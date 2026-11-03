@@ -21,17 +21,17 @@
    "functions": [
     {
      "address": "0x00a7fbd0",
-     "symbol": "?FUN_00a7fbd0@FUN_00a7fbd0_shell@@QAEPAXXZ",
+     "symbol": "?GetRTTI@FUN_00a7fbd0_shell@@QAEPAXXZ",
      "size": 6
     },
     {
      "address": "0x00a7fbe0",
-     "symbol": "?FUN_00a7fbe0@FUN_00a7fbe0_shell@@QAEIXZ",
+     "symbol": "?GetWidth@FUN_00a7fbe0_shell@@QAEIXZ",
      "size": 14
     },
     {
      "address": "0x00a7fbf0",
-     "symbol": "?FUN_00a7fbf0@FUN_00a7fbf0_shell@@QAEIXZ",
+     "symbol": "?GetHeight@FUN_00a7fbf0_shell@@QAEIXZ",
      "size": 14
     },
     {
