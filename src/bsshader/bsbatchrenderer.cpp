@@ -3077,7 +3077,7 @@ struct PassGroup99
 };
 struct PassMap99
 {
-    bool FUN_00853130(unsigned int uiKey, unsigned int& uiValue) const;
+    bool GetAt(unsigned int uiKey, unsigned int& uiValue) const;
     void FUN_00844700(unsigned int uiKey, unsigned int uiValue);
     void* m_ppVirtualMethodTable;
     unsigned int m_uiHashSize;
@@ -3144,7 +3144,7 @@ void S00b99c90_Shell::AddPassToGroup(RenderPass99* pkPass, unsigned int uiPassEn
 
     unsigned int uiFound;
     unsigned int uiIndex;
-    if (!m_kGroupIndexMap.FUN_00853130(uiPass, uiFound))
+    if (!m_kGroupIndexMap.GetAt(uiPass, uiFound))
     {
         uiIndex = m_kGroupIndexMap.m_uiCount;
         m_kGroupIndexMap.FUN_00844700(uiPass, uiIndex);
@@ -3669,7 +3669,7 @@ void FUN_00b988e0();
 
 struct BatchPassIndexMap : NiTPointerMap<unsigned int, unsigned int>
 {
-    __declspec(noalias) bool FUN_00853130(unsigned int key, unsigned int& result) const;
+    __declspec(noalias) bool GetAt(unsigned int key, unsigned int& result) const;
 };
 
 struct PassNode
@@ -3837,7 +3837,7 @@ void BatchRendererQ::FUN_00b99e20(unsigned int uiMinPass, unsigned int uiMaxPass
             }
             {
                 unsigned int uiValue = 0;
-                m_kGroupIndexMap.FUN_00853130(item, uiValue);
+                m_kGroupIndexMap.GetAt(item, uiValue);
 
                 if (FUN_00b630f0(item) && (FUN_00b4f5c0()->bFlag164 || FUN_00b4f5c0()->bFlag165))
                 {

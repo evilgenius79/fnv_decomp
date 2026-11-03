@@ -242,7 +242,7 @@ class BSAudioSoundHandle
     ~BSAudioSoundHandle();
     void FUN_00418890(const void*);
     bool Play(bool);
-    bool FUN_00ad8b60(float, float, float);
+    bool SetPos(float, float, float);
 };
 
 extern TESObjectREFR* _g_thePlayer;
@@ -331,7 +331,7 @@ void FUN_0047a560(TESObjectREFR* apRefr, TESObjectREFR* apActor, BGSOpenCloseFor
                                 h.FUN_00418890(
                                     &((BSAudio2*)BSAudioS_::GetSingleton())->FUN_00ad73b0(p28->FUN_0084e3a0(0x102)));
                                 NiPoint3 pt = *((RefV*)apRefr)->v1f4();
-                                h.FUN_00ad8b60(pt.x, pt.y, pt.z);
+                                h.SetPos(pt.x, pt.y, pt.z);
                             }
                             h.Play(false);
                         }

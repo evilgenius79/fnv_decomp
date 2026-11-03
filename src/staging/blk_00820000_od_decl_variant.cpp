@@ -954,7 +954,7 @@ struct FUN_0082f6c0 : FUN_00aa63c0
     virtual ~FUN_0082f6c0();
 };
 extern unsigned int DAT_011dd1f4;
-void __cdecl FUN_00401030(unsigned int p);
+void __cdecl FormHeap_Free(unsigned int p);
 struct FUN_0082f9c0_obj
 {
     virtual int unk00(int a);
@@ -978,10 +978,10 @@ struct SndXShell
     void __thiscall FUN_00ad89e0(float v);
     void __thiscall FUN_00ad88f0();
     void __thiscall FUN_00418900(const AudioPlaybackHandle& src);
-    void __thiscall FUN_00ad8f20(void* obj);
+    void __thiscall SetNiNode(void* obj);
     void __thiscall FUN_00ad9030(unsigned int v);
-    bool __thiscall FUN_00ad8b60(float x, float y, float z);
-    bool __thiscall FUN_00ad8830(bool v);
+    bool __thiscall SetPos(float x, float y, float z);
+    bool __thiscall Play(bool v);
     void __thiscall FUN_00ad8be0(float a, float b);
 };
 struct Entry

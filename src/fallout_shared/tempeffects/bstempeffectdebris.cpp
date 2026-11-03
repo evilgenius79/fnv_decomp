@@ -453,7 +453,7 @@ struct ScenePointer : MemberPtr
 };
 struct ModelService
 {
-    SceneObject* FUN_00447080(int, int, bool, bool, bool, bool);
+    SceneObject* LoadModel(int, int, bool, bool, bool, bool);
 };
 struct QueueService
 {
@@ -482,7 +482,7 @@ struct DebrisEffect : FUN_00682c40
 void DebrisEffect::SpawnDebris(int a4, int a5, int a6, int a7, int a8, float f9, bool abUseQueue)
 {
     FUN_007e6580(false);
-    SceneObject* update = g_011c3b3c->FUN_00447080(m_1c, 0, true, false, false, false);
+    SceneObject* update = g_011c3b3c->LoadModel(m_1c, 0, true, false, false, false);
     if (abUseQueue)
     {
         if (g_011dea10)

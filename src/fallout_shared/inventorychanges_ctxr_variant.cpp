@@ -2004,7 +2004,7 @@ struct Load90
     void FUN_00857bd0(unsigned int);
 };
 extern Load90* g_TESSaveLoadGame;
-TESForm* FUN_004839c0(unsigned int);
+TESForm* LookupFormByID(unsigned int);
 void FNV_Warning(const char*, ...);
 unsigned short FUN_004efaa0();
 struct Seq90
@@ -6648,7 +6648,7 @@ struct Transfer4c37Node84
 unsigned char __cdecl FUN_00481f10(int a);
 unsigned char __cdecl FUN_00702680(int a, int b);
 int __fastcall FUN_00401170(int a);
-void* __cdecl FUN_00401000(int a);
+void* __cdecl FormHeap_Allocate(int a);
 struct Transfer4c37Obj96
 {
     void* item;
@@ -7487,7 +7487,7 @@ struct Sh00418800
 };
 struct Sh005ac1e0
 {
-    bool FUN_005ac1e0(void* a, void* b, void* c, bool d);
+    bool Execute(void* a, void* b, void* c, bool d);
 };
 struct Sh0087ce80
 {

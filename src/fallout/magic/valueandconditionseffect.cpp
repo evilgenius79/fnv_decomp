@@ -132,7 +132,7 @@ void FUN_0082b8a0_cls::CopyToSpawnedRecord(void* p)
     }
 }
 
-void* __cdecl FUN_00401000(unsigned int size);
+void* __cdecl FormHeap_Allocate(unsigned int size);
 
 struct ValueModifier_b9743
 {
@@ -159,7 +159,7 @@ struct ValueModifier_b9743
     ValueModifier_b9743(void* a, void* b, void* c);
     static void* operator new(unsigned int size)
     {
-        return FUN_00401000(size);
+        return FormHeap_Allocate(size);
     }
 };
 

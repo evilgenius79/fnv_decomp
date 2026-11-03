@@ -51,7 +51,7 @@ class GlobalObject_0096d020
 struct Cell548 : TESObjectCELL
 {
     RefList548* FUN_009604f0();
-    void FUN_00541ae0();
+    void CellRefLockLeave();
     void FUN_00551480(bool RetainReference);
 };
 
@@ -266,7 +266,7 @@ extern CellSaveLoad* DAT_011de45c;
 class CellModelLoader
 {
   public:
-    void FUN_00444850(RefView* pkRef, int iCell);
+    void QueueReference(RefView* pkRef, int iCell);
 };
 extern CellModelLoader* DAT_011c3b3c;
 class CellProcessLists
@@ -395,7 +395,7 @@ class CellView
 
     bool FUN_005516c0();
     void FUN_00541ac0();  // CellRefLockEnter
-    void FUN_00541ae0();  // CellRefLockLeave
+    void CellRefLockLeave();  // CellRefLockLeave
     RefList* FUN_009604f0();
     CellNavHandler* FUN_0054ddd0();
     void FUN_0054ca90(RefView* pkRef);  // RemoveReference
@@ -420,7 +420,7 @@ void CellView::FUN_00548230(RefView* pkRef, bool bArg)
     {
         FUN_00541ac0();
         FUN_009604f0()->FUN_005ae3d0(pkRef);
-        FUN_00541ae0();
+        CellRefLockLeave();
         pkRef->FUN_005d43c0()->FUN_0041d390(this);
         CellNavHandler* pkHandler = FUN_0054ddd0();
         if (pkHandler)
@@ -435,7 +435,7 @@ void CellView::FUN_00548230(RefView* pkRef, bool bArg)
     FUN_00541ac0();
     FUN_009604f0()->FUN_005ae3d0(pkRef);
     pkRef->SetParentCell(this);
-    FUN_00541ae0();
+    CellRefLockLeave();
     if (FUN_00450ff0())
         DAT_011c95c8->FUN_00526f20((BGSPerkEntry*)pkRef);
     if (m_pkNavMeshes)
@@ -475,7 +475,7 @@ void CellView::FUN_00548230(RefView* pkRef, bool bArg)
                         else
                             pkRef->Unk_24c();
                     }
-                    DAT_011c3b3c->FUN_00444850(pkRef, DAT_011dea10->FUN_00458be0(this, 0, 0));
+                    DAT_011c3b3c->QueueReference(pkRef, DAT_011dea10->FUN_00458be0(this, 0, 0));
                 }
             }
             if (!bQueue && pkRef->IsActor())
@@ -542,7 +542,7 @@ bool __fastcall FUN_00440d80(const TESObjectREFR* reference);
 bool __fastcall FUN_00440da0(TESObjectREFR* reference);
 bool __fastcall FUN_00477ba0(TESObjectREFR* reference);
 void* __fastcall FUN_00568e50(TESObjectREFR* reference);
-void __fastcall FUN_00541ae0(TESObjectCELL* cell);
+void __fastcall CellRefLockLeave(TESObjectCELL* cell);
 unsigned int __cdecl GetRandomNumberInRange(int low, int high);
 // @fnv 0x0054afb0
 TESObjectREFR* __cdecl FUN_0054afb0(TESForm* source, TESForm* destination, void* context)
@@ -586,7 +586,7 @@ TESObjectREFR* __cdecl FUN_0054afb0(TESForm* source, TESForm* destination, void*
             }
             cursor4 = cursor4->GetNext();
         }
-        FUN_00541ae0(lockedCellVal);
+        CellRefLockLeave(lockedCellVal);
         if (countB > 0 && !candidatesVal.IsEmpty())
         {
             unsigned int selectedX = GetRandomNumberInRange(0, countB);
@@ -925,7 +925,7 @@ void FUN_00555c20();
 struct Cell550 : TESObjectCELL
 {
     RefList550* FUN_009604f0();
-    void FUN_00541ae0();
+    void CellRefLockLeave();
     void FUN_0054b5b0();
 };
 // @fnv 0x0054b5b0
@@ -958,7 +958,7 @@ void Cell550::FUN_0054b5b0()
         }
         position = position->FUN_00726070();
     }
-    FUN_00541ae0();
+    CellRefLockLeave();
 }
 
 void* __cdecl operator new(unsigned int);
@@ -984,7 +984,7 @@ void Cell548::FUN_00551480(bool RetainReference)
             if (mobile && !mobile->FUN_00440da0() && mobile->FUN_008d8520() && mobile->FUN_00931850() == 3)
                 g_011e0e80.FUN_0096e870(mobile);
         }
-        FUN_00541ae0();
+        CellRefLockLeave();
     }
     if (extra)
     {
@@ -1000,7 +1000,7 @@ void Cell548::FUN_00551480(bool RetainReference)
 class TESWeather : public TESForm
 {
 };
-TESForm* FUN_004839c0(unsigned int auiFormId);
+TESForm* LookupFormByID(unsigned int auiFormId);
 
 class NiUpdateData
 {
@@ -1643,7 +1643,7 @@ void CellUpdateView::FUN_00551890(float fTimeSinceScaleStart, bool bSkipLoaded)
                         LightForm* pkRegion = pkForm;
                         TESWeather* pkWeather = pkRegion->FUN_0059bb30();
                         if (!pkWeather)
-                            pkWeather = dynamic_cast<TESWeather*>(FUN_004839c0(0x15e));
+                            pkWeather = dynamic_cast<TESWeather*>(LookupFormByID(0x15e));
                         if (pkWeather)
                         {
                             Sky* pkSky = FUN_0046dd00();
@@ -1689,7 +1689,7 @@ void CellUpdateView::FUN_00551890(float fTimeSinceScaleStart, bool bSkipLoaded)
                             LightForm* pkRegion = pkSource;
                             TESWeather* pkWeather = pkRegion->FUN_0059bb30();
                             if (!pkWeather)
-                                pkWeather = dynamic_cast<TESWeather*>(FUN_004839c0(0x15e));
+                                pkWeather = dynamic_cast<TESWeather*>(LookupFormByID(0x15e));
                             if (pkWeather)
                             {
                                 Sky* pkSky = FUN_0046dd00();

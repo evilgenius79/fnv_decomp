@@ -11220,7 +11220,7 @@ bool __cdecl FUN_004580e0();
 void __cdecl FUN_00458060(int);
 void __cdecl FUN_00705e30();
 int __cdecl FUN_00458030();
-void __cdecl FUN_00771700(int);
+void __cdecl UpdateVisibilityState(int);
 extern unsigned int DAT_011c3efc;
 
 struct BSAudio
@@ -11344,7 +11344,7 @@ bool S457d70::FUN_00457d70(bool abFlag1, Form457* apForm, bool abFlag2)
             FUN_00705e30();
             if (FUN_00458030() != 0x18)
             {
-                FUN_00771700(2);
+                UpdateVisibilityState(2);
             }
         }
         else
@@ -11360,7 +11360,7 @@ bool S457d70::FUN_00457d70(bool abFlag1, Form457* apForm, bool abFlag2)
                 FUN_00705e30();
                 if (FUN_00458030() != 0x18)
                 {
-                    FUN_00771700(2);
+                    UpdateVisibilityState(2);
                 }
             }
         }

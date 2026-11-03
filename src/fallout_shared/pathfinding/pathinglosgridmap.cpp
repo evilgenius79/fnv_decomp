@@ -1039,7 +1039,7 @@ struct FUN_00559450_shell
 };
 struct FUN_00853130_shell
 {
-    bool __thiscall FUN_00853130(void*);
+    bool __thiscall GetAt(void*);
 };
 struct FUN_006dfdc0_shell
 {
@@ -1064,7 +1064,7 @@ bool __thiscall FUN_006e0b50_cls::FUN_006e0b50(void* aArg)
         return false;
     }
     value = 0;
-    if (((FUN_00853130_shell*)((char*)this + 8))->FUN_00853130(((FUN_00559450_shell*)pHolder)->FUN_00559450(&value)))
+    if (((FUN_00853130_shell*)((char*)this + 8))->GetAt(((FUN_00559450_shell*)pHolder)->FUN_00559450(&value)))
     {
         return ((FUN_006dfdc0_shell*)value)->FUN_006dfdc0(aArg);
     }

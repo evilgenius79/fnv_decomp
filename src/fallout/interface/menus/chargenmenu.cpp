@@ -1191,7 +1191,7 @@ Manager753* __cdecl FUN_004b7210();
 Menu753* __cdecl Lookup753(int);
 float __cdecl Scale753();
 void __cdecl FNV_Warning(const char*);
-int __cdecl FUN_00a01860(const char*);
+int __cdecl TraitNameToID(const char*);
 struct Setting753
 {
     const char* Text();
@@ -1281,7 +1281,7 @@ Tile753* __cdecl FUN_00753420(int kind, int points, bool onlyAdd, bool flag)
         menu753->unk28 = kind;
         menu753->flag = flag;
         menu753->onlyAdd = onlyAdd;
-        menu753->Root()->SetInt(FUN_00a01860(str_01071bfc), onlyAdd);
+        menu753->Root()->SetInt(TraitNameToID(str_01071bfc), onlyAdd);
         menu753->unk40->Set(0xfc4, g_011d33d8.Text(), true);
         menu753->unk44->Set(0xfc4, g_011d35c4.Text(), true);
         if (kind == 0)
@@ -1864,7 +1864,7 @@ struct Proxy_700320_call
 
 struct Proxy_a00940
 {
-    static void* __cdecl FUN_00a00940(char const* name, int index);
+    static void* __cdecl TraitNameToIDAdd(char const* name, int index);
 };
 
 struct Proxy_754a00
@@ -1892,7 +1892,7 @@ bool Proxy_754a00::SetTraitSelected(void* pTarget, int action)
         {
             if (((Proxy_7242f0*)this)->ContainsKey(pTarget))
             {
-                static void* selectedTrait = Proxy_a00940::FUN_00a00940("_selected", -1);
+                static void* selectedTrait = Proxy_a00940::TraitNameToIDAdd("_selected", -1);
 
                 bool selected = ((Proxy_a01230*)pTarget)->IsTraitNonZero(selectedTrait);
 

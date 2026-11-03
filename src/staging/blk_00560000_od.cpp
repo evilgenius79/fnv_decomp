@@ -2581,9 +2581,9 @@ struct BSSoundHandleEx
     void FUN_00418900(const BSSoundHandleEx&);
     void FUN_00ad88f0();
     void FUN_00ad8d10();
-    void FUN_00ad8f20(NiAVObject*);
-    bool FUN_00ad8b60(float, float, float);
-    bool FUN_00ad8830(bool);
+    void SetNiNode(NiAVObject*);
+    bool SetPos(float, float, float);
+    bool Play(bool);
 };
 struct Audio57
 {
@@ -2659,10 +2659,10 @@ void SceneSounds57::FUN_0057a410(NiAVObject* object, bool stop)
                                          ? (GetFlagMask(record->GetField54()->CopyBig().flags) | 2)
                                          : 0x102;
                 extra->handle.FUN_00418900(FUN_00453a70()->FUN_00ad73b0(record->GetField54()->FUN_0084e3a0(), flags));
-                extra->handle.FUN_00ad8f20(object);
+                extra->handle.SetNiNode(object);
                 position = object->FUN_0045bb80();
-                extra->handle.FUN_00ad8b60(position.x, position.y, position.z);
-                extra->handle.FUN_00ad8830(false);
+                extra->handle.SetPos(position.x, position.y, position.z);
+                extra->handle.Play(false);
                 object->SetExtraDataName(extra.operator->());
             }
         }

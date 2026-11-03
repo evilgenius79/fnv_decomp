@@ -425,7 +425,7 @@ struct MemoryManager
     void* Allocate(unsigned int);
 };
 MemoryManager* __cdecl FUN_00401020(void);
-void* __cdecl FUN_00401000(unsigned int size);
+void* __cdecl FormHeap_Allocate(unsigned int size);
 struct QueuedItemList
 {
     PaddedFloatRecord** _ref_006815c0();
@@ -4284,7 +4284,7 @@ struct FUN_0092b460_cls
     FUN_0092b460_cls* GetTargetFromOffset();
     FUN_0092b460_cls* FUN_008d8520();
     FUN_0092b460_cls* FUN_008d0430();
-    void FUN_005ac1e0(FUN_0092b460_cls* a, int b, int c, int d);
+    void Execute(FUN_0092b460_cls* a, int b, int c, int d);
     void FUN_0092b460(FUN_0092b460_cls* a1, FUN_0092b460_cls* a2);
 };
 struct FUN_0092b9c0_Class : public MiddleHighProcess
@@ -5825,7 +5825,7 @@ extern P114Settings DAT_011cd82c;
 extern P114Clock DAT_011de7b8;
 extern TESBoundObject* DAT_011ca244;
 extern TESBoundObject* DAT_011ca248;
-P114Global* __cdecl FUN_004839c0(unsigned int);
+P114Global* __cdecl LookupFormByID(unsigned int);
 struct P114Process : MiddleHighProcess
 {
     virtual void slot493();
@@ -7971,7 +7971,7 @@ struct ActivationReference : TESObjectREFR
     void* FUN_00568e50();
     const NiPoint3& FUN_00568fa0();
     bool FUN_00440d80();
-    bool FUN_00573170(Actor*, bool, TESBoundObject*, int);
+    bool Activate(Actor*, bool, TESBoundObject*, int);
 };
 struct ActivationPlayer : Actor
 {
@@ -10069,7 +10069,7 @@ struct P130Actor
     virtual void v217();
     virtual void v218();
     virtual bool IsDead();
-    void FUN_008a6840(int);
+    void SetWantsWeaponOut(int);
     int FUN_008a7570();
     bool HasAnyFlag();
     bool FUN_004997b0();
@@ -10101,7 +10101,7 @@ struct P130Package
 class HighProcess : public MiddleHighProcess
 {
 };
-void FUN_00771700(int);
+void UpdateVisibilityState(int);
 bool FUN_005094f0(int);
 bool FUN_00509510(int);
 void FNV_Warning(const char*, ...);
@@ -12244,7 +12244,7 @@ struct ActRef
     void* FUN_008d6f30();
     void* FUN_00575d70();
     bool FUN_005686b0(ActPoint* apPos, int a2, int a3, ActPoint* apOut, int* apMarker, int a6);
-    bool FUN_00573170(ActActor* apActor, int aiActivate, void* apItem, int a4);
+    bool Activate(ActActor* apActor, int aiActivate, void* apItem, int a4);
     void FUN_00565870();
 };
 
@@ -12364,7 +12364,7 @@ struct ActGlobal
 
 extern void* DAT_011ca248;
 extern void* DAT_011ca244;
-ActGlobal* __cdecl FUN_004839c0(unsigned int auiFormID);
+ActGlobal* __cdecl LookupFormByID(unsigned int auiFormID);
 
 struct ActProcess
 {
@@ -12996,7 +12996,7 @@ bool ActProcess::FUN_00915f10(ActActor* apActor, bool abActivate)
             }
             if (!apActor->FUN_008b3bb0())
             {
-                ActGlobal* pHourGlobal = FUN_004839c0(0x3a);
+                ActGlobal* pHourGlobal = LookupFormByID(0x3a);
                 float fNowCur = DAT_011de7b8.FUN_00867da0();
                 if (FUN_007df1f0() > fNowCur)
                     fNowCur = fNowCur + 24.0;
@@ -13055,9 +13055,9 @@ bool ActProcess::FUN_00915f10(ActActor* apActor, bool abActivate)
                     }
                     else if (m_pDetectionData60)
                     {
-                        pTarget->FUN_00573170(apActor, 1, m_pDetectionData60->pItem, 1);
+                        pTarget->Activate(apActor, 1, m_pDetectionData60->pItem, 1);
                     }
-                    else if (!pTarget->IsActor() && !pTarget->FUN_00573170(apActor, 1, 0, 1) &&
+                    else if (!pTarget->IsActor() && !pTarget->Activate(apActor, 1, 0, 1) &&
                              pPackage->FUN_0067efd0())
                     {
                         SetProcessTarget(apActor, -1);
@@ -13096,11 +13096,11 @@ bool ActProcess::FUN_00915f10(ActActor* apActor, bool abActivate)
                     }
                     else if (m_pDetectionData60)
                     {
-                        pTarget->FUN_00573170(apActor, 0, m_pDetectionData60->pItem, 1);
+                        pTarget->Activate(apActor, 0, m_pDetectionData60->pItem, 1);
                     }
                     else
                     {
-                        pTarget->FUN_00573170(apActor, 0, 0, 1);
+                        pTarget->Activate(apActor, 0, 0, 1);
                     }
                 }
                 if (pUsed)
@@ -15120,7 +15120,7 @@ class PlayerCharacter : public Actor
     BipedAnim* GetBipedAnim(bool);
     NiNode* GetNode(bool);
     bool FUN_004eaf60();
-    void FUN_00950110(bool);
+    void ToggleFirstPerson(bool);
     void FUN_005098c0();
 };
 extern PlayerCharacter* _g_thePlayer;
@@ -16144,7 +16144,7 @@ struct ItemLoadState913e80
 void ItemLoadState913e80::FUN_00913e80(BufferView* buffer)
 {
     ReferenceView* ref = buffer->GetRef();
-    object = dynamic_cast<TESBoundObject*>(reinterpret_cast<TESForm*>(::FUN_004839c0(buffer->FUN_008648a0())));
+    object = dynamic_cast<TESBoundObject*>(reinterpret_cast<TESForm*>(::LookupFormByID(buffer->FUN_008648a0())));
     int iIndex = -1;
     buffer->FUN_00864980(&iIndex, 4);
     if (iIndex != -1)

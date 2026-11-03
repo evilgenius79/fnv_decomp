@@ -2202,7 +2202,7 @@ struct NodeObj
 };
 struct Glob
 {
-    NodeObj* FUN_00447080(const char* n, int a, bool b, bool c, bool d, bool e);
+    NodeObj* LoadModel(const char* n, int a, bool b, bool c, bool d, bool e);
     void FUN_0045a5e0(const char* n);
 };
 extern Glob* DAT_011c3b3c;
@@ -2499,7 +2499,7 @@ ResObj* ThisC::CreateNodeFromTransform(void* pLookupKey, A2* pTransformSource, A
                         if (pTransformSource != 0)
                         {
                             NodeObj* u;
-                            u = DAT_011c3b3c->FUN_00447080(p4->FUN_005d8a70()->GetNameV5(), 0, 1, 0, 0, 0);
+                            u = DAT_011c3b3c->LoadModel(p4->FUN_005d8a70()->GetNameV5(), 0, 1, 0, 0, 0);
                             if (u != 0)
                             {
                                 X38 x_(1.0f);

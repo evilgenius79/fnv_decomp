@@ -651,8 +651,8 @@ struct ImpactHandle
 {
     unsigned id, flags, state;
     ~ImpactHandle();
-    bool FUN_00ad8b60(float, float, float);
-    bool FUN_00ad8830(bool);
+    bool SetPos(float, float, float);
+    bool Play(bool);
 };
 struct ImpactAudio
 {
@@ -859,12 +859,12 @@ void ProjectileImpact::TriggerImpact(int aiUnused1, int aiUnused2, int aiUnused3
         unsigned e = FUN_004fd400()->GetAreaSound()->GetFormID();
         ImpactHandle d = FUN_00453a70()->FUN_00ad73b0(e, 0x102);
         ImpactPoint c = position();
-        d.FUN_00ad8b60(c.x, c.y, c.z);
-        d.FUN_00ad8830(false);
+        d.SetPos(c.x, c.y, c.z);
+        d.Play(false);
     }
 }
 
-void* FUN_00401000(unsigned int);
+void* FormHeap_Allocate(unsigned int);
 struct Mgr
 {
     void FUN_0096d470(void*, int);
@@ -3203,7 +3203,7 @@ extern "C" void __cdecl FUN_0040fbe0(const void*, ...);
 
 extern "C" void __cdecl FUN_005b5e40(const void*, const void*, int);
 
-extern "C" int __cdecl FUN_004839c0(int);
+extern "C" int __cdecl LookupFormByID(int);
 
 extern "C" int __cdecl FUN_004a8b00(int);
 
@@ -3442,7 +3442,7 @@ void FUN_008ce610_owner::FUN_008ce610(int arg)
         if (finished)
         {
 
-            int manager = FUN_004839c0(*finished);
+            int manager = LookupFormByID(*finished);
 
             typedef int(__thiscall * LogFunction)(void*);
 
@@ -4259,7 +4259,7 @@ struct SaveForm
     virtual void v75();
     virtual const char* GetName();
 };
-SaveForm* __cdecl FUN_004839c0(unsigned);
+SaveForm* __cdecl LookupFormByID(unsigned);
 void __cdecl SaveLog(const char*, ...);
 struct ProjectileData
 {
@@ -4355,7 +4355,7 @@ unsigned short ArrowSave::FUN_008ce3b0(unsigned flags)
         ValueReferencePair* entry = ((SaveState*)g_TESSaveLoadGame)->GetHitSound();
         if (entry)
         {
-            SaveForm* form = FUN_004839c0(entry->id);
+            SaveForm* form = LookupFormByID(entry->id);
             SaveLog("GetSaveSize(): %-5i for form %08X %s with flags %08X ending at line %i in file %s", size7 - start,
                     entry->id, form->GetName(), *(unsigned*)&entry->flags0, 2174,
                     "D:\\_Fallout3\\Platforms\\Common\\Code\\Fallout\\Ai\\ArrowProjectile.cpp");
@@ -5139,8 +5139,8 @@ void ContinuousBeamProjectile::ApplyAreaEffect(NiPoint3 point, unsigned int vari
         unsigned int soundID3 = this->FUN_004fd400()->GetAreaSound()->GetFormID();
         ImpactHandle handleA = FUN_00453a70()->FUN_00ad73b0(soundID3, 0x102);
         NiPoint3 aEPos = *this->Position();
-        handleA.FUN_00ad8b60(aEPos.x, aEPos.y, aEPos.z);
-        handleA.FUN_00ad8830(false);
+        handleA.SetPos(aEPos.x, aEPos.y, aEPos.z);
+        handleA.Play(false);
     }
 }
 
@@ -6544,7 +6544,7 @@ struct CleanupReference : FUN_0092ec40, CleanupSecondary
     int unkb0, unkb4, unkb8, unkbc;
     bool detached;
     void* FUN_0043fcd0();
-    void FUN_005702e0(void*, bool);
+    void Set3D(void*, bool);
     void FUN_0092ed60(bool);
 };
 struct CleanupList
@@ -6599,7 +6599,7 @@ FUN_008cac60::~FUN_008cac60()
         }
     }
     delete data;
-    FUN_005702e0(0, true);
+    Set3D(0, true);
     if (!DAT_011c3f2c->FUN_004226e0())
         FUN_0092ed60(false);
 }
@@ -8288,25 +8288,25 @@ class ActorDeletionQueue
     void FUN_0096d470(MobileObject*, int);
     void FUN_0096d450(MobileObject*, int, bool, bool, bool);
 };
-// Calls FUN_00932490, resolves three form fields and unk88->unk28 through FUN_004839c0, then calls two functions on DAT_011e0e80.
+// Calls FUN_00932490, resolves three form fields and unk88->unk28 through LookupFormByID, then calls two functions on DAT_011e0e80.
 // @fnv 0x008cf2c0
 void MobileObject::FUN_008cf2c0(unsigned int auiArg1, unsigned int auiArg2)
 {
     SetProcessFlags(auiArg1, auiArg2);
     unsigned int enchantment = (unsigned int)unkA4;
     if (enchantment)
-        unkA4 = dynamic_cast<Actor*>((TESForm*)FUN_004839c0(enchantment));
+        unkA4 = dynamic_cast<Actor*>((TESForm*)LookupFormByID(enchantment));
     unsigned int actor = (unsigned int)unkA8;
     if (actor)
-        unkA8 = dynamic_cast<EnchantmentItem*>((TESForm*)FUN_004839c0(actor));
+        unkA8 = dynamic_cast<EnchantmentItem*>((TESForm*)LookupFormByID(actor));
     unsigned int alchemy = (unsigned int)unkB0;
     if (alchemy)
-        unkB0 = dynamic_cast<AlchemyItem*>((TESForm*)FUN_004839c0(alchemy));
+        unkB0 = dynamic_cast<AlchemyItem*>((TESForm*)LookupFormByID(alchemy));
     if (unk88 && (unk88->unk00 == 1 || unk88->unk00 == 0))
     {
         unsigned int reference = (unsigned int)unk88->unk28;
         if (reference)
-            unk88->unk28 = dynamic_cast<TESObjectREFR*>((TESForm*)FUN_004839c0(reference));
+            unk88->unk28 = dynamic_cast<TESObjectREFR*>((TESForm*)LookupFormByID(reference));
     }
     DAT_011e0e80.FUN_0096d470(this, FUN_00931850());
     DAT_011e0e80.FUN_0096d450(this, FUN_00931850(), false, false, false);

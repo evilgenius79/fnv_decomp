@@ -257,7 +257,7 @@ void FUN_004fffe0(int);
 unsigned int FUN_00ec6130(const char*);
 void FUN_005b5e40(const char*, ...);
 void ResolveFormID(unsigned int*, int);
-TESForm* FUN_004839c0(unsigned int);
+TESForm* LookupFormByID(unsigned int);
 extern "C" void* __cdecl __RTDynamicCast(void*, int, void*, void*, int);
 
 struct Cell : Reference
@@ -324,7 +324,7 @@ void Cell::FUN_00542d40()
         {
             unsigned int handle = GetLightingTemplate();
             ResolveFormID(&handle, FUN_00484e60(-1));
-            BGSLightingTemplate* resolved = dynamic_cast<BGSLightingTemplate*>(FUN_004839c0(handle));
+            BGSLightingTemplate* resolved = dynamic_cast<BGSLightingTemplate*>(LookupFormByID(handle));
             FUN_00558b60(resolved);
             if (!resolved && handle)
                 FUN_005b5e40(&DAT_0102eb10, handle, Name(), FUN_0084e3a0());

@@ -2546,7 +2546,7 @@ struct Door
 {
     DoorBase* FUN_007af430();
 };
-Door* __cdecl FUN_004839c0(unsigned int);
+Door* __cdecl LookupFormByID(unsigned int);
 struct Actor;
 struct PathingRequest
 {
@@ -4693,7 +4693,7 @@ bool SearchEdges::ExpandNeighborNodes(NavMeshTriangleReference* source, NodeOutp
                 else
                 {
                     unsigned int door = *mesh->FUN_00699af0(triangle);
-                    Door* doorId = FUN_004839c0(door);
+                    Door* doorId = LookupFormByID(door);
                     if (doorId)
                     {
                         Actor* actor;

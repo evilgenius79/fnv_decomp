@@ -2066,7 +2066,7 @@ class Model
 };
 struct Loader_S
 {
-    NiNode* FUN_00447080(const char*, int, bool, bool, bool, bool);
+    NiNode* LoadModel(const char*, int, bool, bool, bool, bool);
 };
 extern bool DAT_011d8908;
 class FileFinder
@@ -3183,7 +3183,7 @@ struct MapMenuR6
 };
 int __cdecl FUN_00556870(V3Maker*);
 // free helpers; conventions read from add esp evidence
-extern "C" void* __cdecl FUN_00401000(unsigned int);
+extern "C" void* __cdecl FormHeap_Allocate(unsigned int);
 extern "C" void __stdcall FUN_00401050(void*, unsigned int, unsigned int, void*);
 extern "C" void* __cdecl FUN_00aa1070(unsigned int);
 extern "C" void* __cdecl FUN_00aa13e0(unsigned int);
@@ -3244,10 +3244,10 @@ extern unsigned int DAT_011f4418;
 void __cdecl FUN_0079ffb0(char param_1);
 namespace s7094f0 {
 
-struct Lock
+struct SpinLock
 {
-    void FUN_0040fbf0(int iArg);
-    void FUN_0040fba0();
+    void Lock(int iArg);
+    void Unlock();
 };
 
 struct InterfaceManagerView
@@ -3606,7 +3606,7 @@ struct NameTile
     int unk28;
 };
 
-extern Lock DAT_011d89c0;
+extern SpinLock DAT_011d89c0;
 extern int DAT_011d8950;
 extern TESObjectREFR* DAT_011d8954;
 extern int DAT_011d8958;
@@ -3623,7 +3623,7 @@ bool FUN_00706130(TESObjectREFR* pkRef);
 int FUN_00705070(TESObjectREFR* pkRef, int iArg0, int iArg1);
 int GetOrCreateMenuTile(int iArg);
 bool InitStartMenu(int iArg0, int iArg1);
-void FUN_00771700(int iArg);
+void UpdateVisibilityState(int iArg);
 bool FUN_007a8ba0();
 bool DestroyCompanionWheelMenu(Actor* pkActor);
 
@@ -3632,7 +3632,7 @@ static const char s_szPlayerNameEntryMenu[] = "Player Name Entry Menu";
 // @fnv 0x007094f0
 void FUN_007094f0()
 {
-    DAT_011d89c0.FUN_0040fbf0(0);
+    DAT_011d89c0.Lock(0);
     if (DAT_011d8950 && (!FUN_004b7210()->m_iModalCount || DAT_011d8950 == 6 || DAT_011d8950 == 7))
     {
         bool bPickResultFound = false;
@@ -3657,7 +3657,7 @@ void FUN_007094f0()
         case 6:
             bPickResultFound = InitStartMenu(1, 0);
             if (bPickResultFound)
-                FUN_00771700(4);
+                UpdateVisibilityState(4);
             break;
         case 7:
             bPickResultFound = FUN_007a8ba0();
@@ -3695,7 +3695,7 @@ void FUN_007094f0()
             DAT_011d899c = 0;
         }
     }
-    DAT_011d89c0.FUN_0040fba0();
+    DAT_011d89c0.Unlock();
 }
 
 }
@@ -4211,7 +4211,7 @@ extern DisplaySetting DAT_011d4024, DAT_011c6478, DAT_011c64a8, DAT_011c3cb4, DA
 extern char DAT_0106ed20[], DAT_0106ed18[], DAT_0106ed0c[], DAT_0106ecfc[], DAT_01020764[], DAT_0106ecf4[],
     DAT_01019f08[], DAT_0106ece8[], DAT_01047008[], DAT_0106ece0[], DAT_0106ecd8[], DAT_0106ecd0[], DAT_0106ecc8[],
     DAT_01020768[], DAT_01030018[], DAT_01018348[];
-int FUN_00a01860(const char*);
+int TraitNameToID(const char*);
 float FUN_0048ebc0(DisplayForm*, bool);
 DisplayTile* FUN_00a08b20(DisplayTile*, const char*);
 unsigned int FUN_0044a670(const char*);

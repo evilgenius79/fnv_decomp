@@ -1013,7 +1013,7 @@ bool SettingRegistry::FUN_00405120()
     return isValid;
 }
 
-char* __cdecl FUN_00401000(unsigned int aSize);
+char* __cdecl FormHeap_Allocate(unsigned int aSize);
 const char* __cdecl FUN_00464f30(const char* apString, int aFlag);
 
 struct FUN_004d61b0_sub
@@ -1050,7 +1050,7 @@ FUN_004d61b0::FUN_004d61b0(int a1, int a2, int a3, const char* apName, int a5, i
     m00 = a1;
     m04 = a2;
     m28 = a3;
-    char* pNameBuffer = FUN_00401000(FUN_0044a670(apName) + 1);
+    char* pNameBuffer = FormHeap_Allocate(FUN_0044a670(apName) + 1);
     m2c = pNameBuffer;
     FUN_004046f0(m2c, FUN_00464f30(apName, 0));
     CreateTreeWindows(a5, a6, a7, a8);

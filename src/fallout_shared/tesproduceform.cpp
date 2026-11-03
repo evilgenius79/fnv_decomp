@@ -194,7 +194,7 @@ struct FUN_00485b60_Cls
 
 void ResolveFormID(unsigned int* apFormID, TESFile* apFile);
 struct TESForm;
-TESForm* FUN_004839c0(unsigned int aFormID);
+TESForm* LookupFormByID(unsigned int aFormID);
 void FNV_Warning(const char* apMsg, ...);
 
 extern const char DAT_0101d2b4[];
@@ -224,7 +224,7 @@ void FUN_0048b720_Cls::ResolveIngredient(FUN_00485b60_Cls* apArg)
     {
         unsigned int formID = (unsigned int)pIngredient;
         ResolveFormID(&formID, apArg->GetFile(-1));
-        pIngredient = dynamic_cast<IngredientItem*>(FUN_004839c0(formID));
+        pIngredient = dynamic_cast<IngredientItem*>(LookupFormByID(formID));
         if (pIngredient == 0)
         {
             if (apArg != 0)

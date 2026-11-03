@@ -56,7 +56,7 @@ class GlobalObject_0040c150
 extern GlobalObject_0040c150 g_011d2b38, g_011d2718, g_011d3e44;
 extern bool DAT_011c5cb4;
 int __fastcall FUN_005d9f90(char* apRef);
-TESForm* FUN_004839c0(unsigned int auiFormID);
+TESForm* LookupFormByID(unsigned int auiFormID);
 void FNV_Warning(const char* apFormat, ...);
 void __cdecl FUN_00a6e8e0(NiNode* apNode, NiControllerManager* apManager);
 void __cdecl ApplyFaceGenTextures(NiNode* apNode, void* apData);
@@ -261,13 +261,13 @@ class NPCModelView
 class FaceRefr
 {
   public:
-    void FUN_005702e0(NiNode* apNode, bool abQueue);
+    void Set3D(NiNode* apNode, bool abQueue);
     NiNode* FUN_0087e060(bool abFlag);
 };
 class PlayerFace
 {
   public:
-    void FUN_00950110(bool abFlag);
+    void ToggleFirstPerson(bool abFlag);
     void FUN_0094eaf0(NiNode* apNode, bool abFlag);
 };
 class NPCFace
@@ -337,7 +337,7 @@ void TESNPCFace::FUN_00609f60(Actor* apActor)
         FNV_Warning("MODELS: %s has a bad current race when loading facegen", TESFullName::GetFullName());
     unsigned int uiNewRace;
     ((FUN_00484d40_Host*)this)->FUN_00484d40(&uiNewRace, 4);
-    TESRace* pRace = dynamic_cast<TESRace*>(FUN_004839c0(uiNewRace));
+    TESRace* pRace = dynamic_cast<TESRace*>(LookupFormByID(uiNewRace));
     if (uiNewRace && !pRace)
         FNV_Warning("MODELS: NPC %s could not find race %08X", TESFullName::GetFullName(), uiNewRace);
     if (GetFormRace() != pRace)
@@ -350,7 +350,7 @@ void TESNPCFace::FUN_00609f60(Actor* apActor)
         FNV_Warning("MODELS: %s has a bad new race when loading facegen", TESFullName::GetFullName());
     unsigned int uiNewHairFormID;
     ((FUN_00484d40_Host*)this)->FUN_00484d40(&uiNewHairFormID, 4);
-    TESHair* pReadHair = dynamic_cast<TESHair*>(FUN_004839c0(uiNewHairFormID));
+    TESHair* pReadHair = dynamic_cast<TESHair*>(LookupFormByID(uiNewHairFormID));
     if (uiNewHairFormID && !pReadHair)
         FNV_Warning("MODELS: NPC %s could not find hair %08X", TESFullName::GetFullName(), uiNewHairFormID);
     if (m_pHair != pReadHair)
@@ -358,7 +358,7 @@ void TESNPCFace::FUN_00609f60(Actor* apActor)
     m_pHair = pReadHair;
     unsigned int uiEyes;
     ((FUN_00484d40_Host*)this)->FUN_00484d40(&uiEyes, 4);
-    TESEyes* pCurEyeForm = dynamic_cast<TESEyes*>(FUN_004839c0(uiEyes));
+    TESEyes* pCurEyeForm = dynamic_cast<TESEyes*>(LookupFormByID(uiEyes));
     if (uiEyes && !pCurEyeForm)
         FNV_Warning("MODELS: NPC %s could not find eyes %08X", TESFullName::GetFullName(), uiEyes);
     if (m_pEyes != pCurEyeForm)
@@ -423,11 +423,11 @@ void TESNPCFace::FUN_00609f60(Actor* apActor)
             NiNode* pParent = 0;
             ((NPCFace*)this)->FUN_005dd560();
             bool bWasFirstPerson = ((FUN_004eaf60_shell*)g_thePlayer)->FUN_004eaf60();
-            ((PlayerFace*)g_thePlayer)->FUN_00950110(false);
+            ((PlayerFace*)g_thePlayer)->ToggleFirstPerson(false);
             if (pNode && bPrevHadRace != bNowHasRace)
             {
                 pParent = (NiNode*)((FUN_009611e0_shell*)apActor->Get3DSimple())->FUN_009611e0();
-                ((FaceRefr*)apActor)->FUN_005702e0(0, true);
+                ((FaceRefr*)apActor)->Set3D(0, true);
             }
             if (bNowHasRace)
                 ((NPCModelView*)this)->kModel.SetModelFilePath(g_011d2b38.FUN_00403df0());
@@ -456,7 +456,7 @@ void TESNPCFace::FUN_00609f60(Actor* apActor)
                 if (pProcess)
                     pProcess->ApplyProcessLevelChange(apActor);
             }
-            ((PlayerFace*)g_thePlayer)->FUN_00950110(!bWasFirstPerson);
+            ((PlayerFace*)g_thePlayer)->ToggleFirstPerson(!bWasFirstPerson);
         }
     }
 }

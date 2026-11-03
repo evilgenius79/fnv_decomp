@@ -1900,7 +1900,7 @@ struct CachedModelPointer
 struct ModelCache
 {
     void FUN_004472a0(const char*, CachedModelPointer*);
-    NiNode* FUN_00447080(const char*, unsigned int, bool, bool, bool, bool);
+    NiNode* LoadModel(const char*, unsigned int, bool, bool, bool, bool);
 };
 extern ModelCache* DAT_011c3b3c;
 extern unsigned int DAT_011c90ac;
@@ -1941,7 +1941,7 @@ NiNode* ModelOwner::GetModelNode(ModelReference* reference)
             }
         }
         if (!pNode)
-            pNode = DAT_011c3b3c->FUN_00447080(pModelName, flags, true, false, false, false);
+            pNode = DAT_011c3b3c->LoadModel(pModelName, flags, true, false, false, false);
     }
     return pNode;
 }

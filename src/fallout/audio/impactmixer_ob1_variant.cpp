@@ -66,9 +66,9 @@ struct SoundPlaybackHandle
     ~SoundPlaybackHandle();
     SoundPlaybackHandle& operator=(const SoundPlaybackHandle& kOther);
     void FUN_00ad89e0(float m_fSoundVolume);
-    bool FUN_00ad8830(int iFlags);
-    void FUN_00ad8b60(float fX, float fY, float fZ);
-    void FUN_00ad8f20(void* pkNode);
+    bool Play(int iFlags);
+    void SetPos(float fX, float fY, float fZ);
+    void SetNiNode(void* pkNode);
 };
 struct BGSSoundDescriptor;
 struct BSAudioStandIn
@@ -383,10 +383,10 @@ struct S_0083a930_SoundHandle
     S_0083a930_SoundHandle();
     ~S_0083a930_SoundHandle();
     S_0083a930_SoundHandle& operator=(const S_0083a930_SoundHandle& other);
-    bool FUN_00ad8b60(float x, float y, float z);
-    void FUN_00ad8f20(S_0083a930_NiNode* node);
+    bool SetPos(float x, float y, float z);
+    void SetNiNode(S_0083a930_NiNode* node);
     bool FUN_00ad89e0(float volume);
-    bool FUN_00ad8830(bool flag);
+    bool Play(bool flag);
 };
 struct S_0083a930_Audio
 {
@@ -1148,11 +1148,11 @@ extern FootstepEntry DAT_011dd650[];
 void PlayFootstepSound(FootstepActor* ref, int foot);
 struct FUN_00ad8b60_h
 {
-    bool FUN_00ad8b60(float x, float y, float z);
+    bool SetPos(float x, float y, float z);
 };
 struct FUN_00ad8830_shell : FUN_00ad8b60_h
 {
-    bool FUN_00ad8830(bool flag);
+    bool Play(bool flag);
 };
 struct SH_00418890 : FUN_00ad8830_shell
 {

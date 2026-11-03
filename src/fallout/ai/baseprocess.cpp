@@ -1632,7 +1632,7 @@ extern const char DAT_0101536c[];
 extern const char DAT_01015318[];
 void __cdecl FUN_0040fbe0(const char*, ...);
 void __cdecl FNV_Warning(const char*, ...);
-TESForm* __cdecl FUN_004839c0(unsigned int);
+TESForm* __cdecl LookupFormByID(unsigned int);
 struct ProcessData
 {
     int unk00, unk04, unk08, unk0c, unk10, unk14;
@@ -1748,7 +1748,7 @@ void SavedProcess::FUN_008d0a10(unsigned int flags, unsigned int unused)
         SaveHeaderView* end = ((TESSaveLoadGameHelper*)g_TESSaveLoadGame)->GetHitSound();
         if (end)
         {
-            TESForm* form = FUN_004839c0(end->id);
+            TESForm* form = LookupFormByID(end->id);
             FUN_0040fbe0(DAT_010153a0, header - initial, end->id, ((FormView*)form)->Describe(),
                          *(unsigned int*)&end->flags, 0xf9, DAT_010865e0);
         }
@@ -1867,7 +1867,7 @@ struct Object8d
     virtual void v75();
     virtual const char* name();
 };
-Object8d* __cdecl FUN_004839c0(unsigned);
+Object8d* __cdecl LookupFormByID(unsigned);
 void __cdecl FUN_005b5e40(const char*, ...);
 struct Base8d
 {
@@ -1896,7 +1896,7 @@ void Target8d::LoadAndValidate(void* arg1, void* arg2, void* arg3)
             Record8d* record = (*(Reader8d**)&DAT_011de45c)->FUN_004fd3c0();
             if (record)
             {
-                Object8d* object = FUN_004839c0(record->id);
+                Object8d* object = LookupFormByID(record->id);
                 FUN_005b5e40(&DAT_01015718, &DAT_010865e0, 0x104, record->id, object->name(),
                              *(unsigned char*)((char*)record + 9), *(unsigned*)((char*)record + 5));
             }
@@ -1916,7 +1916,7 @@ void Target8d::LoadAndValidate(void* arg1, void* arg2, void* arg3)
         Record8d* record = (*(Reader8d**)&DAT_011de45c)->FUN_004fd3c0();
         if (record)
         {
-            Object8d* object = FUN_004839c0(record->id);
+            Object8d* object = LookupFormByID(record->id);
             if (end > start + count)
             {
                 FUN_005b5e40(&DAT_01015588, end - (start + count), &DAT_010865e0, 0x109, record->id, object->name(),

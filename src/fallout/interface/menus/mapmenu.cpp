@@ -2464,7 +2464,7 @@ struct LBValue
     void RemoveFromReactions();
     void FUN_00a09130(int, Tile*, int);
     void AppendFloatAction(int, float);
-    void FUN_00a09410(int);
+    void Refresh(int);
 };
 
 struct LBTile
@@ -2476,10 +2476,10 @@ struct LBTile
 
 struct LBMenu
 {
-    Tile* FUN_00a1ddb0(LBTile*, const char*, int);
+    Tile* AddTileFromTemplate(LBTile*, const char*, int);
 };
 
-int __cdecl FUN_00a00940(const char*, int);
+int __cdecl TraitNameToIDAdd(const char*, int);
 extern const char _kListBoxNumFiltered[];
 extern double _gModifierZero;
 
@@ -2522,7 +2522,7 @@ Tile* LBox::AddItem(int item, const char* text, int (*sortFunc)(LBItem*, LBItem*
     if (parentTile && (templateName || altTemplate))
     {
         Tile* newTile =
-            ((LBMenu*)parentTile->GetMenu())->FUN_00a1ddb0(parentTile, altTemplate ? altTemplate : templateName, 0);
+            ((LBMenu*)parentTile->GetMenu())->AddTileFromTemplate(parentTile, altTemplate ? altTemplate : templateName, 0);
         if (!newTile->GetValue(0xfaa))
             newTile->Set(0xfaa, -1);
         if (text)
@@ -2545,13 +2545,13 @@ Tile* LBox::AddItem(int item, const char* text, int (*sortFunc)(LBItem*, LBItem*
         }
         if (GetRaceCount() == 1)
         {
-            if (parentTile->FUN_00a011b0(FUN_00a00940(_kListBoxNumFiltered, -1)) > _gModifierZero)
+            if (parentTile->FUN_00a011b0(TraitNameToIDAdd(_kListBoxNumFiltered, -1)) > _gModifierZero)
             {
                 LBValue* value = parentTile->FindTraitValue(0xfb0);
                 value->RemoveFromReactions();
                 value->FUN_00a09130(0x7d0, newTile, 0xfb0);
-                value->AppendFloatAction(0x7d3, parentTile->FUN_00a011b0(FUN_00a00940(_kListBoxNumFiltered, -1)));
-                value->FUN_00a09410(0);
+                value->AppendFloatAction(0x7d3, parentTile->FUN_00a011b0(TraitNameToIDAdd(_kListBoxNumFiltered, -1)));
+                value->Refresh(0);
             }
         }
         return newTile;
@@ -2562,12 +2562,12 @@ Tile* LBox::AddItem(int item, const char* text, int (*sortFunc)(LBItem*, LBItem*
     }
 }
 
-int __cdecl FUN_00a00940(const char* pcName, int iDefault);
+int __cdecl TraitNameToIDAdd(const char* pcName, int iDefault);
 
 struct HighlightValue
 {
     void FUN_00a09130(int a1, Tile* a2, int a3);
-    void FUN_00a09410(int a1);
+    void Refresh(int a1);
 };
 
 struct HighlightTile : public Tile
@@ -2594,8 +2594,8 @@ struct FUN_007a6c80_shell
 // @fnv 0x007a6c80
 void FUN_007a6c80_shell::UpdateHighlightBox()
 {
-    static int iHighlightY = FUN_00a00940("_highlight_y", -1);
-    static int iSelectedHeight = FUN_00a00940("_selected_height", -1);
+    static int iHighlightY = TraitNameToIDAdd("_highlight_y", -1);
+    static int iSelectedHeight = TraitNameToIDAdd("_selected_height", -1);
 
     if (unk0C)
     {
@@ -2604,9 +2604,9 @@ void FUN_007a6c80_shell::UpdateHighlightBox()
             HighlightValue* pHighlightY = (HighlightValue*)unk0C->GetValue(iHighlightY);
             HighlightValue* pSelectedHeight = (HighlightValue*)unk0C->GetValue(iSelectedHeight);
             pHighlightY->FUN_00a09130(2000, unk10, 0xfa2);
-            pHighlightY->FUN_00a09410(0);
+            pHighlightY->Refresh(0);
             pSelectedHeight->FUN_00a09130(2000, unk10, 0xfb0);
-            pSelectedHeight->FUN_00a09410(0);
+            pSelectedHeight->Refresh(0);
             if (unk10->GetSpeechChallengeFailure())
             {
                 HighlightTile* pBox = FUN_00a08b20(unk0C, "lb_highlight_box");
@@ -2858,7 +2858,7 @@ Tile* __cdecl FUN_00796b90()
         TileShaderProperty* property = object ? (TileShaderProperty*)object->GetProperty(FUN_00438220()) : 0;
         if (property)
             property->FUN_007700d0(true);
-        DAT_011da368->m_pTiles[6]->Set(FUN_00a00940("_Title", -1), "", true);
+        DAT_011da368->m_pTiles[6]->Set(TraitNameToIDAdd("_Title", -1), "", true);
         DAT_011da368->m_pTiles[5]->SetFlag8000(true);
         DAT_011da368->m_pTiles[3]->SetFlag8000(true);
         FUN_007a1490();
@@ -3011,7 +3011,7 @@ struct FUN_00a01290_shell
 
 int __cdecl MinInt(int, int);
 float __cdecl FUN_00404010(float, float);
-int __cdecl FUN_00a01860(const char*);
+int __cdecl TraitNameToID(const char*);
 
 struct MapMenu_Shell : public MapMenu
 {
@@ -3031,9 +3031,9 @@ void MapMenu_Shell::UpdateChallengeText(TESChallenge* apChallenge)
 
     dataTextTile_2 = m_pTiles[13]->GetNamedChild("MM_DataText");
     scrollbarTile7 = m_pTiles[13]->GetNamedChild("MM_TextScrollbar");
-    kScrollDelta = scrollbarTile7->GetFloat(FUN_00a01860("_ScrollDelta"));
+    kScrollDelta = scrollbarTile7->GetFloat(TraitNameToID("_ScrollDelta"));
     fUnk218 = 0.0f;
-    m_pTiles[13]->Set(FUN_00a01860("_ItemType"), 1);
+    m_pTiles[13]->Set(TraitNameToID("_ItemType"), 1);
 
     sprintf_s(buffer_, 0x200, "%s\n%d\\%d\n\n%s", apChallenge->GetFullName(),
               MinInt(apChallenge->GetProgressValue(), apChallenge->GetThreshold()), apChallenge->GetThreshold(),
@@ -3045,9 +3045,9 @@ void MapMenu_Shell::UpdateChallengeText(TESChallenge* apChallenge)
     fUnk218 = height8 - dataTextTile_2->GetParent()->GetFloat(0xfb0);
     fUnk218 = FUN_00404010(0.0f, fUnk218);
 
-    scrollbarTile7->Set(FUN_00a01860("_number_of_items"), FUN_004e4430(fUnk218 / kScrollDelta) + 1.0, true);
-    scrollbarTile7->Set(FUN_00a01860("_current_value"), 0.0f, false);
-    ((FUN_00a01290_shell*)scrollbarTile7)->SetTraitAndReset(FUN_00a01860("_SetInCode"), 1.0f);
+    scrollbarTile7->Set(TraitNameToID("_number_of_items"), FUN_004e4430(fUnk218 / kScrollDelta) + 1.0, true);
+    scrollbarTile7->Set(TraitNameToID("_current_value"), 0.0f, false);
+    ((FUN_00a01290_shell*)scrollbarTile7)->SetTraitAndReset(TraitNameToID("_SetInCode"), 1.0f);
 }
 
 struct WidgetTile
@@ -3217,8 +3217,8 @@ bool __cdecl FUN_00702450(int code);
 UIManager* __cdecl FUN_00705990();
 bool __cdecl FUN_00709d40();
 double __cdecl FUN_00408820(float value);
-int __cdecl FUN_00a01860(const void* key);
-int __cdecl FUN_00a01860(const void* key, float value);
+int __cdecl TraitNameToID(const void* key);
+int __cdecl TraitNameToID(const void* key, float value);
 int __cdecl FUN_00ec62c0();
 void __cdecl FUN_00717280(int);
 void __cdecl FUN_007048f0(int, int, int);
@@ -3313,12 +3313,12 @@ bool Controller::HandleInputCommand(int command, int ignored)
                         if (!DAT_011da404 || (double)(unsigned)(DAT_011f6394.FUN_00825c00() - DAT_011da404) >
                                                  (double)*DAT_011d8b88.FUN_00403e20())
                         {
-                            int before = FUN_00a01860(DAT_010702d8);
+                            int before = TraitNameToID(DAT_010702d8);
                             int property = (int)item->FUN_00a011b0(before);
                             item->FUN_00a012d0(before, (float)(property + direction), 0);
                             if ((double)property != item->FUN_00a011b0(before))
                             {
-                                item->SetTraitAndReset(FUN_00a01860(DAT_01070250), 1.0f);
+                                item->SetTraitAndReset(TraitNameToID(DAT_01070250), 1.0f);
                             }
                             DAT_011da404 = DAT_011f6394.FUN_00825c00();
                             changed = true;
@@ -3470,7 +3470,7 @@ class NoteSource
     void* FUN_005cbb50();
 };
 extern NoteSource* DAT_011dea3c;
-int __cdecl FUN_00a01860(const char* pcTrait);
+int __cdecl TraitNameToID(const char* pcTrait);
 
 class NotesMapMenu
 {
@@ -3501,7 +3501,7 @@ void NotesMapMenu::RefreshNotesList()
         }
         m_kNotesList.FUN_007a30e0(true);
         m_kNotesList.ApplyNoteFilter(FUN_0079b390);
-        m_pkNotesTile->FUN_00700320(FUN_00a01860("_ShowingAllNotes"), m_bShowingAllNotes);
+        m_pkNotesTile->FUN_00700320(TraitNameToID("_ShowingAllNotes"), m_bShowingAllNotes);
         m_pkNotesTile->FUN_00700320(0xfaf, DAT_011dea3c->FUN_005cbb50() != 0);
     }
 }
@@ -4140,7 +4140,7 @@ struct NiPoint2_helper
 };
 int __cdecl TruncateFloatToInt(float);
 int __cdecl FUN_00556870(NiPoint3&);
-int __cdecl FUN_00a00940(const char*, int);
+int __cdecl TraitNameToIDAdd(const char*, int);
 struct MarkerChildren
 {
     bool FUN_0076b610();
@@ -4155,7 +4155,7 @@ struct MapView : MapMenu
     void UpdateLocalMap();
     void FUN_0079c5a0(bool, float);
     NiPoint3 GetMarkerPosition(NiPoint3, TESWorldSpace*);
-    Tile* FUN_00a1ddb0(Tile*, const char*, bool);
+    Tile* AddTileFromTemplate(Tile*, const char*, bool);
     void FUN_0079dbb0();
 };
 // Computes the local map's world bounds from the player position or parent cell, updates the map view, and places door markers on the map tile.
@@ -4211,7 +4211,7 @@ void MapView::UpdateLocalMap()
                     c = (float)(FUN_00556870(d) / 4.0 * c);
                 if (c > 0.0 && b.x >= 0.0 && b.x <= 1.0 && b.y >= 0.0 && b.y <= 1.0)
                 {
-                    Tile* g = ((MapView*)DAT_011da368)->FUN_00a1ddb0(m_pTiles[2], "MapMarkerTemplate", false);
+                    Tile* g = ((MapView*)DAT_011da368)->AddTileFromTemplate(m_pTiles[2], "MapMarkerTemplate", false);
                     DoorInfoView* f = e->FUN_00568e50();
                     g->Set(4010, 26);
                     g->Set(DAT_011da350, b.x, true);
@@ -4222,7 +4222,7 @@ void MapView::UpdateLocalMap()
                     {
                         BSStringT<char> locationName;
                         f->SetString(locationName);
-                        g->Set(FUN_00a00940("_LocationName", -1), (const char*)locationName, true);
+                        g->Set(TraitNameToIDAdd("_LocationName", -1), (const char*)locationName, true);
                     }
                 }
             }
@@ -5043,7 +5043,7 @@ struct QuestNode
 };
 struct PlayerQuestOps
 {
-    QuestNode* FUN_00952ba0();
+    QuestNode* GetCurrentQuestTargets();
 };
 struct RefMapOps
 {
@@ -5060,7 +5060,7 @@ struct MarkerValue
 {
     void RemoveFromReactions();
     void FUN_00a09130(int, Tile*, int);
-    void FUN_00a09410(int);
+    void Refresh(int);
 };
 struct MarkerTileOps
 {
@@ -5072,7 +5072,7 @@ struct MarkerMap : MapMenu
     TESObjectREFR* SelectTarget(TESObjectREFR*, PathingPath*);
     void FUN_0079f8d0(TESObjectREFR*, TESObjectREFR*, PathingPath*, int);
     NiPoint3 GetMarkerPosition(NiPoint3, TESWorldSpace*);
-    Tile* FUN_00a1ddb0(Tile*, const char*, int);
+    Tile* AddTileFromTemplate(Tile*, const char*, int);
     void FUN_0079e0a0();
 };
 // @fnv 0x0079e0a0
@@ -5094,7 +5094,7 @@ void MarkerMap::FUN_0079e0a0()
         delete tile;
         tile = ((MarkerTile*)m_pMapTile)->FUN_00a03eb0(29);
     }
-    for (QuestNode* node = ((PlayerQuestOps*)g_thePlayer)->FUN_00952ba0();
+    for (QuestNode* node = ((PlayerQuestOps*)g_thePlayer)->GetCurrentQuestTargets();
          g_011e07f0.FUN_00408d60()->b && node && *node->FUN_006815c0(); node = node->FUN_00726070())
     {
         TESObjectREFR* reference = (*node->FUN_006815c0())->FUN_006101b0(true);
@@ -5121,9 +5121,9 @@ void MarkerMap::FUN_0079e0a0()
             {
                 Tile* value = 0;
                 if (m_iMapDisplayMode == 33)
-                    value = ((MarkerMap*)DAT_011da368)->FUN_00a1ddb0(m_pMapTile, markerWorld, 0);
+                    value = ((MarkerMap*)DAT_011da368)->AddTileFromTemplate(m_pMapTile, markerWorld, 0);
                 else
-                    value = ((MarkerMap*)DAT_011da368)->FUN_00a1ddb0(m_pMapTile, markerLocal, 0);
+                    value = ((MarkerMap*)DAT_011da368)->AddTileFromTemplate(m_pMapTile, markerLocal, 0);
                 value->Set(DAT_011da350, mapPosition.x, true);
                 value->Set(DAT_011da34c, mapPosition.y, true);
                 value->Set(0xfcc, markerTexture, true);
@@ -5131,7 +5131,7 @@ void MarkerMap::FUN_0079e0a0()
                 MarkerValue* marker = ((MarkerTileOps*)value)->FUN_00a00f30(0xff5);
                 marker->RemoveFromReactions();
                 marker->FUN_00a09130(2000, m_iMapDisplayMode == 33 ? m_pTiles[5] : m_pTiles[3], 0xff5);
-                marker->FUN_00a09410(0);
+                marker->Refresh(0);
             }
         }
     }
@@ -5232,11 +5232,11 @@ void MarkerMenu::UpdateQuestMarkers()
                 LBValue* aCacheObject = (LBValue*)a->GetValue(0xfa2);
                 aCreated->RemoveFromReactions();
                 aCreated->FUN_00a09130(0x7d0, aB, 0xfa1);
-                aCreated->FUN_00a09410(0);
+                aCreated->Refresh(0);
                 aCacheObject->RemoveFromReactions();
                 aCacheObject->FUN_00a09130(0x7d0, aB, 0xfa2);
                 aCacheObject->AppendFloatAction(0x7d1, 60.0f);
-                aCacheObject->FUN_00a09410(0);
+                aCacheObject->Refresh(0);
             }
             a->FUN_00a07530(0x3ff);
         }
@@ -5307,7 +5307,7 @@ struct TileEx
 
 struct MapMenuExt : public MapMenu
 {
-    Tile* FUN_00a1ddb0(Tile*, const char*, int);
+    Tile* AddTileFromTemplate(Tile*, const char*, int);
     void UpdateMapMarkers();
 };
 
@@ -5401,11 +5401,11 @@ void MapMenuExt::UpdateMapMarkers()
 
             if (m_iMapDisplayMode == 0x21)
             {
-                ui_ = ((MapMenuExt*)DAT_011da368)->FUN_00a1ddb0(m_pMapTile, "WorldMapQuestMarkerTemplate", 0);
+                ui_ = ((MapMenuExt*)DAT_011da368)->AddTileFromTemplate(m_pMapTile, "WorldMapQuestMarkerTemplate", 0);
             }
             else
             {
-                ui_ = ((MapMenuExt*)DAT_011da368)->FUN_00a1ddb0(m_pMapTile, "LocalMapQuestMarkerTemplate", 0);
+                ui_ = ((MapMenuExt*)DAT_011da368)->AddTileFromTemplate(m_pMapTile, "LocalMapQuestMarkerTemplate", 0);
             }
 
             ui_->Set(DAT_011da350, pt1A.x, true);
@@ -5419,12 +5419,12 @@ void MapMenuExt::UpdateMapMarkers()
             ui_->Set(0xfaa, 0x1a);
             ui_->Set(0xfad, 5.0f, true);
 
-            ui_->Set(FUN_00a00940("_LocationName", -1), "Companion", true);
+            ui_->Set(TraitNameToIDAdd("_LocationName", -1), "Companion", true);
 
             LBValue* val_ec = (LBValue*)ui_->GetValue(0xff5);
             val_ec->RemoveFromReactions();
             val_ec->FUN_00a09130(0x7d0, pStyleVal, 0xff5);
-            val_ec->FUN_00a09410(0);
+            val_ec->Refresh(0);
 
             float fadeXX = m_pMapTile->GetFloat(0xfb1);
             float kScaleY = m_pMapTile->GetFloat(0xfb0);
@@ -5453,17 +5453,17 @@ void MapMenuExt::UpdateMapMarkers()
             LBValue* valY = (LBValue*)newTile->GetValue(0xfa2);
             xVal->RemoveFromReactions();
             xVal->FUN_00a09130(0x7d0, ui_, 0xfa1);
-            xVal->FUN_00a09410(0);
+            xVal->Refresh(0);
 
             valY->RemoveFromReactions();
             valY->FUN_00a09130(0x7d0, ui_, 0xfa2);
             valY->AppendFloatAction(0x7d1, 60.0f);
-            valY->FUN_00a09410(0);
+            valY->Refresh(0);
 
             val_ec = (LBValue*)newTile->GetValue(0xff5);
             val_ec->RemoveFromReactions();
             val_ec->FUN_00a09130(0x7d0, pStyleVal, 0xff5);
-            val_ec->FUN_00a09410(0);
+            val_ec->Refresh(0);
         }
 
         headX = headX->GetNext();
@@ -5523,10 +5523,10 @@ void QuestMapMenu::UpdateQuestMarker()
                 Tile* marker = 0;
                 if (m_iMapDisplayMode == 33)
                     marker =
-                        ((LBMenu*)DAT_011da368)->FUN_00a1ddb0((LBTile*)m_pMapTile, "WorldMapQuestMarkerTemplate", 0);
+                        ((LBMenu*)DAT_011da368)->AddTileFromTemplate((LBTile*)m_pMapTile, "WorldMapQuestMarkerTemplate", 0);
                 else
                     marker =
-                        ((LBMenu*)DAT_011da368)->FUN_00a1ddb0((LBTile*)m_pMapTile, "LocalMapQuestMarkerTemplate", 0);
+                        ((LBMenu*)DAT_011da368)->AddTileFromTemplate((LBTile*)m_pMapTile, "LocalMapQuestMarkerTemplate", 0);
                 marker->Set(DAT_011da350, mapPosition.x, true);
                 marker->Set(DAT_011da34c, mapPosition.y, true);
                 marker->Set(0xfcc, "glow_hud_compass_pc_marker.dds", true);
@@ -5536,7 +5536,7 @@ void QuestMapMenu::UpdateQuestMarker()
                     LBValue* value = (LBValue*)marker->GetValue(0xff5);
                     value->RemoveFromReactions();
                     value->FUN_00a09130(2000, parent, 0xff5);
-                    value->FUN_00a09410(0);
+                    value->Refresh(0);
                 }
             }
         }
@@ -5712,7 +5712,7 @@ class PathingPath
 };
 struct Menu053
 {
-    Tile* FUN_00a1ddb0(Tile*, const char*, int);
+    Tile* AddTileFromTemplate(Tile*, const char*, int);
 };
 struct Value053
 {
@@ -5745,7 +5745,7 @@ void Map053::FUN_0079f8d0(TESObjectREFR* start, TESObjectREFR* end, PathingPath*
     NiPoint3 height = WorldToMapPosition(*end->GetPos(), end->GetParentWorldSpace());
     Tile* startPos = 0;
     width = 0;
-    startPos = ((Menu053*)DAT_011da368)->FUN_00a1ddb0(m_pMapTile, "WaypointTemplate", 0);
+    startPos = ((Menu053*)DAT_011da368)->AddTileFromTemplate(m_pMapTile, "WaypointTemplate", 0);
     startPos->Set(DAT_011da350, endPos.x, true);
     startPos->Set(DAT_011da34c, endPos.y, true);
     startPos->Set(0xfaa, id);
@@ -5773,7 +5773,7 @@ void Map053::FUN_0079f8d0(TESObjectREFR* start, TESObjectREFR* end, PathingPath*
             ref = ((Ref053*)path->refs.FUN_00558dd0(j))->FUN_00568e50()->FUN_00559450();
         if (ref && !((Ref053*)ref)->FUN_00575d10())
         {
-            Tile* middle = ((Menu053*)DAT_011da368)->FUN_00a1ddb0(m_pMapTile, "WaypointTemplate", 0);
+            Tile* middle = ((Menu053*)DAT_011da368)->AddTileFromTemplate(m_pMapTile, "WaypointTemplate", 0);
             NiPoint3 middlePos = WorldToMapPosition(*ref->GetPos(), ref->GetParentWorldSpace());
             middle->Set(DAT_011da350, middlePos.x, true);
             middle->Set(DAT_011da34c, middlePos.y, true);
@@ -5783,7 +5783,7 @@ void Map053::FUN_0079f8d0(TESObjectREFR* start, TESObjectREFR* end, PathingPath*
             first.AddTail(middle);
         }
     }
-    width = ((Menu053*)DAT_011da368)->FUN_00a1ddb0(m_pMapTile, "WaypointTemplate", 0);
+    width = ((Menu053*)DAT_011da368)->AddTileFromTemplate(m_pMapTile, "WaypointTemplate", 0);
     width->Set(DAT_011da350, height.x, true);
     width->Set(DAT_011da34c, height.y, true);
     width->Set(0xfaa, id);
@@ -5793,7 +5793,7 @@ void Map053::FUN_0079f8d0(TESObjectREFR* start, TESObjectREFR* end, PathingPath*
     float finish = m_pMapTile ? m_pMapTile->GetFloat(0xfce) : 0.0f;
     for (BSSimpleList<Tile*>* node = &first; node && node->GetItem() && node->GetNext(); node = node->GetNext())
     {
-        Tile* line = ((Menu053*)DAT_011da368)->FUN_00a1ddb0(node->GetItem(), "PathLineTemplate", 0);
+        Tile* line = ((Menu053*)DAT_011da368)->AddTileFromTemplate(node->GetItem(), "PathLineTemplate", 0);
         NiPoint2_helper b(node->GetItem()->GetFloat(DAT_011da350), node->GetItem()->GetFloat(DAT_011da34c));
         NiPoint2_helper a(node->GetNext()->GetItem()->GetFloat(DAT_011da350),
                           node->GetNext()->GetItem()->GetFloat(DAT_011da34c));
@@ -5814,11 +5814,11 @@ struct InsertAction
     void RemoveFromReactions();
     void FUN_00a09130(int, InsertTile*, int);
     void AppendFloatAction(int, float);
-    void FUN_00a09410(int);
+    void Refresh(int);
 };
 struct CloneTile
 {
-    InsertTile* FUN_00a1ddb0();
+    InsertTile* AddTileFromTemplate();
 };
 struct InsertTile
 {
@@ -5846,7 +5846,7 @@ struct InsertList
 void* __cdecl operator new(unsigned int);
 void __cdecl operator delete(void*);
 extern const char DAT_0106f860[];
-extern int __cdecl FUN_00a00940(const char*, int);
+extern int __cdecl TraitNameToIDAdd(const char*, int);
 struct ListInserter
 {
     unsigned int unk00;
@@ -5868,7 +5868,7 @@ InsertTile* ListInserter::InsertTileFromTemplate(void* data, const char* text, I
 {
     if (root && (templateName || source))
     {
-        InsertTile* pTile = root->FUN_00a03c90(root, source ? source : templateName, 0)->FUN_00a1ddb0();
+        InsertTile* pTile = root->FUN_00a03c90(root, source ? source : templateName, 0)->AddTileFromTemplate();
         InsertAction* action;
         if (!pTile->FUN_00a00f30(0xfaa))
             pTile->FUN_00700320(0xfaa, -1);
@@ -5890,13 +5890,13 @@ InsertTile* ListInserter::InsertTileFromTemplate(void* data, const char* text, I
             }
             pTile->FUN_00700320(0xfac, nextID++);
         }
-        if (GetRaceCount() == 1 && root->FUN_00a011b0(FUN_00a00940(DAT_0106f860, -1)) > 0.0)
+        if (GetRaceCount() == 1 && root->FUN_00a011b0(TraitNameToIDAdd(DAT_0106f860, -1)) > 0.0)
         {
             action = root->FindTraitValue(0xfb0);
             action->RemoveFromReactions();
             action->FUN_00a09130(2000, pTile, 0xfb0);
-            action->AppendFloatAction(2003, root->FUN_00a011b0(FUN_00a00940(DAT_0106f860, -1)));
-            action->FUN_00a09410(0);
+            action->AppendFloatAction(2003, root->FUN_00a011b0(TraitNameToIDAdd(DAT_0106f860, -1)));
+            action->Refresh(0);
         }
         return pTile;
     }
@@ -5910,7 +5910,7 @@ struct MyValue
     void RemoveFromReactions();
     void FUN_00a09130(int, MyTile*, int);
     void AppendFloatAction(int, float);
-    void FUN_00a09410(int);
+    void Refresh(int);
 };
 struct MyTile
 {
@@ -5920,7 +5920,7 @@ struct MyTile
 };
 struct MyMaker
 {
-    MyTile* FUN_00a1ddb0();
+    MyTile* AddTileFromTemplate();
 };
 struct MyParent
 {
@@ -5942,7 +5942,7 @@ struct MyList
     void FUN_007a7eb0(MyItem*, int (*)(MyItem*, MyItem*));
     void AddTail(MyItem* const&);
 };
-int __cdecl FUN_00a00940(const char*, int);
+int __cdecl TraitNameToIDAdd(const char*, int);
 extern const char _kListBoxNumFiltered[];
 extern double _DAT_01012060;
 
@@ -5969,7 +5969,7 @@ MyTile* MyBox::CreateListItem(int item, const char* text, int (*sortFunc)(MyItem
     if (parentTile && (templateName || altTemplate))
     {
         MyTile* tile_2 =
-            parentTile->FUN_00a03c90(parentTile, altTemplate ? altTemplate : templateName, 0)->FUN_00a1ddb0();
+            parentTile->FUN_00a03c90(parentTile, altTemplate ? altTemplate : templateName, 0)->AddTileFromTemplate();
         if (!tile_2->FUN_00a00f30(4010))
             tile_2->FUN_00700320(4010, -1);
         if (text)
@@ -5990,13 +5990,13 @@ MyTile* MyBox::CreateListItem(int item, const char* text, int (*sortFunc)(MyItem
             }
             tile_2->FUN_00700320(4012, itemCount++);
         }
-        if (GetRaceCount() == 1 && parentTile->FUN_00a011b0(FUN_00a00940(_kListBoxNumFiltered, -1)) > _DAT_01012060)
+        if (GetRaceCount() == 1 && parentTile->FUN_00a011b0(TraitNameToIDAdd(_kListBoxNumFiltered, -1)) > _DAT_01012060)
         {
             MyValue* value = parentTile->FindTraitValue(4016);
             value->RemoveFromReactions();
             value->FUN_00a09130(2000, tile_2, 4016);
-            value->AppendFloatAction(2003, parentTile->FUN_00a011b0(FUN_00a00940(_kListBoxNumFiltered, -1)));
-            value->FUN_00a09410(0);
+            value->AppendFloatAction(2003, parentTile->FUN_00a011b0(TraitNameToIDAdd(_kListBoxNumFiltered, -1)));
+            value->Refresh(0);
         }
         return tile_2;
     }
@@ -6049,7 +6049,7 @@ void NoteFilterBox::ApplyNoteFilter(bool (*filter)(BGSNote*))
 {
     int filteredCount = 0;
     int selectedIndex = -1;
-    static int numFiltered = FUN_00a00940("_num_filtered", -1);
+    static int numFiltered = TraitNameToIDAdd("_num_filtered", -1);
     count = 0;
     height = 0.0f;
     for (NoteFilterList* node = this; node && node->FUN_006815c0(); node = node->FUN_00726070())
@@ -6082,7 +6082,7 @@ void NoteFilterBox::ApplyNoteFilter(bool (*filter)(BGSNote*))
     UpdateHighlightBox();
 }
 
-int __cdecl FUN_00a00940(const char* pcName, int iDefault);
+int __cdecl TraitNameToIDAdd(const char* pcName, int iDefault);
 
 class Tile7A3
 {
@@ -6105,11 +6105,11 @@ class MenuItem7A3
 // @fnv 0x007a30e0
 void MenuItem7A3::FUN_007a30e0(bool bEnabled)
 {
-    static int s_iEnabledTrait = FUN_00a00940("_enabled", -1);
+    static int s_iEnabledTrait = TraitNameToIDAdd("_enabled", -1);
     m_pkTile->SetInt(s_iEnabledTrait, bEnabled);
 }
 
-int FUN_00a01860(const char* apName);
+int TraitNameToID(const char* apName);
 float FUN_0040ebd0(float a, float b);
 
 struct ScrollTile_7a3580
@@ -6173,8 +6173,8 @@ void ListBoxStandIn_7a3580::UpdateScrollSelection(bool abArg)
     ScrollTile_7a3580* pTile = 0;
     if (pListTile && m_pHighlightedTile)
     {
-        m_pHighlightedTile->Set(FUN_00a01860("_current_value"), fScrollValue, false);
-        m_pHighlightedTile->SetFloat(FUN_00a01860("_SetInCode"), 1.0f);
+        m_pHighlightedTile->Set(TraitNameToID("_current_value"), fScrollValue, false);
+        m_pHighlightedTile->SetFloat(TraitNameToID("_SetInCode"), 1.0f);
         pTile = GetTileAt((unsigned int)FUN_0040ebd0(fScrollPos, GetCount(0) - 1.0));
         GetInterfaceManager_7a3580()->Notify(pTile, 0xfc3, abArg);
         SetSelected(pTile);
@@ -6212,7 +6212,7 @@ Tile* InsertBox::FUN_007a3820(int item, const char* text, int (*sortFunc)(LBItem
     if (parentTile && (templateName || altTemplate))
     {
         Tile* tile =
-            ((LBMenu*)parentTile->GetMenu())->FUN_00a1ddb0(parentTile, altTemplate ? altTemplate : templateName, 0);
+            ((LBMenu*)parentTile->GetMenu())->AddTileFromTemplate(parentTile, altTemplate ? altTemplate : templateName, 0);
         if (!tile->GetValue(0xfaa))
             tile->Set(0xfaa, -1);
         if (text)
@@ -6233,13 +6233,13 @@ Tile* InsertBox::FUN_007a3820(int item, const char* text, int (*sortFunc)(LBItem
             }
             tile->Set(0xfac, itemCount++);
         }
-        if (GetRaceCount() == 1 && parentTile->FUN_00a011b0(FUN_00a00940(_kListBoxNumFiltered, -1)) > _DAT_01012060)
+        if (GetRaceCount() == 1 && parentTile->FUN_00a011b0(TraitNameToIDAdd(_kListBoxNumFiltered, -1)) > _DAT_01012060)
         {
             LBValue* value = parentTile->FindTraitValue(0xfb0);
             value->RemoveFromReactions();
             value->FUN_00a09130(0x7d0, tile, 0xfb0);
-            value->AppendFloatAction(0x7d3, parentTile->FUN_00a011b0(FUN_00a00940(_kListBoxNumFiltered, -1)));
-            value->FUN_00a09410(0);
+            value->AppendFloatAction(0x7d3, parentTile->FUN_00a011b0(TraitNameToIDAdd(_kListBoxNumFiltered, -1)));
+            value->Refresh(0);
         }
         return tile;
     }
@@ -6261,7 +6261,7 @@ Tile* InsertBox::FUN_007a44e0(int object, const char* text, int (*sort)(LBItem*,
 {
     if (parentTile && (templateName || alt))
     {
-        Tile* tile_2 = ((LBMenu*)parentTile->GetMenu())->FUN_00a1ddb0(parentTile, alt ? alt : templateName, 0);
+        Tile* tile_2 = ((LBMenu*)parentTile->GetMenu())->AddTileFromTemplate(parentTile, alt ? alt : templateName, 0);
         LBValue* value;
         if (!tile_2->GetValue(0xfaa))
             tile_2->Set(0xfaa, -1);
@@ -6285,13 +6285,13 @@ Tile* InsertBox::FUN_007a44e0(int object, const char* text, int (*sort)(LBItem*,
                 tile_2->Set(0xfac, itemCount++);
             }
         }
-        if (GetRaceCount() == 1 && parentTile->FUN_00a011b0(FUN_00a00940(_kListBoxNumFiltered, -1)) > 0.0)
+        if (GetRaceCount() == 1 && parentTile->FUN_00a011b0(TraitNameToIDAdd(_kListBoxNumFiltered, -1)) > 0.0)
         {
             value = parentTile->FindTraitValue(0xfb0);
             value->RemoveFromReactions();
             value->FUN_00a09130(0x7d0, tile_2, 0xfb0);
-            value->AppendFloatAction(0x7d3, parentTile->FUN_00a011b0(FUN_00a00940(_kListBoxNumFiltered, -1)));
-            value->FUN_00a09410(0);
+            value->AppendFloatAction(0x7d3, parentTile->FUN_00a011b0(TraitNameToIDAdd(_kListBoxNumFiltered, -1)));
+            value->Refresh(0);
         }
         return tile_2;
     }
@@ -6350,7 +6350,7 @@ void FilterHost::ApplyObjectiveFilter(bool (*predicate)(BGSQuestObjective*))
 {
     int filteredCount = 0;
     int selectedIndex = -1;
-    static int numFilteredTrait = FUN_00a00940("_num_filtered", -1);
+    static int numFilteredTrait = TraitNameToIDAdd("_num_filtered", -1);
     count = 0;
     height = 0.0f;
     for (FilterNode* node = this; node && node->FUN_006815c0(); node = node->FUN_00726070())
@@ -6554,7 +6554,7 @@ struct SelectTile;
 struct SelectAction
 {
     void FUN_00a09130(int, SelectTile*, int);
-    void FUN_00a09410(int);
+    void Refresh(int);
 };
 struct SelectTile
 {
@@ -6567,7 +6567,7 @@ struct SelectTile
 };
 extern const char DAT_0106f8c0[], DAT_0106f8ac[], DAT_0106f898[], DAT_0106f894[], DAT_0106f88c[], DAT_0106f884[],
     DAT_0106f87c[];
-extern int __cdecl FUN_00a00940(const char*, int);
+extern int __cdecl TraitNameToIDAdd(const char*, int);
 extern SelectTile* __cdecl FUN_00a08b20(SelectTile*, const char*);
 struct SelectionList
 {
@@ -6580,8 +6580,8 @@ struct SelectionList
 // @fnv 0x007a7a60
 void SelectionList::UpdateSelectionState()
 {
-    static int DAT_011da4bc = FUN_00a00940(DAT_0106f8c0, -1);
-    static int DAT_011da4b8 = FUN_00a00940(DAT_0106f8ac, -1);
+    static int DAT_011da4bc = TraitNameToIDAdd(DAT_0106f8c0, -1);
+    static int DAT_011da4b8 = TraitNameToIDAdd(DAT_0106f8ac, -1);
     if (root)
     {
         if (selected)
@@ -6589,9 +6589,9 @@ void SelectionList::UpdateSelectionState()
             SelectAction* first = root->FUN_00a00f30(DAT_011da4bc);
             SelectAction* second6 = root->FUN_00a00f30(DAT_011da4b8);
             first->FUN_00a09130(2000, selected, 0xfa2);
-            first->FUN_00a09410(0);
+            first->Refresh(0);
             second6->FUN_00a09130(2000, selected, 0xfb0);
-            second6->FUN_00a09410(0);
+            second6->Refresh(0);
             if (selected->FUN_0071aa80())
             {
                 SelectTile* container = FUN_00a08b20(root, DAT_0106f898);
@@ -6817,7 +6817,7 @@ struct FUN_007a3d20_parent
 };
 
 int __cdecl FUN_00ec62c0();
-int __cdecl FUN_00a00940(const char*, int);
+int __cdecl TraitNameToIDAdd(const char*, int);
 
 struct FUN_007a3d20_cls
 {
@@ -6848,7 +6848,7 @@ void FUN_007a3d20_cls::FUN_007a3d20(bool (*pfnFilter)(int))
 {
     int count = 0;
     int selIdx = -1;
-    static int numFiltered = FUN_00a00940("_num_filtered", -1);
+    static int numFiltered = TraitNameToIDAdd("_num_filtered", -1);
 
     this->itemCount = 0;
     this->unk20 = 0.0f;
@@ -6887,7 +6887,7 @@ void FUN_007a3d20_cls::FUN_007a3d20(bool (*pfnFilter)(int))
     this->FUN_007a73e0();
 }
 
-int FUN_00a00940(const char* pszName, int iIndex);
+int TraitNameToIDAdd(const char* pszName, int iIndex);
 
 class TileOwnerW
 {
@@ -6902,7 +6902,7 @@ class TileOwnerW
 // @fnv 0x007a59a0
 void TileOwnerW::FUN_007a59a0(bool abEnabled)
 {
-    static int s_iTrait = FUN_00a00940("_enabled", -1);
+    static int s_iTrait = TraitNameToIDAdd("_enabled", -1);
     m_pkTile->Set(s_iTrait, abEnabled);
 }
 
@@ -6982,7 +6982,7 @@ class AMSoundHandle
     ~AMSoundHandle();
     bool FUN_00ad8ce0();            // IsPlaying
     int FUN_00ad8b30();             // duration in ms
-    bool FUN_00ad8830(bool bLoop);  // Play
+    bool Play(bool bLoop);  // Play
 };
 
 struct AMSoundNode
@@ -7131,7 +7131,7 @@ class AMAudio
 };
 
 void FUN_00705210(const char* pcSubtitle, AMSoundHandle kHandle, AMPoint kPos, AMPlayer* pkSpeaker, int iFlag);
-int FUN_00a01860(const char* pcTrait);
+int TraitNameToID(const char* pcTrait);
 int FUN_00406d00(char* pcBuffer, unsigned int uiSize, const char* pcFormat, ...);
 float FUN_0040ebd0(float fA, float fB);
 
@@ -7263,7 +7263,7 @@ void AMMenuView::UpdateHolotapePlayback()
         {
             m_bLoading = false;
             m_fSoundVolume = (iCount - 1) * 500 + iTotalLoc;
-            m_pkCurrent->FUN_006815c0()->FUN_00ad8830(false);
+            m_pkCurrent->FUN_006815c0()->Play(false);
             m_uiStartTime = DAT_011f6394.FUN_00825c00();
             FUN_00705210(m_kSubtitles.GetElement(0)->FUN_00559450(), *m_pkCurrent->FUN_006815c0(),
                          DAT_011dea3c->GetPosition(), DAT_011dea3c, 0);
@@ -7278,8 +7278,8 @@ void AMMenuView::UpdateHolotapePlayback()
         iRemaining = (int)(m_fSoundVolume - fTimeOffset);
         FUN_00406d00(acText, 0x40, "%02d:%02d:%01d %s", iRemaining / 60000, iRemaining % 60000 / 1000,
                      iRemaining % 1000 / 100, DAT_011d3960.FUN_00403df0());
-        m_pkInfoTile->FUN_00a01350(FUN_00a01860("_ItemStringInfo"), acText, 1);
-        m_pkInfoTile->FUN_00a012d0(FUN_00a01860("_AudioFileCompletion"), fTimeOffset / m_fSoundVolume, 1);
+        m_pkInfoTile->FUN_00a01350(TraitNameToID("_ItemStringInfo"), acText, 1);
+        m_pkInfoTile->FUN_00a012d0(TraitNameToID("_AudioFileCompletion"), fTimeOffset / m_fSoundVolume, 1);
     }
     if (m_pkCurrent && !m_pkCurrent->FUN_006815c0()->FUN_00ad8ce0())
     {
@@ -7288,7 +7288,7 @@ void AMMenuView::UpdateHolotapePlayback()
         if (m_pkCurrent->FUN_0084e3a0() && DAT_011f6394.FUN_00825c00() - DAT_011da410 > 500)
         {
             m_pkCurrent = m_pkCurrent->FUN_0084e3a0();
-            m_pkCurrent->FUN_006815c0()->FUN_00ad8830(false);
+            m_pkCurrent->FUN_006815c0()->Play(false);
             DAT_011da410 = 0;
             FUN_00705210(m_kSubtitles.GetElement(0)->FUN_00559450(), *m_pkCurrent->FUN_006815c0(),
                          DAT_011dea3c->GetPosition(), DAT_011dea3c, 1);
@@ -7297,8 +7297,8 @@ void AMMenuView::UpdateHolotapePlayback()
         else if (!m_pkCurrent->FUN_0084e3a0())
         {
             FUN_00406d00(acText, 0x40, "00:00:0 %s", DAT_011d3960.FUN_00403df0());
-            m_pkInfoTile->FUN_00a01350(FUN_00a01860("_ItemStringInfo"), acText, 1);
-            m_pkInfoTile->FUN_00a012d0(FUN_00a01860("_AudioFileCompletion"), 1.0f, 1);
+            m_pkInfoTile->FUN_00a01350(TraitNameToID("_ItemStringInfo"), acText, 1);
+            m_pkInfoTile->FUN_00a012d0(TraitNameToID("_AudioFileCompletion"), 1.0f, 1);
             m_pkInfoTile->FUN_00700320(0x1004, 0);
             StopHolotapeAudio();
         }
@@ -7594,7 +7594,7 @@ class MMMenu
     int unk118;
     void* m_pkNorthCell;  // +0x11c
 
-    MMTile* FUN_00a1ddb0(MMTile* pkParent, const char* pcTemplate, int iFlag);
+    MMTile* AddTileFromTemplate(MMTile* pkParent, const char* pcTemplate, int iFlag);
     void FUN_0079c5a0(int iA, float fScale);
     NiPoint3 GetMarkerPosition(NiPoint3 kPos, MMParent* pkSpace);
     void FUN_0079dbb0();
@@ -7607,9 +7607,9 @@ struct MMPoint2
     MMPoint2(float fX, float fY);
 };
 
-TESForm* FUN_004839c0(unsigned int auiFormId);
+TESForm* LookupFormByID(unsigned int auiFormId);
 int FUN_00406d00(char* pcBuffer, unsigned int uiSize, const char* pcFormat, ...);
-int FUN_00a00940(const char* pcTrait, int iIndex);
+int TraitNameToIDAdd(const char* pcTrait, int iIndex);
 extern unsigned int DAT_011da370;
 extern const char* DAT_011a0404[];
 
@@ -7620,7 +7620,7 @@ void MMMenu::RefreshMap()
     MMMapData* pkData = m_pkRootSpace ? m_pkRootSpace->FUN_00586400() : 0;
     if (!m_pkRootSpace || !pkData || !pkData->iWidth || !pkData->iHeight)
     {
-        m_pkRootSpace = (MMWorld*)dynamic_cast<TESWorldSpace*>(FUN_004839c0(0x3c));
+        m_pkRootSpace = (MMWorld*)dynamic_cast<TESWorldSpace*>(LookupFormByID(0x3c));
         pkData = m_pkRootSpace ? m_pkRootSpace->FUN_00586400() : 0;
         m_bRootSpaceChanged = true;
     }
@@ -7660,7 +7660,7 @@ void MMMenu::RefreshMap()
                     continue;
                 if (pkSpace != (MMParent*)m_pkRootSpace)
                     continue;
-                MMTile* pkMarkerEntry = ((MMMenu*)DAT_011da368)->FUN_00a1ddb0(m_pkMapTile, "MapMarkerTemplate", 0);
+                MMTile* pkMarkerEntry = ((MMMenu*)DAT_011da368)->AddTileFromTemplate(m_pkMapTile, "MapMarkerTemplate", 0);
                 if (pkMarkerEntry)
                 {
                     char acText[256];
@@ -7670,10 +7670,10 @@ void MMMenu::RefreshMap()
                     {
                         FUN_00406d00(acText, 0x100, "%s\n(%s)", pkRef->FUN_00569060()->FUN_00438eb0(),
                                      pkName->FUN_00616710());
-                        pkMarkerEntry->FUN_00a01350(FUN_00a00940("_LocationName", -1), acText, 1);
+                        pkMarkerEntry->FUN_00a01350(TraitNameToIDAdd("_LocationName", -1), acText, 1);
                     }
                     else
-                        pkMarkerEntry->FUN_00a01350(FUN_00a00940("_LocationName", -1),
+                        pkMarkerEntry->FUN_00a01350(TraitNameToIDAdd("_LocationName", -1),
                                                     pkRef->FUN_00569060()->FUN_00438eb0(), 1);
                     pkMarkerEntry->FUN_00707e10(pkRef->FUN_00569060()->FUN_00438eb0());
                     pkMarkerEntry->FUN_00700320(0xfaa, 0x1a);
@@ -7686,7 +7686,7 @@ void MMMenu::RefreshMap()
                         pkMarkerEntry->FUN_00a01350(0xfcc, "Interface\\Icons\\World Map\\icon_map_undiscovered.dds", 1);
                         pkMarkerEntry->FUN_00700320(0x1004, 0);
                     }
-                    pkMarkerEntry->FUN_00700320(FUN_00a00940("_MarkerIndex", -1), DAT_011da370);
+                    pkMarkerEntry->FUN_00700320(TraitNameToIDAdd("_MarkerIndex", -1), DAT_011da370);
                     m_kMarkers.FUN_00905820(&pkRef);
                     DAT_011da370++;
                 }
@@ -7734,10 +7734,10 @@ struct NoteExtent
 };
 struct NoteFont
 {
-    NoteExtent* FUN_00a1b020(NoteExtent*, const char*, int, float, int);
+    NoteExtent* GetStringDimensions(NoteExtent*, const char*, int, float, int);
 };
 NoteFont* FUN_005bd5b0();
-int FUN_00a01860(const char*);
+int TraitNameToID(const char*);
 float FUN_00404010(float, float);
 float FUN_004e4430(float);
 struct NoteSetting
@@ -7812,32 +7812,32 @@ void NoteMenu::SetNote(NoteInput* note)
     case 1:
         textTile2 = noteTile->FUN_00a03da0("MM_DataText");
         scrollbar2 = noteTile->FUN_00a03da0("MM_TextScrollbar");
-        scrollDelta = scrollbar2->FUN_00a011b0(FUN_00a01860("_ScrollDelta"));
+        scrollDelta = scrollbar2->FUN_00a011b0(TraitNameToID("_ScrollDelta"));
         overflow3 = 0.0f;
-        noteTile->FUN_00700320(FUN_00a01860("_ItemType"), 1);
+        noteTile->FUN_00700320(TraitNameToID("_ItemType"), 1);
         textTile2->FUN_00a01350(0xfc4, note->FUN_005e91d0()->GetText((BGSNote*)note, 0x4d414e54), true);
         textHeight2 =
             FUN_005bd5b0()
-                ->FUN_00a1b020(&extent4, note->FUN_005e91d0()->GetText((BGSNote*)note, 0x4d414e54), 1, 400.0f, 0)
+                ->GetStringDimensions(&extent4, note->FUN_005e91d0()->GetText((BGSNote*)note, 0x4d414e54), 1, 400.0f, 0)
                 ->y;
         overflow3 = textHeight2 - textTile2->FUN_0045cd60()->FUN_00a011b0(0xfb0);
         overflow3 = FUN_00404010(0.0f, overflow3);
-        scrollbar2->FUN_00a012d0(FUN_00a01860("_number_of_items"), FUN_004e4430(overflow3 / scrollDelta) + 1.0, true);
-        scrollbar2->FUN_00a012d0(FUN_00a01860("_current_value"), 0.0f, false);
-        scrollbar2->SetTraitAndReset(FUN_00a01860("_SetInCode"), 1.0f);
+        scrollbar2->FUN_00a012d0(TraitNameToID("_number_of_items"), FUN_004e4430(overflow3 / scrollDelta) + 1.0, true);
+        scrollbar2->FUN_00a012d0(TraitNameToID("_current_value"), 0.0f, false);
+        scrollbar2->SetTraitAndReset(TraitNameToID("_SetInCode"), 1.0f);
         break;
     case 2:
         noteTile->FUN_00a03da0("MM_DataImage")->FUN_00a01350(0xfcc, note->GetNoteTexture()->FUN_00408da0(), true);
-        noteTile->FUN_00700320(FUN_00a01860("_ItemType"), 2);
+        noteTile->FUN_00700320(TraitNameToID("_ItemType"), 2);
         break;
     case 0:
     case 3:
-        noteTile->FUN_00700320(FUN_00a01860("_ItemType"), 3);
+        noteTile->FUN_00700320(TraitNameToID("_ItemType"), 3);
         if (!unkb8)
         {
             sprintf_s(timeText2, 64, "--:--:- %s", g_011d3960.FUN_00403df0());
-            noteTile->FUN_00a01350(FUN_00a01860("_ItemStringInfo"), timeText2, true);
-            noteTile->FUN_00a012d0(FUN_00a01860("_AudioFileCompletion"), 0.0f, true);
+            noteTile->FUN_00a01350(TraitNameToID("_ItemStringInfo"), timeText2, true);
+            noteTile->FUN_00a012d0(TraitNameToID("_AudioFileCompletion"), 0.0f, true);
         }
         break;
     }
@@ -7845,11 +7845,11 @@ void NoteMenu::SetNote(NoteInput* note)
 }
 }  // namespace fnv_007993d0
 
-int __cdecl FUN_00a00940(const char*, int);
+int __cdecl TraitNameToIDAdd(const char*, int);
 struct TraitValue
 {
     void FUN_00a09130(int, Tile*, int);
-    void FUN_00a09410(bool);
+    void Refresh(bool);
 };
 
 HighlightTile* __cdecl FUN_00a08b20(Tile*, const char*);
@@ -7866,8 +7866,8 @@ struct HighlightList
 // @fnv 0x007a8260
 void HighlightList::UpdateHighlight()
 {
-    static int highlightY = FUN_00a00940("_highlight_y", -1);
-    static int selectedHeight = FUN_00a00940("_selected_height", -1);
+    static int highlightY = TraitNameToIDAdd("_highlight_y", -1);
+    static int selectedHeight = TraitNameToIDAdd("_selected_height", -1);
     if (unk0c)
     {
         if (unk10)
@@ -7875,9 +7875,9 @@ void HighlightList::UpdateHighlight()
             TraitValue* valueHeight = (TraitValue*)unk0c->GetValue(highlightY);
             TraitValue* valueY = (TraitValue*)unk0c->GetValue(selectedHeight);
             valueHeight->FUN_00a09130(2000, unk10, 4002);
-            valueHeight->FUN_00a09410(false);
+            valueHeight->Refresh(false);
             valueY->FUN_00a09130(2000, unk10, 4016);
-            valueY->FUN_00a09410(false);
+            valueY->Refresh(false);
             if (unk10->GetSpeechChallengeFailure())
             {
                 HighlightTile* box = FUN_00a08b20(unk0c, "lb_highlight_box");
@@ -7941,7 +7941,7 @@ extern char str_010739a0[];
 extern SettingT_GameSettingCollection_ DAT_011db2f0, DAT_011db358;
 extern void FUN_0079bc50(Tile*, BGSQuestObjective*);
 extern void FUN_00799100(Tile*, BGSQuestObjective*);
-extern int FUN_00a01860(const char*);
+extern int TraitNameToID(const char*);
 extern void FUN_00706f30(int);
 struct SelectedIndex
 {

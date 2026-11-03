@@ -79,7 +79,7 @@ struct CStringArgument
     bool FUN_005afad0(ScriptToken*, bool, bool);
 };
 TESForm* FUN_00483a00(const char*);
-TESForm* FUN_004839c0(unsigned int);
+TESForm* LookupFormByID(unsigned int);
 unsigned int FUN_005afe10(const char*, char**, int);
 void ReportScriptError(CStringArgument*, const char*, ...);
 // @fnv 0x005afad0
@@ -133,7 +133,7 @@ bool CStringArgument::FUN_005afad0(ScriptToken* token, bool variable, bool allow
                 unsigned int formID = FUN_005afe10(token->name, &end, 16);
                 if (formID && end && !*end)
                 {
-                    reference->form = FUN_004839c0(formID);
+                    reference->form = LookupFormByID(formID);
                     if (reference->form)
                         result = true;
                 }

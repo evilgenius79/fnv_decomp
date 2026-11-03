@@ -866,7 +866,7 @@ struct ConsoleLines
 };
 struct ConsoleTextRenderer
 {
-    void FUN_00a0f8b0(const char* text, float x, float y, int color, int state, float opacity, int alignment,
+    void CreateLine(const char* text, float x, float y, int color, int state, float opacity, int alignment,
                       int style);
 };
 ConsoleTextRenderer* __cdecl FUN_00a0d9e0(int mode);
@@ -889,7 +889,7 @@ void ConsoleDisplay::DrawConsoleLines()
     int lineIndex = lastLine - DAT_011d8cfc.Int()->i;
     while (lineIndex < 0)
     {
-        FUN_00a0d9e0(1)->FUN_00a0f8b0(0, (float)m_iConsoleX, (float)lineY, 1, -1, _DAT_01012054, 0, 0);
+        FUN_00a0d9e0(1)->CreateLine(0, (float)m_iConsoleX, (float)lineY, 1, -1, _DAT_01012054, 0, 0);
         ++lineIndex;
         lineY += iConsoleLineSpacing;
     }
@@ -897,7 +897,7 @@ void ConsoleDisplay::DrawConsoleLines()
         node = strings.DereferenceIfNotNull(node);
     while (lineIndex < lastLine)
     {
-        FUN_00a0d9e0(1)->FUN_00a0f8b0(strings.AddEight(node)->FUN_00559450(), (float)m_iConsoleX, (float)lineY, 1, -1,
+        FUN_00a0d9e0(1)->CreateLine(strings.AddEight(node)->FUN_00559450(), (float)m_iConsoleX, (float)lineY, 1, -1,
                                       _DAT_01012054, DAT_011d8d38.Int()->i, 0);
         node = strings.DereferenceIfNotNull(node);
         ++lineIndex;

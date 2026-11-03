@@ -143,7 +143,7 @@ struct Tile
 {
     virtual ~Tile();  // the original class is polymorphic (rtti_variants.py)
     void __thiscall Set(int, int);
-    Tile* FUN_00a01b00();
+    Tile* ReadXML();
     Menu* FUN_00a03c90();
     float FUN_00a011b0(int id);
     void FUN_00a012d0(int id, float value, bool a);
@@ -1208,8 +1208,8 @@ struct RemoveInterface
     Tile* FUN_00586150(const char* path);
 };
 RemoveInterface* FUN_004b7210();
-int FUN_00a01860(const char*);
-void FUN_00401030(void*);
+int TraitNameToID(const char*);
+void FormHeap_Free(void*);
 struct RemoveBase
 {
     int unk00;
@@ -1274,7 +1274,7 @@ bool __cdecl FUN_007e6320(const char* titleText, const char* initialText, void(_
 
     RemoveInterface* interfaceManager = FUN_004b7210();
     float depthA = FUN_00a01530();
-    Tile* root2 = interfaceManager->FUN_00586150("Data\\Menus\\Dialog\\TextEditMenu.xml")->FUN_00a01b00();
+    Tile* root2 = interfaceManager->FUN_00586150("Data\\Menus\\Dialog\\TextEditMenu.xml")->ReadXML();
     Menu* menu = root2->FUN_00a03c90();
     if (menu && menu->GetID() == FUN_007e65a0())
     {

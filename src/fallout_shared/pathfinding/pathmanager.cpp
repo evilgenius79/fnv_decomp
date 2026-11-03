@@ -1130,8 +1130,8 @@ struct SearchLock
     int unk14;
     int unk18;
     int unk1c;
-    void FUN_0040fbf0(const char*);
-    void FUN_0040fba0();
+    void Lock(const char*);
+    void Unlock();
 };
 struct ManagerView
 {
@@ -1152,7 +1152,7 @@ struct ManagerView
 int ManagerView::FUN_006ea350()
 {
     int total = 0;
-    lock.FUN_0040fbf0(0);
+    lock.Lock(0);
     for (unsigned int i = 0; i < first.FUN_0044ddc0(); i++)
     {
         if (second.FUN_00877a30(i)->flags == 0)
@@ -1164,7 +1164,7 @@ int ManagerView::FUN_006ea350()
                 break;
         }
     }
-    lock.FUN_0040fba0();
+    lock.Unlock();
     return total;
 }
 
@@ -5783,7 +5783,7 @@ struct RequestManager
 unsigned int FUN_006ea780_Obj::RequestLocationStatus(int pShape, int iLocation, int a3, int bTypeFlag)
 {
     unsigned int status = 0;
-    ((RequestManager*)this)->lock.FUN_0040fbf0(0);
+    ((RequestManager*)this)->lock.Lock(0);
     for (unsigned int i = 0; i < ((RequestManager*)this)->statuses.FUN_0044ddc0(); i++)
     {
         if (((RequestManager*)this)->statuses.FUN_00877a30(i)->type == !(unsigned char)bTypeFlag &&
@@ -5803,7 +5803,7 @@ unsigned int FUN_006ea780_Obj::RequestLocationStatus(int pShape, int iLocation, 
             default:
                 status = 2;
             }
-            ((RequestManager*)this)->lock.FUN_0040fba0();
+            ((RequestManager*)this)->lock.Unlock();
             return status;
         }
     }
@@ -5817,7 +5817,7 @@ unsigned int FUN_006ea780_Obj::RequestLocationStatus(int pShape, int iLocation, 
     request->status = 0;
     ((RequestManager*)this)->requests.FUN_007cb2e0(entry);
     ((RequestManager*)this)->statuses.FUN_007cb2e0(request);
-    ((RequestManager*)this)->lock.FUN_0040fba0();
+    ((RequestManager*)this)->lock.Unlock();
     ((RequestManager*)this)->FUN_0060d4b0(1);
     return status;
 }

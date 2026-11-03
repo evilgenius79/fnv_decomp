@@ -2147,7 +2147,7 @@ struct CameraShotExtra : ::BGSCameraShot
 };
 struct CameraDisplayManager
 {
-    void __thiscall FUN_00950110(bool);
+    void __thiscall ToggleFirstPerson(bool);
 };
 extern CameraDisplayManager* DAT_011dea3c;
 extern unsigned char DAT_011f21d3;
@@ -2184,7 +2184,7 @@ bool __thiscall FUN_009c9920_shell::FUN_009c9920()
         }
         if (pCamera && static_cast<CameraShotExtra*>(pCamera)->FUN_009c8600())
         {
-            DAT_011dea3c->FUN_00950110(true);
+            DAT_011dea3c->ToggleFirstPerson(true);
         }
         else
         {

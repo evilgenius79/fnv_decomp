@@ -3306,7 +3306,7 @@ struct MyPool
 };
 struct FUN_0040fbf0_Class
 {
-    void FUN_0040fbf0(int);
+    void Lock(int);
 };
 extern FUN_00a615c0_Class* DAT_011f4468;
 extern FUN_0040fbf0_Class DAT_011f4480;
@@ -3317,7 +3317,7 @@ void __cdecl FUN_00a62030()
 {
     if (DAT_011f4468 != 0)
     {
-        DAT_011f4480.FUN_0040fbf0(0);
+        DAT_011f4480.Lock(0);
         DAT_011f4468->ClearAllBuckets();
         for (unsigned int i = 0; i < 7; i++)
             ((MyPool*)DAT_011f4464)->m_buckets[i].ClearAllSlots();

@@ -1071,7 +1071,7 @@ struct P164Inventory
     P164Item* FUN_004c8c10(unsigned int, int);
 };
 P164Inventory* __cdecl FUN_004bf220(TESObjectREFR*);
-TESForm* __cdecl FUN_004839c0(unsigned int);
+TESForm* __cdecl LookupFormByID(unsigned int);
 struct P164Modifier
 {
     void LoadModifiers(P164Buffer*);
@@ -1599,7 +1599,7 @@ void P164Actor::FUN_008ab3a0(P164Buffer* buffer)
     if (buffer->GetVersion() >= 13)
         buffer->FUN_00864980(&m_uiValueBeforeBooleanFields, 4);
     buffer->FUN_008648e0(&m_pActorReference);
-    m_pActorBase = dynamic_cast<TESActorBase*>(FUN_004839c0(buffer->FUN_008648a0()));
+    m_pActorBase = dynamic_cast<TESActorBase*>(LookupFormByID(buffer->FUN_008648a0()));
     buffer->FUN_008648e0(&m_pMobileObject);
     if (buffer->FUN_00428110().FUN_004280f0(0x400))
     {

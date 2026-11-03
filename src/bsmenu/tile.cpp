@@ -224,9 +224,9 @@ float FUN_00a01440_shell::GetAccumulatedFloat()
     return fTotal;
 }
 
-int __cdecl FUN_00a01860(const char*);
+int __cdecl TraitNameToID(const char*);
 
-// Copies characters before '(' into text and characters inside parentheses into apParam, then passes text to FUN_00a01860 and returns its result.
+// Copies characters before '(' into text and characters inside parentheses into apParam, then passes text to TraitNameToID and returns its result.
 // @fnv 0x00a018d0
 int __cdecl ParseTextAndParams(const char* apText, char* apParam)
 {
@@ -261,7 +261,7 @@ int __cdecl ParseTextAndParams(const char* apText, char* apParam)
         }
     }
 
-    return FUN_00a01860(text);
+    return TraitNameToID(text);
 }
 
 const char* __cdecl strrchr(const char*, int);
@@ -478,7 +478,7 @@ struct FUN_00a0a0b0_shell : public Tile {
 
 const char* __cdecl FUN_00a01a70(int);
 int __cdecl _sprintf_s(char*, unsigned int, const char*, ...);
-int __cdecl FUN_00a01860(const char*);
+int __cdecl TraitNameToID(const char*);
 
 // Builds a value name from the base trait name and ID, then returns the value looked up by that name.
 // @fnv 0x00a0a0b0
@@ -487,7 +487,7 @@ void* FUN_00a0a0b0_shell::FUN_00a0a0b0(int aiBaseTrait, int aiID)
     char strValueName[260];
     const char* strBaseName = FUN_00a01a70(aiBaseTrait);
     _sprintf_s(strValueName, sizeof(strValueName), "%s%d", strBaseName, aiID);
-    return GetValue(FUN_00a01860(strValueName));
+    return GetValue(TraitNameToID(strValueName));
 }
 
 struct MemoryManager { void Deallocate(void* p); };
@@ -594,10 +594,10 @@ void FUN_00a079d0_shell::UpdateTileChildren()
 namespace fnv_00a0a270 {
 struct MemoryManager { void Deallocate(void*); };
 extern MemoryManager g_memoryManager;
-struct VX { char pad[8]; float fValue; void* ptr; void RemoveFromReactions(); void FUN_00a09410(bool); };
+struct VX { char pad[8]; float fValue; void* ptr; void RemoveFromReactions(); void Refresh(bool); };
 struct BW { bool v; };
 struct FW { float f; };
-// Stores afValue.f into fValue, frees ptr if set, optionally calls RemoveFromReactions, then calls FUN_00a09410 with whether the value changed or ptr was non-null.
+// Stores afValue.f into fValue, frees ptr if set, optionally calls RemoveFromReactions, then calls Refresh with whether the value changed or ptr was non-null.
 // @fnv 0x00a0a270
 void __fastcall FUN_00a0a270(VX* self, FW afValue, BW abClearActions)
 {
@@ -610,7 +610,7 @@ void __fastcall FUN_00a0a270(VX* self, FW afValue, BW abClearActions)
     }
     if (abClearActions.v)
         self->RemoveFromReactions();
-    self->FUN_00a09410(bforceUpdate);
+    self->Refresh(bforceUpdate);
 }
 }  // namespace fnv_00a0a270
 
@@ -1647,13 +1647,13 @@ struct FUN_0072ccd0_cls {
     int FUN_0072ccd0();
 };
 
-int __cdecl FUN_00a00940(const char* name, int len);
+int __cdecl TraitNameToIDAdd(const char* name, int len);
 
 // Returns GetRaceCount() minus the value FUN_00a011b0 computes from the static _num_filtered setting via m_0c.
 // @fnv 0x0072ccd0
 int FUN_0072ccd0_cls::FUN_0072ccd0()
 {
-    static int numFiltered = FUN_00a00940("_num_filtered", -1);
+    static int numFiltered = TraitNameToIDAdd("_num_filtered", -1);
     return GetRaceCount() - (unsigned int)m_0c->FUN_00a011b0(numFiltered);
 }
 
@@ -1671,13 +1671,13 @@ struct FUN_0075b020_cls {
     int FUN_0075b020();
 };
 
-int __cdecl FUN_00a00940(const char* name, int len);
+int __cdecl TraitNameToIDAdd(const char* name, int len);
 
 // Returns the result of GetRaceCount minus the value FUN_00a011b0 computes from the cached _num_filtered setting.
 // @fnv 0x0075b020
 int FUN_0075b020_cls::FUN_0075b020()
 {
-    static int numFiltered = FUN_00a00940("_num_filtered", -1);
+    static int numFiltered = TraitNameToIDAdd("_num_filtered", -1);
     return GetRaceCount() - (unsigned int)m_0c->FUN_00a011b0(numFiltered);
 }
 }  // namespace fnv_0075b020
@@ -1696,13 +1696,13 @@ struct FUN_007a71b0_cls {
     int FUN_007a71b0();
 };
 
-int __cdecl FUN_00a00940(const char* name, int len);
+int __cdecl TraitNameToIDAdd(const char* name, int len);
 
 // Returns the result of GetRaceCount minus the value FUN_00a011b0 computes from the cached "_num_filtered" setting.
 // @fnv 0x007a71b0
 int FUN_007a71b0_cls::FUN_007a71b0()
 {
-    static int numFiltered = FUN_00a00940("_num_filtered", -1);
+    static int numFiltered = TraitNameToIDAdd("_num_filtered", -1);
     return GetRaceCount() - (unsigned int)m_0c->FUN_00a011b0(numFiltered);
 }
 }  // namespace fnv_007a71b0
@@ -2574,7 +2574,7 @@ unsigned int StrMapW::FUN_00a0d440(const char* pKey)
     return uiHash % m_uiHashSize;
 }
 
-int __cdecl FUN_00a00940(const char*, int);
+int __cdecl TraitNameToIDAdd(const char*, int);
 int __fastcall GetRaceCount(char*);
 extern const char DAT_0106f8d0[];
 
@@ -2590,11 +2590,11 @@ struct FilteredList {
 // @fnv 0x00726870
 unsigned int FilteredList::FUN_00726870()
 {
-    static int s_iNumFiltered = FUN_00a00940(DAT_0106f8d0, -1);
+    static int s_iNumFiltered = TraitNameToIDAdd(DAT_0106f8d0, -1);
     return GetRaceCount((char*)this) - (unsigned int)tile->GetFloat(s_iNumFiltered);
 }
 
-int __cdecl FUN_00a00940(const char* name, int index);
+int __cdecl TraitNameToIDAdd(const char* name, int index);
 namespace filt72c {
 struct F2Tile {
     float FUN_00a011b0(int trait);
@@ -2614,12 +2614,12 @@ using namespace filt72c;
 // @fnv 0x0072cd80
 int F2Menu::FUN_0072cd80()
 {
-    static int s_iNumFiltered = FUN_00a00940("_num_filtered", -1);
+    static int s_iNumFiltered = TraitNameToIDAdd("_num_filtered", -1);
     return GetRaceCount() - (unsigned int)pList->FUN_00a011b0(s_iNumFiltered);
 }
 
 extern const char DAT_0106f8d0[];
-int __cdecl FUN_00a00940(const char*, int);
+int __cdecl TraitNameToIDAdd(const char*, int);
 struct TraitSource {
     float FUN_00a011b0(int);
 };
@@ -2634,11 +2634,11 @@ struct ItemCounter {
 // Returns the race count minus the trait value from the tile's TraitSource for the static trait id.
 // @fnv 0x007a8030
 unsigned int ItemCounter::FUN_007a8030() {
-    static int trait = FUN_00a00940(DAT_0106f8d0, -1);
+    static int trait = TraitNameToIDAdd(DAT_0106f8d0, -1);
     return GetRaceCount() - (unsigned int)tile->FUN_00a011b0(trait);
 }
 
-int __cdecl FUN_00a00940(const char* name, int index);
+int __cdecl TraitNameToIDAdd(const char* name, int index);
 namespace filt7a8 {
 struct F7Tile {
     float FUN_00a011b0(int trait);
@@ -2658,7 +2658,7 @@ using namespace filt7a8;
 // @fnv 0x007a86e0
 int F7Menu::FUN_007a86e0()
 {
-    static int s_iNumFiltered = FUN_00a00940("_num_filtered", -1);
+    static int s_iNumFiltered = TraitNameToIDAdd("_num_filtered", -1);
     return GetRaceCount() - (unsigned int)pList->FUN_00a011b0(s_iNumFiltered);
 }
 

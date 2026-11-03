@@ -720,10 +720,10 @@ struct RecursiveSpinLock
 {
     unsigned int* pCount;
     unsigned int count;
-    void __thiscall FUN_0040fba0();
+    void __thiscall Unlock();
 };
 // @fnv 0x0040fba0
-void __thiscall RecursiveSpinLock::FUN_0040fba0()
+void __thiscall RecursiveSpinLock::Unlock()
 {
     Interface::PrintDebugMessage();
     --count;

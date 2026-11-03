@@ -497,7 +497,7 @@ struct FUN_0082f950_shell
 };
 
 extern void __stdcall FUN_00ec5fce(void*, unsigned int, unsigned int, void (FUN_0082f950_shell::*)());
-extern void __cdecl FUN_00401030(void*);
+extern void __cdecl FormHeap_Free(void*);
 
 // Destructor that runs cleanup, optionally frees the object (and its 4-byte header when flags bit 2 is set), and returns the object pointer.
 // @fnv 0x0082f950
@@ -507,13 +507,13 @@ void* FUN_0082f950_shell::ScalarDeletingDestructor(unsigned int flags)
     {
         FUN_00ec5fce(this, 0x4c, ((unsigned int*)this)[-1], &FUN_0082f950_shell::FUN_0082f6c0);
         if ((flags & 1) != 0)
-            FUN_00401030((char*)this - 4);
+            FormHeap_Free((char*)this - 4);
         return (char*)this - 4;
     }
 
     FUN_0082f6c0();
     if ((flags & 1) != 0)
-        FUN_00401030(this);
+        FormHeap_Free(this);
     return this;
 }
 

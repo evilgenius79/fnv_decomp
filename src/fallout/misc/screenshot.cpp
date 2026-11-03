@@ -73,7 +73,7 @@ struct S_00878f60_ImageSpaceManager
 
 struct S_00878f60_Player
 {
-    void FUN_0094ae40(bool a, bool b);
+    void UpdateCamera(bool a, bool b);
     void FUN_009466d0(float f, int b);
 };
 
@@ -391,7 +391,7 @@ S_00878f60_PixelData* FUN_00878f60(int* pWidth, int* pHeight, const char* filena
 
     float aspect = (double)FUN_004dc200() / FUN_004dc1f0();
     int outHeight = (int)(*pHeight * aspect);
-    DAT_011dea3c->FUN_0094ae40(false, false);
+    DAT_011dea3c->UpdateCamera(false, false);
     S_00878f60_ImageSpaceManager::FUN_004e3270()->FUN_00879860(0.0f, 1.0f, 1.0f, 1.0f - aspect);
     DAT_011dea0c->FUN_008706b0(eTex, 0, 0);
     S_00878f60_ImageSpaceManager::FUN_004e3270()->FUN_008798a0();

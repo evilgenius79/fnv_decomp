@@ -5299,7 +5299,7 @@ struct FUN_00b5ddb0_self
 struct LocalLock
 {
     unsigned owner, count;
-    void FUN_0040fbf0(char*);
+    void Lock(char*);
     void unlock()
     {
         if (--count == 0)
@@ -5824,8 +5824,8 @@ void LocalTarget::FUN_00b5ddf0(LocalContext* apContext)
 {
     if (apContext != context)
     {
-        DAT_011f9ea0.FUN_0040fbf0(0);
-        DAT_011f9ec0.FUN_0040fbf0(0);
+        DAT_011f9ea0.Lock(0);
+        DAT_011f9ec0.Lock(0);
         dirty = false;
         listA.RemoveAll();
         listB.RemoveAll();
@@ -7705,7 +7705,7 @@ struct S00b5d9f0_Lock
     unsigned int m_pOwnerObject;
     int m_uiItemCount;
 
-    void __thiscall FUN_0040fbf0(int spin);
+    void __thiscall Lock(int spin);
 };
 
 extern S00b5d9f0_Lock DAT_011f9ec0;
@@ -7824,7 +7824,7 @@ void S00b5d9f0_Owner::FUN_00b5d9f0(S00b5d9f0_Obj* obj, unsigned char flag)
     if (obj == 0)
         return;
 
-    DAT_011f9ec0.FUN_0040fbf0(0);
+    DAT_011f9ec0.Lock(0);
 
     switch (!flag)
     {

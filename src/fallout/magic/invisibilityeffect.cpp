@@ -562,7 +562,7 @@ void InvisibilityEffect::RevertInvisibility(Actor* apActor)
 }
 }  // namespace fnv_0080e5b0
 
-void* __cdecl FUN_00401000(unsigned int uiSize);
+void* __cdecl FormHeap_Allocate(unsigned int uiSize);
 
 class B0E060Effect
 {
@@ -571,7 +571,7 @@ class B0E060Effect
 
     static void* operator new(unsigned int uiSize)
     {
-        return FUN_00401000(uiSize);
+        return FormHeap_Allocate(uiSize);
     }
     static void operator delete(void* pvMem);
 

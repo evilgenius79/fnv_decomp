@@ -1903,7 +1903,7 @@ int B61F2B0Object::FUN_0061f2b0()
 }
 
 extern unsigned int kGroupFormType;
-TESForm* FUN_004839c0(unsigned int id);
+TESForm* LookupFormByID(unsigned int id);
 struct S_00619510_Obj
 {
     unsigned int unk00;
@@ -1952,7 +1952,7 @@ bool FUN_00619510_shell::IsFormInGroup(S_00619510_Obj* pGroupObj)
             result = false;
             break;
         case 7: {
-            TESTopic* t = dynamic_cast<TESTopic*>(FUN_004839c0(pGroupObj->unk08));
+            TESTopic* t = dynamic_cast<TESTopic*>(LookupFormByID(pGroupObj->unk08));
             if (t)
                 result = v15(t);
             break;

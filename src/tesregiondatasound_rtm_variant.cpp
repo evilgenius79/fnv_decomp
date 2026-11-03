@@ -13,7 +13,7 @@ struct FUN_004f4f90_node : BSSimpleList<unsigned int>
 };
 
 int __cdecl FUN_00944460(int, int);
-int __cdecl FUN_004839c0(unsigned int);
+int __cdecl LookupFormByID(unsigned int);
 
 struct FUN_004f4f90_shell : TESRegionDataSound
 {
@@ -45,7 +45,7 @@ int FUN_004f4f90_shell::FUN_004f4f90()
     {
         ((FUN_004f4f90_node*)&Battle)->FUN_00905330(&found);
         ((FUN_004f4f90_node*)&Battle)->FUN_005ae3d0(&found);
-        return FUN_004839c0(found);
+        return LookupFormByID(found);
     }
     return 0;
 }

@@ -621,7 +621,7 @@ struct ExtraDataList
 
 struct FUN_005ac1e0_shell
 {
-    bool __thiscall FUN_005ac1e0(TESObjectREFR* apRef, ScriptLocals* apLocals, ScriptLocals* apNullLocals, bool abFlag);
+    bool __thiscall Execute(TESObjectREFR* apRef, ScriptLocals* apLocals, ScriptLocals* apNullLocals, bool abFlag);
 };
 
 struct FUN_00501830_shell
@@ -638,7 +638,7 @@ void FUN_00501830_shell::FUN_00501830(Script* apScript)
     m_kScript.GetHeader()->quest = false;
 
     reinterpret_cast<FUN_005ac1e0_shell*>(&m_kScript)
-        ->FUN_005ac1e0(reinterpret_cast<TESObjectREFR*>(apScript),
+        ->Execute(reinterpret_cast<TESObjectREFR*>(apScript),
                        reinterpret_cast<ExtraDataList*>(apScript->GetReferencedObjectList())->GetScriptLocalData(), 0,
                        true);
 }

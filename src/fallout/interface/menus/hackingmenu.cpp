@@ -550,7 +550,7 @@ struct FUN_007021b0_cls
 
 extern "C" void __stdcall FUN_00ec5fce(void* object, int elementSize, int count, void (FUN_007021b0_cls::*callback)());
 
-extern "C" void __cdecl FUN_00401030(void* apMemory);
+extern "C" void __cdecl FormHeap_Free(void* apMemory);
 
 // Destroys the object's elements and optionally frees the allocation, returning the object or its base pointer depending on flags.
 // @fnv 0x007021b0
@@ -562,7 +562,7 @@ void* FUN_007021b0_cls::DestroyOrFree(unsigned int flags)
 
         if (flags & 1)
         {
-            FUN_00401030(reinterpret_cast<char*>(this) - 4);
+            FormHeap_Free(reinterpret_cast<char*>(this) - 4);
         }
 
         return reinterpret_cast<char*>(this) - 4;
@@ -572,7 +572,7 @@ void* FUN_007021b0_cls::DestroyOrFree(unsigned int flags)
 
     if (flags & 1)
     {
-        FUN_00401030(this);
+        FormHeap_Free(this);
     }
 
     return this;
@@ -668,7 +668,7 @@ struct EntryListNode
 };
 struct FUN_00767ef0_shell
 {
-    ValueRow* __thiscall FUN_00a1ddb0(void* owner, int* descriptor, unsigned int mode);
+    ValueRow* __thiscall AddTileFromTemplate(void* owner, int* descriptor, unsigned int mode);
     void __thiscall AddValueRows(unsigned int count, const unsigned int* values);
 };
 // Adds count to the 0xfac value of each existing row, then creates count new rows with descending 0xfac values and the given values at 0xfc4, appending each.
@@ -686,7 +686,7 @@ void __thiscall FUN_00767ef0_shell::AddValueRows(unsigned int count, const unsig
     }
     for (unsigned int index = 0; index < count; ++index)
     {
-        item = FUN_00a1ddb0(*(void**)((char*)this + 0x118), &DAT_010729c8, 0);
+        item = AddTileFromTemplate(*(void**)((char*)this + 0x118), &DAT_010729c8, 0);
         item->FUN_00715c60(0xfac, count - index - 1);
         item->FUN_00a01350(0xfc4, puiValues[index], 1);
         ((EntryListNode*)((char*)this + 0x168))->FUN_004ed8c0(&item);
@@ -1008,7 +1008,7 @@ void FUN_0076a670_cls::FUN_0076a670(int a1, const char* pcSource)
 }
 
 extern "C" unsigned int __cdecl FUN_00457fe0();
-extern "C" int __cdecl FUN_00a00940(const char*, int);
+extern "C" int __cdecl TraitNameToIDAdd(const char*, int);
 extern "C" char str_01072108;
 struct Fade
 {
@@ -1036,7 +1036,7 @@ struct HackingMenuDecomp : HackingMenu
 void HackingMenuDecomp::UpdateFade()
 {
     static float delay = (*reinterpret_cast<Resources**>(reinterpret_cast<char*>(this) + 0x11c))
-                             ->FUN_00a011b0(FUN_00a00940(&str_01072108, -1));
+                             ->FUN_00a011b0(TraitNameToIDAdd(&str_01072108, -1));
     if (*reinterpret_cast<int*>(reinterpret_cast<char*>(this) + 0x1c4) == 4 && FUN_00726070(0x1006)->IsTraitNonZero())
     {
         return;
@@ -1179,7 +1179,7 @@ struct FUN_00a1ddb0_res
 
 struct FUN_00a1ddb0_owner
 {
-    FUN_00a1ddb0_res* __thiscall FUN_00a1ddb0(char* base, char const* name, void* f0);
+    FUN_00a1ddb0_res* __thiscall AddTileFromTemplate(char* base, char const* name, void* f0);
 };
 
 extern FUN_00a1ddb0_owner* DAT_011d95b8;
@@ -1214,7 +1214,7 @@ struct FUN_0076ad50_cls
 // @fnv 0x0076ad50
 void FUN_0076ad50_cls::BuildHackingGuessTemplate()
 {
-    FUN_00a1ddb0_res* p = DAT_011d95b8->FUN_00a1ddb0(m110, "hacking_guess_template", 0);
+    FUN_00a1ddb0_res* p = DAT_011d95b8->AddTileFromTemplate(m110, "hacking_guess_template", 0);
     p->FUN_00715c60(0xfac, m174.FUN_0044ddc0());
     m174.FUN_004ed8c0(&p);
     {
@@ -1555,7 +1555,7 @@ struct Menu_007a8b10
     virtual ~Menu_007a8b10();
 };
 unsigned int __cdecl gm_GetTickCount();
-void __cdecl FUN_00401030(void*);
+void __cdecl FormHeap_Free(void*);
 extern SettingColl DAT_011d0b90;
 extern unsigned int DAT_011d95c0;
 extern char DAT_011d9674;
@@ -1608,7 +1608,7 @@ FUN_007658e0::~FUN_007658e0()
     DAT_011d95c0 = gm_GetTickCount() + DAT_011d0b90.FUN_0043d4d0()->v;
     m180.FreeAll();
     void* ptrTmp = ptr1B0;
-    FUN_00401030(ptrTmp);
+    FormHeap_Free(ptrTmp);
     DAT_011d95b8 = 0;
     for (i8 = 0; i8 < 5; i8++)
     {
@@ -1769,7 +1769,7 @@ void HackMenu::RemoveRandomWord()
         positions[index] = positions[index + 1];
     positions[index] = 0x198;
     char* deleted = *word->Get();
-    FUN_00401030(deleted);
+    FormHeap_Free(deleted);
     words.Remove(word->Get());
     --count;
 }
@@ -2032,14 +2032,14 @@ FUN_0076b300::FUN_0076b300(const char* name, char* parent, const char* path, int
     {
         unsigned int randomValue = counts[kind] > 1 ? FUN_004bd510(1000.0 / counts[kind], 1.0f) : 1000.0f;
         SetCapacity(randomValue);
-        tile = static_cast<ConstructorTile*>(DAT_011d95b8->FUN_00a1ddb0(parent, path, 0));
+        tile = static_cast<ConstructorTile*>(DAT_011d95b8->AddTileFromTemplate(parent, path, 0));
         if (tile)
         {
             FUN_006ffe80(tile->FUN_00a00f30(0xfc4), tile->FindTraitValue(0xfa3));
             if (kind == 1)
             {
                 label = static_cast<ConstructorTile*>(
-                    DAT_011d95b8->FUN_00a1ddb0(static_cast<ConstructorMenu*>(DAT_011d95b8)->root, DAT_0107293c, 0));
+                    DAT_011d95b8->AddTileFromTemplate(static_cast<ConstructorMenu*>(DAT_011d95b8)->root, DAT_0107293c, 0));
                 label->FUN_00a01350(0xfc4, DAT_010692d0, true);
             }
             if (value >= 0)
@@ -3265,7 +3265,7 @@ struct Snd150
     int unk00;
     int unk04;
     int unk08;
-    bool __thiscall FUN_00ad8830(bool);
+    bool __thiscall Play(bool);
 };
 
 struct DummyClass
@@ -3371,7 +3371,7 @@ void DummyClass::FUN_00767c90()
         {
             if (entries[bbb] && !entries[bbb]->FUN_00759d80())
             {
-                m150.FUN_00ad8830(false);
+                m150.Play(false);
                 entries[bbb]->FUN_006ffea0();
                 PositionTileFromEntry(entries[bbb]);
                 break;
@@ -3429,7 +3429,7 @@ struct H769Player
     int unk00;
     int unk04;
     int unk08;
-    void FUN_00ad8830(int a);
+    void Play(int a);
 };
 struct H769TileV
 {
@@ -3584,7 +3584,7 @@ void H769Menu::FUN_00769830()
                     }
                     if (pLines[i]->FUN_00759d80())
                     {
-                        kSuccessSound.FUN_00ad8830(0);
+                        kSuccessSound.Play(0);
                         DAT_011d969c = FUN_00457fe0() + 500;
                     }
                 }
@@ -3592,7 +3592,7 @@ void H769Menu::FUN_00769830()
             else if (FUN_00457fe0() > DAT_011d969c)
             {
                 pLines[i]->FUN_006ffea0();
-                kFailSound.FUN_00ad8830(0);
+                kFailSound.Play(0);
             }
             PositionTileFromEntry(pLines[i]);
             break;
@@ -4152,7 +4152,7 @@ struct Interface84
 extern Interface84* DAT_011d95bc;
 struct Tile84
 {
-    Tile84* FUN_00a01b00();
+    Tile84* ReadXML();
     Menu84* FUN_00a03c90();
     float FUN_00a011b0(int);
     void FUN_00a012d0(int, float, int);
@@ -4176,7 +4176,7 @@ struct Text84
 };
 struct Scroll84
 {
-    void FUN_00ad8830(int);
+    void Play(int);
 };
 struct Menu84
 {
@@ -4322,7 +4322,7 @@ Tile84* FUN_00765b80(Ref84* reference)
         FUN_00718b60()->ApplyToChild(3, Color84(1.0f, 1.0f, 1.0f, 0.0f));
     DAT_0119f27c = *DAT_011d42d0.FUN_0043d4d0();
     DAT_0119f280 = *DAT_011d2934.FUN_0043d4d0();
-    Tile84* tile4 = DAT_011d95bc->FUN_00586150("Data\\Menus\\hacking_menu.xml")->FUN_00a01b00();
+    Tile84* tile4 = DAT_011d95bc->FUN_00586150("Data\\Menus\\hacking_menu.xml")->ReadXML();
     Menu84* menu24 = tile4->FUN_00a03c90();
     if (menu24 && menu24->Type() == FUN_00766a40())
     {
@@ -4401,7 +4401,7 @@ Tile84* FUN_00765b80(Ref84* reference)
             DAT_011d95b8->entries[13] = new Entry84(DAT_011d2130.FUN_004c69f0(), DAT_011d95b8->tile10c, name9,
                                                     DAT_011d95b8->unk1b4 + DAT_011d95b8->unk1b8 * 19, 1);
         }
-        DAT_011d95b8->scroll.FUN_00ad8830(0);
+        DAT_011d95b8->scroll.Play(0);
         menu24->FUN_00a1dc20(0);
         return tile4;
     }

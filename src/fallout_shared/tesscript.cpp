@@ -608,7 +608,7 @@ void FUN_005abe50_shell::FUN_005abe50(char* newText)
 
 struct FUN_005abf60_shell : public Script
 {
-    ScriptLocals* FUN_005abf60();
+    ScriptLocals* CreateEventList();
 };
 
 void* __cdecl operator new(unsigned int);
@@ -616,7 +616,7 @@ void* __fastcall CopyVariableList(Script*);
 
 // Allocates a ScriptLocals, stores the result of CopyVariableList(this) at offset 0xc and this at offset 0, then returns it.
 // @fnv 0x005abf60
-ScriptLocals* FUN_005abf60_shell::FUN_005abf60()
+ScriptLocals* FUN_005abf60_shell::CreateEventList()
 {
     AutoMemContext tempMemContext(static_cast<MEM_CONTEXT>(0x15), true,
                                   "D:\\_Fallout3\\Platforms\\Common\\Code\\Fallout Shared\\TESScript.cpp", 0xcde);
@@ -641,14 +641,14 @@ void __cdecl FUN_005ac190(TESObjectREFR* ownerObject, ExtraDataList* apExtra)
 
 struct FUN_005ac1e0_shell : public Script
 {
-    bool FUN_005ac1e0(TESObjectREFR*, ScriptLocals*, TESObjectREFR*, bool);
+    bool Execute(TESObjectREFR*, ScriptLocals*, TESObjectREFR*, bool);
 };
 
 extern SettingT_GameSettingCollection_ g_011cac68;
 
 // Runs the script via the script runner, decrementing a timer and resetting it from the game setting or a referenced value when the header flag is set.
 // @fnv 0x005ac1e0
-bool FUN_005ac1e0_shell::FUN_005ac1e0(TESObjectREFR* ownerObject, ScriptLocals* ownerVars,
+bool FUN_005ac1e0_shell::Execute(TESObjectREFR* ownerObject, ScriptLocals* ownerVars,
                                       TESObjectREFR* ownerContainer, bool abIsPartialScript)
 {
     if (!abIsPartialScript && GetHeader()->dataSize <= 4)
@@ -1935,7 +1935,7 @@ extern FlagManager DAT_011de4e8;
 extern const char DAT_01036d58;
 extern const char DAT_01012cb0;
 extern const char DAT_01012c78;
-extern Formatter* __cdecl FUN_004839c0(void* item);
+extern Formatter* __cdecl LookupFormByID(void* item);
 extern void __cdecl FUN_0040fbe0(const char* message, ...);
 struct ScriptLocalsExt : ScriptLocals
 {
@@ -1973,7 +1973,7 @@ unsigned short __fastcall GetScriptLocalsSerializedSize(ScriptLocals* pLocals)
         void* info = DAT_011de45c->FUN_004fd3e0();
         if (info)
         {
-            Formatter* formatter = FUN_004839c0(*(void**)info);
+            Formatter* formatter = LookupFormByID(*(void**)info);
             FUN_0040fbe0(&DAT_01012cb0, (unsigned int)bytes - (unsigned int)original, *(void**)info,
                          ((TESForm*)formatter)->GetName(), *(int*)((char*)info + 5), 638, &DAT_01036d58);
         }
@@ -2377,7 +2377,7 @@ void ThisX::WriteScriptLocals()
         formPtr = DAT_011de45c->FUN_004fd3e0();
         if (formPtr)
         {
-            pFmt = FUN_004839c0(*(void**)formPtr);
+            pFmt = LookupFormByID(*(void**)formPtr);
             typedef unsigned int(__thiscall * GetItemFn)(Formatter*);
             FUN_0040fbe0("SaveGame(): %-5i for form %08X %s with flags %08X ending at line %i in file %s",
                          curPos - fromPos, *(int*)formPtr, (*(GetItemFn*)(*(char**)pFmt + 0x130))(pFmt),
@@ -3655,7 +3655,7 @@ struct S4eb0_list
 };
 
 void ResolveFormID(TESForm** form, TESFile* file);
-TESForm* FUN_004839c0(TESForm* form);
+TESForm* LookupFormByID(TESForm* form);
 
 struct Scr : TESForm
 {
@@ -3701,7 +3701,7 @@ void Scr::FUN_005ab400(TESForm* form)
         if (form7)
         {
             ResolveFormID(&form7, pTemp);
-            refTmp->pForm = FUN_004839c0(form7);
+            refTmp->pForm = LookupFormByID(form7);
             if (refTmp->pForm)
                 ok3 = true;
         }

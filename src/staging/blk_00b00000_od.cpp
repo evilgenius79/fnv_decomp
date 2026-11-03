@@ -1867,7 +1867,7 @@ void __cdecl FUN_00b10940(unsigned int first, unsigned int last, unsigned int de
     FUN_00b10c20(val.lo, n, dest, al, tag, kind);
 }
 
-void __cdecl FUN_00401030(int block);
+void __cdecl FormHeap_Free(int block);
 
 struct FUN_00b15600_cls
 {
@@ -1885,7 +1885,7 @@ struct Rng
     int a;
     int b;
 };
-// If m_0c is set, passes it to FUN_00401030; then zeroes m_0c, m_10 and m_14.
+// If m_0c is set, passes it to FormHeap_Free; then zeroes m_0c, m_10 and m_14.
 // @fnv 0x00b15600
 void FUN_00b15600_cls::FUN_00b15600()
 {
@@ -1905,7 +1905,7 @@ void FUN_00b15600_cls::FUN_00b15600()
         int kCount;
         kCount = (m_14 - m_0c) / 0x18;
         long block = m_0c;
-        FUN_00401030(block);
+        FormHeap_Free(block);
     }
     m_0c = 0;
     m_10 = 0;

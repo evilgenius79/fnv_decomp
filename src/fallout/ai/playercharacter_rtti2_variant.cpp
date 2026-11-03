@@ -804,7 +804,7 @@ extern int DAT_01017874, DAT_005764f0, DAT_00577450, DAT_00577ca0, DAT_0045c680;
 extern float DAT_01012054, DAT_01017868, DAT_0101786c, DAT_01013974, DAT_01017870;
 extern unsigned int DAT_011c3c00;
 extern void *DAT_01202d98, *DAT_011c3b3c, *DAT_01202df4, *DAT_011c3f2c, *DAT_011de45c;
-extern void* __cdecl FUN_00401000(unsigned int);
+extern void* __cdecl FormHeap_Allocate(unsigned int);
 extern void* __cdecl FUN_00aa13e0(unsigned int);
 extern void __cdecl FUN_00403d30(void*, unsigned int, unsigned int);
 extern void __cdecl FUN_00450430(int);
@@ -1097,7 +1097,7 @@ struct StubCallees
     void* FUN_00500940();
     void* FUN_005d43c0(int a, int b);
     int FUN_00418830();
-    void FUN_005ac1e0(void* a, int b);
+    void Execute(void* a, int b);
     void MarkAsRefusal();
     bool FUN_0061aef0();
     void LoadRecord(void* a);
@@ -1105,7 +1105,7 @@ struct StubCallees
 bool __cdecl FUN_005ac740(void);
 struct FUN_0061f170_cls
 {
-    void FUN_0061f170(void* a1, ArgObj* a2);
+    void RunResultScript(void* a1, ArgObj* a2);
 };
 struct C68E30Owner;
 struct C68E30VirtualBase
@@ -5346,7 +5346,7 @@ struct ExtObj
 };
 void __cdecl FUN_005b5e40(const char* msg);
 void __cdecl FUN_00868d70(int arg);
-void __cdecl FUN_00401030(void* p);
+void __cdecl FormHeap_Free(void* p);
 struct FUN_0093bea0_cls
 {
     int unk00;
@@ -8765,7 +8765,7 @@ struct AimPlayer : AimObject
     AimScale* FUN_00950a60(bool);
     bool FUN_005a03f0(int);
     bool FUN_00967ae0();
-    void FUN_00950110(bool);
+    void ToggleFirstPerson(bool);
     int FUN_004f8960();
     int FUN_008a7570();
     void FUN_00931d30(float);
@@ -10518,7 +10518,7 @@ struct GlobalObject_0041a250 : SH_00418890
 };
 struct FUN_00ad8830_shell
 {
-    bool FUN_00ad8830(bool);
+    bool Play(bool);
 };
 struct GlobalObject2_0045cfe0
 {
@@ -11403,7 +11403,7 @@ extern float DAT_011e0b5c;
 struct FUN_00950340_Class
 {
     bool FUN_005721e0();
-    void FUN_00950110(bool);
+    void ToggleFirstPerson(bool);
     bool FUN_00950340(bool abForceCameraDistance);
 };
 extern bool DAT_011e07b8;
@@ -12044,7 +12044,7 @@ struct FUN_009503d0_Obj
     unsigned char unk64d;
     unsigned char unk64e;
 
-    void FUN_00950110(int value);
+    void ToggleFirstPerson(int value);
     void FUN_009503d0();
 };
 struct NiAVObject
@@ -12062,7 +12062,7 @@ struct ActorBlock
 };
 struct FUN_00950110_shell
 {
-    void FUN_00950110(bool);
+    void ToggleFirstPerson(bool);
 };
 struct FUN_00950460_shell : public PlayerCharacter
 {
@@ -12175,7 +12175,7 @@ struct FUN_00950530_shell
 {
     unsigned char FUN_00967ae0();
     unsigned char FUN_008bbc10();
-    void FUN_00950110(int mode);
+    void ToggleFirstPerson(int mode);
     void FUN_00950530();
 };
 class Proc950
@@ -12204,8 +12204,8 @@ class FUN_00620850
 };
 struct Lock950
 {
-    void FUN_0040fbf0(char* pcName);
-    void FUN_0040fba0();
+    void Lock(char* pcName);
+    void Unlock();
 };
 extern Lock950 DAT_011f11a0;
 struct Queue950
@@ -13007,7 +13007,7 @@ TESContainer* __fastcall FUN_0055d310(TESObjectREFR*);
 struct FUN_00952c30_shell : PlayerCharacter
 {
     void FUN_00952c30(TESObjectREFR* apMovingRef);
-    BSSimpleList<TESQuestTargetX*>* FUN_00952ba0();
+    BSSimpleList<TESQuestTargetX*>* GetCurrentQuestTargets();
 };
 struct _Mem_2064
 {
@@ -15023,7 +15023,7 @@ class FUN_00958ec0_cls
     Sub878 unk878;
     void FUN_008aa9a0(int a1, int a2);
     int FUN_00950bb0(int flag);
-    void FUN_00950110(bool flag);
+    void ToggleFirstPerson(bool flag);
     void FUN_00950340(int flag);
     void FUN_0095f930(int a1, int a2, float f);
     void FUN_00947c90();
@@ -16436,7 +16436,7 @@ struct Shell957
     void FUN_008c4640();
     void FUN_00952290();
     Anim957* FUN_00950a60(int);
-    void FUN_0094ae40(int, int);
+    void UpdateCamera(int, int);
     void FUN_009466d0(float, int);
     void FUN_0095f930(int, int, float);
     void FUN_00947c90();
@@ -17365,7 +17365,7 @@ struct GObj
 struct PlayerShell
 {
     int GetAtIfValid(int value);
-    void FUN_0088c650(TESBoundObject* obj, int value, ExtraDataList* extra, bool b1, bool b2, bool b3);
+    void EquipItem(TESBoundObject* obj, int value, ExtraDataList* extra, bool b1, bool b2, bool b3);
     unsigned short FUN_00897910(int value, int a2, int a3, Animation* anim);
     void FUN_008a73e0(int value, BSAnimGroupSequence* seq);
 };
@@ -21022,7 +21022,7 @@ struct FUN_00963bf0_glob
     float FUN_0084d030();
 };
 extern double DAT_01012060;
-void FUN_00401030(void* p);
+void FormHeap_Free(void* p);
 struct FUN_00963bf0_cls
 {
     unsigned int unk00;
@@ -27951,7 +27951,7 @@ struct InputSound
 {
     int unk00, unk04, unk08;
     ~InputSound();
-    void FUN_00ad8830();
+    void Play();
 };
 struct InputAudio
 {
@@ -28647,7 +28647,7 @@ struct InputReference
     virtual void r185();
     virtual bool Busy();
     bool FUN_00568680();
-    bool FUN_00573170(InputPlayer*, int, int, int);
+    bool Activate(InputPlayer*, int, int, int);
     InputProcess* FUN_008d8520();
 };
 struct InputCharacter : InputReference
@@ -29242,7 +29242,7 @@ struct InputPlayer : InputCharacter
     bool FUN_008843a0();
     int FUN_008a7570();
     bool FUN_008a6970();
-    void FUN_008a6840(bool);
+    void SetWantsWeaponOut(bool);
     bool FUN_00437bf0();
     bool FUN_00437bd0();
     const InputPoint& FUN_00436aa0();
@@ -29294,7 +29294,7 @@ class ArrowProjectile : public TESObjectREFR
   public:
     int FUN_008ce390();
 };
-TESForm* FUN_004839c0(void*);
+TESForm* LookupFormByID(void*);
 void* FUN_0040a250(void*);
 void* FUN_00825550(void*);
 struct SaveVersion
@@ -30106,7 +30106,7 @@ extern char DAT_01184720;
 extern char DAT_0118640c;
 extern char DAT_011861dc;
 extern char DAT_0118c5c4;
-TESForm* FUN_004839c0(unsigned int id);
+TESForm* LookupFormByID(unsigned int id);
 class TESRegion : public TESForm
 {
 };
@@ -36922,7 +36922,7 @@ void PlayerSave::FUN_00955620(unsigned int flags)
             SaveReference* reference = ((StreamView*)g_TESSaveLoadGame)->GetHitSound();
             if (reference)
             {
-                TESForm* form = FUN_004839c0(reference->formID);
+                TESForm* form = LookupFormByID(reference->formID);
                 SaveLog("SaveGame(): %-5i for form %08X %s with flags %08X ending at line %i in file %s",
                         endPosition4 - initialPosition3, reference->formID, form->GetName(),
                         *(unsigned int*)&reference->detail0, 0x3378,
@@ -37322,7 +37322,7 @@ void PlayerSave::FUN_00955620(unsigned int flags)
             SaveReference* reference4 = ((StreamView*)g_TESSaveLoadGame)->GetHitSound();
             if (reference4)
             {
-                TESForm* form2 = FUN_004839c0(reference4->formID);
+                TESForm* form2 = LookupFormByID(reference4->formID);
                 SaveLog("SaveGame(): %-5i for form %08X %s with flags %08X ending at line %i in file %s",
                         endPosition2 - initialPosition3, reference4->formID, form2->GetName(),
                         *(unsigned int*)&reference4->detail0, 0x3592,

@@ -15,7 +15,7 @@ struct GROUP_HEADER
     int iGroupType;
 };
 extern unsigned int kGroupFormType;
-TESForm* FUN_004839c0(unsigned int);
+TESForm* LookupFormByID(unsigned int);
 class FormGroupOwner
 {
   public:
@@ -44,7 +44,7 @@ class MobileObject : public TESObjectREFR
 class Actor : public MobileObject
 {
 };
-TESForm* __cdecl FUN_004839c0(unsigned int);
+TESForm* __cdecl LookupFormByID(unsigned int);
 struct MapPosition532;
 struct FUN_00993820
 {

@@ -501,7 +501,7 @@ class FUN_0077ffd0_lbx
     virtual void vfn_00();
     virtual Tile* vfn_04(int);
 };
-void* __cdecl FUN_00a01860(const char* s);
+void* __cdecl TraitNameToID(const char* s);
 int __cdecl FUN_00ec62c0();
 void __cdecl UpdateCurrentValue();
 struct InputInterface
@@ -1105,7 +1105,7 @@ int __cdecl FUN_00408b20(const char*, const char*);
 void __cdecl UpdateCurrentValue();
 int __cdecl FUN_005e58f0(int, void*, void*, int, float*);
 unsigned int __fastcall FUN_0044ddc0(void*);
-int __cdecl FUN_004839c0(int);
+int __cdecl LookupFormByID(int);
 unsigned int __cdecl FUN_0044a670(const char*);
 
 void __cdecl FUN_007824e0();
@@ -1140,7 +1140,7 @@ void FUN_00782a90()
         if (cn)
             ck = (int)FUN_0044ddc0((void*)cn);
         else
-            ck = FUN_004839c0(0x1f4);
+            ck = LookupFormByID(0x1f4);
         bn = 0.0f;
         FUN_005e58f0(0x38, g_thePlayer, g_thePlayer, ck, &bn);
         FUN_00406d00(ba, 0x40, "%1.1f", (double)(bl + bn));
@@ -1158,7 +1158,7 @@ void FUN_00782a90()
         ((InvObj*)(void*)(unsigned int)DAT_011d9ea4)->t2c->FUN_00a01350(DAT_011d9eb4, ba, true);
         if (FUN_00408b20(((InventoryMenuSetting*)&DAT_011c3cb4)->FUN_00403df0(), "ENGLISH"))
         {
-            el = (int)FUN_00a01860("_Title");
+            el = (int)TraitNameToID("_Title");
             ((InvObj*)(void*)(unsigned int)DAT_011d9ea4)
                 ->t44->FUN_00a01350(0xfc4, ((InventoryMenuSetting*)&DAT_011d2a18)->FUN_00403df0(), true);
             ((InvObj*)(void*)(unsigned int)DAT_011d9ea4)

@@ -263,7 +263,7 @@ class Tile
 extern double DAT_01012060;
 extern float __cdecl FUN_004e4430(float value);
 extern int __cdecl FUN_00647b70(int lower, int upper);
-extern int __cdecl FUN_00a01860(const char* name);
+extern int __cdecl TraitNameToID(const char* name);
 struct FUN_00725f40_shell
 {
     int unk00;
@@ -298,12 +298,12 @@ void FUN_00725f40_shell::FUN_00725f40()
                 }
                 if (iItemCount > 1)
                 {
-                    unk0c->Set(FUN_00a01860("_scroll_delta"), (unk20 - iStack_c) / (iItemCount - 1), true);
+                    unk0c->Set(TraitNameToID("_scroll_delta"), (unk20 - iStack_c) / (iItemCount - 1), true);
                 }
             }
             if (unk14 != 0)
             {
-                unk14->Set(FUN_00a01860("_number_of_items"), iItemCount);
+                unk14->Set(TraitNameToID("_number_of_items"), iItemCount);
             }
         }
     }
@@ -422,7 +422,7 @@ void FUN_0072c700_cls::FUN_0072c700()
 extern double DAT_01012060;
 extern float __cdecl FUN_004e4430(float value);
 extern int __cdecl FUN_00647b70(int lower, int upper);
-extern int __cdecl FUN_00a01860(const char* name);
+extern int __cdecl TraitNameToID(const char* name);
 struct FUN_0072cba0_cls
 {
     int unk00;
@@ -456,12 +456,12 @@ void FUN_0072cba0_cls::FUN_0072cba0()
             }
             if (iCount > 1)
             {
-                unk0c->Set(FUN_00a01860("_scroll_delta"), (float)((m_20 - fCurrentAmountNext) / (iCount - 1)), true);
+                unk0c->Set(TraitNameToID("_scroll_delta"), (float)((m_20 - fCurrentAmountNext) / (iCount - 1)), true);
             }
         }
         if (unk14)
         {
-            unk14->Set(FUN_00a01860("_number_of_items"), iCount);
+            unk14->Set(TraitNameToID("_number_of_items"), iCount);
         }
     }
 }

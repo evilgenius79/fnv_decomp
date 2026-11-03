@@ -296,7 +296,7 @@ extern SetMgr* DAT_011d9058;
 extern SetMgrB* DAT_011dea3c;
 extern void* DAT_011d9044;
 extern void* DAT_011d9048;
-void* __cdecl FUN_00a00940(const char*, int);
+void* __cdecl TraitNameToIDAdd(const char*, int);
 class FUN_007315e0 : public SetBase
 {
   public:
@@ -567,7 +567,7 @@ extern Pointer90 DAT_011d90bc;
 extern int DAT_011f36ac;
 struct Loader90
 {
-    Node90* FUN_00447080(const char*, int, int, int, int, int);
+    Node90* LoadModel(const char*, int, int, int, int, int);
 };
 extern Loader90* DAT_011c3b3c;
 Node90* __cdecl FUN_004aae30(Node90*, const char*);
@@ -1519,7 +1519,7 @@ struct BSSoundHandleEx
     int flags;
     int state;
     ~BSSoundHandleEx();
-    bool FUN_00ad8830(bool);
+    bool Play(bool);
 };
 struct Audio129
 {
@@ -1644,7 +1644,7 @@ struct Tile129
 Tile129* FUN_00a08b20(Tile129*, const char*);
 struct Xml129
 {
-    Tile129* FUN_00a01b00();
+    Tile129* ReadXML();
 };
 struct Interface129
 {
@@ -3239,7 +3239,7 @@ void BlackjackUpdate::FUN_00734db0()
             {
                 Update90 reset(0.0f, true, false);
                 ((ScenePointerUpdate*)&g_011d9098)->FUN_00559450()->FUN_00a59c60(reset);
-                FUN_00453a70()->FUN_00ad7550(DAT_01070d74, 0x121).FUN_00ad8830(false);
+                FUN_00453a70()->FUN_00ad7550(DAT_01070d74, 0x121).Play(false);
                 sounded = true;
                 FUN_0096a2d0* p = player;
                 FUN_0096a2d0* dealerNode = dealer;
@@ -3263,7 +3263,7 @@ void BlackjackUpdate::FUN_00734db0()
                 if (sounded && DAT_011d90e0 < playerSeq[1]->FUN_00508100())
                 {
                     sounded = false;
-                    FUN_00453a70()->FUN_00ad7550(DAT_01070d74, 0x121).FUN_00ad8830(false);
+                    FUN_00453a70()->FUN_00ad7550(DAT_01070d74, 0x121).Play(false);
                 }
                 Update90 du(DAT_011d90e0 - half, true, false);
                 ((ScenePointerUpdate*)&g_011d9098)->FUN_00559450()->FUN_0043b4a0(3)->FUN_00a59c60(du);
@@ -3273,7 +3273,7 @@ void BlackjackUpdate::FUN_00734db0()
                 if (!sounded && DAT_011d90e0 < playerSeq[1]->FUN_00508100() + half)
                 {
                     sounded = true;
-                    FUN_00453a70()->FUN_00ad7550(DAT_01070d74, 0x121).FUN_00ad8830(false);
+                    FUN_00453a70()->FUN_00ad7550(DAT_01070d74, 0x121).Play(false);
                 }
                 Update90 pu2(DAT_011d90e0 - playerSeq[previous]->FUN_00508100(), true, false);
                 ((ScenePointerUpdate*)&g_011d9098)->FUN_00559450()->FUN_0043b4a0(1)->FUN_00a59c60(pu2);
@@ -3283,7 +3283,7 @@ void BlackjackUpdate::FUN_00734db0()
                 if (sounded)
                 {
                     sounded = false;
-                    FUN_00453a70()->FUN_00ad7550(DAT_01070d5c, 0x121).FUN_00ad8830(false);
+                    FUN_00453a70()->FUN_00ad7550(DAT_01070d5c, 0x121).Play(false);
                 }
                 Update90 du2(DAT_011d90e0 - (playerSeq[1]->FUN_00508100() + half), true, false);
                 ((ScenePointerUpdate*)&g_011d9098)->FUN_00559450()->FUN_0043b4a0(3)->FUN_00a59c60(du2);
@@ -3372,7 +3372,7 @@ void BlackjackUpdate::FUN_00734db0()
         ((ScenePointerUpdate*)&g_011d9098)->FUN_00559450()->FUN_0043b4a0(0)->FUN_00a59c60(scene);
         if (DAT_011d90e0 == 0.0)
         {
-            FUN_00453a70()->FUN_00ad7550(DAT_01070d74, 0x121).FUN_00ad8830(false);
+            FUN_00453a70()->FUN_00ad7550(DAT_01070d74, 0x121).Play(false);
             FUN_0096a2d0* curr = 0;
             BJCard* last = 0;
             int drawn = 0;
@@ -3482,7 +3482,7 @@ void BlackjackUpdate::FUN_00734db0()
                 message->FUN_00700320(0xfa3, 0);
             if (DAT_011d90e0 == 0.0 && !sounded)
             {
-                FUN_00453a70()->FUN_00ad7550(DAT_01070d40, 0x121).FUN_00ad8830(false);
+                FUN_00453a70()->FUN_00ad7550(DAT_01070d40, 0x121).Play(false);
                 Update90 reset(0.0f, true, false);
                 ((ScenePointerUpdate*)&g_011d9098)->FUN_00559450()->FUN_00a59c60(reset);
                 tableAnim->FUN_0047aab0(tableStart, 0, 0, 1.0f, 0.0f, 0);
@@ -3511,7 +3511,7 @@ void BlackjackUpdate::FUN_00734db0()
                 tableAnim->FUN_0047b220(tableStart, 0.0f);
                 tableAnim->FUN_0047aab0(tableEnd, 0, 0, 1.0f, 0.0f, 0);
                 dealerAnim->FUN_0047aab0(dealerSeq[0], 0, 0, 1.0f, 0.0f, 0);
-                FUN_00453a70()->FUN_00ad7550(DAT_01070d20, 0x121).FUN_00ad8830(false);
+                FUN_00453a70()->FUN_00ad7550(DAT_01070d20, 0x121).Play(false);
                 sounded = true;
                 soundTime = DAT_011d90e0;
                 Update90 tableUpdate2(0.0f, true, false);
@@ -3571,7 +3571,7 @@ void BlackjackUpdate::FUN_00734db0()
             SetFlag(0x400, true);
             SetFlag(0x800, true);
             HideArrowNodes();
-            FUN_00453a70()->FUN_00ad7550(DAT_01070d5c, 0x121).FUN_00ad8830(false);
+            FUN_00453a70()->FUN_00ad7550(DAT_01070d5c, 0x121).Play(false);
             dealerAnim->FUN_0047aab0(revealSeq, 0, 0, 1.0f, 0.0f, 0);
         }
         if (DAT_011d90e0 < revealSeq->FUN_00508100())
@@ -3601,7 +3601,7 @@ void BlackjackUpdate::FUN_00734db0()
         ((ScenePointerUpdate*)&g_011d9098)->FUN_00559450()->FUN_0043b4a0(0)->FUN_00a59c60(su);
         if (DAT_011d90e0 == 0.0)
         {
-            FUN_00453a70()->FUN_00ad7550(DAT_01070d5c, 0x121).FUN_00ad8830(false);
+            FUN_00453a70()->FUN_00ad7550(DAT_01070d5c, 0x121).Play(false);
             HideArrowNodes();
             FUN_0096a2d0* curr = dealer;
             BJCard* last = 0;
@@ -3768,7 +3768,7 @@ void BlackjackUpdate::FUN_00734db0()
             else
                 FUN_00406d00(buf, 260, DAT_01070d0c, DAT_011d2ff4.FUN_00403df0(), payout, DAT_011d5050.FUN_00403df0(),
                              DAT_011d3114.FUN_00403df0());
-            FUN_00453a70()->FUN_00ad7550(DAT_01070cf8, 0x121).FUN_00ad8830(false);
+            FUN_00453a70()->FUN_00ad7550(DAT_01070cf8, 0x121).Play(false);
             ((BlackjackUpdate*)DAT_011d9050)->message->SetTraitAndReset(0xfc4, 1.0f);
             ((BlackjackUpdate*)DAT_011d9050)->message->FUN_00a01350(0xfc4, buf, true);
             ((BlackjackUpdate*)DAT_011d9050)->message->FUN_00700320(0xfa3, 1);
@@ -3781,7 +3781,7 @@ void BlackjackUpdate::FUN_00734db0()
             else
                 FUN_00406d00(buf, 260, DAT_01070d0c, DAT_011d3474.FUN_00403df0(), -payout, DAT_011d5050.FUN_00403df0(),
                              DAT_011d3114.FUN_00403df0());
-            FUN_00453a70()->FUN_00ad7550(DAT_01070ce4, 0x121).FUN_00ad8830(false);
+            FUN_00453a70()->FUN_00ad7550(DAT_01070ce4, 0x121).Play(false);
             ((BlackjackUpdate*)DAT_011d9050)->message->SetTraitAndReset(0xfc4, 1.0f);
             ((BlackjackUpdate*)DAT_011d9050)->message->FUN_00a01350(0xfc4, buf, true);
             ((BlackjackUpdate*)DAT_011d9050)->message->FUN_00700320(0xfa3, 1);
@@ -3833,7 +3833,7 @@ void BlackjackUpdate::FUN_00734db0()
             char warning[260];
             FUN_00406d00(warning, 260, DAT_011d2424.FUN_00403df0());
             DispatchMessageToSink(warning, 0, DAT_01049638, 0, DAT_010162c0, 0);
-            FUN_00453a70()->FUN_00ad7550(DAT_01025cc4, 0x121).FUN_00ad8830(false);
+            FUN_00453a70()->FUN_00ad7550(DAT_01025cc4, 0x121).Play(false);
             FUN_00731d30();
         }
         break;

@@ -758,7 +758,7 @@ struct CaravanCard
 };
 typedef int(__cdecl* CaravanCompare)(const void*, const void*);
 int __cdecl CompareCalendarDays(const void*, const void*);
-void __cdecl FUN_00401030(void*);
+void __cdecl FormHeap_Free(void*);
 int __cdecl FUN_00ec7d40(int);
 struct PointerArray
 {

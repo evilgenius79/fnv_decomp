@@ -522,7 +522,7 @@ struct Entry
 };
 
 void __cdecl ResolveFormID(unsigned int*, TESFile*);
-TESForm* __cdecl FUN_004839c0(unsigned int);
+TESForm* __cdecl LookupFormByID(unsigned int);
 
 // For each of the 12 maps, collects old/new impact pairs, resolves their form IDs against apForm's file, warns on missing impacts, and reinserts them.
 // @fnv 0x0058f210
@@ -560,7 +560,7 @@ void SomeClass::RemapImpactData(TESForm* apForm)
                 {
                     oldFormID = (unsigned int)entries3[j_].oldImpact;
                     ResolveFormID(&oldFormID, apForm->GetFile(-1));
-                    oldImpact6 = dynamic_cast<BGSImpactData*>(FUN_004839c0(oldFormID));
+                    oldImpact6 = dynamic_cast<BGSImpactData*>(LookupFormByID(oldFormID));
                     if (!oldImpact6)
                     {
                         Warning("Could not find old ImpactData (%08X) for ImpactSwap on '%s' (%08X).", oldFormID,
@@ -573,7 +573,7 @@ void SomeClass::RemapImpactData(TESForm* apForm)
                 {
                     newFormID4 = (unsigned int)entries3[j_].newImpact;
                     ResolveFormID(&newFormID4, apForm->GetFile(-1));
-                    newImpact = dynamic_cast<BGSImpactData*>(FUN_004839c0(newFormID4));
+                    newImpact = dynamic_cast<BGSImpactData*>(LookupFormByID(newFormID4));
                     if (!newImpact)
                     {
                         Warning("Could not find new ImpactData (%08X) for ImpactSwap on '%s' (%08X).", newFormID4,

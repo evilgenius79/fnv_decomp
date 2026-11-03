@@ -457,7 +457,7 @@ F40ActiveEffect* F40ActiveEffect::CreateAbsorbEffectClone()
     return pkClone;
 }
 
-void* __cdecl FUN_00401000(unsigned int size);
+void* __cdecl FormHeap_Allocate(unsigned int size);
 
 struct AbsorbRecord
 {
@@ -486,7 +486,7 @@ struct AbsorbRecord
     unsigned int unk58;
     static void* operator new(unsigned int size)
     {
-        return FUN_00401000(size);
+        return FormHeap_Allocate(size);
     }
     AbsorbRecord(unsigned int a, unsigned int b, unsigned int c);
 };
@@ -1135,7 +1135,7 @@ struct BoltEffectUpd
     void FUN_0082c660(float fTimeOffset);
     BoltCasterSrc* FUN_0045cd60();
     BoltTargetSrc* FUN_0059bb30();
-    void FUN_00804210(bool bForce);
+    void Remove(bool bForce);
     bool FUN_00705cf0();
     float GetFloatAtOffset1C(int iIndex);
     void FUN_00803b70(float fTimeOffset);
@@ -1152,7 +1152,7 @@ void BoltEffectUpd::UpdateEffect(float fTimeOffset)
     {
         int iAV = GetActorValue();
         if (pkTarget && pkTarget->kAVOwner.GetActorValueInt(GetActorValue()) <= 0.0)
-            FUN_00804210(false);
+            Remove(false);
         if (!FUN_00705cf0())
             ApplyDamage(pkCaster, -GetFloatAtOffset1C(-1) * fTimeOffset);
     }
@@ -1161,17 +1161,17 @@ void BoltEffectUpd::UpdateEffect(float fTimeOffset)
     {
         float fDist = pkCaster->FUN_005723b0(pkTarget, false, false);
         if (fDist > FUN_006463e0(*g_s_011d1aa8.FUN_00403e20()))
-            FUN_00804210(false);
+            Remove(false);
         else if (pkCaster->FUN_008d8520())
         {
             BoltLOSData* pkLOS = pkCaster->FUN_008d8520()->GetLOS(pkTarget, 0);
             if (pkLOS && !pkLOS->bHasLOS)
-                FUN_00804210(false);
+                Remove(false);
         }
     }
     else
     {
-        FUN_00804210(false);
+        Remove(false);
     }
     if (!FUN_00705cf0())
         FUN_00803b70(fTimeOffset);

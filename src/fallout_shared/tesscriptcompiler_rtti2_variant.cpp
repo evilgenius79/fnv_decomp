@@ -269,7 +269,7 @@ int FUN_00404dc0(const char*, const char*);
 
 void* FUN_00401460(void*, const void*, unsigned);
 
-int FUN_004b12d0(const char*);
+int IsFloatString(const char*);
 
 int FUN_004b1230(const char*);
 
@@ -307,7 +307,7 @@ extern const char* DAT_0118a2d8[];
 extern unsigned char DAT_0118a598[];
 
 // @fnv 0x005b1ba0
-bool __cdecl FUN_005b1ba0(unsigned short count, const EncodeParameter* parameters, ScriptLineBuffer* line,
+bool __cdecl Cmd_Default_Parse(unsigned short count, const EncodeParameter* parameters, ScriptLineBuffer* line,
                           EncodeCompiler* compiler)
 
 {
@@ -1088,7 +1088,7 @@ bool __cdecl FUN_005b1ba0(unsigned short count, const EncodeParameter* parameter
                     else
                     {
 
-                        if (!FUN_004b12d0(word7.text))
+                        if (!IsFloatString(word7.text))
                         {
                             FUN_005aea90(compiler,
                                          "Unknown variable '%s' for parameter %s.\r\nCompiled script not saved!",

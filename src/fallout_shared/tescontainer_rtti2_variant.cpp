@@ -154,7 +154,7 @@ class B81390Extra
 };
 
 void __cdecl ResolveFormID(unsigned int* puiFormID, int iFile);
-TESForm* __cdecl FUN_004839c0(unsigned int auiFormId);
+TESForm* __cdecl LookupFormByID(unsigned int auiFormId);
 void __cdecl FUN_005b5e40(const char* pcFormat, ...);
 
 class B81390ContainerObject
@@ -172,7 +172,7 @@ void B81390ContainerObject::FUN_00481390(TESForm* pkOwner)
 {
     unsigned int auiFormId = (unsigned int)m_pPointer;
     ResolveFormID(&auiFormId, pkOwner->FUN_00484e60(-1));
-    m_pPointer = dynamic_cast<TESBoundObject*>(FUN_004839c0(auiFormId));
+    m_pPointer = dynamic_cast<TESBoundObject*>(LookupFormByID(auiFormId));
     if (!m_pPointer)
     {
         if (pkOwner)

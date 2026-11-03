@@ -108,7 +108,7 @@ struct TileValueCalls
 {
     void FUN_00a012d0(int trait, float value, bool update);
 };
-int __cdecl FUN_00a01860(const char* name);
+int __cdecl TraitNameToID(const char* name);
 extern "C" bool s_bAllowDetach;
 class FUN_007308e0 : public ListBox<ListItemData*>
 {
@@ -145,7 +145,7 @@ void FUN_007308e0::FUN_00730950()
     m_usSelectedIndex = 0;
     m_fFirstListValue = 0.0f;
     if (m_pListTile)
-        ((TileValueCalls*)m_pListTile)->FUN_00a012d0(FUN_00a01860("_num_filtered"), 0.0f, true);
+        ((TileValueCalls*)m_pListTile)->FUN_00a012d0(TraitNameToID("_num_filtered"), 0.0f, true);
     UpdateScrollPages();
     m_pSelectedTile = 0;
     FUN_0071a740();
@@ -159,7 +159,7 @@ template <> class ListBoxItem<unsigned int>
     bool m_bFiltered;
 };
 float FUN_004bd510(float value, float step);
-int FUN_00a01860(const char* name);
+int TraitNameToID(const char* name);
 
 struct LB_00730f40 : BSSimpleList<ListBoxItem<unsigned int>*>
 {
@@ -195,13 +195,13 @@ Tile* LB_00730f40::FUN_00730f40(int event)
     case 15:
         delta = m_pListTile
                     ? (int)FUN_004bd510(
-                          -m_pListTile->GetFloat(0xfb0) / m_pListTile->GetFloat(FUN_00a01860("_scroll_delta")), 1.0f)
+                          -m_pListTile->GetFloat(0xfb0) / m_pListTile->GetFloat(TraitNameToID("_scroll_delta")), 1.0f)
                     : 0;
         break;
     case 16:
         delta = m_pListTile
                     ? (int)FUN_004bd510(
-                          m_pListTile->GetFloat(0xfb0) / m_pListTile->GetFloat(FUN_00a01860("_scroll_delta")), 1.0f)
+                          m_pListTile->GetFloat(0xfb0) / m_pListTile->GetFloat(TraitNameToID("_scroll_delta")), 1.0f)
                     : 0;
         break;
     }
@@ -377,8 +377,8 @@ struct ClearNode
 };
 extern unsigned char DAT_011d8909;
 extern const char str_0106f8d0[];
-int __cdecl FUN_00a01860(const char*);
-void __cdecl FUN_00401030(void*);
+int __cdecl TraitNameToID(const char*);
+void __cdecl FormHeap_Free(void*);
 struct Target007a4780
 {
     void* unk00;
@@ -395,7 +395,7 @@ struct Target007a4780
     void UpdateSelectionState();
     void FUN_007a4780();
 };
-// Clears the entries, resets fields, and calls FUN_00a012d0 on unk0c with a value from FUN_00a01860.
+// Clears the entries, resets fields, and calls FUN_00a012d0 on unk0c with a value from TraitNameToID.
 // @fnv 0x007a4780
 void Target007a4780::FUN_007a4780()
 {
@@ -423,7 +423,7 @@ void Target007a4780::FUN_007a4780()
     unk1c = 0;
     unk20 = 0.0f;
     if (unk0c)
-        unk0c->FUN_00a012d0(FUN_00a01860(str_0106f8d0), 0.0f, true);
+        unk0c->FUN_00a012d0(TraitNameToID(str_0106f8d0), 0.0f, true);
     FUN_007a7d80();
     unk10 = 0;
     UpdateSelectionState();
@@ -463,13 +463,13 @@ Tile* LB_007a4d50::FUN_007a4d50(int event)
     case 15:
         iDelta = m_pListTile
                      ? (int)FUN_004bd510(
-                           -m_pListTile->GetFloat(0xfb0) / m_pListTile->GetFloat(FUN_00a01860("_scroll_delta")), 1.0f)
+                           -m_pListTile->GetFloat(0xfb0) / m_pListTile->GetFloat(TraitNameToID("_scroll_delta")), 1.0f)
                      : 0;
         break;
     case 16:
         iDelta = m_pListTile
                      ? (int)FUN_004bd510(
-                           m_pListTile->GetFloat(0xfb0) / m_pListTile->GetFloat(FUN_00a01860("_scroll_delta")), 1.0f)
+                           m_pListTile->GetFloat(0xfb0) / m_pListTile->GetFloat(TraitNameToID("_scroll_delta")), 1.0f)
                      : 0;
         break;
     }
@@ -576,14 +576,14 @@ Tile* SomeClass::FUN_007a31e0(int param)
     case 15:
         delta = m_pListTile
                     ? (int)FUN_004bd510(-((TileListBoxCalls*)m_pListTile)->GetFloat(4016) /
-                                            ((TileListBoxCalls*)m_pListTile)->GetFloat(FUN_00a01860("_scroll_delta")),
+                                            ((TileListBoxCalls*)m_pListTile)->GetFloat(TraitNameToID("_scroll_delta")),
                                         1.0f)
                     : 0;
         break;
     case 16:
         delta = m_pListTile
                     ? (int)FUN_004bd510(((TileListBoxCalls*)m_pListTile)->GetFloat(4016) /
-                                            ((TileListBoxCalls*)m_pListTile)->GetFloat(FUN_00a01860("_scroll_delta")),
+                                            ((TileListBoxCalls*)m_pListTile)->GetFloat(TraitNameToID("_scroll_delta")),
                                         1.0f)
                     : 0;
         break;

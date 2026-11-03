@@ -326,7 +326,7 @@ class GcRef
     void FUN_00420ba0(int i);
     void FUN_005de0a0(int iFlags, int i);
 };
-GcRef* __cdecl FUN_004839c0(unsigned int auiFormId);
+GcRef* __cdecl LookupFormByID(unsigned int auiFormId);
 
 static const char s_szLockName[] = "GarbageCollector::Add(TESObjectREFR)";
 extern const char g_szGcEnd[] = "";
@@ -335,7 +335,7 @@ extern const char g_szGcEnd[] = "";
 void __cdecl FUN_00867f90(GcRef* pkRef)
 {
     GcScopedLock kLock(1, s_szLockName);
-    if (FUN_004839c0(pkRef->FUN_0084e3a0()) != pkRef)
+    if (LookupFormByID(pkRef->FUN_0084e3a0()) != pkRef)
     {
         delete pkRef;
     }

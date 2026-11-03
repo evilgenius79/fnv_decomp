@@ -517,7 +517,7 @@ struct SceneCache
 };
 struct SceneLoader
 {
-    void* FUN_00447080(const char*, int, int, int, int, int);
+    void* LoadModel(const char*, int, int, int, int, int);
     void FUN_0045a5e0(const char*);
 };
 extern SceneSource* DAT_011c3f2c;
@@ -553,7 +553,7 @@ void LoadScenes::LoadSceneModels()
                 char cPath[260];
                 FUN_00406d30(cPath, 260, &DAT_01016fac);
                 FUN_00406d50(cPath, 260, pSceneRecord->description.Name());
-                void* model = DAT_011c3b3c->FUN_00447080(cPath, 0, 1, 0, 0, 0);
+                void* model = DAT_011c3b3c->LoadModel(cPath, 0, 1, 0, 0, 0);
                 if (model)
                 {
                     if (!FUN_00c511f0(model))
@@ -957,7 +957,7 @@ struct StatUnique
 };
 struct StatTextureSet
 {
-    void FUN_00853130(void*, int*);
+    void GetAt(void*, int*);
     void FUN_00844700(void*, int);
 };
 struct StatTextureCount
@@ -1205,7 +1205,7 @@ void SceneStatistics::AccumulateSceneStatistics(StatObject* object, int* output,
                         while (texture1)
                         {
                             int uses = 0;
-                            ((StatTextureSet*)&g_011c5ad0)->FUN_00853130(texture1, &uses);
+                            ((StatTextureSet*)&g_011c5ad0)->GetAt(texture1, &uses);
                             uses++;
                             ((StatTextureSet*)&g_011c5ad0)->FUN_00844700(texture1, uses);
                             if (uses == *DAT_011c5a90.FUN_0043d4d0())

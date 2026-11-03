@@ -6052,7 +6052,7 @@ struct BSSimpleListTESRaceSize {
 };
 struct FUN_005cb8e0_Player {
     TESQuest* FUN_005cbb50();
-    BSSimpleListTESRaceSize* FUN_00952ba0();
+    BSSimpleListTESRaceSize* GetCurrentQuestTargets();
 };
 extern FUN_005cb8e0_Player* g_thePlayer;
 void DebugLog(const char*, ...);
@@ -6089,7 +6089,7 @@ bool FUN_005cb8e0(const ScriptParameter* apParameters, const char* apCompiledPar
     if (g_thePlayer->FUN_005cbb50())
     {
         DebugLog("Active quest: %s", ((FUN_005cb8e0_FormVT*)g_thePlayer->FUN_005cbb50())->GetName138());
-        BSSimpleListTESRaceSize* pActiveTargetList = g_thePlayer->FUN_00952ba0();
+        BSSimpleListTESRaceSize* pActiveTargetList = g_thePlayer->GetCurrentQuestTargets();
         if (!pActiveTargetList)
             DebugLog("No current targets");
         else
@@ -16420,7 +16420,7 @@ public:
 bool __cdecl FUN_005accb0(const ScriptParameter* apParameters, const char* apCompiledParams, unsigned int& auiOffset, TESObjectREFR* apRefObject, TESObjectREFR* apContainer, Script* apScript, ScriptLocals* apScriptLocals, unsigned int* puiA, unsigned int* puiB);
 ScriptEditTarget* __cdecl FUN_00ec43fb(TESObjectREFR* apRef, int aUnk1, const char* aStr1, const char* aStr2, int aUnk2);
 bool __cdecl FUN_00406d70(unsigned int uiA, unsigned int uiB);
-const char* __cdecl FUN_0066eac0(unsigned int uiA);
+const char* __cdecl GetActorValueName(unsigned int uiA);
 void __cdecl FUN_00703c00(const char* apFmt, ...);
 
 // @fnv 0x005bdcd0
@@ -16437,7 +16437,7 @@ bool __cdecl FUN_005bdcd0(const ScriptParameter* apParameters, const char* apCom
             pTarget->Apply(uiA, uiB);
         } else {
             if (g_scriptDebugTls.bDebugIsActor) {
-                FUN_00703c00("Actor Value '%s' cannot be modified in scripts or the console.", FUN_0066eac0(uiA));
+                FUN_00703c00("Actor Value '%s' cannot be modified in scripts or the console.", GetActorValueName(uiA));
             }
         }
     }
@@ -21105,7 +21105,7 @@ void __cdecl FUN_005d45c0();
 void __cdecl FUN_005d45e0();
 
 // @fnv 0x005d4580
-bool __cdecl FUN_005d4580()
+bool __cdecl Cmd_OutputLocalMapPictures_Execute()
 {
     DAT_012004fc = true;
     FUN_005d45c0();
@@ -24996,14 +24996,14 @@ struct MessageForm {
 };
 bool __cdecl FUN_005accb0(const ScriptParameter*, const char*, unsigned int*, TESObjectREFR*, TESObjectREFR*, Script*, ScriptLocals*, MessageForm**, int*);
 void FUN_005b4940();
-void FUN_005b4a70();
+void ShowMessageBox_Callback();
 bool __fastcall FUN_004077c0(const TESObjectREFR*);
 unsigned int __fastcall FUN_0084e3a0(void*);
 unsigned int __fastcall FUN_004048e0(const BSStringT<char>*);
 extern int DAT_011cac64;
 extern const char DAT_01020770[];
 extern const char DAT_0103934c[];
-void __cdecl FUN_00703e80(const char*, int, const char*, void (*)(), int, int, float, float, ...);
+void __cdecl ShowMessageBox(const char*, int, const char*, void (*)(), int, int, float, float, ...);
 bool __cdecl QueueUIMessage(const char*, int, const char*, const char*, float, bool);
 
 // @fnv 0x005b4630
@@ -25046,7 +25046,7 @@ bool __cdecl FUN_005b4630(const ScriptParameter* parameters, const char* compile
     if (f)
         a[0] = DAT_0103934c;
     if (i->FUN_00590d00()) {
-        FUN_00703e80(PrepareScriptMessage(p.String(), false), 0, i->fullName.FUN_00408da0(), FUN_005b4a70, 0, 23, 0.0f, 0.0f,
+        ShowMessageBox(PrepareScriptMessage(p.String(), false), 0, i->fullName.FUN_00408da0(), ShowMessageBox_Callback, 0, 23, 0.0f, 0.0f,
             a[0], a[1], a[2], a[3], a[4], a[5], a[6], a[7], a[8], a[9], 0);
     } else if (FUN_004048e0(&p)) {
         QueueUIMessage(PrepareScriptMessage(p.String(), false), 0,
@@ -29745,7 +29745,7 @@ struct Actor_005bd960 {
     bool FUN_0087f4e0();
 };
 extern bool __cdecl FUN_005accb0(const ScriptParameter*, const char*, unsigned int&, Actor_005bd960*, TESObjectREFR*, Script*, ScriptLocals*, int*);
-extern const char* __cdecl FUN_0066eac0(int);
+extern const char* __cdecl GetActorValueName(int);
 extern bool __cdecl FUN_0066ed60(ValueInterface_005bd960*, int, float*);
 extern bool __cdecl FUN_00406d70(int, unsigned int);
 void __cdecl DebugLog(const char*, ...);
@@ -29763,7 +29763,7 @@ bool __cdecl FUN_005bd960(const ScriptParameter* paramInfo, const char* scriptDa
         Actor_005bd960* actorLocal = actor;
         int id4 = requestedValue2;
         float initial_2 = actorLocal->values.GetBase(id4);
-        DebugLog("GetActorValueInfo: %s on %s", FUN_0066eac0(id4), actorLocal->FUN_0055d520());
+        DebugLog("GetActorValueInfo: %s on %s", GetActorValueName(id4), actorLocal->FUN_0055d520());
         DebugLog("...Current Value: %.2f Computed Base: %.2f ", actorLocal->values.Apply(id4), (double)initial_2);
         float current4 = actorLocal->FUN_004181e0()->values.Apply(id4);
         float delta = 0.0f;
@@ -29792,7 +29792,7 @@ extern __declspec(thread) bool g_bConsoleEcho;
 namespace ActorValue {
     bool GetFlag(int aiActorValue, unsigned int auiFlag);
 }
-const char* FUN_0066eac0(unsigned int aiActorValue);
+const char* GetActorValueName(unsigned int aiActorValue);
 
 struct ActorModAVStandIn {
     virtual void v000(); virtual void v001(); virtual void v002(); virtual void v003();
@@ -29897,7 +29897,7 @@ bool __cdecl FUN_005bdf20(const ScriptParameter* apParameters, const char* apCom
             pActor->ModActorValue(m_eAssociatedActorValue, fAmount, 0);
         }
         else if (g_bConsoleEcho) {
-            DebugLog("Actor Value '%s' cannot be modified in scripts or the console.", FUN_0066eac0(m_eAssociatedActorValue));
+            DebugLog("Actor Value '%s' cannot be modified in scripts or the console.", GetActorValueName(m_eAssociatedActorValue));
         }
     }
     return true;
@@ -29906,7 +29906,7 @@ bool __cdecl FUN_005bdf20(const ScriptParameter* apParameters, const char* apCom
 namespace ActorValue {
     bool GetFlag(Index eAV, unsigned int uiFlag);
 }
-const char* FUN_0066eac0(ActorValue::Index eAV);   // the actor value's name
+const char* GetActorValueName(ActorValue::Index eAV);   // the actor value's name
 struct FUN_0088b740_shell {
     void FUN_0088b740(int iAV, float fValue);   // Actor: apply a script change to an actor value
 };
@@ -29922,7 +29922,7 @@ bool __cdecl FUN_005be080(const ScriptParameter* paramInfo, const char* scriptDa
         if (!ActorValue::GetFlag(eAV, 0x4000)) {
             ((FUN_0088b740_shell*)pActor)->FUN_0088b740(eAV, ActorValue::GetFlag(eAV, 0x200) ? -fValue : std::abs(fValue));
         } else if (tlsData.bConsoleEcho) {
-            DebugLog("Actor Value '%s' cannot be modified in scripts or the console.", FUN_0066eac0(eAV));
+            DebugLog("Actor Value '%s' cannot be modified in scripts or the console.", GetActorValueName(eAV));
         }
     }
     return true;
@@ -29940,7 +29940,7 @@ public:
 };
 extern bool __cdecl ExtractArgs(const ScriptParameter*, const char*, unsigned int*, TESObjectREFR*, TESObjectREFR*, Script*, ScriptLocals*, ...);
 extern bool __cdecl FUN_00406d70(unsigned int, unsigned int);
-extern const char* __cdecl FUN_0066eac0(unsigned int);
+extern const char* __cdecl GetActorValueName(unsigned int);
 extern void __cdecl FUN_00703c00(const char*, const char*);
 extern const char DAT_0103a310[];
 typedef void (__thiscall *ActorValueChange)(Actor*, unsigned int, float, int);
@@ -29957,7 +29957,7 @@ bool __cdecl FUN_005be190(const ScriptParameter* parameters, const char* compile
             float amount = (float)((double)newValue - (double)(reinterpret_cast<ActorValueOwner*>((char*)pActor + 0xa4))->GetValue(actorValue));
             ((ActorValueChange)(*(void***)pActor)[0x3a4 / 4])(pActor, actorValue, amount, 0);
         } else if (g_tls.bDebug) {
-            FUN_00703c00(DAT_0103a310, FUN_0066eac0(actorValue));
+            FUN_00703c00(DAT_0103a310, GetActorValueName(actorValue));
         }
     }
     return true;
@@ -32433,7 +32433,7 @@ int __cdecl FUN_00406f60(BSStringT<char>* pkString, const char* pcFormat, ...);
 bool __cdecl QueueUIMessage(const char* pcMessage, int iType, const char* pcIcon, const char* pcSound, float fDuration, bool bInstant);
 
 // @fnv 0x005c1d40
-bool __cdecl FUN_005c1d40(const ScriptParameter* paramInfo, const char* scriptData, TESObjectREFR* thisObj, TESObjectREFR* containingObj, Script* scriptObj, ScriptLocals* eventList, double& result, unsigned int& opcodeOffsetPtr)
+bool __cdecl Cmd_AddSpell_Execute(const ScriptParameter* paramInfo, const char* scriptData, TESObjectREFR* thisObj, TESObjectREFR* containingObj, Script* scriptObj, ScriptLocals* eventList, double& result, unsigned int& opcodeOffsetPtr)
 {
     SpellItem5c1* pkSpell = 0;
     if (!ExtractArgs(paramInfo, scriptData, &opcodeOffsetPtr, thisObj, containingObj, scriptObj, eventList, &pkSpell))
@@ -46128,8 +46128,8 @@ struct S_00703c80_Ctx {
     bool FUN_009373f0();
 };
 struct S_00703c80_Mgr {
-    bool FUN_004a4020();
-    void FUN_0071d0a0(S_00703c80_Elem* e, int* b);
+    bool IsConsoleOpen();
+    void Print(S_00703c80_Elem* e, int* b);
 };
 S_00703c80_Mgr* __cdecl FUN_0071b160(int which);
 
@@ -46137,9 +46137,9 @@ S_00703c80_Mgr* __cdecl FUN_0071b160(int which);
 void __cdecl FUN_00703c80(S_00703c80_A a, int b)
 {
     if (FUN_004b7210() && ((S_00703c80_Ctx*)FUN_004b7210())->FUN_009373f0()) {
-        if ((FUN_0071b160(0) && FUN_0071b160(1)->FUN_004a4020()) || FUN_005b6f70()) {
+        if ((FUN_0071b160(0) && FUN_0071b160(1)->IsConsoleOpen()) || FUN_005b6f70()) {
             int* p = &b;
-            FUN_0071b160(1)->FUN_0071d0a0(a.FUN_00559450(), p);
+            FUN_0071b160(1)->Print(a.FUN_00559450(), p);
             p = 0;
         }
     }
@@ -49332,7 +49332,7 @@ public:
 
 class FUN_0088c650_shell : public TESObjectREFR {
 public:
-    void FUN_0088c650(TESForm*, int, ExtraDataList*, bool, bool, bool);
+    void EquipItem(TESForm*, int, ExtraDataList*, bool, bool, bool);
 };
 
 class Actor : public FUN_0088c650_shell {
@@ -49420,7 +49420,7 @@ extern void FNV_Warning(const char*, ...);
 ExtraDataList* __fastcall FUN_005d43c0(TESObjectREFR*);
 
 // @fnv 0x005d0060
-bool FUN_005d0060(
+bool Cmd_EquipItem_Execute(
     const ScriptParameter* paramInfo,
     const char* argStr,
     TESObjectREFR* thisObj,
@@ -49470,7 +49470,7 @@ bool FUN_005d0060(
                 }
 
                 if (bDoEquipVal) {
-                    actor_->FUN_0088c650(pItem_2, 1, 0, 1, bNoUnequipA, 1);
+                    actor_->EquipItem(pItem_2, 1, 0, 1, bNoUnequipA, 1);
                     if (actor_ == _g_thePlayer && !kISilent) {
                         BSStringT<char> str;
                         str.PrintfString("%s %s.", TESFullName::GetFullName(pItem_2), g_011d2a0c.FUN_00403df0());
@@ -50853,7 +50853,7 @@ extern double DAT_01012640;
 extern NiPoint3 DAT_011a9c30;
 bool __cdecl FUN_005accb0(const ScriptParameter*, const char*, unsigned int*, TESObjectREFR*, TESObjectREFR*, Script*, ScriptLocals*, int*, int*, int*);
 void __cdecl _DebugLog(const char*, ...);
-int __cdecl FUN_004839c0(int);
+int __cdecl LookupFormByID(int);
 int __cdecl FUN_004b3890(NiPoint3*, NiPoint3*, NiPoint3*, NiPoint3*, int);
 
 struct V16 { int m_00; NiPoint3 position; };
@@ -51408,7 +51408,7 @@ bool __cdecl FUN_005c25f0(const ScriptParameter* apParameters, const char* apCom
             else aE0x = ((Pt&)((PtOp*)&aBId.m_10.GetAt(aD1x - 1).position)->operator-(aBId.finish)).Length();
             _DebugLog("Travel %f units", (double)aE0x);
             float aBox = aBId.FUN_006f49c0();
-            int aAll = FUN_004839c0(58);
+            int aAll = LookupFormByID(58);
             float ratio = aBox / ((SpeedObj*)DAT_011dea3c)->FUN_008a0b10();
             ratio = (float)(ratio / DAT_01012640);
             ratio = ((TESGlobalValueReader*)aAll)->GetValue() * ratio;
@@ -56158,7 +56158,7 @@ bool FUN_005bde40(
         {
             ::DebugLog(
                 "Actor Value '%s' cannot be modified in scripts or the console.",
-                ::FUN_0066eac0(actorValue));
+                ::GetActorValueName(actorValue));
         }
     }
 

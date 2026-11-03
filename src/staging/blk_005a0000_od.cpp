@@ -201,7 +201,7 @@ char __thiscall FUN_005a8e20_cls::FUN_005a8ef0(int param_2, int param_3)
 char __cdecl ConsumeByteAtE4();
 
 // @fnv 0x005b4a70
-void FUN_005b4a70()
+void ShowMessageBox_Callback()
 {
     DAT_0118c684 = ConsumeByteAtE4();
 }

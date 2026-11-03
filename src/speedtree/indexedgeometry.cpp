@@ -324,7 +324,7 @@ struct K
     void __thiscall FUN_00b331c0();
 };
 
-void __cdecl FUN_00401030(void*);
+void __cdecl FormHeap_Free(void*);
 
 // @fnv 0x00b331c0
 void __thiscall K::FUN_00b331c0()
@@ -338,7 +338,7 @@ void __thiscall K::FUN_00b331c0()
         FUN_00b33110(fC, f10);
         t1 = (f14 - fC) / 24;
         t2 = fC;
-        FUN_00401030((void*)t2);
+        FormHeap_Free((void*)t2);
     }
     fC = 0;
     f10 = 0;
@@ -346,7 +346,7 @@ void __thiscall K::FUN_00b331c0()
 }
 
 unsigned int __cdecl FUN_00ec7c56(void);
-void __cdecl FUN_00401030(void*);
+void __cdecl FormHeap_Free(void*);
 
 struct InnerVec
 {
@@ -478,7 +478,7 @@ void TargetClass::ClearOuter()
             if (jL >= (unsigned int)(cQ->_last - cQ->_first))
                 FUN_00ec7c56();
             _v = cQ->_first[jL];
-            FUN_00401030(_v);
+            FormHeap_Free(_v);
             D5 = &m_outer;
             if (i >= (unsigned int)(D5->_last - D5->_first))
                 FUN_00ec7c56();

@@ -321,7 +321,7 @@ struct FUN_005ea2c0_cls
 
 extern "C" void __stdcall FUN_00ec5fce(void* object, int elementSize, int count, void (FUN_005ea2c0_cls::*callback)());
 
-extern "C" void __cdecl FUN_00401030(void* apMemory);
+extern "C" void __cdecl FormHeap_Free(void* apMemory);
 
 // @fnv 0x005ea2c0
 void* FUN_005ea2c0_cls::FUN_005ea2c0(unsigned int flags)
@@ -332,7 +332,7 @@ void* FUN_005ea2c0_cls::FUN_005ea2c0(unsigned int flags)
 
         if (flags & 1)
         {
-            FUN_00401030(reinterpret_cast<char*>(this) - 4);
+            FormHeap_Free(reinterpret_cast<char*>(this) - 4);
         }
 
         return reinterpret_cast<char*>(this) - 4;
@@ -342,7 +342,7 @@ void* FUN_005ea2c0_cls::FUN_005ea2c0(unsigned int flags)
 
     if (flags & 1)
     {
-        FUN_00401030(this);
+        FormHeap_Free(this);
     }
 
     return this;

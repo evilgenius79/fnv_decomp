@@ -444,8 +444,8 @@ struct Handle114
     Handle114& FUN_00ad7480();
     Handle114& FUN_00418900(const Handle114&);
     void FUN_00ad8be0(float, float);
-    void FUN_00ad8b60(float, float, float);
-    void FUN_00ad8f20(Obj114*);
+    void SetPos(float, float, float);
+    void SetNiNode(Obj114*);
     void FUN_00ad8870(int, int);
 };
 struct Obj114
@@ -1348,8 +1348,8 @@ void Dialogue114::FUN_009ee0a0(bool process)
                         sound.FUN_00418900(FUN_00453a70()->FUN_00ad7480(path27, flags22, 0));
                         Vec114 position1 = actor18->v1f4();
                         sound.FUN_00ad8be0(FUN_005790b0(), FUN_005790d0());
-                        sound.FUN_00ad8b60(position1.x, position1.y, position1.z);
-                        sound.FUN_00ad8f20(actor18->v1d0());
+                        sound.SetPos(position1.x, position1.y, position1.z);
+                        sound.SetNiNode(actor18->v1d0());
                         sound.FUN_00ad8870(1, 0);
                     }
                 }
@@ -1654,7 +1654,7 @@ void This::LoadSaveData()
 }
 
 namespace fnv_009eff60 {
-TESForm* FUN_004839c0(unsigned int formID);
+TESForm* LookupFormByID(unsigned int formID);
 void* __cdecl operator new(unsigned int size);
 void __cdecl operator delete(void* object);
 
@@ -1744,12 +1744,12 @@ void DialoguePackageState::ResolveReferences()
     FUN_006796c0();
     // Serialized actor IDs are resolved in target, speaker, listener order.
     unsigned int listenerID = (unsigned int)target;
-    target = dynamic_cast<Actor*>(FUN_004839c0(listenerID));
+    target = dynamic_cast<Actor*>(LookupFormByID(listenerID));
     unsigned int targetID;
     unsigned int speakerID = (unsigned int)speaker;
-    speaker = dynamic_cast<Actor*>(FUN_004839c0(speakerID));
+    speaker = dynamic_cast<Actor*>(LookupFormByID(speakerID));
     targetID = (unsigned int)listener;
-    listener = dynamic_cast<Actor*>(FUN_004839c0(targetID));
+    listener = dynamic_cast<Actor*>(LookupFormByID(targetID));
 
     if (g_TESSaveLoadGame->FUN_008df040() >= 32 && conversation)
         conversation->FUN_0083c220();
@@ -1812,7 +1812,7 @@ class Conversation_Stub
     void SaveConversation();
     short FUN_0083ba50(DialogueItem*);
 };
-TESForm* FUN_004839c0(unsigned int);
+TESForm* LookupFormByID(unsigned int);
 void FUN_0040fbe0(const char*, ...);
 void FNV_Warning(const char*, ...);
 class DialoguePackage
@@ -1929,7 +1929,7 @@ void DialoguePackage::FUN_009ef6e0()
         DialogueSaveRecord* record = ((DialogueSaveGameWriter*)g_TESSaveLoadGame)->FUN_004fd3e0();
         if (record)
         {
-            TESForm* form = FUN_004839c0(record->formID);
+            TESForm* form = LookupFormByID(record->formID);
             FUN_0040fbe0("SaveGame(): %-5i for form %08X %s with flags %08X ending at line %i in file %s", end - saved7,
                          record->formID, form->GetName(), (unsigned int&)record->flags, 0x231,
                          "D:\\_Fallout3\\Platforms\\Common\\Code\\Fallout\\Ai\\DialoguePackage.cpp");
@@ -1960,7 +1960,7 @@ struct BGSLoadFormBuffer
     unsigned FUN_008648a0();
     void FUN_00864980(void* p, unsigned n);
 };
-TESForm* __cdecl FUN_004839c0(unsigned id);
+TESForm* __cdecl LookupFormByID(unsigned id);
 struct List0083b830SV
 {
     int a, b, c;
@@ -2043,7 +2043,7 @@ void FUN_009f0460_class::FUN_009f0460(BGSLoadFormBuffer* apSaveBuffer)
     apSaveBuffer->FUN_008648e0(&mb4);
     apSaveBuffer->FUN_008648e0(&mb8);
     apSaveBuffer->FUN_008648e0(&m9c);
-    m8c = dynamic_cast<TESTopic*>(FUN_004839c0(apSaveBuffer->FUN_008648a0()));
+    m8c = dynamic_cast<TESTopic*>(LookupFormByID(apSaveBuffer->FUN_008648a0()));
     apSaveBuffer->FUN_00864980(&m90, 4);
     apSaveBuffer->FUN_00864980(&m98, 1);
     apSaveBuffer->FUN_00864980(&mbc, 1);

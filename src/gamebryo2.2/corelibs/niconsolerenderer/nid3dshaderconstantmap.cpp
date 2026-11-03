@@ -583,7 +583,7 @@ struct BSFadeNode
 };
 struct CtorShim
 {
-    NiShaderConstantMapEntry* FUN_00401000();
+    NiShaderConstantMapEntry* FormHeap_Allocate();
 };
 struct NiGlobalStringTable
 {
@@ -647,7 +647,7 @@ unsigned int FUN_00e81f10_shell::FUN_00e81f10(char* pszKey, unsigned int uiExtra
                                               unsigned int uiDataStride, void* pvDataSource, bool bCopyData)
 {
     void* mem = BSFadeNode::operator new(0x38);
-    NiShaderConstantMapEntry* pkEntry = mem ? ((CtorShim*)mem)->FUN_00401000() : 0;
+    NiShaderConstantMapEntry* pkEntry = mem ? ((CtorShim*)mem)->FormHeap_Allocate() : 0;
     EntryLayout* e = (EntryLayout*)pkEntry;
     e->m_kControlPoint = pszKey;
     e->m_uiValue2 = uiExtra;

@@ -71,7 +71,7 @@ template <> bool BSStringT<char>::Set(const BSStringT<char>& source)
 }
 
 void ResolveFormID(unsigned int*, TESFile*);
-TESForm* FUN_004839c0(unsigned int);
+TESForm* LookupFormByID(unsigned int);
 void FUN_005b5e40(const char*, ...);
 void __cdecl operator delete(void*);
 
@@ -87,7 +87,7 @@ void ExtraDecalRefs::FUN_00433db0(TESForm* form)
         ReferenceIntersectionData* decal = position->GetItem();
         unsigned int formID = reinterpret_cast<unsigned int>(decal->m_pHitReference);
         ResolveFormID(&formID, form->FUN_00484e60(-1));
-        TESObjectREFR* resolvedB = dynamic_cast<TESObjectREFR*>(FUN_004839c0(formID));
+        TESObjectREFR* resolvedB = dynamic_cast<TESObjectREFR*>(LookupFormByID(formID));
         if (!resolvedB)
         {
             FUN_005b5e40("MASTERFILE: Unable to find decal reference %08X.", formID);

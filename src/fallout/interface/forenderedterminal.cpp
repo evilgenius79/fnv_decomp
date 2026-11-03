@@ -705,7 +705,7 @@ struct Sound376
     unsigned int state;
     ~Sound376()
     {}
-    bool FUN_00ad8830(bool deferred);
+    bool Play(bool deferred);
 };
 struct Audio376
 {
@@ -715,5 +715,5 @@ Audio376* FUN_00ad9060();
 // @fnv 0x007ffe40
 void FUN_007ffe40()
 {
-    FUN_00ad9060()->ResolveAudioHandle("OBJComputerTerminalPowerDown", 0x121).FUN_00ad8830(false);
+    FUN_00ad9060()->ResolveAudioHandle("OBJComputerTerminalPowerDown", 0x121).Play(false);
 }

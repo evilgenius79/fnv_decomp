@@ -3245,8 +3245,8 @@ struct ImpSound
 {
     int iData[3];
     ~ImpSound();
-    void FUN_00ad8b60(float afX, float afY, float afZ);
-    void FUN_00ad8830(int aiFlags);
+    void SetPos(float afX, float afY, float afZ);
+    void Play(int aiFlags);
 };
 
 struct ImpAudio
@@ -3553,15 +3553,15 @@ void ImpProjectile::ApplyImpact(ImpTarget* apTarget, ImpPoint* apPos, ImpPoint* 
             if (SoundAssetTmp)
             {
                 ImpSound kSound = FUN_00453a70()->FUN_00ad7480(SoundAssetTmp->FUN_00511840(), 0x4102, SoundAssetTmp);
-                kSound.FUN_00ad8b60(apPos->x, apPos->y, apPos->z);
-                kSound.FUN_00ad8830(0);
+                kSound.SetPos(apPos->x, apPos->y, apPos->z);
+                kSound.Play(0);
             }
             ImpSoundDesc* pSound2New = pImpactTmp->GetGrass();
             if (pSound2New)
             {
                 ImpSound kSound2 = FUN_00453a70()->FUN_00ad7480(pSound2New->FUN_00511840(), 0x4102, pSound2New);
-                kSound2.FUN_00ad8b60(apPos->x, apPos->y, apPos->z);
-                kSound2.FUN_00ad8830(0);
+                kSound2.SetPos(apPos->x, apPos->y, apPos->z);
+                kSound2.Play(0);
             }
         }
     }

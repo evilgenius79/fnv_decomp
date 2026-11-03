@@ -541,21 +541,21 @@ class FUN_00b276f0_cls
     void Reset();
 };
 
-extern void __cdecl FUN_00401030(void* p);
+extern void __cdecl FormHeap_Free(void* p);
 
 // Releases the objects held in m_20, m_24, m_2c and m_18, calls Destroy(3) on m_2c, then zeroes m_0c, m_14, m_20, m_24, m_2c and m_18.
 // @fnv 0x00b276f0
 void FUN_00b276f0_cls::Reset()
 {
     void* a = (void*)m_20;
-    FUN_00401030(a);
+    FormHeap_Free(a);
     void* b = (void*)m_24;
-    FUN_00401030(b);
+    FormHeap_Free(b);
     void* t = (void*)m_2c;
     FUN_00b276f0_sub* c = (FUN_00b276f0_sub*)t;
     c != 0 ? c->Destroy(3) : 0;
     void* d7 = (void*)m_18;
-    FUN_00401030(d7);
+    FormHeap_Free(d7);
     m_0c = 0;
     m_14 = 0;
     m_20 = 0;
@@ -573,7 +573,7 @@ struct FUN_00b277b0_cls
 
 extern "C" void __stdcall FUN_00ec5fce(void* object, int elementSize, int count, void (FUN_00b277b0_cls::*callback)());
 
-extern "C" void __cdecl FUN_00401030(void* apMemory);
+extern "C" void __cdecl FormHeap_Free(void* apMemory);
 
 // @fnv 0x00b277b0
 void* FUN_00b277b0_cls::Destroy(unsigned int flags)
@@ -584,7 +584,7 @@ void* FUN_00b277b0_cls::Destroy(unsigned int flags)
 
         if (flags & 1)
         {
-            FUN_00401030(reinterpret_cast<char*>(this) - 4);
+            FormHeap_Free(reinterpret_cast<char*>(this) - 4);
         }
 
         return reinterpret_cast<char*>(this) - 4;
@@ -594,7 +594,7 @@ void* FUN_00b277b0_cls::Destroy(unsigned int flags)
 
     if (flags & 1)
     {
-        FUN_00401030(this);
+        FormHeap_Free(this);
     }
 
     return this;
@@ -857,7 +857,7 @@ struct Hldr0044
 };
 
 extern "C" void __stdcall FUN_00ec7894(Hldr0044* p, void* dat);
-extern "C" void __cdecl FUN_00401000(unsigned int scaled);
+extern "C" void __cdecl FormHeap_Allocate(unsigned int scaled);
 extern "C" int DAT_01140ef8;
 extern "C" int DAT_010176f8;
 
@@ -882,7 +882,7 @@ extern "C" void __cdecl FUN_00b35f00(unsigned int n)
         }
     }
 
-    FUN_00401000(n * 2);
+    FormHeap_Allocate(n * 2);
 }
 
 struct FUN_00b31270
@@ -1883,7 +1883,7 @@ class OwnerB3ff90
     void FUN_00b3ff90(FUN_00b37880_class* a);
 };
 
-// If a differs from m_6c, calls FUN_00b37880 then FUN_00401030 on the old m_6c, and stores a in m_6c.
+// If a differs from m_6c, calls FUN_00b37880 then FormHeap_Free on the old m_6c, and stores a in m_6c.
 // @fnv 0x00b3ff90
 void OwnerB3ff90::FUN_00b3ff90(FUN_00b37880_class* a)
 {
@@ -1891,7 +1891,7 @@ void OwnerB3ff90::FUN_00b3ff90(FUN_00b37880_class* a)
     {
         FUN_00b37880_class* saved = m_6c;
         FUN_00b37880_class* old = saved;
-        old ? ((((old->FUN_00b37880(), 1) & 1) ? FUN_00401030(old) : (void)0), old) : 0;
+        old ? ((((old->FUN_00b37880(), 1) & 1) ? FormHeap_Free(old) : (void)0), old) : 0;
         m_6c = a;
     }
 }

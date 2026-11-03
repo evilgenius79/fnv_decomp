@@ -1595,7 +1595,7 @@ struct S00c880f0_Cls
 };
 struct S00c880f0_LockObj
 {
-    void FUN_0040fbf0(int);
+    void Lock(int);
 };
 // @fnv 0x00c880f0
 void S00c880f0_Cls::FUN_00c880f0()
@@ -1621,7 +1621,7 @@ void S00c880f0_Cls::FUN_00c880f0()
                 makePosition(position, pose.translation);
                 out.min.plus(position);
                 out.max.plus(position);
-                reinterpret_cast<S00c880f0_LockObj*>(&DAT_01267b80)->FUN_0040fbf0(0);
+                reinterpret_cast<S00c880f0_LockObj*>(&DAT_01267b80)->Lock(0);
                 S00c880f0_Ifc* item = b->m_08;
                 if (item)
                 {

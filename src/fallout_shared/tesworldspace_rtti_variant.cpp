@@ -13,7 +13,7 @@ struct GROUP_HEADER
     int iGroupType;
 };
 extern unsigned int kGroupFormType;
-TESForm* FUN_004839c0(unsigned int);
+TESForm* LookupFormByID(unsigned int);
 class FormGroupOwner
 {
   public:
@@ -52,7 +52,7 @@ bool FormGroupOwner::FUN_00584d40(GROUP_HEADER* pkGroup)
             bResult = false;
             break;
         case 6: {
-            TESObjectCELL* pkCell = dynamic_cast<TESObjectCELL*>(FUN_004839c0(pkGroup->uiLabel));
+            TESObjectCELL* pkCell = dynamic_cast<TESObjectCELL*>(LookupFormByID(pkGroup->uiLabel));
             if (pkCell)
                 bResult = IsParentForm((TESForm*)pkCell);
         }
@@ -61,7 +61,7 @@ bool FormGroupOwner::FUN_00584d40(GROUP_HEADER* pkGroup)
         case 5:
             break;
         case 1: {
-            TESWorldSpace* pkWorld = dynamic_cast<TESWorldSpace*>(FUN_004839c0(pkGroup->uiLabel));
+            TESWorldSpace* pkWorld = dynamic_cast<TESWorldSpace*>(LookupFormByID(pkGroup->uiLabel));
             if (pkWorld)
                 bResult = IsParentForm((TESForm*)pkWorld);
         }
@@ -80,7 +80,7 @@ class MobileObject : public TESObjectREFR
 class Actor : public MobileObject
 {
 };
-TESForm* __cdecl FUN_004839c0(unsigned int);
+TESForm* __cdecl LookupFormByID(unsigned int);
 struct MapPosition532;
 struct FUN_00993820
 {
@@ -130,7 +130,7 @@ void CombatGroup532::FUN_00993600(void* stream)
     {
         oldMapX->GetNextEntry(position, actor_, valueTmp);
         // Persisted pointer-map keys hold a 32-bit form identifier until fixup.
-        actor_ = actor_ ? dynamic_cast<Actor*>(FUN_004839c0((unsigned int)actor_)) : 0;
+        actor_ = actor_ ? dynamic_cast<Actor*>(LookupFormByID((unsigned int)actor_)) : 0;
         if (actor_)
             map->SetValue(actor_, valueTmp);
     }
@@ -401,7 +401,7 @@ void WorldSpaceOwner5845::FUN_005845e0()
         if (uiFormIDA)
         {
             ResolveFormID5845(&uiFormIDA, GetFile(-1));
-            TESClimate* pkClimate = dynamic_cast<TESClimate*>(FUN_004839c0(uiFormIDA));
+            TESClimate* pkClimate = dynamic_cast<TESClimate*>(LookupFormByID(uiFormIDA));
             if (!pkClimate)
             {
                 if (HasEditorID())
@@ -417,7 +417,7 @@ void WorldSpaceOwner5845::FUN_005845e0()
         if (uiFormIDA)
         {
             ResolveFormID5845(&uiFormIDA, GetFile(-1));
-            TESImageSpace* pkImageSpace2 = dynamic_cast<TESImageSpace*>(FUN_004839c0(uiFormIDA));
+            TESImageSpace* pkImageSpace2 = dynamic_cast<TESImageSpace*>(LookupFormByID(uiFormIDA));
             if (!pkImageSpace2)
             {
                 if (HasEditorID())
@@ -433,7 +433,7 @@ void WorldSpaceOwner5845::FUN_005845e0()
         if (uiFormIDA)
         {
             ResolveFormID5845(&uiFormIDA, GetFile(-1));
-            BGSEncounterZone* pkEncounterZone = dynamic_cast<BGSEncounterZone*>(FUN_004839c0(uiFormIDA));
+            BGSEncounterZone* pkEncounterZone = dynamic_cast<BGSEncounterZone*>(LookupFormByID(uiFormIDA));
             if (!pkEncounterZone)
             {
                 if (HasEditorID())
@@ -449,7 +449,7 @@ void WorldSpaceOwner5845::FUN_005845e0()
         if (uiFormIDA)
         {
             ResolveFormID5845(&uiFormIDA, GetFile(-1));
-            TESWaterForm* pkWaterType4 = dynamic_cast<TESWaterForm*>(FUN_004839c0(uiFormIDA));
+            TESWaterForm* pkWaterType4 = dynamic_cast<TESWaterForm*>(LookupFormByID(uiFormIDA));
             if (!pkWaterType4)
             {
                 if (HasEditorID())
@@ -465,7 +465,7 @@ void WorldSpaceOwner5845::FUN_005845e0()
         if (uiFormIDA)
         {
             ResolveFormID5845(&uiFormIDA, GetFile(-1));
-            TESWaterForm* pkLODWaterType3 = dynamic_cast<TESWaterForm*>(FUN_004839c0(uiFormIDA));
+            TESWaterForm* pkLODWaterType3 = dynamic_cast<TESWaterForm*>(LookupFormByID(uiFormIDA));
             if (!pkLODWaterType3)
             {
                 if (HasEditorID())
@@ -481,7 +481,7 @@ void WorldSpaceOwner5845::FUN_005845e0()
         if (uiFormIDA)
         {
             ResolveFormID5845(&uiFormIDA, GetFile(-1));
-            BGSMusicType* kPkMusicType = dynamic_cast<BGSMusicType*>(FUN_004839c0(uiFormIDA));
+            BGSMusicType* kPkMusicType = dynamic_cast<BGSMusicType*>(LookupFormByID(uiFormIDA));
             if (!kPkMusicType)
             {
                 if (HasEditorID())
@@ -497,7 +497,7 @@ void WorldSpaceOwner5845::FUN_005845e0()
         if (uiFormIDA)
         {
             ResolveFormID5845(&uiFormIDA, GetFile(-1));
-            TESWorldSpace* pkParentWorldVal = dynamic_cast<TESWorldSpace*>(FUN_004839c0(uiFormIDA));
+            TESWorldSpace* pkParentWorldVal = dynamic_cast<TESWorldSpace*>(LookupFormByID(uiFormIDA));
             if (!pkParentWorldVal)
             {
                 if (HasEditorID())

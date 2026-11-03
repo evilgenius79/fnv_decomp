@@ -1180,8 +1180,8 @@ struct RemoveInterface
     void FUN_00715860(RemoveTile*, int, bool);
 };
 RemoveInterface* FUN_004b7210();
-int FUN_00a01860(const char*);
-void FUN_00401030(void*);
+int TraitNameToID(const char*);
+void FormHeap_Free(void*);
 struct RemoveBase
 {
     int unk00;

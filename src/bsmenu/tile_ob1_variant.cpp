@@ -388,7 +388,7 @@ template<class K, class V> struct BSMapBase {
 };
 extern BSMapBase<unsigned long, ScrapHeapBuffer*> DAT_011f32f4;
 // @fnv 0x00a01860
-int FUN_00a01860(const char* apText)
+int TraitNameToID(const char* apText)
 {
     AutoTileLock_Local __my_auto_tile_lock;
     int iret = 0x80000000;
@@ -690,7 +690,7 @@ extern int DAT_011a6d74;
 extern BSMapBase<unsigned long, ScrapHeapBuffer*> DAT_011f32f4;
 
 // @fnv 0x00a00940
-int __cdecl FUN_00a00940(char const* apString, int aiIndex)
+int __cdecl TraitNameToIDAdd(char const* apString, int aiIndex)
 {
     AutoTileLock_Local __my_auto_tile_lock;
     ScrapHeapBuffer* pData = 0;
@@ -2330,7 +2330,7 @@ extern const char DAT_01094904[];
 extern const char DAT_010948dc[];
 XmlFile* __cdecl GetOrLoadXML(const char*, unsigned int);
 void __cdecl FUN_00a02d40(XmlFile*);
-int __cdecl FUN_00a01860(const char*);
+int __cdecl TraitNameToID(const char*);
 unsigned int __cdecl FUN_00ec6130(const char*);
 bool __cdecl ResolveSettingString(const char*, char*);
 void __cdecl FUN_005b5e40(const char*, ...);
@@ -2439,14 +2439,14 @@ XmlNode* __cdecl FUN_00a01e20(const char* filename, const char* source, unsigned
                     DAT_011f32c8 = 1;
                     return 0;
                 }
-                parameterType4 = FUN_00a01860(value5);
+                parameterType4 = TraitNameToID(value5);
                 value5[0] = 0;
                 tokenLength3 = 0;
                 aState = 6;
                 hasWhitespace8 = false;
             } else if ((unsigned char)text_2[offset_] <= ' ') {
                 if (value5[0] != 0) {
-                    parameterType4 = FUN_00a01860(value5);
+                    parameterType4 = TraitNameToID(value5);
                     value5[0] = 0;
                     tokenLength3 = 0;
                     hasWhitespace8 = true;
@@ -3091,8 +3091,8 @@ void TileB35::FUN_00a0b350(int iValue, float fDefault)
 
 unsigned int __cdecl FUN_0044a670(const char* text);
 unsigned int __cdecl FUN_00403940(unsigned int a, unsigned int b);
-void* __cdecl FUN_00401000(unsigned int size);
-void __cdecl FUN_00401030(void* p);
+void* __cdecl FormHeap_Allocate(unsigned int size);
+void __cdecl FormHeap_Free(void* p);
 void* __cdecl FUN_00401460(void* dst, const void* src, unsigned int size);
 
 template <> inline void BSStringT<char>::SetLength(unsigned int length)
@@ -3119,7 +3119,7 @@ template <> inline bool BSStringT<char>::Set(const char* text, unsigned int leng
     unsigned int maxLen = MaxLength();
     if (newLen > maxLen) {
         char* oldString = pString;
-        char* newString = (char*)FUN_00401000(newLen + 1);
+        char* newString = (char*)FormHeap_Allocate(newLen + 1);
         pString = newString;
         if (text)
             FUN_00401460(pString, text, srcLen + 1);
@@ -3127,7 +3127,7 @@ template <> inline bool BSStringT<char>::Set(const char* text, unsigned int leng
             *pString = 0;
         if (oldString) {
             char* p = oldString;
-            FUN_00401030(p);
+            FormHeap_Free(p);
         }
         SetMaxLength(newLen);
     } else if (newLen) {
@@ -3138,7 +3138,7 @@ template <> inline bool BSStringT<char>::Set(const char* text, unsigned int leng
     } else {
         if (pString) {
             char* p = pString;
-            FUN_00401030(p);
+            FormHeap_Free(p);
         }
         pString = 0;
         newLen = 0;
@@ -3670,11 +3670,11 @@ struct FUN_00a1dd80_Class : public Menu {
 struct TileLoader : public FUN_00a031b0_shell {
     void FUN_00a033b0(void*);
     void FUN_00a04620(bool);
-    Tile* FUN_00a01b00(void* arg0);
+    Tile* ReadXML(void* arg0);
 };
 
 // @fnv 0x00a01b00
-Tile* TileLoader::FUN_00a01b00(void* arg0) {
+Tile* TileLoader::ReadXML(void* arg0) {
     AutoMemContext kContext(0xd);
     DAT_011f32c8 = 0;
     Tile* pTile7 = 0;
@@ -3726,10 +3726,10 @@ extern "C" int __cdecl sscanf(const char*, const char*, ...);
 
 inline unsigned int __cdecl FUN_0044a670(const char* value) { return strlen(value); }
 unsigned int __cdecl FUN_00403940(unsigned int, unsigned int);
-void* __cdecl FUN_00401000(unsigned int);
-void __cdecl FUN_00401030(void*);
+void* __cdecl FormHeap_Allocate(unsigned int);
+void __cdecl FormHeap_Free(void*);
 inline void* __cdecl FUN_00401460(void* d, const void* s, unsigned n) { return memcpy(d,s,n); }
-inline void ReleaseParsedString(void* pointer) { FUN_00401030(pointer); }
+inline void ReleaseParsedString(void* pointer) { FormHeap_Free(pointer); }
 extern double DAT_01094ba8, DAT_01012060, DAT_01094ce8, DAT_01094ca0, DAT_01094c98, DAT_01094c90, DAT_01094c88, DAT_01073490, DAT_01094c80;
 extern const char DAT_01011584[], DAT_01094cf0[], DAT_01094ca8[], DAT_01094c58[];
 
@@ -3810,7 +3810,7 @@ struct ParsedToken {
     }
 };
 struct ParsedNode {
-    static void* operator new[](unsigned int bytes) { return FUN_00401000(bytes); }
+    static void* operator new[](unsigned int bytes) { return FormHeap_Allocate(bytes); }
     ParsedNode* next;
     ParsedNode* previous;
     ParsedToken* value;
@@ -3822,7 +3822,7 @@ unsigned int FUN_0043b460(volatile unsigned int*, unsigned int, unsigned int);
 struct ParsedPoolLock {
     volatile unsigned int owner;
     unsigned int recursion;
-    void FUN_0040fbf0(int) {
+    void Lock(int) {
         unsigned int thread = FUN_0040fc90();
         if (owner == thread) ++recursion;
         else {
@@ -3836,7 +3836,7 @@ struct ParsedPoolLock {
             recursion = 1;
         }
     }
-    void FUN_0040fba0() {
+    void Unlock() {
         FUN_0040fbe0();
         --recursion;
         if (!recursion) owner = 0;
@@ -3867,23 +3867,23 @@ inline void FUN_0043a080() {
 struct ParsedAllocator {
     unsigned count;
     ParsedNode* FUN_0043a010() {
-        DAT_011c5f80.FUN_0040fbf0(0);
+        DAT_011c5f80.Lock(0);
         if (!DAT_011c5f58) FUN_0043a080();
         ParsedNode* node = DAT_011c5f58;
         DAT_011c5f58 = DAT_011c5f58->next;
         node->value = 0;
         node->next = 0;
         node->previous = 0;
-        DAT_011c5f80.FUN_0040fba0();
+        DAT_011c5f80.Unlock();
         return node;
     }
     void FUN_0045cee0(ParsedNode* node) {
-        DAT_011c5f80.FUN_0040fbf0(0);
+        DAT_011c5f80.Lock(0);
         ParsedNode* item = node;
         item->previous = 0;
         item->next = DAT_011c5f58;
         DAT_011c5f58 = item;
-        DAT_011c5f80.FUN_0040fba0();
+        DAT_011c5f80.Unlock();
     }
 };
 struct ParsedList {
@@ -3937,8 +3937,8 @@ struct ParsedBuilder {
     ParsedList tokens;
     void FUN_00a0a410(int, const char*, void*, bool);
 };
-int FUN_00a01860(const char*);
-int FUN_00a00940(const char*, int);
+int TraitNameToID(const char*);
+int TraitNameToIDAdd(const char*, int);
 ParsedToken* FUN_00a0b950(int, float, const char*, int, void*);
 
 
@@ -3953,9 +3953,9 @@ extern float DAT_01094cf4;
 void ParsedBuilder::FUN_00a0a410(int trait, const char* text, void* context, bool literal) {
     float value = DAT_01094cf4;
     if (!literal)
-        value = (float)FUN_00a01860(text);
+        value = (float)TraitNameToID(text);
     if (value == DAT_01094ba8 && (text[0] == '_' || (text[0] == '&' && text[1] == '_')))
-        value = (float)FUN_00a00940(text, -1);
+        value = (float)TraitNameToIDAdd(text, -1);
     ParsedToken* createdToken16 = FUN_00a0b950(trait, value, text, (int)value, context);
     bool isNumericX = true;
     for (unsigned i = 0; i < strlen(text); ++i) {
@@ -4195,7 +4195,7 @@ struct FadeList {
     }
 };
 extern FadeList DAT_011f3348;
-int __cdecl FUN_00a01860(const char*);
+int __cdecl TraitNameToID(const char*);
 struct FUN_00ae83e0 {
     FadeRecord* item; FUN_00ae83e0* next;
     static void* operator new(unsigned int size) {return g_memoryManager.Allocate(size);}
@@ -4249,8 +4249,8 @@ void __cdecl FUN_00a080d0()
         }
         case 1: case 2: case 3: {
             type2 = local1->item->type;
-            count1 = local1->item->tile->FUN_00a011b0(FUN_00a01860("_FlashCount"));
-            total5 = local1->item->tile->FUN_00a011b0(FUN_00a01860("_TotalFlashCount"));
+            count1 = local1->item->tile->FUN_00a011b0(TraitNameToID("_FlashCount"));
+            total5 = local1->item->tile->FUN_00a011b0(TraitNameToID("_TotalFlashCount"));
             fraction5 = (tick()-local1->item->time)/local1->item->duration;
             if (fraction5 >= 1.0) {
                 if ((type2==2 && count1 < 3.0) || (type2==3 && count1 < total5) || type2==1) {
@@ -4258,7 +4258,7 @@ void __cdecl FUN_00a080d0()
                     fraction5=0.0f;
                 }
                 if (type2==2 || type2==3) {
-                    local1->item->tile->FUN_00a012d0(FUN_00a01860("_FlashCount"),count1+1.0,true);
+                    local1->item->tile->FUN_00a012d0(TraitNameToID("_FlashCount"),count1+1.0,true);
                     if (type2==2 && count1 > 3.0) local1->item->tile->FUN_00a012d0(trait2,local11,true);
                     else if (type2==3 && count1>total5) {
                         local1->item->tile->FUN_00a012d0(trait2,start13,true);
@@ -4384,14 +4384,14 @@ struct R_P03 { void AppendFloatAction(int, float); };
 
 struct R_P09 { void FUN_00a09130(int, void*, int); };
 
-struct R_P04 { void FUN_00a09410(bool); };
+struct R_P04 { void Refresh(bool); };
 
 struct R_P08 { void FUN_00a07530(int); };
 
 struct R_HeapManager : FUN_00a0d220_pool { void* FUN_00aa3e40(unsigned); };
 inline R_HeapManager* FUN_00401020(){return static_cast<R_HeapManager*>(&DAT_011f6238);}
-inline void* FUN_00401000(unsigned n){return FUN_00401020()->FUN_00aa3e40(n);}
-inline void FUN_00401030(void*p){FUN_00401020()->FUN_00aa4060(p);}
+inline void* FormHeap_Allocate(unsigned n){return FUN_00401020()->FUN_00aa3e40(n);}
+inline void FormHeap_Free(void*p){FUN_00401020()->FUN_00aa4060(p);}
 inline void* FUN_00401460(void*dst,const void*src,unsigned n){return memcpy(dst,src,n);}
 extern "C" unsigned strlen(const char*);
 
@@ -4408,15 +4408,15 @@ struct R_SH {
         if(len<=FUN_004039a0()) {
             if(len)FUN_00401460(pString,src.FUN_00559450(),len+1);
             else {
-                if(pString){char* deleted=pString;FUN_00401030(deleted);}
+                if(pString){char* deleted=pString;FormHeap_Free(deleted);}
                 pString=0;len=0;FUN_00403a00(len);
             }
         } else {
             old=pString;
-            char* allocated=(char*)FUN_00401000(len+1);
+            char* allocated=(char*)FormHeap_Allocate(len+1);
             pString=allocated;
             FUN_00401460(pString,src.FUN_00559450(),len+1);
-            if(old){char* deletedOld=old;FUN_00401030(deletedOld);}
+            if(old){char* deletedOld=old;FormHeap_Free(deletedOld);}
             FUN_00403a00(len);
         }
         FUN_004039c0(len);
@@ -4550,7 +4550,7 @@ void C00a033b0::FUN_00a033b0(R_Menu* a1)
 
                 if (ad->parr[an]->trait != 4004)
 
-                    ((R_P04*)ad->parr[an])->FUN_00a09410(true);
+                    ((R_P04*)ad->parr[an])->Refresh(true);
 
             }
 

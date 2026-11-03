@@ -233,13 +233,13 @@ void __thiscall FUN_008579b0_shell::FUN_008579b0(void* apSource, unsigned int ui
 
 struct S00865ce0
 {
-    void __thiscall FUN_00865ce0(void* a1, unsigned int a2, unsigned int a3, unsigned char a4);
+    void __thiscall Write(void* a1, unsigned int a2, unsigned int a3, unsigned char a4);
 };
 // Writes size bytes from data into the buffer at the given offset, using the buffer's stored base position.
 // @fnv 0x00865570
 void BGSSaveGameBuffer::WriteAtOffset(void* data, unsigned int size, unsigned int offset)
 {
-    ((S00865ce0*)this)->FUN_00865ce0(data, size, *(unsigned int*)((char*)this + 12), offset);
+    ((S00865ce0*)this)->Write(data, size, *(unsigned int*)((char*)this + 12), offset);
 }
 
 extern int DAT_01082324;
@@ -373,7 +373,7 @@ struct FUN_00865f20_shell
     int _04;
     int _08;
     unsigned int m_0c;
-    void __thiscall FUN_00865ce0(char* a1, int a2, unsigned int a3, int a4);
+    void __thiscall Write(char* a1, int a2, unsigned int a3, int a4);
     unsigned int __thiscall FUN_00865f20();
 };
 // Appends a single '#' character at offset m_0c and returns the previous offset.
@@ -384,7 +384,7 @@ unsigned int __thiscall FUN_00865f20_shell::FUN_00865f20()
     unsigned int iposition;
     iposition = m_0c;
     cvalue = 0x23;
-    FUN_00865ce0(&cvalue, 1, m_0c, 0);
+    Write(&cvalue, 1, m_0c, 0);
     return iposition;
 }
 
@@ -438,19 +438,19 @@ void __thiscall FUN_00865ff0_shell::FUN_00865ff0(unsigned int uiValue, unsigned 
     if (uiValue < 0x40)
     {
         char value8 = static_cast<char>(uiValue << 2);
-        this->FUN_00865ce0(&value8, 1, a2, 0);
+        this->Write(&value8, 1, a2, 0);
     }
     else if (uiValue < 0x4000)
     {
         this->FUN_00866140(a2, 1);
         unsigned short value16 = static_cast<unsigned short>((uiValue << 2) | 1);
-        this->FUN_00865ce0(reinterpret_cast<char*>(&value16), 2, a2, 0);
+        this->Write(reinterpret_cast<char*>(&value16), 2, a2, 0);
     }
     else if (uiValue < 0x40000000)
     {
         this->FUN_00866140(a2, 3);
         unsigned int value32 = (uiValue << 2) | 2;
-        this->FUN_00865ce0(reinterpret_cast<char*>(&value32), 4, a2, 0);
+        this->Write(reinterpret_cast<char*>(&value32), 4, a2, 0);
     }
     else
     {
@@ -489,7 +489,7 @@ void* __cdecl FUN_00401460(void* a1, const void* a2, unsigned int a3);
 
 // Grows the buffer until it fits a3+a2 (+1 if a4==0), copies a2 bytes from a1 to m_04+a3, appends a 0x7c terminator when a4==0, and updates m_0c/m_10.
 // @fnv 0x00865ce0
-void __thiscall S00865ce0::FUN_00865ce0(void* pSource, unsigned int uiLength, unsigned int a3, unsigned char a4)
+void __thiscall S00865ce0::Write(void* pSource, unsigned int uiLength, unsigned int a3, unsigned char a4)
 {
     int iTerminator = (a4 == 0);
 

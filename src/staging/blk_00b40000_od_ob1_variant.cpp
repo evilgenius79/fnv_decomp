@@ -1965,7 +1965,7 @@ template <class I> inline I checked_base(I& _It)
     return checked_base2(_It, _Base_tag);
 }
 // VC-style vector insertion, with scalar record destruction and exception rollback.
-void __cdecl FUN_00401030(void*);
+void __cdecl FormHeap_Free(void*);
 FUN_00b42980* __cdecl FUN_00b431e0(const FUN_00b42980*, const FUN_00b42980*, FUN_00b42980*, void*);
 void __cdecl FUN_00b42f40(FUN_00b42980*, unsigned, const FUN_00b42980*, void*, ValueTag, RangeTag);
 FUN_00b42980* __cdecl FUN_00b43010(const FUN_00b42980*, const FUN_00b42980*, FUN_00b42980*, void*);
@@ -2002,7 +2002,7 @@ struct RecordAllocator
     }
     inline void deallocate(FUN_00b42980* _Ptr, unsigned)
     {
-        FUN_00401030(_Ptr);
+        FormHeap_Free(_Ptr);
     }
 };
 template <class A> inline void destroy_range(FUN_00b42980* _First, FUN_00b42980* _Last, A& _Al, ValueTag)
@@ -2152,7 +2152,7 @@ void RecordVector::FUN_00b42180(void* iteratorState, FUN_00b42980* _Where, unsig
         catch (...)
         {
             destroy(_Newvec, _Ptr);
-            FUN_00401030(_Newvec);
+            FormHeap_Free(_Newvec);
             throw;
         }
         _Count += size();

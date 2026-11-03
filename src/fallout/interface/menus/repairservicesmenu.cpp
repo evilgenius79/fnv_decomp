@@ -241,21 +241,21 @@ extern char DAT_01075d94;
 extern int DAT_011da7e0;
 extern int DAT_011da7e8;
 extern int DAT_011da7e4;
-extern int __cdecl FUN_00a01860(const char*);
+extern int __cdecl TraitNameToID(const char*);
 struct FUN_007b7400 : FUN_00a1c4a0
 {
     FUN_00730810 inner;
     FUN_007b7400();
     virtual ~FUN_007b7400();
 };
-// Initializes four global values via FUN_00a01860 and sets the field at offset 0x98 of this object to zero.
+// Initializes four global values via TraitNameToID and sets the field at offset 0x98 of this object to zero.
 // @fnv 0x007b7400
 FUN_007b7400::FUN_007b7400()
 {
-    DAT_011da7e0 = FUN_00a01860(&DAT_0106ed20);
-    DAT_011da7e8 = FUN_00a01860(&DAT_0106ed18);
-    DAT_011da7e4 = FUN_00a01860(&DAT_01075da0);
-    DAT_011da7dc = FUN_00a01860(&DAT_01075d94);
+    DAT_011da7e0 = TraitNameToID(&DAT_0106ed20);
+    DAT_011da7e8 = TraitNameToID(&DAT_0106ed18);
+    DAT_011da7e4 = TraitNameToID(&DAT_01075da0);
+    DAT_011da7dc = TraitNameToID(&DAT_01075d94);
     *((int*)((char*)this + 0x98)) = 0;
 }
 

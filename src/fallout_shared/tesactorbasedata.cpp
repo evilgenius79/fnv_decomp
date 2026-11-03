@@ -2151,7 +2151,7 @@ extern SettingRef DAT_011de4e8;
 
 void __cdecl FUN_005b5e40(const char* fmt, const char* file, int line);
 int __cdecl FUN_0040fbe0(const char* fmt, ...);
-FormObj* __cdecl FUN_004839c0(unsigned int formId);
+FormObj* __cdecl LookupFormByID(unsigned int formId);
 
 class FUN_0047e4a0_cls : public TESActorBaseData
 {
@@ -2222,7 +2222,7 @@ void FUN_0047e4a0_cls::SaveFactionData(int flags)
         aRefF = DAT_011de45c->GetSavedRef();
         if (aRefF)
         {
-            _obj = FUN_004839c0(aRefF->formId);
+            _obj = LookupFormByID(aRefF->formId);
             FUN_0040fbe0("SaveGame(): %-5i for form %08X %s with flags %08X ending at line %i in file %s",
                          endPos - startPosP, aRefF->formId, _obj->GetName(),
                          *(unsigned int*)((unsigned char*)aRefF + 5), 0xc77,
@@ -2415,7 +2415,7 @@ class FactionReaction
 };
 
 void* __cdecl operator new(unsigned int);
-TESForm* __cdecl FUN_004839c0(unsigned int);
+TESForm* __cdecl LookupFormByID(unsigned int);
 void __cdecl FNV_Warning(const char*, ...);
 
 struct TESActorBaseData_Shell : public TESActorBaseData
@@ -2452,7 +2452,7 @@ void TESActorBaseData_Shell::FUN_0047e6f0(unsigned int changeFlags, void* pBuffe
             loadBuffer = g_TESSaveLoadGame->FUN_004fd3c0();
             if (loadBuffer)
             {
-                loadedForm = FUN_004839c0(loadBuffer->formID);
+                loadedForm = LookupFormByID(loadBuffer->formID);
                 FNV_Warning(
                     "SAVELOAD: (LoadGame Buffer error) Block Header is incorrect in file %s on line %i.  Currently loading form is %08X %s with version %i and flags %08X",
                     "D:\\_Fallout3\\Platforms\\Common\\Code\\Fallout Shared\\TESActorBaseData.cpp", 3200,
@@ -2484,7 +2484,7 @@ void TESActorBaseData_Shell::FUN_0047e6f0(unsigned int changeFlags, void* pBuffe
     {
         g_TESSaveLoadGame->FUN_00857aa0(&factID, 4);
         g_TESSaveLoadGame->FUN_008579e0(&val, 1);
-        form2 = FUN_004839c0(factID);
+        form2 = LookupFormByID(factID);
         if (form2)
         {
             rank2 = new FactionReaction;
@@ -2500,7 +2500,7 @@ void TESActorBaseData_Shell::FUN_0047e6f0(unsigned int changeFlags, void* pBuffe
         info = g_TESSaveLoadGame->FUN_004fd3c0();
         if (info)
         {
-            formVal = FUN_004839c0(info->formID);
+            formVal = LookupFormByID(info->formID);
             if (curOff > (unsigned int)(readSize + offsetA))
             {
                 FNV_Warning(
@@ -2801,7 +2801,7 @@ void ActorBaseInitItemView::FUN_0047d8b0(TESForm* param)
                 ResolveFormID((unsigned int*)&faction, file4);
 
                 link5->pFaction =
-                    (FactionRec*)dynamic_cast< ::TESFaction*>((TESForm*)FUN_004839c0((unsigned int)faction));
+                    (FactionRec*)dynamic_cast< ::TESFaction*>((TESForm*)LookupFormByID((unsigned int)faction));
             }
 
             if (link5->pFaction != 0)
@@ -2829,7 +2829,7 @@ void ActorBaseInitItemView::FUN_0047d8b0(TESForm* param)
 
         ResolveFormID((unsigned int*)&form4, file4);
 
-        m_kFactionList = (::BGSVoiceType*)dynamic_cast<BGSVoiceType*>((TESForm*)FUN_004839c0((unsigned int)form4));
+        m_kFactionList = (::BGSVoiceType*)dynamic_cast<BGSVoiceType*>((TESForm*)LookupFormByID((unsigned int)form4));
     }
 
     form4 = (TESForm*)m_pBaseTemplateForm;
@@ -2839,7 +2839,7 @@ void ActorBaseInitItemView::FUN_0047d8b0(TESForm* param)
 
         ResolveFormID((unsigned int*)&form4, file4);
 
-        m_pBaseTemplateForm = (::TESLevItem*)dynamic_cast<TESLevItem*>((TESForm*)FUN_004839c0((unsigned int)form4));
+        m_pBaseTemplateForm = (::TESLevItem*)dynamic_cast<TESLevItem*>((TESForm*)LookupFormByID((unsigned int)form4));
 
         if (m_pBaseTemplateForm == 0)
         {
@@ -2856,7 +2856,7 @@ void ActorBaseInitItemView::FUN_0047d8b0(TESForm* param)
 
         ResolveFormID((unsigned int*)&form4, file4);
 
-        m_ppTemplateForms = (TESForm*)FUN_004839c0((unsigned int)form4);
+        m_ppTemplateForms = (TESForm*)LookupFormByID((unsigned int)form4);
 
         if (m_ppTemplateForms == 0)
         {

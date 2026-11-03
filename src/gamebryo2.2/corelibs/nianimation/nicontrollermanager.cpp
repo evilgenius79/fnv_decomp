@@ -1422,7 +1422,7 @@ struct FNV_MapView
         return 0;
     }
     void AdvanceToNextEntry(FNV_MapItem** position, const char** key, void** value);
-    bool FUN_00853130(const char* key, void** value);
+    bool GetAt(const char* key, void** value);
 };
 struct FNV_Comparable
 {
@@ -1479,7 +1479,7 @@ bool FUN_00a2e320_shell::FUN_00a2e320(FUN_00a2e320_shell* apOther)
         FNV_Comparable* matchedItem;
         FNV_MapView* otherMap = reinterpret_cast<FNV_MapView*>(&other->m_kObjectMap);
         map->AdvanceToNextEntry(&position, &key, reinterpret_cast<void**>(&item));
-        if (!otherMap->FUN_00853130(key, reinterpret_cast<void**>(&matchedItem)))
+        if (!otherMap->GetAt(key, reinterpret_cast<void**>(&matchedItem)))
             return false;
         if (!item->FUN_00a6cc80(matchedItem))
             return false;

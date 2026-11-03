@@ -4165,19 +4165,19 @@ struct BadAllocation
     int ownsMessage;
     BadAllocation(const char*);
 };
-void* __cdecl FUN_00401000(unsigned int);
+void* __cdecl FormHeap_Allocate(unsigned int);
 inline Entry24* __cdecl FUN_00b23aa0(unsigned int _Count, unsigned int)
 {
     if (_Count <= 0)
         _Count = 0;
     else if ((unsigned int)(-1) / _Count < sizeof(Entry24))
         throw BadAllocation(0);
-    return static_cast<Entry24*>(FUN_00401000(_Count * sizeof(Entry24)));
+    return static_cast<Entry24*>(FormHeap_Allocate(_Count * sizeof(Entry24)));
 }
 Entry24* __cdecl FUN_00b17790(Entry24*, Entry24*, Entry24*, void*);
 void __cdecl CopyStructArray(Entry24*, unsigned int, const Entry24&, void*, PointerTag, RangeTag);
 
-void __cdecl FUN_00401030(void*);
+void __cdecl FormHeap_Free(void*);
 template <class T> inline MoveTag MoveCategory(const T&)
 {
     MoveTag _Cat;
@@ -4207,7 +4207,7 @@ struct EntryAllocator
     }
     inline void deallocate(Entry24* _Ptr, unsigned int)
     {
-        FUN_00401030(_Ptr);
+        FormHeap_Free(_Ptr);
     }
     inline void destroy(Entry24* _Ptr)
     {
@@ -4521,7 +4521,7 @@ template <class I, class T> inline void FillB160(I _First, I _Last, const T& _Va
 {
     FillRangeB160(CheckedBaseB160(_First), CheckedBaseB160(_Last), _Val);
 }
-void __cdecl FUN_00401030(void*);
+void __cdecl FormHeap_Free(void*);
 struct StringB160
 {
     unsigned int allocator;
@@ -4571,7 +4571,7 @@ inline unsigned int* __cdecl FUN_00b16b00(unsigned int _Count, unsigned int)
 }
 inline void AllocB160::deallocate(unsigned int* _Ptr, unsigned int _Count)
 {
-    FUN_00401030(_Ptr);
+    FormHeap_Free(_Ptr);
 }
 struct IteratorB160
 {
@@ -4656,7 +4656,7 @@ void ArrayB160::FUN_00b16070(IteratorB160 _Where, unsigned int _Count, const uns
         catch (...)
         {
             _Destroy(_Newvec, _Ptr);
-            FUN_00401030(_Newvec);
+            FormHeap_Free(_Newvec);
             throw;
         }
         _Count += size();

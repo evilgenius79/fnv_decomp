@@ -1342,7 +1342,7 @@ struct MenuData
 ContainerVirtual* FUN_00a09030(int);
 void FNV_Warning(const char*, ...);
 MenuTile* FUN_00a08b20(MenuTile*, const char*);
-int FUN_00a01860(const char*);
+int TraitNameToID(const char*);
 struct InventoryMenuSetting
 {
     const char* FUN_00403df0();
@@ -1384,7 +1384,7 @@ MenuTile* FUN_0075b310(TESObjectREFR* reference, int mode)
         ((MenuData*)DAT_011d93f8)->reference = reference;
         ((MenuData*)DAT_011d93f8)->mode = mode;
         ((MenuData*)DAT_011d93f8)->FUN_0075bc80();
-        int subtitle = FUN_00a01860("_Title");
+        int subtitle = TraitNameToID("_Title");
         if (((MenuData*)DAT_011d93f8)->tile60)
             ((MenuData*)DAT_011d93f8)->tile60->Set(subtitle, DAT_011d2c7c.FUN_00403df0(), true);
         if (((MenuData*)DAT_011d93f8)->tile64)
@@ -2554,7 +2554,7 @@ struct TrimFont
 };
 struct TrimManager
 {
-    void FUN_00a1b020(float*, const char*, int, float, int);
+    void GetStringDimensions(float*, const char*, int, float, int);
     TrimFont* FUN_005bd5c0(int);
 };
 TrimManager* FUN_005bd5b0();
@@ -2599,7 +2599,7 @@ void TrimMenu::SetLabelText(const char* text)
         return;
     int font8 = (int)label->FUN_00a011b0(4025);
     float dimensions9[3];
-    FUN_005bd5b0()->FUN_00a1b020(dimensions9, text, font8, DAT_01016970, 0);
+    FUN_005bd5b0()->GetStringDimensions(dimensions9, text, font8, DAT_01016970, 0);
     float widthTmp = label->FUN_0045cd60()->FUN_00a011b0(4017) - DAT_01072310;
     if (root->IsTraitNonZero(4003))
         widthTmp -= DAT_010356b0;
@@ -5011,7 +5011,7 @@ struct InvChg
 struct Loader
 {
     void FUN_0045a5e0(char* name);
-    void* FUN_00447080(char* name, int a1, int a2, int a3, int a4, int a5);
+    void* LoadModel(char* name, int a1, int a2, int a3, int a4, int a5);
 };
 struct PlayerObj
 {
@@ -5068,7 +5068,7 @@ void ThiS::FUN_007019e0(ObjRef* apObjRef)
         if (d == 0)
             d = dynamic_cast<TESModelTextureSwap*>(apObjRef->FUN_0044ddc0());
         if (d != 0)
-            DAT_011c3b3c->FUN_00447080(d->GetSwapName(), 0, 1, 0, 0, 0);
+            DAT_011c3b3c->LoadModel(d->GetSwapName(), 0, 1, 0, 0, 0);
     }
     FUN_007017b0();
     ((PlayerObj*)DAT_011dea3c)->PlayActorSound(apObjRef->FUN_0044ddc0(), 1, 0);

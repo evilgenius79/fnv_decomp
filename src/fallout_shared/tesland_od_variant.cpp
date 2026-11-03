@@ -3730,8 +3730,8 @@ void Worker53::FUN_0053a090(bool update, int unused) {
  } else { FUN_00539500(0); FUN_005374f0(); }
 }
 
-void* __cdecl FUN_00401000(unsigned int size);
-void __cdecl FUN_00401030(void* memory);
+void* __cdecl FormHeap_Allocate(unsigned int size);
+void __cdecl FormHeap_Free(void* memory);
 struct LayerOwner53a940 : Owner53ace0 {
     void FUN_0053abb0(unsigned char quadrant, unsigned short layer);
     void FUN_0053a940();
@@ -3759,7 +3759,7 @@ void LayerOwner53a940::FUN_0053a940()
                 count--;
             }
         }
-        float* result = (float*)FUN_00401000((count + 1) * sizeof(float));
+        float* result = (float*)FormHeap_Allocate((count + 1) * sizeof(float));
         FUN_00403d30(result, 0, (count + 1) * sizeof(float));
         for (int vertex = 0; vertex < 289; vertex++) {
             float sum = 0.0f;
@@ -3781,7 +3781,7 @@ void LayerOwner53a940::FUN_0053a940()
         }
         if (indexVal != -1)
             FUN_0053ace0((unsigned char)quadrant, (unsigned short)indexVal);
-        FUN_00401030(result);
+        FormHeap_Free(result);
         result = 0;
     }
 }

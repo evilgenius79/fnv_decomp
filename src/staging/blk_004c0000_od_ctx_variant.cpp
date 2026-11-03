@@ -480,7 +480,7 @@ struct FUN_004d4f70
 
     FUN_004d4f70(unsigned int ItemUpdateArray, int iParam);
 };
-extern "C" void __cdecl FUN_00401030(void*);
+extern "C" void __cdecl FormHeap_Free(void*);
 struct FUN_004d5080_Class
 {
     void* unk00;
@@ -1073,7 +1073,7 @@ struct FUN_004de2d0_StandIn : FUN_004de2b0_StandIn
 {
     FUN_004de2b0_StandIn* __thiscall FUN_004de2d0(char c);
 };
-extern "C" void __cdecl FUN_00401030(void*);
+extern "C" void __cdecl FormHeap_Free(void*);
 struct FUN_004de3f0_Class
 {
     void __thiscall FUN_004de420();

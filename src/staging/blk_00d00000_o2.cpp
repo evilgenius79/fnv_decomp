@@ -658,7 +658,7 @@ void __cdecl FUN_00d10780()
 {}
 
 extern int DAT_010cd664;
-void __cdecl FUN_00401030(void*);
+void __cdecl FormHeap_Free(void*);
 struct FUN_00d1bab0_t
 {
     int m_vft;
@@ -669,7 +669,7 @@ FUN_00d1bab0_t::FUN_00d1bab0_t(bool fInit)
 {
     m_vft = (int)&DAT_010cd664;
     if (fInit & 1)
-        FUN_00401030(this);
+        FormHeap_Free(this);
 }
 
 // @fnv 0x00d1f100

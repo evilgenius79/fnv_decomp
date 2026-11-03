@@ -212,7 +212,7 @@ class FUN_00b276f0_cls
 
     void Reset();
 };
-extern void __cdecl FUN_00401030(void* p);
+extern void __cdecl FormHeap_Free(void* p);
 // InitBuffer
 extern "C" int __cdecl FUN_00b2e4a0(unsigned int count, int flag);
 extern "C" void __cdecl FUN_00b0fb80();
@@ -318,7 +318,7 @@ struct Hldr0044
     void Init(unsigned int* p);
 };
 extern "C" void __stdcall FUN_00ec7894(Hldr0044* p, void* dat);
-extern "C" void __cdecl FUN_00401000(unsigned int scaled);
+extern "C" void __cdecl FormHeap_Allocate(unsigned int scaled);
 extern "C" int DAT_01140ef8;
 extern "C" int DAT_010176f8;
 // @fnv 0x00b35f00
@@ -342,7 +342,7 @@ extern "C" void __cdecl FUN_00b35f00(unsigned int n)
         }
     }
 
-    FUN_00401000(n * 2);
+    FormHeap_Allocate(n * 2);
 }
 struct FUN_00b31270
 {

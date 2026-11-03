@@ -377,7 +377,7 @@ unsigned int __fastcall GetField20C(char* pThis)
 
 struct T00485110
 {
-    void FUN_00472f60(void*);
+    void InitializeForm(void*);
 };
 struct S00485110
 {
@@ -386,7 +386,7 @@ struct S00485110
 // @fnv 0x00485110
 void S00485110::CallWithThis(T00485110* apTarget)
 {
-    apTarget->FUN_00472f60(this);
+    apTarget->InitializeForm(this);
 }
 
 // Returns the smaller of two unsigned short values.
@@ -1535,7 +1535,7 @@ struct DummyPointerMap
 };
 // Looks up aiSearchID in the form map and returns the stored TESForm pointer, or 0 if the map is null or has no entry.
 // @fnv 0x004839c0
-TESForm* FUN_004839c0(unsigned int aiSearchID)
+TESForm* LookupFormByID(unsigned int aiSearchID)
 {
     TESForm* pTempForm = 0;
     if (TESForm::ms_pFormIDMap &&
@@ -3679,8 +3679,8 @@ FUN_00483370::FUN_00483370()
 
 bool __cdecl FUN_00401500();
 void __cdecl AppendChunk(void*, void*, void*);
-void* __cdecl FUN_00401000(unsigned int size);
-void __cdecl FUN_00401030(void* p);
+void* __cdecl FormHeap_Allocate(unsigned int size);
+void __cdecl FormHeap_Free(void* p);
 void* __cdecl FUN_00401460(void* dst, void* src, unsigned int size);
 void __cdecl FUN_00401080(void* p, bool value);
 
@@ -3694,11 +3694,11 @@ struct Slot4
     unsigned int value;
     static void* operator new[](unsigned int size)
     {
-        return FUN_00401000(size);
+        return FormHeap_Allocate(size);
     }
     static void operator delete[](void* p)
     {
-        FUN_00401030(p);
+        FormHeap_Free(p);
     }
 };
 

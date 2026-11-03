@@ -229,10 +229,10 @@ struct ScopeLock
 
 struct Outer
 {
-    void FUN_0071d0a0(const char* fmt, va_list args);
+    void Print(const char* fmt, va_list args);
 };
 
-// Locks a scope, forwards the format string and variadic arguments to obj->FUN_0071d0a0, then releases the lock.
+// Locks a scope, forwards the format string and variadic arguments to obj->Print, then releases the lock.
 // @fnv 0x0071d030
 void __cdecl FUN_0071d030(Outer* apOuter, const char* fmt, ...)
 {
@@ -241,7 +241,7 @@ void __cdecl FUN_0071d030(Outer* apOuter, const char* fmt, ...)
     {
         va_list args;
         va_start(args, fmt);
-        apOuter->FUN_0071d0a0(fmt, args);
+        apOuter->Print(fmt, args);
         va_end(args);
     }
 }

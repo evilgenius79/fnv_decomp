@@ -3281,7 +3281,7 @@ struct Sound
     Sound();
     ~Sound();
     Sound& FUN_00418900(const Sound&);
-    void FUN_00ad8830(int);
+    void Play(int);
 };
 struct Audio
 {
@@ -3631,7 +3631,7 @@ void ShutdownVats()
                 soundSlot0.FUN_00418900(audioSlot0->ResolveAudioHandle(V::DAT_01077d84, 289));
             else
                 soundSlot0.FUN_00418900(audioSlot0->ResolveAudioHandle(V::DAT_01077d78, 289));
-            soundSlot0.FUN_00ad8830(0);
+            soundSlot0.Play(0);
         }
         tile->FUN_00700320(6002, 1);
         V::DAT_011db0d4->FUN_00a1d910();
@@ -3641,7 +3641,7 @@ void ShutdownVats()
         V::Audio* audioSlot0 = V::FUN_00ad9060();
         V::Sound soundSlot0;
         soundSlot0.FUN_00418900(audioSlot0->ResolveAudioHandle(V::DAT_01077d6c, 289));
-        soundSlot0.FUN_00ad8830(0);
+        soundSlot0.Play(0);
         float chanceASlot14 = *V::DAT_011ce32c.FUN_00403e20();
         float chanceBSlot0 = *V::DAT_011ce738.FUN_00403e20();
         V::FUN_005e58f0(67, V::DAT_011dea3c, &chanceASlot14);
@@ -4007,7 +4007,7 @@ struct Sound85
     Sound85();
     ~Sound85();
     void FUN_00418900(const Sound85&);
-    void FUN_00ad8830(int);
+    void Play(int);
 };
 struct Audio85
 {
@@ -4036,7 +4036,7 @@ void UpdateVatsTargetHighlight(bool force)
             {
                 Sound85 sound;
                 sound.FUN_00418900(FUN_00453a70()->FUN_00ad7550("UIVATSSelectTargetPart", 289));
-                sound.FUN_00ad8830(0);
+                sound.Play(0);
             }
             ((Menu85*)DAT_011db0d4)->damage = ((Menu85*)DAT_011db0d4)->FUN_007f48e0();
             Actor85* actor4 = 0;
@@ -5125,14 +5125,14 @@ extern const char str_01077df4[];
 extern const char str_01077de8[];
 extern const char str_01077dd4[];
 extern const char str_010734b8[];
-int __cdecl FUN_00a00940(const char*, int);
+int __cdecl TraitNameToIDAdd(const char*, int);
 // @fnv 0x007f07a0
 void Owner7::UpdateLimbHighlight()
 {
-    static int sMeterPercent = FUN_00a00940(str_01077df4, -1);
-    static int sLimbName = FUN_00a00940(str_01077de8, -1);
-    static int sLimbNameVisible = FUN_00a00940(str_01077dd4, -1);
-    static int sBrightness = FUN_00a00940(str_010734b8, -1);
+    static int sMeterPercent = TraitNameToIDAdd(str_01077df4, -1);
+    static int sLimbName = TraitNameToIDAdd(str_01077de8, -1);
+    static int sLimbNameVisible = TraitNameToIDAdd(str_01077dd4, -1);
+    static int sBrightness = TraitNameToIDAdd(str_010734b8, -1);
     BSSimpleList* node7;
     BSSimpleList* list6;
     list6 = FindListEntryForTarget(DAT_011f21cc);
@@ -6466,11 +6466,11 @@ struct ListItemValue
     void RemoveFromReactions();
     void FUN_00a09130(int operation, ListItemTile* tile, int trait);
     void AppendFloatAction(int operation, float value);
-    void FUN_00a09410(int mode);
+    void Refresh(int mode);
 };
 struct ListItemMenu
 {
-    ListItemTile* FUN_00a1ddb0(ListItemTile* parent, const char* name, int flags);
+    ListItemTile* AddTileFromTemplate(ListItemTile* parent, const char* name, int flags);
 };
 struct ListItemTile
 {
@@ -6518,7 +6518,7 @@ ListItemTile* ListBoxInsert::AddItemTile(void* object, const char* text, ListIte
 {
     if (parent && (templateName || name))
     {
-        ListItemTile* tile = parent->GetMenu()->FUN_00a1ddb0(parent, name ? name : templateName, 0);
+        ListItemTile* tile = parent->GetMenu()->AddTileFromTemplate(parent, name ? name : templateName, 0);
         ListItemValue* value7;
         if (!tile->FUN_00a00f30(4010))
             tile->SetInt(4010, -1);
@@ -6546,7 +6546,7 @@ ListItemTile* ListBoxInsert::AddItemTile(void* object, const char* text, ListIte
             value7->RemoveFromReactions();
             value7->FUN_00a09130(2000, tile, 4016);
             value7->AppendFloatAction(2003, parent->FUN_00a011b0(xFUN_00a00940(_kListBoxNumFiltered, -1)));
-            value7->FUN_00a09410(0);
+            value7->Refresh(0);
         }
         return tile;
     }
@@ -7370,7 +7370,7 @@ void* __cdecl FUN_00a09030(unsigned int a1);
 void* __cdecl FUN_00a08b20(void* a1, void* a2);
 struct GlobalManager
 {
-    void* __thiscall FUN_00a1ddb0(void* a1, void* a2, int a3);
+    void* __thiscall AddTileFromTemplate(void* a1, void* a2, int a3);
 };
 struct Tile
 {
@@ -7396,7 +7396,7 @@ struct FUN_007f6e50_This
 {
     void __thiscall AssignActionTiles(TargetList* apTargets);
 };
-// For each entry in apTargets, creates a tile via FUN_00a1ddb0 and sets it to a value chosen by the action's type.
+// For each entry in apTargets, creates a tile via AddTileFromTemplate and sets it to a value chosen by the action's type.
 // @fnv 0x007f6e50
 void __thiscall FUN_007f6e50_This::AssignActionTiles(TargetList* apTargets)
 {
@@ -7405,7 +7405,7 @@ void __thiscall FUN_007f6e50_This::AssignActionTiles(TargetList* apTargets)
     while (pEntry != 0 && !pEntry->FUN_008256d0())
     {
         ((ActionData*)*pEntry->FUN_006815c0())->tile =
-            (Tile*)((GlobalManager*)DAT_011db0d4)->FUN_00a1ddb0(pTileBuffer, &UNK_01077e98, 0);
+            (Tile*)((GlobalManager*)DAT_011db0d4)->AddTileFromTemplate(pTileBuffer, &UNK_01077e98, 0);
         if (((ActionData*)*pEntry->FUN_006815c0())->tile != 0)
         {
             switch (((ActionData*)*pEntry->FUN_006815c0())->type)
@@ -7518,7 +7518,7 @@ struct Sound
     Sound();
     ~Sound();
     Sound& operator=(const Sound& arOther);
-    void FUN_00ad8830(int aiFlags);
+    void Play(int aiFlags);
 };
 
 struct SoundSource
@@ -8037,14 +8037,14 @@ void VATSMenuQueue::UpdateQueueEntry(VATSAction* apAction, bool abAddEntry, bool
         kQueue.FUN_007f7280(kQueue.GetRaceCount() - 1, false);
         Sound kSoundCur;
         kSoundCur = FUN_00453a70()->FUN_00ad7550("UIMenuCancel", 0x121);
-        kSoundCur.FUN_00ad8830(0);
+        kSoundCur.Play(0);
     }
     else
     {
         SoundSource* pAudio = FUN_00ad9060();
         Sound kMoveSound;
         kMoveSound = pAudio->ResolveAudioHandle("UIVATSMove", 0x121);
-        kMoveSound.FUN_00ad8830(0);
+        kMoveSound.Play(0);
         TargetList* pTargetsCur = DAT_011db0d4->FindListEntryForTarget(DAT_011f21cc);
         WeaponHolder* pOwnerOut = DAT_011dea3c->FUN_008d8520()->FUN_vt148();
         Weapon* pQueueWeaponTmp = pOwnerOut ? pOwnerOut->FUN_0044ddc0() : 0;
@@ -9128,7 +9128,7 @@ extern double DAT_01012060;
 extern double DAT_01012070;
 extern float DAT_010718c0;
 
-void* __cdecl FUN_00401000(unsigned int a1);
+void* __cdecl FormHeap_Allocate(unsigned int a1);
 extern Vec3 DAT_011f426c;
 struct ListHead
 {

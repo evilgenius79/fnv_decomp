@@ -7897,7 +7897,7 @@ struct PkgFile
     int FUN_004726b0();
     unsigned int GetField25C();
     bool FUN_00401680();
-    void FUN_00472890(void*, unsigned int);
+    void GetChunkData(void*, unsigned int);
     bool FUN_004726f0();
     void ReadChunkInt(unsigned int*);
 };
@@ -8145,7 +8145,7 @@ bool PkgLoad::LoadFromFile(PkgFile* file)
         {
         case 0x44494445: {
             char* editor = (char*)_alloca(file->GetField25C());
-            file->FUN_00472890(editor, 512);
+            file->GetChunkData(editor, 512);
             SetEditorID(editor);
             break;
         }
@@ -8155,7 +8155,7 @@ bool PkgLoad::LoadFromFile(PkgFile* file)
         case 0x54444b50: {
             PkgGeneral record;
             FUN_00403d30(&record, 0, 12);
-            file->FUN_00472890(&record, 12);
+            file->GetChunkData(&record, 12);
             if (file->FUN_00401680())
                 record.FUN_00670760();
             SetPackageType(record.type);
@@ -8165,7 +8165,7 @@ bool PkgLoad::LoadFromFile(PkgFile* file)
         case 0x54444c50: {
             PkgLocationRecord locationRecord2;
             FUN_00403d30(&locationRecord2, 0, 12);
-            file->FUN_00472890(&locationRecord2, 12);
+            file->GetChunkData(&locationRecord2, 12);
             if (file->FUN_00401680())
                 locationRecord2.FUN_0067eff0();
             PkgLocation location2(locationRecord2);
@@ -8175,7 +8175,7 @@ bool PkgLoad::LoadFromFile(PkgFile* file)
         case 0x44444b50: {
             PkgDialogueRecord record;
             FUN_00403d30(&record, 0, 24);
-            file->FUN_00472890(&record, 24);
+            file->GetChunkData(&record, 24);
             if (file->FUN_00401680())
                 record.FUN_0067b100();
             delete data;
@@ -8186,7 +8186,7 @@ bool PkgLoad::LoadFromFile(PkgFile* file)
         case 0x44464b50: {
             PkgFindRecord record;
             FUN_00403d30(&record, 0, 4);
-            file->FUN_00472890(&record, 4);
+            file->GetChunkData(&record, 4);
             if (file->FUN_00401680())
                 record.FUN_00503210();
             delete data;
@@ -8197,7 +8197,7 @@ bool PkgLoad::LoadFromFile(PkgFile* file)
         case 0x32454b50: {
             PkgEscortRecord record;
             FUN_00403d30(&record, 0, 4);
-            file->FUN_00472890(&record, 4);
+            file->GetChunkData(&record, 4);
             if (file->FUN_00401680())
                 record.FUN_00503210();
             delete data;
@@ -8208,7 +8208,7 @@ bool PkgLoad::LoadFromFile(PkgFile* file)
         case 0x32574b50: {
             PkgWanderRecord2 record;
             FUN_00403d30(&record, 0, 20);
-            file->FUN_00472890(&record, 20);
+            file->GetChunkData(&record, 20);
             if (file->FUN_00401680())
                 record.FUN_0067ca10();
             delete data;
@@ -8218,7 +8218,7 @@ bool PkgLoad::LoadFromFile(PkgFile* file)
         case 0x33574b50: {
             PkgWanderRecord3 record;
             FUN_00403d30(&record, 0, 24);
-            file->FUN_00472890(&record, 24);
+            file->GetChunkData(&record, 24);
             if (file->FUN_00401680())
                 record.FUN_0067ca10();
             delete data;
@@ -8228,7 +8228,7 @@ bool PkgLoad::LoadFromFile(PkgFile* file)
         case 0x54504b50: {
             PkgPatrolRecord record;
             FUN_00403d30(&record, 0, 2);
-            file->FUN_00472890(&record, 2);
+            file->GetChunkData(&record, 2);
             if (file->FUN_00401680())
                 record.FUN_00483710();
             delete data;
@@ -8238,7 +8238,7 @@ bool PkgLoad::LoadFromFile(PkgFile* file)
         case 0x32444c50: {
             PkgLocationRecord record;
             FUN_00403d30(&record, 0, 12);
-            file->FUN_00472890(&record, 12);
+            file->GetChunkData(&record, 12);
             if (file->FUN_00401680())
                 record.FUN_0067eff0();
             switch (FUN_0041ca90())
@@ -8264,7 +8264,7 @@ bool PkgLoad::LoadFromFile(PkgFile* file)
         case 0x32445450: {
             PkgTargetRecord record;
             FUN_00403d30(&record, 0, 16);
-            file->FUN_00472890(&record, 16);
+            file->GetChunkData(&record, 16);
             if (file->FUN_00401680())
                 record.FUN_0067ff10();
             switch (FUN_0041ca90())
@@ -8281,7 +8281,7 @@ bool PkgLoad::LoadFromFile(PkgFile* file)
         case 0x54445350: {
             PkgScheduleRecord scheduleRecord;
             FUN_00403d30(&scheduleRecord, 0, 8);
-            file->FUN_00472890(&scheduleRecord, 8);
+            file->GetChunkData(&scheduleRecord, 8);
             if (file->FUN_00401680())
                 scheduleRecord.FUN_0060ce80();
             PkgSchedule aSchedule(scheduleRecord);
@@ -8291,7 +8291,7 @@ bool PkgLoad::LoadFromFile(PkgFile* file)
         case 0x54445450: {
             PkgTargetRecord record;
             FUN_00403d30(&record, 0, 16);
-            file->FUN_00472890(&record, 16);
+            file->GetChunkData(&record, 16);
             if (file->FUN_00401680())
                 record.FUN_0067ff10();
             PkgTarget target(record);
@@ -12794,7 +12794,7 @@ struct NamedX
     virtual void v100(), v104(), v108(), v10c(), v110(), v114(), v118(), v11c(), v120(), v124(), v128(), v12c();
     virtual const char* GetName();
 };
-NamedX* FUN_004839c0(unsigned int auiFormId);
+NamedX* LookupFormByID(unsigned int auiFormId);
 struct ChangeRecX
 {
     unsigned int auiFormId;
@@ -12841,7 +12841,7 @@ void PackX::FUN_009ecbe0()
             ChangeRecX* pkRec = DAT_011de45c->FUN_004fd3c0();
             if (pkRec)
             {
-                NamedX* pkForm = FUN_004839c0(pkRec->auiFormId);
+                NamedX* pkForm = LookupFormByID(pkRec->auiFormId);
                 FUN_005b5e40(
                     "SAVELOAD: (LoadGame Buffer error) Block Header is incorrect in file %s on line %i.  Currently loading form is %08X %s with version %i and flags %08X",
                     "D:\\_Fallout3\\Platforms\\Common\\Code\\Fallout\\Ai\\AlarmPackage.cpp", 0x216, pkRec->auiFormId,
@@ -12873,7 +12873,7 @@ void PackX::FUN_009ecbe0()
         ChangeRecX* pkRec_z = DAT_011de45c->FUN_004fd3c0();
         if (pkRec_z)
         {
-            NamedX* pkForm2 = FUN_004839c0(pkRec_z->auiFormId);
+            NamedX* pkForm2 = LookupFormByID(pkRec_z->auiFormId);
             if (uiBlockEnd_etwkfv > usBlockSize_yfuyr + uiBlockStart_u)
                 FUN_005b5e40(
                     "SAVELOAD: LoadGame Buffer overrun of %i bytes in file %s on line %i.  Currently loading form is %08X %s with version %i and flags %08X",
@@ -13593,7 +13593,7 @@ class SaveLoad679
     unsigned int FUN_00825c00();
 };
 extern SaveLoad679* g_TESSaveLoadGame;
-Form679* __cdecl FUN_004839c0(unsigned int);
+Form679* __cdecl LookupFormByID(unsigned int);
 void __cdecl FNV_Warning(const char*, ...);
 void* __cdecl operator new(unsigned int);
 void __cdecl operator delete(void*);
@@ -13648,7 +13648,7 @@ void Package679::FUN_00679340()
                 SaveRecord679* record = g_TESSaveLoadGame->FUN_004fd3c0();
                 if (record)
                 {
-                    Form679* form = FUN_004839c0(record->formID);
+                    Form679* form = LookupFormByID(record->formID);
                     FNV_Warning(
                         "SAVELOAD: (LoadGame Buffer error) Block Header is incorrect in file %s on line %i.  Currently loading form is %08X %s with version %i and flags %08X",
                         packageSourcePath, 7540, record->formID, form->GetDebugName(), record->version,
@@ -13683,7 +13683,7 @@ void Package679::FUN_00679340()
             SaveRecord679* record2 = g_TESSaveLoadGame->FUN_004fd3c0();
             if (record2)
             {
-                Form679* form2 = FUN_004839c0(record2->formID);
+                Form679* form2 = LookupFormByID(record2->formID);
                 if (end > blockStart + blockSize)
                     FNV_Warning(
                         "SAVELOAD: LoadGame Buffer overrun of %i bytes in file %s on line %i.  Currently loading form is %08X %s with version %i and flags %08X",

@@ -12959,18 +12959,18 @@ struct FUN_0096e150_shell
 struct FUN_0054af40_cls : public TESObjectCELL
 {
     void FUN_00541ac0();
-    void FUN_00541ae0();
+    void CellRefLockLeave();
     void* FUN_009604f0(unsigned char flag);
     void FUN_0054af40(unsigned char flag);
 };
 
-// Calls FUN_00541ac0, passes the result of FUN_009604f0(flag) to ProcessWorkerList on DAT_011e0e80, then calls FUN_00541ae0.
+// Calls FUN_00541ac0, passes the result of FUN_009604f0(flag) to ProcessWorkerList on DAT_011e0e80, then calls CellRefLockLeave.
 // @fnv 0x0054af40
 void FUN_0054af40_cls::FUN_0054af40(unsigned char flag)
 {
     FUN_00541ac0();
     ((FUN_0096e150_shell*)&DAT_011e0e80)->ProcessWorkerList(FUN_009604f0(flag));
-    FUN_00541ae0();
+    CellRefLockLeave();
 }
 
 struct Ref54;
@@ -13242,7 +13242,7 @@ struct Claim54b750
     void FUN_00541ac0();
     void ClearAdditionalGeometryData();
     void* FUN_009604f0();
-    void FUN_00541ae0();
+    void CellRefLockLeave();
     void ProcessRefrList();
 };
 
@@ -13270,7 +13270,7 @@ void Claim54b750::ProcessRefrList()
             refr->RemoveCell(0, 0);
         }
     }
-    FUN_00541ae0();
+    CellRefLockLeave();
 }
 
 struct FormType
@@ -13333,7 +13333,7 @@ struct CellStub
     Resource* FUN_0054ddd0();
     Resource* FUN_0054ddd0(RefEx* reference, bool flag);
     Resource* FUN_0054ddd0(bool flag);
-    void FUN_00541ae0();
+    void CellRefLockLeave();
     void ProcessCellReferences();
 };
 // @fnv 0x0054bc10
@@ -13362,7 +13362,7 @@ void CellStub::ProcessCellReferences()
         }
         pNode = pNode->_ref_00726070();
     }
-    FUN_00541ae0();
+    CellRefLockLeave();
 }
 }  // namespace fnv_0054bc10
 
@@ -13526,7 +13526,7 @@ struct RotationList
 struct RotationCell : RotationReference
 {
     void FUN_00541ac0();
-    void FUN_00541ae0();
+    void CellRefLockLeave();
     RotationList* FUN_009604f0();
     void FUN_0054cfd0(RotationPoint&, RotationPoint&);
     void ComputeCellRotationCenter(RotationPoint&);
@@ -13633,7 +13633,7 @@ void RotationCell::ComputeCellRotationCenter(RotationPoint& aRotationCenter)
         }
         aRotationCenter = minimum.FUN_00439e90(aMaximum).FUN_0053d280(DAT_010162c0);
     }
-    FUN_00541ae0();
+    CellRefLockLeave();
 }
 }  // namespace fnv_0054c030
 
@@ -13783,7 +13783,7 @@ struct MoveCell
 {
     bool FUN_005516c0();
     void FUN_00541ac0();
-    void FUN_00541ae0();
+    void CellRefLockLeave();
     MoveNode* FUN_009604f0();
     void FUN_00548230(MoveRef*, bool);
     void MoveReferencesToWorldCells(MoveWorld*);
@@ -13824,7 +13824,7 @@ void MoveCell::MoveReferencesToWorldCells(MoveWorld* world)
             }
             node = node->FUN_00726070();
         }
-        FUN_00541ae0();
+        CellRefLockLeave();
     }
 }
 
@@ -14070,7 +14070,7 @@ struct CellRefScan
 {
     void __thiscall FUN_00541ac0();
     RefEntry* __thiscall FUN_009604f0();
-    void __thiscall FUN_00541ae0();
+    void __thiscall CellRefLockLeave();
     RefObject* FindFirstRefByType(int typeId, bool filtered);
 };
 // Scans the cell's ref entries and returns the first reference whose type matches typeId, optionally skipping filtered ones.
@@ -14090,11 +14090,11 @@ RefObject* CellRefScan::FindFirstRefByType(int typeId, bool filtered)
         current = current->FUN_00726070();
         if (itemType && (!filtered || !reference->FUN_00440d80()) && itemType == typeId)
         {
-            FUN_00541ae0();
+            CellRefLockLeave();
             return reference;
         }
     }
-    FUN_00541ae0();
+    CellRefLockLeave();
     return 0;
 }
 
@@ -15967,7 +15967,7 @@ struct Form
     virtual void v75();
     virtual const char* Name();
 };
-Form* FUN_004839c0(unsigned int);
+Form* LookupFormByID(unsigned int);
 struct Header
 {
     unsigned int id;
@@ -16057,7 +16057,7 @@ void Cell::LoadChanged(unsigned int auiChangedFlags, int file)
                 Header* header = DAT_011de45c->FUN_004fd3c0();
                 if (header)
                 {
-                    Form* form = FUN_004839c0(header->id);
+                    Form* form = LookupFormByID(header->id);
                     FUN_005b5e40(DAT_01015718, DAT_0102ed68, 0x3d9d, header->id, form->Name(), header->version,
                                  *(unsigned int*)&header->payload0);
                 }
@@ -16115,7 +16115,7 @@ void Cell::LoadChanged(unsigned int auiChangedFlags, int file)
             Header* pEndHeader = DAT_011de45c->FUN_004fd3c0();
             if (pEndHeader)
             {
-                Form* pEndForm = FUN_004839c0(pEndHeader->id);
+                Form* pEndForm = LookupFormByID(pEndHeader->id);
                 if (end > start + usChunkSize)
                     FUN_005b5e40(DAT_01015588, end - (start + usChunkSize), DAT_0102ed68, 0x3dd5, pEndHeader->id,
                                  pEndForm->Name(), pEndHeader->version, *(unsigned int*)&pEndHeader->payload0);
@@ -16793,7 +16793,7 @@ template <class T> struct SL
     void FUN_0063f7b0();
     ~SL();
 };
-void FUN_00401030(void*);
+void FormHeap_Free(void*);
 struct FUN_0040ecb0
 {
     virtual ~FUN_0040ecb0();
@@ -16865,7 +16865,7 @@ void TESObjectCELL_Ext::FUN_0054cfd0(NiPoint3* pCenter, NiPoint3* b)
 }  // namespace fnv_0054cfd0
 
 class FormStub;
-FormStub* FUN_004839c0(unsigned int auiFormId);  // LookupFormByID
+FormStub* LookupFormByID(unsigned int auiFormId);  // LookupFormByID
 
 class SkyObjectBase
 {
@@ -16890,7 +16890,7 @@ void LinkedFormOwner::UpdateLinkedForm(unsigned int uiFlags, int iArg)
         if (pkForm)
         {
             unsigned int auiFormId = (unsigned int)pkForm;
-            pkForm = FUN_004839c0(auiFormId);
+            pkForm = LookupFormByID(auiFormId);
             FUN_00546bf0(pkForm);
         }
     }
@@ -18359,7 +18359,7 @@ struct Cell
     void* FUN_00546c20();
     void FUN_00541ac0();
     List* FUN_009604f0();
-    void FUN_00541ae0();
+    void CellRefLockLeave();
     bool FUN_00450ff0();
     bool FUN_004523c0();
     void FUN_00545590(Ref*);
@@ -18386,7 +18386,7 @@ void Cell::FUN_0054ca90(Ref* ref)
     }
     FUN_00541ac0();
     FUN_009604f0()->FUN_00905330(&ref);
-    FUN_00541ae0();
+    CellRefLockLeave();
     if (FUN_00450ff0() || FUN_004523c0())
         ((Loaded*)DAT_011c95c8)->FUN_005270b0(ref);
     if (data)
@@ -18490,7 +18490,7 @@ bool FUN_005548a0(int v);
 int FindFormEnumIndex(unsigned int sig);
 void FUN_005516a0(bool arg);
 bool FUN_00473ff0(unsigned int id, File* file);
-void* FUN_004839c0(unsigned int id);
+void* LookupFormByID(unsigned int id);
 
 extern unsigned int DAT_011872b4;
 extern unsigned int kGroupFormType;
@@ -18554,7 +18554,7 @@ bool Cell::FUN_00550500(File* file)
         unsigned int id4 = file->GetFormID();
         if (FUN_00473ff0(id4, file))
         {
-            void* p2 = FUN_004839c0(id4);
+            void* p2 = LookupFormByID(id4);
             bool b6 = false;
             if (!g_saveLoad->FUN_0042ce10())
                 b6 = g_saveLoad->FUN_00849cc0(id4);
@@ -18934,10 +18934,10 @@ struct Handle5538
 {
     unsigned int a, b, c;
     ~Handle5538();
-    void FUN_00ad8f20(NiAVObject*);
-    bool FUN_00ad8b60(float, float, float);
+    void SetNiNode(NiAVObject*);
+    bool SetPos(float, float, float);
     void FUN_00ad9030(unsigned int);
-    bool FUN_00ad8830(bool);
+    bool Play(bool);
 };
 struct Audio5538
 {
@@ -18956,7 +18956,7 @@ struct Cell5538
     void FUN_00541ac0();
     bool FUN_00450ff0();
     List5538* FUN_009604f0();
-    void FUN_00541ae0();
+    void CellRefLockLeave();
     void PlayCellSoundEffects();
 };
 // Iterates the cell's references and plays a positional sound for each eligible reference within range of the player.
@@ -18982,18 +18982,18 @@ void Cell5538::PlayCellSoundEffects()
                     {
                         Handle5538 a2 = Audio5538::FUN_00453a70()->FUN_00ad73b0(sound4->FUN_0084e3a0(), 0x2102);
                         if (ref->node())
-                            a2.FUN_00ad8f20(ref->node());
+                            a2.SetNiNode(ref->node());
                         Vec5538 position4 = *ref->pos();
-                        a2.FUN_00ad8b60(position4.x, position4.y, position4.z);
+                        a2.SetPos(position4.x, position4.y, position4.z);
                         a2.FUN_00ad9030(0xc0);
-                        a2.FUN_00ad8830(false);
+                        a2.Play(false);
                     }
                 }
             }
             list3 = list3->FUN_00726070();
         }
     }
-    FUN_00541ae0();
+    CellRefLockLeave();
 }
 }  // namespace fnv_005538e0
 
@@ -19047,7 +19047,7 @@ class S_005574d0_Owner
 {
   public:
     void FUN_00541ac0();
-    void FUN_00541ae0();
+    void CellRefLockLeave();
     BSSimpleList<BGSPerkEntry*>* FUN_009604f0();
     void ProcessPerkEntries();
 };
@@ -19083,7 +19083,7 @@ void S_005574d0_Owner::ProcessPerkEntries()
         }
         list = list->GetNext();
     }
-    FUN_00541ae0();
+    CellRefLockLeave();
 }
 }  // namespace fnv_005574d0
 
@@ -20763,7 +20763,7 @@ struct ListArg
 struct FUN_0054b830_cls
 {
     void FUN_00541ac0();
-    void FUN_00541ae0();
+    void CellRefLockLeave();
     NodeX* FUN_009604f0();
     void FUN_0054b830(ListArg* pOut);
 };
@@ -20792,7 +20792,7 @@ void FUN_0054b830_cls::FUN_0054b830(ListArg* pOut)
             }
             pNode = pNode->FUN_00726070();
         }
-        FUN_00541ae0();
+        CellRefLockLeave();
     }
 }
 
@@ -20814,7 +20814,7 @@ struct Node
 struct Owner
 {
     void FUN_00541ac0();
-    void FUN_00541ae0();
+    void CellRefLockLeave();
     Node* FUN_009604f0();
     void FUN_0054ba00();
 };
@@ -20832,7 +20832,7 @@ void Owner::FUN_0054ba00()
         if (pkActor && pkActor->FUN_0057a2f0())
             pkActor->FUN_00579ac0(pkActor->FUN_0057a370());
     }
-    FUN_00541ae0();
+    CellRefLockLeave();
 }
 
 }
@@ -20854,7 +20854,7 @@ struct Node
 struct Owner
 {
     void FUN_00541ac0();
-    void FUN_00541ae0();
+    void CellRefLockLeave();
     Node* FUN_009604f0();
     void FUN_0054ba80(bool bEnable);
 };
@@ -20877,7 +20877,7 @@ void Owner::FUN_0054ba80(bool bEnable)
                 pkActor->FUN_005729e0(0);
         }
     }
-    FUN_00541ae0();
+    CellRefLockLeave();
 }
 
 }
@@ -20912,7 +20912,7 @@ struct Node
 struct Owner
 {
     void FUN_00541ac0();
-    void FUN_00541ae0();
+    void CellRefLockLeave();
     Node* FUN_009604f0();
     void FUN_0054baf0();
 };
@@ -20938,7 +20938,7 @@ void Owner::FUN_0054baf0()
             }
         }
     }
-    FUN_00541ae0();
+    CellRefLockLeave();
 }
 
 }
@@ -20953,18 +20953,18 @@ struct Entry
 struct Owner
 {
     void FUN_00541ac0();
-    void FUN_00541ae0();
+    void CellRefLockLeave();
     Entry* FUN_009604f0();
     int FUN_0054cee0();
 };
 
-// Calls FUN_00541ac0, reads the int returned through the entry's FUN_006815c0 pointer, then calls FUN_00541ae0 and returns it.
+// Calls FUN_00541ac0, reads the int returned through the entry's FUN_006815c0 pointer, then calls CellRefLockLeave and returns it.
 // @fnv 0x0054cee0
 int Owner::FUN_0054cee0()
 {
     FUN_00541ac0();
     int iResult = *FUN_009604f0()->FUN_006815c0();
-    FUN_00541ae0();
+    CellRefLockLeave();
     return iResult;
 }
 
@@ -21122,7 +21122,7 @@ typedef bool (*ActorCallback)(Actor* pkActor, void* pvContext);
 struct Owner
 {
     void FUN_00541ac0();
-    void FUN_00541ae0();
+    void CellRefLockLeave();
     Node* FUN_009604f0();
     bool FUN_0054da20(Position* pkCenter1, float fRadius1, Position* pkCenter2, float fRadius2,
                       ActorCallback pfnCallback, void* pvContext);
@@ -21148,13 +21148,13 @@ bool Owner::FUN_0054da20(Position* pkCenter1, float fRadius1, Position* pkCenter
             {
                 if (pfnCallback(pkActor, pvContext))
                 {
-                    FUN_00541ae0();
+                    CellRefLockLeave();
                     return false;
                 }
             }
         }
     }
-    FUN_00541ae0();
+    CellRefLockLeave();
     return true;
 }
 
@@ -21186,7 +21186,7 @@ struct ListArg
 struct FUN_0054db50_cls
 {
     void FUN_00541ac0();
-    void FUN_00541ae0();
+    void CellRefLockLeave();
     NodeX* FUN_009604f0();
     void FUN_0054db50(ListArg* pOut);
 };
@@ -21222,7 +21222,7 @@ void FUN_0054db50_cls::FUN_0054db50(ListArg* pOut)
         }
         pNode = pNode->FUN_00726070();
     }
-    FUN_00541ae0();
+    CellRefLockLeave();
 }
 }  // namespace fnv_0054db50
 
@@ -21368,7 +21368,7 @@ struct Node
 struct Owner
 {
     void FUN_00541ac0();
-    void FUN_00541ae0();
+    void CellRefLockLeave();
     Node* FUN_009604f0();
     void FUN_005573e0();
 };
@@ -21394,7 +21394,7 @@ void Owner::FUN_005573e0()
         }
         pkNode = pkNode->FUN_00726070();
     }
-    FUN_00541ae0();
+    CellRefLockLeave();
 }
 
 }
@@ -21832,7 +21832,7 @@ struct PortalVisitItem
 struct PortalVisitCell
 {
     void FUN_00541ac0();
-    void FUN_00541ae0();
+    void CellRefLockLeave();
     bool FUN_00425fd0();
     PortalVisitItem* FUN_009604f0();
 };
@@ -21967,7 +21967,7 @@ bool __cdecl FUN_0054d4b0(PortalVisitCell* cell, const PortalVisitPoint& origin,
         }
     }
     if (cell)
-        cell->FUN_00541ae0();
+        cell->CellRefLockLeave();
     return !stop4;
 }
 
@@ -22458,7 +22458,7 @@ struct TESForm_Stub
     virtual const char* GetEditorID();
 };
 
-TESForm* __cdecl FUN_004839c0(unsigned int);
+TESForm* __cdecl LookupFormByID(unsigned int);
 unsigned int __cdecl BSStringLength(const char*);
 void __cdecl FUN_0040fbe0(const char*, ...);
 
@@ -22498,7 +22498,7 @@ unsigned short FUN_00554b90_shell::FUN_00554b90(unsigned int flags)
         void* pObj4 = g_TESSaveLoadGame->FUN_004fd3e0();
         if (pObj4)
         {
-            TESForm_Stub* pForm = (TESForm_Stub*)FUN_004839c0(*(unsigned int*)pObj4);
+            TESForm_Stub* pForm = (TESForm_Stub*)LookupFormByID(*(unsigned int*)pObj4);
             FUN_0040fbe0("GetSaveSize(): %-5i for form %08X %s with flags %08X ending at line %i in file %s",
                          uSize - uBaseSize2, *(unsigned int*)pObj4, pForm->GetEditorID(),
                          *(unsigned int*)((char*)pObj4 + 5), 15697,
@@ -23917,11 +23917,11 @@ TESImageSpace* C5Cell::FUN_00547680()
     }
     if (!m_pImageSpace && FUN_00425fd0() && !FUN_00454b10())
     {
-        m_pImageSpace = dynamic_cast<TESImageSpace*>(((GetFormFn)FUN_004839c0)(0x160));
+        m_pImageSpace = dynamic_cast<TESImageSpace*>(((GetFormFn)LookupFormByID)(0x160));
     }
     else if (!m_pImageSpace)
     {
-        m_pImageSpace = dynamic_cast<TESImageSpace*>(((GetFormFn)FUN_004839c0)(0x161));
+        m_pImageSpace = dynamic_cast<TESImageSpace*>(((GetFormFn)LookupFormByID)(0x161));
     }
     return m_pImageSpace;
 }

@@ -43,9 +43,9 @@ struct xSound
     xSound& operator=(const xSound&);
     bool FUN_00ad8ce0();
     void FUN_00ad8d10();
-    bool FUN_00ad8b60(float, float, float);
-    void FUN_00ad8f20(void*);
-    bool FUN_00ad8830(bool);
+    bool SetPos(float, float, float);
+    void SetNiNode(void*);
+    bool Play(bool);
     int m_iWordAt00, m_iWordAt04, m_8;
 };
 struct xFltSetting
@@ -215,9 +215,9 @@ xProj::xProj(xActorV* apA, int b, int c, int d, xP3 kP1, xP3 kP2)
         {
             m_c8 = xAudio::FUN_00453a70()->FUN_00ad73b0(NAME, 0x102);
             xP3 POS2 = *FUN_00436aa0();
-            m_c8.FUN_00ad8b60(POS2.x, POS2.y, POS2.z);
-            m_c8.FUN_00ad8f20(m_c0.FUN_00559450());
-            m_c8.FUN_00ad8830(true);
+            m_c8.SetPos(POS2.x, POS2.y, POS2.z);
+            m_c8.SetNiNode(m_c0.FUN_00559450());
+            m_c8.Play(true);
         }
     }
     FUN_0081eba0();

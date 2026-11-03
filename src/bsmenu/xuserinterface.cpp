@@ -46,7 +46,7 @@ unsigned char __cdecl FUN_00446e10();
 int __cdecl FUN_004dc1e0();
 void __cdecl FUN_0086a530();
 int __cdecl FUN_0086a820();
-unsigned char __cdecl FUN_00703e80(const char* a1, int a2, int a3, void* a4, int a5, int a6, float a7, float a8,
+unsigned char __cdecl ShowMessageBox(const char* a1, int a2, int a3, void* a4, int a5, int a6, float a7, float a8,
                                    const char* a9, const char* a10, const char* a11, int a12);
 
 // @fnv 0x0086a580
@@ -96,7 +96,7 @@ int FUN_0086a580(const char* text, const char* caption, unsigned int flags)
             }
 
             if (mode == 2 || mode == 0 ||
-                !FUN_00703e80(text, 0, 0, (void*)FUN_0086a530, a, FUN_0086a820(), 0.0f, 0.0f, c, d, b, 0))
+                !ShowMessageBox(text, 0, 0, (void*)FUN_0086a530, a, FUN_0086a820(), 0.0f, 0.0f, c, d, b, 0))
             {
                 if (!FUN_00446e10() || !FUN_004dc1e0())
                 {

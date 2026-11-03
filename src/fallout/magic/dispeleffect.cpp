@@ -123,7 +123,7 @@ struct ItemObj
     ItemObj** FUN_006815c0();
     ItemObj* FUN_00726070();
     ItemObj* FUN_0044ddc0();
-    void FUN_00804210(int arg);
+    void Remove(int arg);
     ItemObj* FUN_00815410();
 };
 
@@ -159,7 +159,7 @@ void FUN_0080da00_cls::UpdateItems()
             if (u2->i6() == 0)
             {
                 if (u2->m_0c.s2(b9 ? x : 0) <= GetFloatAtOffset1C() * *DAT_011d1b20.FUN_00403e20())
-                    t5->FUN_00804210(0);
+                    t5->Remove(0);
             }
         }
         cur = nextItem;

@@ -113,7 +113,7 @@ void __cdecl FUN_0072fa60(int param_1)
 
 struct FUN_00ad8830_shell : public SoundPlaybackHandle
 {
-    bool FUN_00ad8830(bool);
+    bool Play(bool);
 };
 
 struct M8830 : public BSAudioManager
@@ -121,7 +121,7 @@ struct M8830 : public BSAudioManager
     bool FUN_00adb3e0(unsigned, bool);
 };
 // @fnv 0x00ad8830
-bool FUN_00ad8830_shell::FUN_00ad8830(bool v)
+bool FUN_00ad8830_shell::Play(bool v)
 {
     if (*(unsigned*)this == 0xffffffff)
         return false;
@@ -189,10 +189,10 @@ struct FUN_00adb970_stub
 struct FUN_00ad8b60_h
 {
     unsigned int id;
-    bool FUN_00ad8b60(float x, float y, float z);
+    bool SetPos(float x, float y, float z);
 };
 // @fnv 0x00ad8b60
-bool FUN_00ad8b60_h::FUN_00ad8b60(float x, float y, float z)
+bool FUN_00ad8b60_h::SetPos(float x, float y, float z)
 {
     if (id == 0xFFFFFFFF)
         return false;
@@ -263,7 +263,7 @@ struct NiMemObject
 typedef char _sizecheck_NiMemObject[sizeof(NiMemObject) == 1 ? 1 : -1];
 struct FUN_00ad8f20_shell : public SoundPlaybackHandle
 {
-    void FUN_00ad8f20(NiAVObject*);
+    void SetNiNode(NiAVObject*);
 };
 
 extern void(__cdecl* DAT_011f6e08)(NiAVObject*);
@@ -273,7 +273,7 @@ struct FUN_00adc1e0_stub
 };
 // If the stored id is valid and apObj is non-null, calls DAT_011f6e08 on apObj and then FUN_00adc1e0 with the stored id and apObj.
 // @fnv 0x00ad8f20
-void FUN_00ad8f20_shell::FUN_00ad8f20(NiAVObject* apObj)
+void FUN_00ad8f20_shell::SetNiNode(NiAVObject* apObj)
 {
     if (*(unsigned int*)this == 0xFFFFFFFF || !apObj)
         return;

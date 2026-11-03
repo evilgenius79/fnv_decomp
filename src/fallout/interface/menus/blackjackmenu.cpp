@@ -804,7 +804,7 @@ extern SetMgr* DAT_011d9058;
 extern SetMgrB* DAT_011dea3c;
 extern void* DAT_011d9044;
 extern void* DAT_011d9048;
-void* __cdecl FUN_00a00940(const char*, int);
+void* __cdecl TraitNameToIDAdd(const char*, int);
 
 class FUN_007315e0 : public SetBase
 {
@@ -845,8 +845,8 @@ class FUN_007315e0 : public SetBase
 // @fnv 0x007315e0
 FUN_007315e0::FUN_007315e0()
 {
-    DAT_011d9044 = FUN_00a00940("_Value", -1);
-    DAT_011d9048 = FUN_00a00940("_x", -1);
+    DAT_011d9044 = TraitNameToIDAdd("_Value", -1);
+    DAT_011d9048 = TraitNameToIDAdd("_x", -1);
     unk28 = 10;
     m7C = 0;
     if (DAT_011d9058->FUN_007316d0() != 0)
@@ -1634,7 +1634,7 @@ struct FormHolder
     TESForm* FUN_007316d0();
 };
 extern FormHolder* g_formHolder;
-int __cdecl FUN_00a00940(const char*, int);
+int __cdecl TraitNameToIDAdd(const char*, int);
 extern int g_traitValue;
 extern int g_traitX;
 struct FUN_007c06f0 : Menu
@@ -1714,8 +1714,8 @@ struct FUN_007c06f0 : Menu
 // @fnv 0x007c06f0
 FUN_007c06f0::FUN_007c06f0()
 {
-    g_traitValue = FUN_00a00940("_Value", -1);
-    g_traitX = FUN_00a00940("_x", -1);
+    g_traitValue = TraitNameToIDAdd("_Value", -1);
+    g_traitX = TraitNameToIDAdd("_x", -1);
     unk28 = 0;
     unkF4 = 0;
     unk154 = g_thePlayer->GetField630();
@@ -1874,7 +1874,7 @@ extern Pointer90 DAT_011d90bc;
 extern int DAT_011f36ac;
 struct Loader90
 {
-    Node90* FUN_00447080(const char*, int, int, int, int, int);
+    Node90* LoadModel(const char*, int, int, int, int, int);
 };
 extern Loader90* DAT_011c3b3c;
 Node90* __cdecl FUN_004aae30(Node90*, const char*);
@@ -2804,9 +2804,9 @@ struct Menu90
 // @fnv 0x00732540
 void Menu90::InitBlackjackScene()
 {
-    rootdb8 = DAT_011c3b3c->FUN_00447080("Meshes\\Terminals\\NV_BlackJack\\NV_Blackjack-Hand1.NIF", 0, 1, 0, 0, 0);
-    rootdbc = DAT_011c3b3c->FUN_00447080("Meshes\\Terminals\\NV_BlackJack\\NV_Blackjack-Hand2.NIF", 0, 1, 0, 0, 0);
-    rootdc0 = DAT_011c3b3c->FUN_00447080("Meshes\\Terminals\\NV_BlackJack\\NV_Blackjack-Dealer.NIF", 0, 1, 0, 0, 0);
+    rootdb8 = DAT_011c3b3c->LoadModel("Meshes\\Terminals\\NV_BlackJack\\NV_Blackjack-Hand1.NIF", 0, 1, 0, 0, 0);
+    rootdbc = DAT_011c3b3c->LoadModel("Meshes\\Terminals\\NV_BlackJack\\NV_Blackjack-Hand2.NIF", 0, 1, 0, 0, 0);
+    rootdc0 = DAT_011c3b3c->LoadModel("Meshes\\Terminals\\NV_BlackJack\\NV_Blackjack-Dealer.NIF", 0, 1, 0, 0, 0);
     Node90* root8 = rootdb4;
     DAT_011d90bc.FUN_0066b0d0(FUN_004aae30(rootdb4, "object1"));
     ((Pointer90*)&DAT_011d9098)->FUN_0066b0d0(new Node90(0));
@@ -2921,7 +2921,7 @@ struct BSSoundHandleEx
     int flags;
     int state;
     ~BSSoundHandleEx();
-    bool FUN_00ad8830(bool);
+    bool Play(bool);
 };
 struct Audio129
 {
@@ -3046,7 +3046,7 @@ struct Tile129
 Tile129* FUN_00a08b20(Tile129*, const char*);
 struct Xml129
 {
-    Tile129* FUN_00a01b00();
+    Tile129* ReadXML();
 };
 struct Interface129
 {
@@ -3211,7 +3211,7 @@ Tile129* FUN_00733630(SetMgr* casino, int minimum, int maximum, int required)
         FUN_00406d00(message, 260, DAT_01070c58, DAT_011d451c.FUN_00403df0(),
                      ((Player129*)DAT_011dea3c)->FUN_00969b40());
         DispatchMessageToSink(message, 0, DAT_01049638, 0, DAT_010162c0, 0);
-        FUN_00453a70()->FUN_00ad7550(DAT_01025cc4, 0x121).FUN_00ad8830(false);
+        FUN_00453a70()->FUN_00ad7550(DAT_01025cc4, 0x121).Play(false);
         return 0;
     }
     if (DAT_011d9054->amount >= ((Casino129*)DAT_011d9058)->FUN_00504e60()->limit)
@@ -3219,7 +3219,7 @@ Tile129* FUN_00733630(SetMgr* casino, int minimum, int maximum, int required)
         char message[260];
         FUN_00406d00(message, 260, DAT_011d3abc.FUN_00403df0());
         DispatchMessageToSink(message, 0, DAT_01049638, 0, DAT_010162c0, 0);
-        FUN_00453a70()->FUN_00ad7550(DAT_01025cc4, 0x121).FUN_00ad8830(false);
+        FUN_00453a70()->FUN_00ad7550(DAT_01025cc4, 0x121).Play(false);
         return 0;
     }
     if (DAT_011dea3c->FUN_00575610((int)DAT_011d9058->FUN_007316d0()) < DAT_0119fe40)
@@ -3227,7 +3227,7 @@ Tile129* FUN_00733630(SetMgr* casino, int minimum, int maximum, int required)
         char message[260];
         FUN_00406d00(message, 260, DAT_011d2424.FUN_00403df0());
         DispatchMessageToSink(message, 0, DAT_01049638, 0, DAT_010162c0, 0);
-        FUN_00453a70()->FUN_00ad7550(DAT_01025cc4, 0x121).FUN_00ad8830(false);
+        FUN_00453a70()->FUN_00ad7550(DAT_01025cc4, 0x121).Play(false);
         return 0;
     }
     if (DAT_011d9054->amount < required && required != 0)
@@ -3235,12 +3235,12 @@ Tile129* FUN_00733630(SetMgr* casino, int minimum, int maximum, int required)
         char message[260];
         FUN_00406d00(message, 260, DAT_011d3594.FUN_00403df0());
         DispatchMessageToSink(message, 0, DAT_01049638, 0, DAT_010162c0, 0);
-        FUN_00453a70()->FUN_00ad7550(DAT_01025cc4, 0x121).FUN_00ad8830(false);
+        FUN_00453a70()->FUN_00ad7550(DAT_01025cc4, 0x121).Play(false);
         return 0;
     }
     if (oldMenu)
         delete oldMenu;
-    Tile129* pTile = pInterface->FUN_00586150(DAT_01070c38)->FUN_00a01b00();
+    Tile129* pTile = pInterface->FUN_00586150(DAT_01070c38)->ReadXML();
     DAT_011d9050 = (DAT_011d9050_S*)pTile->FUN_00a03c90();
     if (DAT_011d9050 && ((Menu129*)DAT_011d9050)->GetID() == FUN_00733f80())
     {
@@ -3252,7 +3252,7 @@ Tile129* FUN_00733630(SetMgr* casino, int minimum, int maximum, int required)
         }
         if (pTile->FUN_00a011b0(0xfa7) == DAT_010704f0 || pTile->FUN_00a011b0(0xfa7) == DAT_010704e8)
             pTile->FUN_00a012d0(0xfad, FUN_00a01530(1));
-        FUN_00453a70()->FUN_00ad7550(DAT_01070bc0, 0x121).FUN_00ad8830(false);
+        FUN_00453a70()->FUN_00ad7550(DAT_01070bc0, 0x121).Play(false);
         ((Menu129*)DAT_011d9050)->setting = ((Player129*)DAT_011dea3c)->mode.FUN_0066ef20(11);
         ((Menu129*)DAT_011d9050)->bet = DAT_0119fe40;
         ((Menu129*)DAT_011d9050)->tile34->FUN_00a01350((int)DAT_011d9044, DAT_011d3804.FUN_00403df0(), true);
@@ -4855,7 +4855,7 @@ void InputMenu::HandleAction(int action, void* tile)
                 if (bet > DAT_0119fe3c)
                     bet = DAT_0119fe3c;
                 if (oldIncreaseTmp < bet)
-                    FUN_00453a70()->FUN_00ad7550(DAT_01070ca4, 0x121).FUN_00ad8830(false);
+                    FUN_00453a70()->FUN_00ad7550(DAT_01070ca4, 0x121).Play(false);
                 UpdateChipPositions();
                 ((Menu129*)DAT_011d9050)->tile34->SetTraitAndReset((int)DAT_011d9048, 1.0f);
                 ((Menu129*)DAT_011d9050)->tile34->FUN_00700320((int)DAT_011d9048, bet);
@@ -4923,7 +4923,7 @@ void InputMenu::HandleAction(int action, void* tile)
                 if (bet < DAT_0119fe40)
                     bet = DAT_0119fe40;
                 if (kOldDecrease > bet)
-                    FUN_00453a70()->FUN_00ad7550(DAT_01070c88, 0x121).FUN_00ad8830(false);
+                    FUN_00453a70()->FUN_00ad7550(DAT_01070c88, 0x121).Play(false);
                 UpdateChipPositions();
                 ((Menu129*)DAT_011d9050)->tile34->SetTraitAndReset((int)DAT_011d9048, 1.0f);
                 ((Menu129*)DAT_011d9050)->tile34->FUN_00700320((int)DAT_011d9048, bet);

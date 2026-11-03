@@ -1948,8 +1948,8 @@ struct IdFlagState
     ~IdFlagState();
     void operator=(const IdFlagState&);
     bool FUN_00ad8ce0();
-    bool FUN_00ad8b60(float, float, float);
-    bool FUN_00ad8830(bool);
+    bool SetPos(float, float, float);
+    bool Play(bool);
 };
 struct AudioX
 {

@@ -1606,7 +1606,7 @@ struct HKSoundHandle
     void FUN_00ad8d10();
     bool IsNotEqual(int iFlag);
     void FUN_00ad8870(int iDelay);
-    bool FUN_00ad8830(bool bLoop);
+    bool Play(bool bLoop);
 };
 struct HKSoundNode
 {
@@ -1722,7 +1722,7 @@ void HKMenu::UpdateHighlight()
             if (ItemUpdateArray)
                 kSound.FUN_00ad8870((int)(m_kGuessed.FUN_0044edb0(0) * ItemUpdateArray * 1.5));
             else
-                kSound.FUN_00ad8830(false);
+                kSound.Play(false);
         }
     }
     bool bFound = false;

@@ -848,7 +848,7 @@ struct TESObjectBOOK
 struct Tile_00a01b00 : Tile
 {
     static float __cdecl FUN_00a01530();
-    Tile* FUN_00a01b00(const char*);
+    Tile* ReadXML(const char*);
     Menu* FUN_00a03c90();
     void FUN_00a012d0(int, float, bool);
 };
@@ -911,7 +911,7 @@ Tile* __cdecl FUN_0073ad50(TESObjectBOOK* apBook, TESObjectREFR* apRef)
     pin = FUN_004b7210();
     ftop_depth = Tile_00a01b00::FUN_00a01530();
     ptile = 0;
-    ptile = (Tile_00a01b00*)((IMH*)pin)->FUN_00586150()->FUN_00a01b00("Data\\Menus\\book_menu.xml");
+    ptile = (Tile_00a01b00*)((IMH*)pin)->FUN_00586150()->ReadXML("Data\\Menus\\book_menu.xml");
     pmenu = ptile->FUN_00a03c90();
     g_pHudMainMenuInstance = (BookMenu*)pmenu;
     ((BookMenuData*)g_pHudMainMenuInstance)->m_pObjectToUpdateMenuTile = apBook;

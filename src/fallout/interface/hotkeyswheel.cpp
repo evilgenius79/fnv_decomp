@@ -793,8 +793,8 @@ struct Player
     virtual void v3c0();
     virtual void v3c4();
     int FUN_008a7570();
-    void FUN_0088c650(Form*, int, void*, int, int, int);
-    void FUN_0088c790(Form*, int, void*, int, int, int);
+    void EquipItem(Form*, int, void*, int, int, int);
+    void UnequipItem(Form*, int, void*, int, int, int);
     void FUN_00950030();
     Process* FUN_008d8520();
 };
@@ -836,9 +836,9 @@ void Wheel::FUN_00701e80()
     else
     {
         if (!entry5->FUN_004bddd0(false))
-            DAT_011dea3c->FUN_0088c650(entry5->FUN_0044ddc0(), ammo4 ? entry5->FUN_00726070() : 1, extra, 0, 0, 1);
+            DAT_011dea3c->EquipItem(entry5->FUN_0044ddc0(), ammo4 ? entry5->FUN_00726070() : 1, extra, 0, 0, 1);
         else
-            DAT_011dea3c->FUN_0088c790(entry5->FUN_0044ddc0(), ammo4 ? entry5->FUN_00726070() : 1, extra, 0, 0, 1);
+            DAT_011dea3c->UnequipItem(entry5->FUN_0044ddc0(), ammo4 ? entry5->FUN_00726070() : 1, extra, 0, 0, 1);
     }
     DAT_011dea3c->FUN_00950030();
     DAT_011dea3c->FUN_008d8520()->v580(1, 0, 0);
@@ -889,7 +889,7 @@ EQUIP_TYPE GetEquipType(TESForm*);
 }
 
 const char* GetMenuIconName(int);
-int FUN_00a01860(const char*);
+int TraitNameToID(const char*);
 int __cdecl FUN_00406f60(void*, const char*, ...);
 
 static const char str_InterfaceIcons[] = "Interface\\Icons\\";
@@ -921,8 +921,8 @@ void HotkeyWheelUpdate::FUN_007017b0()
                 reinterpret_cast<HotkeyStringCalls&>(str3).FUN_00438390(str_InterfaceIcons);
                 reinterpret_cast<HotkeyStringCalls&>(str3).FUN_00404820(
                     GetMenuIconName(BGSEquipType::GetEquipType(item3->GetObject())));
-                this->m_ppHotkeySlotTiles[i]->Set(FUN_00a01860(str_HotKeyIcon), str3.String(), true);
-                this->m_ppHotkeySlotTiles[i]->Set(FUN_00a01860(str_HotKeyAssigned), 1);
+                this->m_ppHotkeySlotTiles[i]->Set(TraitNameToID(str_HotKeyIcon), str3.String(), true);
+                this->m_ppHotkeySlotTiles[i]->Set(TraitNameToID(str_HotKeyAssigned), 1);
                 if (item3->FUN_00726070() > 1)
                 {
                     FUN_00406f60(&str3, str_FormatCount, item3->GetTargetFullName(), item3->FUN_00726070());
@@ -935,7 +935,7 @@ void HotkeyWheelUpdate::FUN_007017b0()
             }
             else
             {
-                this->m_ppHotkeySlotTiles[i]->Set(FUN_00a01860(str_HotKeyAssigned), 0);
+                this->m_ppHotkeySlotTiles[i]->Set(TraitNameToID(str_HotKeyAssigned), 0);
                 this->m_ppHotkeySlotTiles[i]->Set(0xfc4, "", true);
             }
         }

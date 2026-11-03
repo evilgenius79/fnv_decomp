@@ -13577,7 +13577,7 @@ struct Transfer4c37Node84
 unsigned char __cdecl FUN_00481f10(int a);
 unsigned char __cdecl FUN_00702680(int a, int b);
 int __fastcall FUN_00401170(int a);
-void* __cdecl FUN_00401000(int a);
+void* __cdecl FormHeap_Allocate(int a);
 struct Transfer4c37Obj96
 {
     void* item;
@@ -16003,7 +16003,7 @@ struct Sh00418800
 };
 struct Sh005ac1e0
 {
-    bool FUN_005ac1e0(void* a, void* b, void* c, bool d);
+    bool Execute(void* a, void* b, void* c, bool d);
 };
 struct Sh0087ce80
 {
@@ -16069,7 +16069,7 @@ bool C004d2480::FUN_004d2480(TESObjectREFR* apRef)
                             ((Sh00568bb0*)DAT_011c6444)->FUN_00568bb0(pExtra);
                             ((Sh00575690*)DAT_011c6444)->FUN_00575690((void*)FUN_0044ddc0((InventoryItemEntry*)pItem));
                             if (((Sh005ac1e0*)pScript)
-                                    ->FUN_005ac1e0(DAT_011c6444, ((Sh00418830*)pExtra)->FUN_00418830(), apRef, false))
+                                    ->Execute(DAT_011c6444, ((Sh00418830*)pExtra)->FUN_00418830(), apRef, false))
                                 bRan = true;
                             ((Sh00419f80*)((Sh005d43c0*)DAT_011c6444)->FUN_005d43c0())->FUN_00419f80((void*)0);
                             ((Sh00411fd0*)((Sh005d43c0*)DAT_011c6444)->FUN_005d43c0())->FUN_00411fd0((void*)1);
@@ -17141,8 +17141,8 @@ struct FUN_0055a2f0
 };
 struct InvScript
 {
-    void* FUN_005abf60();
-    void FUN_005ac1e0(FUN_0055a2f0*, void*, int, int);
+    void* CreateEventList();
+    void Execute(FUN_0055a2f0*, void*, int, int);
 };
 struct FUN_00410360_Inventory
 {
@@ -17238,10 +17238,10 @@ void InvInventory::FUN_004d1960()
                         if (extraA && !extraA->FUN_00418800())
                         {
                             extraA->FUN_00419ed0(script1);
-                            extraA->FUN_00419f80(extraA->FUN_00418800()->FUN_005abf60());
+                            extraA->FUN_00419f80(extraA->FUN_00418800()->CreateEventList());
                             FUN_0055a2f0* temporaryA = new FUN_0055a2f0;
                             temporaryA->FUN_00484490();
-                            script1->FUN_005ac1e0(temporaryA, extraA->FUN_00418830(), 0, 0);
+                            script1->Execute(temporaryA, extraA->FUN_00418830(), 0, 0);
                             delete temporaryA;
                             --count17;
                         }
@@ -17259,10 +17259,10 @@ void InvInventory::FUN_004d1960()
                         if (extraB && !extraB->FUN_00418800())
                         {
                             extraB->FUN_00419ed0(script1);
-                            extraB->FUN_00419f80(extraB->FUN_00418800()->FUN_005abf60());
+                            extraB->FUN_00419f80(extraB->FUN_00418800()->CreateEventList());
                             FUN_0055a2f0* temporaryB = new FUN_0055a2f0;
                             temporaryB->FUN_00484490();
-                            script1->FUN_005ac1e0(temporaryB, extraB->FUN_00418830(), 0, 0);
+                            script1->Execute(temporaryB, extraB->FUN_00418830(), 0, 0);
                             delete temporaryB;
                         }
                     }
@@ -17280,7 +17280,7 @@ void InvInventory::FUN_004d1960()
                     {
                         FUN_0055a2f0* temporaryC = new FUN_0055a2f0;
                         temporaryC->FUN_00484490();
-                        script1->FUN_005ac1e0(temporaryC, extraC->FUN_00418830(), 0, 0);
+                        script1->Execute(temporaryC, extraC->FUN_00418830(), 0, 0);
                         delete temporaryC;
                         --count17;
                     }
@@ -17313,10 +17313,10 @@ void InvInventory::FUN_004d1960()
                         if (extraD && !extraD->FUN_00418800())
                         {
                             extraD->FUN_00419ed0(scriptB46);
-                            extraD->FUN_00419f80(extraD->FUN_00418800()->FUN_005abf60());
+                            extraD->FUN_00419f80(extraD->FUN_00418800()->CreateEventList());
                             FUN_0055a2f0* temporaryD = new FUN_0055a2f0;
                             temporaryD->FUN_00484490();
-                            scriptB46->FUN_005ac1e0(temporaryD, extraD->FUN_00418830(), 0, 0);
+                            scriptB46->Execute(temporaryD, extraD->FUN_00418830(), 0, 0);
                             delete temporaryD;
                             --countB11;
                         }
@@ -17332,10 +17332,10 @@ void InvInventory::FUN_004d1960()
                     if (extraE && !extraE->FUN_00418800())
                     {
                         extraE->FUN_00419ed0(scriptB46);
-                        extraE->FUN_00419f80(extraE->FUN_00418800()->FUN_005abf60());
+                        extraE->FUN_00419f80(extraE->FUN_00418800()->CreateEventList());
                         FUN_0055a2f0* temporaryE = new FUN_0055a2f0;
                         temporaryE->FUN_00484490();
-                        scriptB46->FUN_005ac1e0(temporaryE, extraE->FUN_00418830(), 0, 0);
+                        scriptB46->Execute(temporaryE, extraE->FUN_00418830(), 0, 0);
                         delete temporaryE;
                     }
                 }
@@ -17350,7 +17350,7 @@ void InvInventory::FUN_004d1960()
                     {
                         FUN_0055a2f0* temporaryF = new FUN_0055a2f0;
                         temporaryF->FUN_00484490();
-                        scriptB46->FUN_005ac1e0(temporaryF, extraF->FUN_00418830(), 0, 0);
+                        scriptB46->Execute(temporaryF, extraF->FUN_00418830(), 0, 0);
                         delete temporaryF;
                         --countB11;
                     }
@@ -17459,8 +17459,8 @@ struct CleanRef;
 struct CleanEvent;
 struct CleanScript
 {
-    CleanEvent* FUN_005abf60();
-    void FUN_005ac1e0(CleanRef*, CleanEvent*, int, int);
+    CleanEvent* CreateEventList();
+    void Execute(CleanRef*, CleanEvent*, int, int);
 };
 struct CleanRef
 {
@@ -17651,10 +17651,10 @@ void InventoryClean::FUN_004cbbc0()
                                 nextScope13->FUN_0063f7b0();
                                 CleanExtra* copyScope15 = new CleanExtra;
                                 copyScope15->FUN_00419ed0(extraScope12->FUN_00418800());
-                                copyScope15->FUN_00419f80(copyScope15->FUN_00418800()->FUN_005abf60());
+                                copyScope15->FUN_00419f80(copyScope15->FUN_00418800()->CreateEventList());
                                 CleanRef* refScope3 = new CleanRef;
                                 refScope3->FUN_00484490();
-                                extraScope12->FUN_00418800()->FUN_005ac1e0(refScope3, copyScope15->FUN_00418830(), 0,
+                                extraScope12->FUN_00418800()->Execute(refScope3, copyScope15->FUN_00418830(), 0,
                                                                            0);
                                 nextScope13->FUN_00905820(&copyScope15);
                                 nextScope13 = nodeScope11->FUN_00726070();
@@ -17685,10 +17685,10 @@ void InventoryClean::FUN_004cbbc0()
                         if (extraScope20 && !extraScope20->FUN_00418800())
                         {
                             extraScope20->FUN_00419ed0(scriptScope17);
-                            extraScope20->FUN_00419f80(extraScope20->FUN_00418800()->FUN_005abf60());
+                            extraScope20->FUN_00419f80(extraScope20->FUN_00418800()->CreateEventList());
                             CleanRef* refScope21 = new CleanRef;
                             refScope21->FUN_00484490();
-                            itemScope4Local28->FUN_004bde40()->FUN_005ac1e0(refScope21, extraScope20->FUN_00418830(), 0,
+                            itemScope4Local28->FUN_004bde40()->Execute(refScope21, extraScope20->FUN_00418830(), 0,
                                                                             0);
                             delete refScope21;
                         }
@@ -17699,10 +17699,10 @@ void InventoryClean::FUN_004cbbc0()
                     {
                         CleanExtra* extraScope23 = new CleanExtra;
                         extraScope23->FUN_00419ed0(itemScope4Local28->FUN_004bde40());
-                        extraScope23->FUN_00419f80(extraScope23->FUN_00418800()->FUN_005abf60());
+                        extraScope23->FUN_00419f80(extraScope23->FUN_00418800()->CreateEventList());
                         CleanRef* refScope3 = new CleanRef;
                         refScope3->FUN_00484490();
-                        scriptScope17->FUN_005ac1e0(refScope3, extraScope23->FUN_00418830(), 0, 0);
+                        scriptScope17->Execute(refScope3, extraScope23->FUN_00418830(), 0, 0);
                         delete refScope3;
                         nodeScope18->FUN_005ae3d0(&extraScope23);
                     }
@@ -17913,10 +17913,10 @@ void InventoryClean::FUN_004cbbc0()
                             nextScope50->FUN_0063f7b0();
                             CleanExtra* copyScope52 = new CleanExtra;
                             copyScope52->FUN_00419ed0(extraScope49->FUN_00418800());
-                            copyScope52->FUN_00419f80(copyScope52->FUN_00418800()->FUN_005abf60());
+                            copyScope52->FUN_00419f80(copyScope52->FUN_00418800()->CreateEventList());
                             CleanRef* refScope6 = new CleanRef;
                             refScope6->FUN_00484490();
-                            extraScope49->FUN_00418800()->FUN_005ac1e0(refScope6, copyScope52->FUN_00418830(), 0, 0);
+                            extraScope49->FUN_00418800()->Execute(refScope6, copyScope52->FUN_00418830(), 0, 0);
                             nextScope50->FUN_00905820(&copyScope52);
                             nextScope50 = nodeScope48->FUN_00726070();
                         }
@@ -17946,10 +17946,10 @@ void InventoryClean::FUN_004cbbc0()
                         if (extraScope57 && !extraScope57->FUN_00418800())
                         {
                             extraScope57->FUN_00419ed0(scriptScope54);
-                            extraScope57->FUN_00419f80(extraScope57->FUN_00418800()->FUN_005abf60());
+                            extraScope57->FUN_00419f80(extraScope57->FUN_00418800()->CreateEventList());
                             CleanRef* refScope58 = new CleanRef;
                             refScope58->FUN_00484490();
-                            itemScope39->FUN_004bde40()->FUN_005ac1e0(refScope58, extraScope57->FUN_00418830(), 0, 0);
+                            itemScope39->FUN_004bde40()->Execute(refScope58, extraScope57->FUN_00418830(), 0, 0);
                         }
                         nodeScope55 = nodeScope55->FUN_00726070();
                     }
@@ -17958,10 +17958,10 @@ void InventoryClean::FUN_004cbbc0()
                     {
                         CleanExtra* extraScope60 = new CleanExtra;
                         extraScope60->FUN_00419ed0(itemScope39->FUN_004bde40());
-                        extraScope60->FUN_00419f80(extraScope60->FUN_00418800()->FUN_005abf60());
+                        extraScope60->FUN_00419f80(extraScope60->FUN_00418800()->CreateEventList());
                         CleanRef* refScope61 = new CleanRef;
                         refScope61->FUN_00484490();
-                        scriptScope54->FUN_005ac1e0(refScope61, extraScope60->FUN_00418830(), 0, 0);
+                        scriptScope54->Execute(refScope61, extraScope60->FUN_00418830(), 0, 0);
                         delete refScope61;
                         nodeScope55->FUN_005ae3d0(&extraScope60);
                     }
@@ -18372,7 +18372,7 @@ struct EquippedActor_5b4e90 : public ::Actor
 
 struct Target_5b4e90 : public ::MagicTarget
 {
-    void FUN_008248e0(TESBoundObject*, bool);
+    void StopEffect(TESBoundObject*, bool);
 };
 
 struct Player_5b4e90
@@ -18472,7 +18472,7 @@ bool FUN_005b4e90(ScriptParameter* paramInfo, char* scriptData, TESObjectREFR* t
                     bool bEquipped = static_cast<EquippedActor_5b4e90*>(pActor)->FUN_00575400(pObject);
                     if (bEquipped)
                         reinterpret_cast<Target_5b4e90*>(reinterpret_cast<char*>(pActor) + 0x94)
-                            ->FUN_008248e0(pObject, true);
+                            ->StopEffect(pObject, true);
                     pActor->RemoveItem((TESForm*)pObject, pExtra, iRemove, 0, 0, 0, 0, 0, 1, 0);
                     if (pActor == reinterpret_cast< ::Actor*>(::g_thePlayer))
                     {

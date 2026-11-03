@@ -14801,7 +14801,7 @@ struct List2_af60
 struct Lock_af60
 {
     int m_pOwnerObject;
-    void FUN_0040fbf0(int a);
+    void Lock(int a);
 };
 struct Mgr_af60
 {
@@ -14913,7 +14913,7 @@ inline void List2_af60::RemoveHead()
         m_pTail = 0;
     }
     n->m_data = 0;
-    DAT_011c5f80.FUN_0040fbf0(0);
+    DAT_011c5f80.Lock(0);
     n->m_pSecondNode = 0;
     n->m_next = DAT_011c5f58;
     DAT_011c5f84 -= 1;

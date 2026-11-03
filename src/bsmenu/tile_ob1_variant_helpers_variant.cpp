@@ -253,7 +253,7 @@ template<class K, class V> struct BSMapBase {
     }
 };
 extern BSMapBase<unsigned long, ScrapHeapBuffer*> DAT_011f32f4;
-int FUN_00a01860(const char* apText);
+int TraitNameToID(const char* apText);
 struct FUN_00a087d0_shell : public Tile {
     void FUN_00a087d0(Tile*, Tile*);
 };
@@ -353,7 +353,7 @@ bool __cdecl FUN_00a0bb00(char const*);
 void __cdecl FUN_009ff8a0(char const*, int);
 extern int DAT_011a6d74;
 extern BSMapBase<unsigned long, ScrapHeapBuffer*> DAT_011f32f4;
-int __cdecl FUN_00a00940(char const* apString, int aiIndex);
+int __cdecl TraitNameToIDAdd(char const* apString, int aiIndex);
 class ScrapMapShell {
 public:
     void Insert(char const* apName, int aiValue);
@@ -1415,8 +1415,8 @@ public:
 };
 unsigned int __cdecl FUN_0044a670(const char* text);
 unsigned int __cdecl FUN_00403940(unsigned int a, unsigned int b);
-void* __cdecl FUN_00401000(unsigned int size);
-void __cdecl FUN_00401030(void* p);
+void* __cdecl FormHeap_Allocate(unsigned int size);
+void __cdecl FormHeap_Free(void* p);
 void* __cdecl FUN_00401460(void* dst, const void* src, unsigned int size);
 template <> inline void BSStringT<char>::SetLength(unsigned int length)
 {
@@ -1439,7 +1439,7 @@ template <> inline bool BSStringT<char>::Set(const char* text, unsigned int leng
     unsigned int maxLen = MaxLength();
     if (newLen > maxLen) {
         char* oldString = pString;
-        char* newString = (char*)FUN_00401000(newLen + 1);
+        char* newString = (char*)FormHeap_Allocate(newLen + 1);
         pString = newString;
         if (text)
             FUN_00401460(pString, text, srcLen + 1);
@@ -1447,7 +1447,7 @@ template <> inline bool BSStringT<char>::Set(const char* text, unsigned int leng
             *pString = 0;
         if (oldString) {
             char* p = oldString;
-            FUN_00401030(p);
+            FormHeap_Free(p);
         }
         SetMaxLength(newLen);
     } else if (newLen) {
@@ -1458,7 +1458,7 @@ template <> inline bool BSStringT<char>::Set(const char* text, unsigned int leng
     } else {
         if (pString) {
             char* p = pString;
-            FUN_00401030(p);
+            FormHeap_Free(p);
         }
         pString = 0;
         newLen = 0;
@@ -1734,10 +1734,10 @@ __forceinline double RoundMultiple(float a,const float& b) { float quotient=a/b;
 struct EvalValue {
  int m_iValueId; EvalTile* pTile; float fValue; char* pString; EvalAction* actions;
  __forceinline char* String() { return pString; }
- void FUN_00a09410(bool);
+ void Refresh(bool);
 };
 // @fnv 0x00a09410
-void EvalValue::FUN_00a09410(bool update) {
+void EvalValue::Refresh(bool update) {
  if((pTile->flags&0x10000) && m_iValueId!=4004) return;
  if(!pTile || pTile->Flag(0x4000)) return;
 
@@ -1864,8 +1864,8 @@ extern "C" int __cdecl FUN_00ec8d5f(char*, unsigned int, const char*, unsigned i
 extern "C" int __cdecl FUN_00ec65a6(char*, unsigned int, const char*);
 extern "C" char* __cdecl FUN_00ecc5f8(char*, const char*, char**);
 extern "C" unsigned int __cdecl FUN_00ec6130(const char*);
-extern void* __cdecl FUN_00401000(unsigned);
-extern void __cdecl FUN_00401030(void*);
+extern void* __cdecl FormHeap_Allocate(unsigned);
+extern void __cdecl FormHeap_Free(void*);
 extern void* __cdecl FUN_00401460(void*, const void*, unsigned);
 __forceinline void* __cdecl operator new[](unsigned size) { return ((TilePool_ac80*)&DAT_011f6238)->FUN_00aa3e40(size); }
 __forceinline void __cdecl operator delete[](void* data) { DAT_011f6238.FUN_00aa4060(data); }

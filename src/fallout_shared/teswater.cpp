@@ -3110,7 +3110,7 @@ struct WData
 
 struct WMap
 {
-    bool FUN_00853130(void*, WData*&);
+    bool GetAt(void*, WData*&);
     void FUN_00844700(void*, WData*);
     void RemoveKey(void*);
 };
@@ -3332,7 +3332,7 @@ void WSys::FUN_004e8a00()
                             Pt3 refPos = ref->GetPos();
                             refPos.z = group->plane.FUN_0084d030();
                             WData* ea = 0;
-                            if (!map.FUN_00853130(ref, ea))
+                            if (!map.GetAt(ref, ea))
                             {
                                 ea = new WData;
                                 ea->m5 = refPos;
@@ -3353,7 +3353,7 @@ void WSys::FUN_004e8a00()
                         else
                         {
                             WData* old = 0;
-                            if (map.FUN_00853130(ref, old))
+                            if (map.GetAt(ref, old))
                                 map.RemoveKey(ref);
                         }
                     }
@@ -6899,11 +6899,11 @@ Audio098* FUN_00453a70();
 struct Handle098
 {
     bool FUN_00ad8ce0();
-    bool FUN_00ad8b60(float, float, float);
+    bool SetPos(float, float, float);
     bool FUN_00ad8930();
     void FUN_00ad88f0();
     void FUN_00ad8d10();
-    bool FUN_00ad8830(bool);
+    bool Play(bool);
     Handle098& FUN_00418900(const void*);
 };
 struct WaterSound098
@@ -7025,7 +7025,7 @@ void WaterSound098::UpdateWaterSound()
                 DebugNode098* range = FUN_004b3890(&line, &Color098(1, 1, 0, 0), &node, &Color098(1, 1, 0, 0), true);
                 ((TES098*)DAT_011dea10)->FUN_00458e20(range, 10.0f);
             }
-            handle.FUN_00ad8b60(amount.x, amount.y, cell->FUN_005471e0());
+            handle.SetPos(amount.x, amount.y, cell->FUN_005471e0());
             if (handle.FUN_00ad8930() && height <= 0.0)
             {
                 DAT_011c7cfc = 0;
@@ -7035,7 +7035,7 @@ void WaterSound098::UpdateWaterSound()
             else if (!handle.FUN_00ad8930() && height > 0.0)
             {
                 DAT_011c7cfc = 1;
-                handle.FUN_00ad8830(true);
+                handle.Play(true);
             }
         }
         else if (height > 0.0 && g_thePlayer && ((Player098*)g_thePlayer)->FUN_008d6f30() &&
@@ -8930,7 +8930,7 @@ struct IterList
 };
 struct Map
 {
-    bool FUN_00853130(RefActor*, RefActor**);
+    bool GetAt(RefActor*, RefActor**);
     void FUN_00844700(RefActor*, RefActor*);
 };
 struct State
@@ -9126,7 +9126,7 @@ void Target::FUN_004e9d40(void* input, State* state, bool special)
                                         if (list->FUN_006815c0()->flags & 1)
                                         {
                                             RefActor* item = list->FUN_006815c0()->ref;
-                                            if (item->v1d0() && !map.FUN_00853130(item, &item) &&
+                                            if (item->v1d0() && !map.GetAt(item, &item) &&
                                                 (DAT_011dea10->FUN_005f36f0() ||
                                                  (!DAT_011dea10->FUN_005f36f0() && !item->FUN_00564e60())))
                                             {
@@ -9143,7 +9143,7 @@ void Target::FUN_004e9d40(void* input, State* state, bool special)
                                     while (list && !list->FUN_008256d0())
                                     {
                                         RefActor* item = list->FUN_006815c0();
-                                        if (item && item->v1d0() && !map.FUN_00853130(item, &item) &&
+                                        if (item && item->v1d0() && !map.GetAt(item, &item) &&
                                             !item->FUN_00564e60())
                                         {
                                             state->nodes.FUN_0076b660(item->v1d0());
@@ -9163,7 +9163,7 @@ void Target::FUN_004e9d40(void* input, State* state, bool special)
                         if (iter)
                         {
                             RefActor* item = DAT_011c7b8c.AddEight(iter);
-                            if (item->v1d0() && !map.FUN_00853130(item, &item))
+                            if (item->v1d0() && !map.GetAt(item, &item))
                             {
                                 state->more.FUN_0076b660(item->v1d0());
                                 map.FUN_00844700(item, item);
@@ -11259,7 +11259,7 @@ struct Array074
 struct Map074
 {
     int unk00, unk04, unk08, unk0c;
-    bool FUN_00853130(Ref074*, Ref074*&);
+    bool GetAt(Ref074*, Ref074*&);
     void FUN_00844700(Ref074*, Ref074*);
 };
 struct Property074
@@ -11531,7 +11531,7 @@ void Owner074::RenderWaterRefs(Camera074* camera, State074* state)
                                         Ref074* actor = state->actors.AddEight(nextActor);
                                         if ((actor != (Ref074*)DAT_011dea3c ||
                                              (actor == (Ref074*)DAT_011dea3c && DAT_011dea3c->FUN_004eaf60())) &&
-                                            actor->Get3D() && !seen.FUN_00853130(actor, actor))
+                                            actor->Get3D() && !seen.GetAt(actor, actor))
                                         {
                                             state->actorNodes.FUN_0076b660(actor->Get3D());
                                             seen.FUN_00844700(actor, actor);
@@ -11545,7 +11545,7 @@ void Owner074::RenderWaterRefs(Camera074* camera, State074* state)
                                     if ((*link->FUN_006815c0())->flags & 2)
                                     {
                                         Ref074* linked = (*link->FUN_006815c0())->ref;
-                                        if (linked->Get3D() && !seen.FUN_00853130(linked, linked))
+                                        if (linked->Get3D() && !seen.GetAt(linked, linked))
                                         {
                                             state->nodes.FUN_0076b660(linked->Get3D());
                                             seen.FUN_00844700(linked, linked);
@@ -11563,7 +11563,7 @@ void Owner074::RenderWaterRefs(Camera074* camera, State074* state)
                                     if (otherNext)
                                     {
                                         Ref074* other = state->otherRefs.AddEight(otherNext);
-                                        if (other->Get3D() && !seen.FUN_00853130(other, other))
+                                        if (other->Get3D() && !seen.GetAt(other, other))
                                         {
                                             state->actorNodes.FUN_0076b660(other->Get3D());
                                             seen.FUN_00844700(other, other);
@@ -11577,7 +11577,7 @@ void Owner074::RenderWaterRefs(Camera074* camera, State074* state)
                                     while (special && !special->FUN_008256d0())
                                     {
                                         Ref074* entry = (Ref074*)*special->FUN_006815c0();
-                                        if (entry && entry->Get3D() && !seen.FUN_00853130(entry, entry))
+                                        if (entry && entry->Get3D() && !seen.GetAt(entry, entry))
                                         {
                                             state->nodes.FUN_0076b660(entry->Get3D());
                                             seen.FUN_00844700(entry, entry);
@@ -12382,7 +12382,7 @@ struct Cell
 
 struct ReferenceIntegerMap
 {
-    bool FUN_00853130(Ref* pkRef, int* piValue);
+    bool GetAt(Ref* pkRef, int* piValue);
     void RemoveKey(Ref* pkRef);
 };
 
@@ -12463,7 +12463,7 @@ void Owner::RemoveReferenceFromCell(Ref* pkRef, Cell* pkCell)
         {
             pkCell->m_kActors.FUN_0049f590(pkMatch);
             int iValue = 0;
-            if (m_kActorMap.FUN_00853130(pkRef, &iValue))
+            if (m_kActorMap.GetAt(pkRef, &iValue))
                 m_kActorMap.RemoveKey(pkRef);
         }
         else

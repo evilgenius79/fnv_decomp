@@ -579,7 +579,7 @@ IterQ TreeQ::FUN_00acf120(bool _Addleft, NodeQ* _Wherenode, const ValQ& _Val)
     return (IterQ(_Newnode, this));
 }
 
-void* __cdecl FUN_00401000(unsigned int size);
+void* __cdecl FormHeap_Allocate(unsigned int size);
 struct FUN_00b31270
 {
     FUN_00b31270();
@@ -607,7 +607,7 @@ struct FUN_00b377c0
 {
     static void* operator new(unsigned int size)
     {
-        return FUN_00401000(size);
+        return FormHeap_Allocate(size);
     }
     static void operator delete(void* p)
     {}
@@ -782,7 +782,7 @@ FUN_00b37880_class::~FUN_00b37880_class()
 {}
 
 namespace fnv_00b37a00 {
-extern "C" void __cdecl FUN_00401030(void* p);
+extern "C" void __cdecl FormHeap_Free(void* p);
 
 struct Sound_b37a
 {
@@ -793,7 +793,7 @@ struct Sound_b37a
     }
     static void operator delete(void* p)
     {
-        FUN_00401030(p);
+        FormHeap_Free(p);
     }
 };
 
@@ -3192,7 +3192,7 @@ ElemB5A0* __cdecl FUN_00b3b5a0(ElemB5A0* _First, ElemB5A0* _Last, ElemB5A0* _Des
 }
 }  // namespace fnv_00b3b5a0
 
-void FUN_00401030(void* p);
+void FormHeap_Free(void* p);
 inline void* operator new(unsigned int, void* p)
 {
     return p;

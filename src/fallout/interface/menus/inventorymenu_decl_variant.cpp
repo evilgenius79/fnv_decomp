@@ -502,7 +502,7 @@ class FUN_0077ffd0_lbx
     virtual void vfn_00();
     virtual Tile* vfn_04(int);
 };
-void* __cdecl FUN_00a01860(const char* s);
+void* __cdecl TraitNameToID(const char* s);
 int __cdecl FUN_00ec62c0();
 void __cdecl UpdateCurrentValue();
 struct InputInterface
@@ -856,14 +856,14 @@ struct Sh004bddd0
 };
 struct Sh0088c650
 {
-    void FUN_0088c650(void* a, int b, void* c, bool d, bool e, bool f);
+    void EquipItem(void* a, int b, void* c, bool d, bool e, bool f);
 };
 struct Sh0088c790
 {
-    void FUN_0088c790(void* a, int b, void* c, bool d, bool e, bool f);
+    void UnequipItem(void* a, int b, void* c, bool d, bool e, bool f);
 };
 unsigned __cdecl FUN_0058db10(int arg);
-unsigned __cdecl FUN_004839c0(int arg);
+unsigned __cdecl LookupFormByID(int arg);
 class SettingString
 {
   public:

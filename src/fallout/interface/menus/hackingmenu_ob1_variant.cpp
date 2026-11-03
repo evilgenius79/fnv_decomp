@@ -209,7 +209,7 @@ struct FUN_007021b0_cls
     void* DestroyOrFree(unsigned int flags);
 };
 extern "C" void __stdcall FUN_00ec5fce(void* object, int elementSize, int count, void (FUN_007021b0_cls::*callback)());
-extern "C" void __cdecl FUN_00401030(void* apMemory);
+extern "C" void __cdecl FormHeap_Free(void* apMemory);
 class NiNode;
 class TileD766
 {
@@ -268,7 +268,7 @@ struct EntryListNode
 };
 struct FUN_00767ef0_shell
 {
-    ValueRow* __thiscall FUN_00a1ddb0(void* owner, int* descriptor, unsigned int mode);
+    ValueRow* __thiscall AddTileFromTemplate(void* owner, int* descriptor, unsigned int mode);
     void __thiscall AddValueRows(unsigned int count, const unsigned int* values);
 };
 struct Entry
@@ -461,7 +461,7 @@ struct FUN_0076a670_cls
     void FUN_0076a670(int a1, const char* s);
 };
 extern "C" unsigned int __cdecl FUN_00457fe0();
-extern "C" int __cdecl FUN_00a00940(const char*, int);
+extern "C" int __cdecl TraitNameToIDAdd(const char*, int);
 extern "C" char str_01072108;
 struct Fade
 {
@@ -580,7 +580,7 @@ struct FUN_00a1ddb0_res
 };
 struct FUN_00a1ddb0_owner
 {
-    FUN_00a1ddb0_res* __thiscall FUN_00a1ddb0(char* base, char const* name, void* f0);
+    FUN_00a1ddb0_res* __thiscall AddTileFromTemplate(char* base, char const* name, void* f0);
 };
 extern FUN_00a1ddb0_owner* DAT_011d95b8;
 struct FUN_0044ddc0_sub
@@ -864,7 +864,7 @@ struct Menu_007a8b10
     virtual ~Menu_007a8b10();
 };
 unsigned int __cdecl gm_GetTickCount();
-void __cdecl FUN_00401030(void*);
+void __cdecl FormHeap_Free(void*);
 extern SettingColl DAT_011d0b90;
 extern unsigned int DAT_011d95c0;
 extern char DAT_011d9674;

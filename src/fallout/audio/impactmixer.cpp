@@ -153,9 +153,9 @@ struct SoundPlaybackHandle
     ~SoundPlaybackHandle();
     SoundPlaybackHandle& operator=(const SoundPlaybackHandle& kOther);
     void FUN_00ad89e0(float m_fSoundVolume);
-    bool FUN_00ad8830(int iFlags);
-    void FUN_00ad8b60(float fX, float fY, float fZ);
-    void FUN_00ad8f20(void* pkNode);
+    bool Play(int iFlags);
+    void SetPos(float fX, float fY, float fZ);
+    void SetNiNode(void* pkNode);
 };
 
 struct BGSSoundDescriptor;
@@ -425,13 +425,13 @@ void __cdecl PlayFootstepImpact(FootstepActor* pActor, int iMaterial)
         {
             kHandle_ = BSAudioStandIn::GetSingleton()->FUN_00ad73b0(pImpactX->FUN_0084e3a0(iSound));
             kHandle_.FUN_00ad89e0(0.95f - FUN_00476b70(0.0f, g_fFootstepRand_0101e2bc));
-            kHandle_.FUN_00ad8830(0);
+            kHandle_.Play(0);
         }
         if (pImpact_)
         {
             kHandle_ = BSAudioStandIn::GetSingleton()->FUN_00ad73b0(pImpact_->FUN_0084e3a0(iSound));
             kHandle_.FUN_00ad89e0(0.95f - FUN_00476b70(0.0f, g_fFootstepRand_0101e2bc));
-            kHandle_.FUN_00ad8830(0);
+            kHandle_.Play(0);
         }
     }
     else
@@ -442,18 +442,18 @@ void __cdecl PlayFootstepImpact(FootstepActor* pActor, int iMaterial)
         if (pImpactX)
         {
             kHandle_ = BSAudioStandIn::GetSingleton()->FUN_00ad73b0(pImpactX->FUN_0084e3a0(iSound2));
-            kHandle_.FUN_00ad8b60(kPosOut.x, kPosOut.y, kPosOut.z);
-            kHandle_.FUN_00ad8f20(pActor->Get3D());
+            kHandle_.SetPos(kPosOut.x, kPosOut.y, kPosOut.z);
+            kHandle_.SetNiNode(pActor->Get3D());
             kHandle_.FUN_00ad89e0(0.95f - FUN_00476b70(0.0f, g_fFootstepRand_0101e2bc));
-            kHandle_.FUN_00ad8830(0);
+            kHandle_.Play(0);
         }
         if (pImpact_)
         {
             kHandle_ = BSAudioStandIn::GetSingleton()->FUN_00ad73b0(pImpact_->FUN_0084e3a0(iSound2));
-            kHandle_.FUN_00ad8b60(kPosOut.x, kPosOut.y, kPosOut.z);
-            kHandle_.FUN_00ad8f20(pActor->Get3D());
+            kHandle_.SetPos(kPosOut.x, kPosOut.y, kPosOut.z);
+            kHandle_.SetNiNode(pActor->Get3D());
             kHandle_.FUN_00ad89e0(0.95f - FUN_00476b70(0.0f, g_fFootstepRand_0101e2bc));
-            kHandle_.FUN_00ad8830(0);
+            kHandle_.Play(0);
         }
     }
 }
@@ -999,10 +999,10 @@ struct S_0083a930_SoundHandle
     S_0083a930_SoundHandle();
     ~S_0083a930_SoundHandle();
     S_0083a930_SoundHandle& operator=(const S_0083a930_SoundHandle& other);
-    bool FUN_00ad8b60(float x, float y, float z);
-    void FUN_00ad8f20(S_0083a930_NiNode* node);
+    bool SetPos(float x, float y, float z);
+    void SetNiNode(S_0083a930_NiNode* node);
     bool FUN_00ad89e0(float volume);
-    bool FUN_00ad8830(bool flag);
+    bool Play(bool flag);
 };
 
 struct S_0083a930_Audio
@@ -1310,14 +1310,14 @@ void PlayWeaponImpactSound(TESObjectREFR* ref, int type)
             else
             {
                 sound = S_0083a930_Audio::FUN_00453a70()->FUN_00ad7480(snd->FUN_00511840(), 0x4102, snd);
-                sound.FUN_00ad8b60(pos.x, pos.y, pos.z);
-                sound.FUN_00ad8f20(ref->GetNode());
+                sound.SetPos(pos.x, pos.y, pos.z);
+                sound.SetNiNode(ref->GetNode());
             }
             if (sneaking)
                 sound.FUN_00ad89e0(DAT_010231a8);
             else
                 sound.FUN_00ad89e0(1.0f);
-            sound.FUN_00ad8830(false);
+            sound.Play(false);
         }
     }
 }
@@ -1865,11 +1865,11 @@ void PlayFootstepSound(FootstepActor* apActor, int foot)
             {
                 primary = AudioOps::FUN_00453a70()->FUN_00ad73b0(memory->FUN_0084e3a0(266));
             }
-            primary.FUN_00ad8b60(firstPerson.x, firstPerson.y, firstPerson.z);
+            primary.SetPos(firstPerson.x, firstPerson.y, firstPerson.z);
             if (creature->FUN_00acbb70())
-                primary.FUN_00ad8f20(creature->FUN_00acbb70());
+                primary.SetNiNode(creature->FUN_00acbb70());
             primary.FUN_00ad89e0(0.98f);
-            primary.FUN_00ad8830(0);
+            primary.Play(0);
         }
         else
         {
@@ -1954,13 +1954,13 @@ void PlayFootstepSound(FootstepActor* apActor, int foot)
                 {
                     primary = AudioOps::FUN_00453a70()->FUN_00ad7480(memory->FUN_00511840(), flags, memory);
                     primary.FUN_00ad89e0(*DAT_011dd988.FUN_00403e20());
-                    primary.FUN_00ad8830(0);
+                    primary.Play(0);
                 }
                 if (sound)
                 {
                     secondary = AudioOps::FUN_00453a70()->FUN_00ad7480(sound->FUN_00511840(), flags, sound);
                     secondary.FUN_00ad89e0(*DAT_011dd988.FUN_00403e20());
-                    secondary.FUN_00ad8830(0);
+                    secondary.Play(0);
                 }
             }
             else
@@ -1969,20 +1969,20 @@ void PlayFootstepSound(FootstepActor* apActor, int foot)
                 if (memory && armor <= memory->GetField45() * 100)
                 {
                     primary = AudioOps::FUN_00453a70()->FUN_00ad7480(memory->FUN_00511840(), flags, memory);
-                    primary.FUN_00ad8b60(firstPerson.x, firstPerson.y, firstPerson.z - 128.0);
+                    primary.SetPos(firstPerson.x, firstPerson.y, firstPerson.z - 128.0);
                     if (apActor->Get3D())
-                        primary.FUN_00ad8f20(apActor->Get3D());
+                        primary.SetNiNode(apActor->Get3D());
                     primary.FUN_00ad89e0(FUN_00476b70(0.9f, 1.0f));
-                    primary.FUN_00ad8830(0);
+                    primary.Play(0);
                 }
                 if (sound && armor <= sound->GetField45() * 100)
                 {
                     secondary = AudioOps::FUN_00453a70()->FUN_00ad7480(sound->FUN_00511840(), flags, sound);
-                    secondary.FUN_00ad8b60(firstPerson.x, firstPerson.y, firstPerson.z - 128.0);
+                    secondary.SetPos(firstPerson.x, firstPerson.y, firstPerson.z - 128.0);
                     if (apActor->Get3D())
-                        secondary.FUN_00ad8f20(apActor->Get3D());
+                        secondary.SetNiNode(apActor->Get3D());
                     secondary.FUN_00ad89e0(1.0 - FUN_00476b70(0.0f, g_fFootstepRand_0101e2bc));
-                    secondary.FUN_00ad8830(0);
+                    secondary.Play(0);
                 }
             }
         }
@@ -1991,12 +1991,12 @@ void PlayFootstepSound(FootstepActor* apActor, int foot)
 
 struct FUN_00ad8b60_h
 {
-    bool FUN_00ad8b60(float x, float y, float z);
+    bool SetPos(float x, float y, float z);
 };
 
 struct FUN_00ad8830_shell : FUN_00ad8b60_h
 {
-    bool FUN_00ad8830(bool flag);
+    bool Play(bool flag);
 };
 
 struct SH_00418890 : FUN_00ad8830_shell
@@ -2074,8 +2074,8 @@ void PlayBlockSound(int aUnused, FUN_00522df0_shell* pObject, float x0, float y0
     v.x = (float)(FUN_0040ebd0(x0, x1) + (FUN_00404010(x0, x1) - FUN_0040ebd0(x0, x1)) / 2.0);
     v.y = (float)(FUN_0040ebd0(y0, y1) + (FUN_00404010(y0, y1) - FUN_0040ebd0(y0, y1)) / 2.0);
     v.z = (float)(FUN_0040ebd0(z0, z1) + (FUN_00404010(z0, z1) - FUN_0040ebd0(z0, z1)) / 2.0);
-    p.FUN_00ad8b60(v.x, v.y, v.z);
-    p.FUN_00ad8830(false);
+    p.SetPos(v.x, v.y, v.z);
+    p.Play(false);
 }
 
 extern SoundOps* DAT_011dd870;
@@ -2123,11 +2123,11 @@ void __cdecl FUN_00838780(TESObjectREFR* apRefr)
                     handle12 = AudioOps::FUN_00453a70()->FUN_00ad73b0(impact1->FUN_0084e3a0(0x10a));
                 }
             }
-            handle12.FUN_00ad8b60(pos20.x, pos20.y, pos20.z);
+            handle12.SetPos(pos20.x, pos20.y, pos20.z);
             if (creature6->FUN_00acbb70())
-                handle12.FUN_00ad8f20(creature6->FUN_00acbb70());
+                handle12.SetNiNode(creature6->FUN_00acbb70());
             handle12.FUN_00ad89e0(0.98f);
-            handle12.FUN_00ad8830(0);
+            handle12.Play(0);
         }
         else
         {
@@ -2201,13 +2201,13 @@ void __cdecl FUN_00838780(TESObjectREFR* apRefr)
                 {
                     handle12 = AudioOps::FUN_00453a70()->FUN_00ad7480(impact1->FUN_00511840(), flags, impact1);
                     handle12.FUN_00ad89e0(*DAT_011dd988.FUN_00403e20());
-                    handle12.FUN_00ad8830(0);
+                    handle12.Play(0);
                 }
                 if (second9)
                 {
                     handle6 = AudioOps::FUN_00453a70()->FUN_00ad7480(second9->FUN_00511840(), flags, second9);
                     handle6.FUN_00ad89e0(*DAT_011dd988.FUN_00403e20());
-                    handle6.FUN_00ad8830(0);
+                    handle6.Play(0);
                 }
             }
             else
@@ -2220,11 +2220,11 @@ void __cdecl FUN_00838780(TESObjectREFR* apRefr)
                     if ((float)(impact1->GetField45() * 100) >= distBX)
                     {
                         handle12 = AudioOps::FUN_00453a70()->FUN_00ad7480(impact1->FUN_00511840(), flags2, impact1);
-                        handle12.FUN_00ad8b60(pos20.x, pos20.y, (float)(pos20.z - 128.0));
+                        handle12.SetPos(pos20.x, pos20.y, (float)(pos20.z - 128.0));
                         if (apRefr->GetNode())
-                            handle12.FUN_00ad8f20(apRefr->GetNode());
+                            handle12.SetNiNode(apRefr->GetNode());
                         handle12.FUN_00ad89e0(FUN_00476b70(0.9f, 1.0f));
-                        handle12.FUN_00ad8830(0);
+                        handle12.Play(0);
                     }
                 }
                 if (second9)
@@ -2232,11 +2232,11 @@ void __cdecl FUN_00838780(TESObjectREFR* apRefr)
                     if ((float)(second9->GetField45() * 100) >= distBX)
                     {
                         handle6 = AudioOps::FUN_00453a70()->FUN_00ad7480(second9->FUN_00511840(), flags2, second9);
-                        handle6.FUN_00ad8b60(pos20.x, pos20.y, (float)(pos20.z - 128.0));
+                        handle6.SetPos(pos20.x, pos20.y, (float)(pos20.z - 128.0));
                         if (apRefr->GetNode())
-                            handle6.FUN_00ad8f20(apRefr->GetNode());
+                            handle6.SetNiNode(apRefr->GetNode());
                         handle6.FUN_00ad89e0(1.0f - FUN_00476b70(0.0f, g_fFootstepRand_0101e2bc));
-                        handle6.FUN_00ad8830(0);
+                        handle6.Play(0);
                     }
                 }
             }
@@ -2309,10 +2309,10 @@ struct ImpactSoundHandle
     ~ImpactSoundHandle();
     ImpactSoundHandle& operator=(const ImpactSoundHandle& arOther);
     void FUN_00ad9030(unsigned int auiVolume);
-    bool FUN_00ad8b60(float afX, float afY, float afZ);
+    bool SetPos(float afX, float afY, float afZ);
     bool SetStaticAttenuation(unsigned short ausFrequency);
     void FUN_00ad8a90(float afValue);
-    bool FUN_00ad8830(bool abFlag);
+    bool Play(bool abFlag);
 };
 
 struct ImpactAudio
@@ -2323,7 +2323,7 @@ struct ImpactAudio
 
 struct ImpactHistory
 {
-    bool FUN_00853130(unsigned int auiKey, unsigned int& arTime);
+    bool GetAt(unsigned int auiKey, unsigned int& arTime);
     void FUN_00844700(unsigned int auiKey, unsigned int auiTime);
     void* FUN_004b9ba0();
     void FUN_006b7f20(void*& arIter, unsigned int& arKey, int& arTime);
@@ -2407,7 +2407,7 @@ void FUN_00837550(ImpactData* apImpact)
         ImpactSoundHandle kHandleB;
         unsigned int uiNow = DAT_011f6394.FUN_00825c00();
         unsigned int uiLastTime = 0;
-        if (DAT_011dd948.FUN_00853130(apImpact->uiKey, uiLastTime) &&
+        if (DAT_011dd948.GetAt(apImpact->uiKey, uiLastTime) &&
             uiNow - uiLastTime < (unsigned int)*DAT_011dd968.FUN_0043d4d0())
         {
             s_kTimer.FUN_004538c0();
@@ -2429,18 +2429,18 @@ void FUN_00837550(ImpactData* apImpact)
         if (pSoundA)
         {
             kHandleAResult.FUN_00ad9030(0xff);
-            kHandleAResult.FUN_00ad8b60(apImpact->kPos.x, apImpact->kPos.y, apImpact->kPos.z);
+            kHandleAResult.SetPos(apImpact->kPos.x, apImpact->kPos.y, apImpact->kPos.z);
             kHandleAResult.SetStaticAttenuation(uiFrequencyVal);
             kHandleAResult.FUN_00ad8a90(fVolumeLoc);
-            kHandleAResult.FUN_00ad8830(false);
+            kHandleAResult.Play(false);
         }
         if (pSoundBNew)
         {
             kHandleB.FUN_00ad9030(0xff);
-            kHandleB.FUN_00ad8b60(apImpact->kPos.x, apImpact->kPos.y, apImpact->kPos.z);
+            kHandleB.SetPos(apImpact->kPos.x, apImpact->kPos.y, apImpact->kPos.z);
             kHandleB.SetStaticAttenuation(uiFrequencyVal);
             kHandleB.FUN_00ad8a90(fVolumeLoc);
-            kHandleB.FUN_00ad8830(false);
+            kHandleB.Play(false);
         }
         DAT_011dd958 = apImpact->kPos;
     }

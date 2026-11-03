@@ -4354,7 +4354,7 @@ struct FUN_00a5abe0_lock
 {
     int m_pOwnerObject;
     int m_uiItemCount;
-    void FUN_0040fbf0(int mode);
+    void Lock(int mode);
 };
 extern FUN_00a5abe0_lock DAT_011f42a0;
 
@@ -4429,7 +4429,7 @@ struct FUN_00a5abe0_list
 // @fnv 0x00a5abe0
 void __stdcall FUN_00a5abe0(FUN_00a5abe0_owner* apOwner, void* apList, void* volatile apContext)
 {
-    DAT_011f42a0.FUN_0040fbf0(0);
+    DAT_011f42a0.Lock(0);
     FUN_00a5abe0_node* node = ((FUN_00a5abe0_list*)apList)->m_pFirstNode;
     while (node != 0)
     {

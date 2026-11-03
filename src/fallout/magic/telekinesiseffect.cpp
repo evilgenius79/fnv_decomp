@@ -837,7 +837,7 @@ struct Effect
     bool released;
     bool skipCost;
     void FUN_0082c660(float);
-    void FUN_00804210(bool);
+    void Remove(bool);
     Ref* FUN_0045cd60();
     float GetFloatAtOffset1C();
     void UpdateGrabEffect(float delta);
@@ -850,7 +850,7 @@ void Effect::UpdateGrabEffect(float delta)
     Target* grab = DAT_011dea3c->GetFloatAsUInt();
     if (!grab->FUN_0082aeb0())
     {
-        FUN_00804210(false);
+        Remove(false);
         return;
     }
     World* casterWorld = FUN_0045cd60() && DAT_011dea3c->FUN_0089f4e0()->FUN_008d6f30()
@@ -862,7 +862,7 @@ void Effect::UpdateGrabEffect(float delta)
     if (!grab || target != DAT_011dea3c->FUN_0089f4e0() || DAT_011dea3c->GetField63C() != 3 ||
         casterWorld != playerWorld)
     {
-        FUN_00804210(false);
+        Remove(false);
         return;
     }
     if (DAT_011dea0c->FUN_00877720()->FUN_00a24660(6, 0) && DAT_011dea0c->FUN_00877720()->FUN_00a24660(4, 0))
@@ -870,7 +870,7 @@ void Effect::UpdateGrabEffect(float delta)
         if (velocity >
             *originalRuntimeFloatSetting1168.FUN_00403e20() + *originalRuntimeFloatSetting1169.FUN_00403e20() * 0.1f)
             released = true;
-        FUN_00804210(false);
+        Remove(false);
     }
     else if (DAT_011dea0c->FUN_00877720()->FUN_00a24660(4, 0))
     {

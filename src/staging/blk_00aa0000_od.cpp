@@ -1159,7 +1159,7 @@ struct MemoryPool
     int unk1c;
     int unk20;
     int unk24;
-    void FUN_0040fbf0(char*);
+    void Lock(char*);
     void FUN_00aa7260();
 };
 
@@ -1174,7 +1174,7 @@ void FUN_00aa7290(int aiIndex)
     int* pool;
     if (DAT_011f67b8[aiIndex])
     {
-        ((MemoryPool*)((char*)DAT_011f67b8[aiIndex] + 0x20))->FUN_0040fbf0(&DAT_010a2850);
+        ((MemoryPool*)((char*)DAT_011f67b8[aiIndex] + 0x20))->Lock(&DAT_010a2850);
         DAT_011f67b8[aiIndex]->FUN_00aa7260();
         pool = (int*)((char*)DAT_011f67b8[aiIndex] + 0x20);
         pool[1] = pool[1] - 1;
@@ -1893,7 +1893,7 @@ struct FUN_00aa7300_pool
 {
     int m_00;
     int m_04;
-    void FUN_0040fbf0(const char* name);
+    void Lock(const char* name);
 };
 
 class FUN_00aa7300_cls
@@ -1925,7 +1925,7 @@ void FUN_00aa7300_cls::FUN_00aa7300()
     int scratch0;
     int scratch1;
     FUN_00aa7300_node* cur;
-    m_20.FUN_0040fbf0((const char*)"CheckFreeBlocks");
+    m_20.Lock((const char*)"CheckFreeBlocks");
     if (m_40 > 8)
     {
         cur = m_08;

@@ -8607,7 +8607,7 @@ struct Value {
 };
 struct Item { Item* next; Key* key; Value* value; };
 struct PoolNode { PoolNode* next; PoolNode* prev; void* data; };
-struct LockObj { unsigned int value; void FUN_0040fbf0(char*); };
+struct LockObj { unsigned int value; void Lock(char*); };
 extern LockObj DAT_011c5f80;
 extern unsigned int DAT_011c5f84;
 extern PoolNode* DAT_011c5f58;
@@ -8652,7 +8652,7 @@ void Target::FUN_00e8b630() {
   if(head) head->prev=0;
   else tail=0;
   node->data=0;
-  DAT_011c5f80.FUN_0040fbf0(0);
+  DAT_011c5f80.Lock(0);
   node->prev=0;
   node->next=DAT_011c5f58;
   --DAT_011c5f84;
@@ -10853,7 +10853,7 @@ struct LightInputNode { LightInputNode* next; SceneLight* light; };
 struct LightInput { unsigned int field00,field04,field08; LightInputNode* head; };
 inline SceneLight*& nextLight(PoolNode*& node) { SceneLight*& item=(SceneLight*&)node->data; node=node->next; return item; }
 struct ShadowSceneLightList { PoolNode* head; PoolNode* tail; unsigned int count; void* InsertHead(SceneLight* const*); SceneLight* FUN_004edf00();
- __forceinline void recycle(PoolNode* node) { node->data=0; DAT_011c5f80.FUN_0040fbf0(0); node->prev=0; node->next=DAT_011c5f58; --DAT_011c5f84; DAT_011c5f58=node; if (!DAT_011c5f84) DAT_011c5f80.value=0; }
+ __forceinline void recycle(PoolNode* node) { node->data=0; DAT_011c5f80.Lock(0); node->prev=0; node->next=DAT_011c5f58; --DAT_011c5f84; DAT_011c5f58=node; if (!DAT_011c5f84) DAT_011c5f80.value=0; }
  __forceinline SceneLight* remove(PoolNode*& node) { if(node==head) { PoolNode* old=head; head=old->next; if(head) head->prev=0; else tail=0; SceneLight* element=(SceneLight*)old->data; recycle(old); --count; return element; } else if(node==tail) { return FUN_004edf00(); } else { PoolNode* prev=node->prev; PoolNode* next=node->next; if(prev)prev->next=next; if(next)next->prev=prev; SceneLight* element=(SceneLight*)node->data; recycle(node); --count; return element; } }
 };
 extern const float runtimeFloatSettingDefault9;

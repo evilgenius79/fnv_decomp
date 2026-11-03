@@ -836,7 +836,7 @@ struct SaveForm
     virtual void vfn_12c();
     virtual const char* Describe();
 };
-SaveForm* FUN_004839c0(unsigned int);
+SaveForm* LookupFormByID(unsigned int);
 unsigned int FUN_0044a670(const char*);
 void FUN_0040fbe0(const char*, ...);
 void FNV_Warning(const char*, ...);
@@ -881,7 +881,7 @@ void SaveActorBase::FUN_005f18c0(unsigned int flags)
         SaveRecord* record = g_TESSaveLoadGame->GetHitSound();
         if (record)
         {
-            SaveForm* form = FUN_004839c0(record->formID);
+            SaveForm* form = LookupFormByID(record->formID);
             FUN_0040fbe0("SaveGame(): %-5i for form %08X %s with flags %08X ending at line %i in file %s",
                          end - offset2, record->formID, form->Describe(), *(unsigned int*)&record->flagsLow, 587,
                          "D:\\_Fallout3\\Platforms\\Common\\Code\\Fallout Shared\\TESActorBase.cpp");
@@ -1000,7 +1000,7 @@ struct FormName
     virtual const char* GetName();
 };
 
-FormName* __cdecl FUN_004839c0(unsigned int);
+FormName* __cdecl LookupFormByID(unsigned int);
 
 struct TESSaveLoadGame
 {
@@ -1123,7 +1123,7 @@ void ActorBaseLoad::FUN_005f1b30(unsigned int aiFlags, unsigned int a2)
             hdrB = g_TESSaveLoadGame->FUN_004fd3c0();
             if (hdrB != 0)
             {
-                form5 = FUN_004839c0(hdrB->id);
+                form5 = LookupFormByID(hdrB->id);
                 FUN_005b5e40(
                     "SAVELOAD: (LoadGame Buffer error) Block Header is incorrect in file %s on line %i.  Currently loading form is %08X %s with version %i and flags %08X",
                     "D:\\_Fallout3\\Platforms\\Common\\Code\\Fallout Shared\\TESActorBase.cpp", 596, hdrB->id,
@@ -1171,7 +1171,7 @@ void ActorBaseLoad::FUN_005f1b30(unsigned int aiFlags, unsigned int a2)
         hdr2A = g_TESSaveLoadGame->FUN_004fd3c0();
         if (hdr2A != 0)
         {
-            form25 = FUN_004839c0(hdr2A->id);
+            form25 = LookupFormByID(hdr2A->id);
             if (endPos0 > usVarZ + curPosC)
             {
                 FUN_005b5e40(

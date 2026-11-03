@@ -2380,7 +2380,7 @@ void FUN_00845cc0(const char*, ...);
 void ForwardToShell(W20File*, void*, int);
 unsigned int FUN_00847d70(W20File*);
 unsigned int FUN_00847d90(W20File*);
-W20Form* FUN_004839c0(unsigned int);
+W20Form* LookupFormByID(unsigned int);
 void FUN_0084eb80(W20Buffer*, W20Form*, unsigned int);
 
 // Writes the save file: logs the save, writes a header, serializes each changed form, then rewrites the header with offsets and sizes.
@@ -2417,7 +2417,7 @@ void W20Save::FUN_00847850(W20File* file)
         }
         else
         {
-            W20Form* form = FUN_004839c0(j);
+            W20Form* form = LookupFormByID(j);
             if (form)
             {
                 l.FUN_00847db0();
@@ -2704,7 +2704,7 @@ void __cdecl ReadFileIntoBuffer(SaveFile*, unsigned char*, unsigned int);
 void __cdecl FUN_00848e40(unsigned int);
 void __cdecl FUN_0084c270(unsigned int);
 void __cdecl LoadGlobalDataRanges(SaveFile*, unsigned int);
-FormExtra* __cdecl FUN_004839c0(unsigned int);
+FormExtra* __cdecl LookupFormByID(unsigned int);
 const char* __cdecl GetStringForByte(unsigned int);
 void __cdecl FUN_00845cc0(const char*, ...);
 UnloadFlags __cdecl FUN_00841120(UnloadFlags, UnloadFlags, unsigned int, bool);
@@ -2806,7 +2806,7 @@ bool ReconstructSession::LoadSaveGame(SaveFile* pSaveFile, bool restoreMode)
                         }
                         pendingChanges->ApplyFormQuantityChange(index, changed);
                         current->FUN_0086cf00(currentVal);
-                        FormExtra* form_ = FUN_004839c0(index);
+                        FormExtra* form_ = LookupFormByID(index);
                         current->FUN_007037c0(form_);
                         unsigned int position3 = LoadFormData(pSaveFile, current, oldState5);
                         current->FUN_00864580(pSaveFile, position3);
@@ -3518,7 +3518,7 @@ struct ThisHist84
     char pad[0x1c];
     void* m_pNoteHandler;
 };
-Form84* __cdecl FUN_004839c0(unsigned int);
+Form84* __cdecl LookupFormByID(unsigned int);
 int __cdecl FUN_0084e730(unsigned int, int, unsigned int);
 int __cdecl FUN_0084e930(void*, int, void*);
 unsigned int __cdecl FUN_00526100();
@@ -3575,7 +3575,7 @@ void FUN_0084ab20_shell::FUN_0084ab20()
             }
             else
             {
-                Form84* form = FUN_004839c0(fid);
+                Form84* form = LookupFormByID(fid);
                 if (form != 0)
                 {
                     if (form->FUN_00401170() == 0x39)
@@ -3638,7 +3638,7 @@ void FUN_0084ab20_shell::FUN_0084ab20()
             }
             else
             {
-                Form84* formT = FUN_004839c0(fm);
+                Form84* formT = LookupFormByID(fm);
                 if (formT != 0)
                 {
                     ek = (unsigned int)formT->FUN_00401170();
@@ -3705,7 +3705,7 @@ void FUN_0084ab20_shell::FUN_0084ab20()
                     {
                         FUN_0084e930(ev->buffer.FUN_00866390(), res100, &info2);
                         ((RefMap84*)m_pReferencesMap)->FUN_0084b470(fm);
-                        Form84* formX = FUN_004839c0((unsigned int)info2.f00);
+                        Form84* formX = LookupFormByID((unsigned int)info2.f00);
                         if (formX != 0 && formX->FUN_00401170() == 0x41)
                         {
                             ((RefMap84*)m_pReferencesMap)
@@ -3894,7 +3894,7 @@ class ReconstructLoadContext
     bool RevertReference(TESForm**, const char*, int);
     void FUN_00848e70(BGSSaveLoadChangesMap*, TESFile*);
 };
-extern TESForm* __cdecl FUN_004839c0(unsigned int);
+extern TESForm* __cdecl LookupFormByID(unsigned int);
 
 extern int __cdecl FUN_0084e730(unsigned int, const char*, unsigned int);
 extern void __cdecl FUN_0084e930(char*, int, ReconstructScratch*);
@@ -3914,7 +3914,7 @@ void ReconstructLoadContext::FUN_00848e70(BGSSaveLoadChangesMap* changes, TESFil
         unsigned int form = 0;
         RevertFormChangesView* key = 0;
         pMap->GetNext(pos, *(TESFile**)&form, *(::BGSReconstructFormsInFileMap**)&key);
-        current = FUN_004839c0(form);
+        current = LookupFormByID(form);
         if (current)
         {
             if (((DataHandlerOps*)g_dataHandler)->FUN_00469860(form))
@@ -3982,7 +3982,7 @@ void ReconstructLoadContext::FUN_00848e70(BGSSaveLoadChangesMap* changes, TESFil
 
 struct FUN_00853130_shell
 {
-    bool FUN_00853130(unsigned int key, unsigned int& value);
+    bool GetAt(unsigned int key, unsigned int& value);
 };
 
 struct FUN_0084aa90_shell
@@ -3997,12 +3997,12 @@ struct FUN_0084aa90_shell
     unsigned int FUN_0084aa90(unsigned int aiOldFormID);
 };
 
-// Calls FUN_00853130 with aiOldFormID and returns its output value on success, or 0 on failure.
+// Calls GetAt with aiOldFormID and returns its output value on success, or 0 on failure.
 // @fnv 0x0084aa90
 unsigned int FUN_0084aa90_shell::FUN_0084aa90(unsigned int aiOldFormID)
 {
     unsigned int value = 0;
-    if (unk18->FUN_00853130(aiOldFormID, value))
+    if (unk18->GetAt(aiOldFormID, value))
         return value;
     return 0;
 }

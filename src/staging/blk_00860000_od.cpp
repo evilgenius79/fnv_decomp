@@ -7115,8 +7115,8 @@ bool FUN_004dc310();
 unsigned int FUN_004dc1f0();
 int FUN_004dc200();
 void* FUN_00401460(void* pvDst, const void* pvSrc, unsigned int uiSize);
-void* FUN_00401000(unsigned int uiSize);
-void FUN_00401030(void* pvMem);
+void* FormHeap_Allocate(unsigned int uiSize);
+void FormHeap_Free(void* pvMem);
 int FUN_00406d30(char* pcDst, unsigned int uiSize, const char* pcSrc);
 int FUN_00406d00(char* pcBuffer, unsigned int uiSize, const char* pcFormat, ...);
 int FUN_00ec623a(char* pcBuffer, const char* pcFormat, ...);
@@ -7180,7 +7180,7 @@ void SaveScreenshot(const char* pcPath)
         unsigned int uiHeightRes = FUN_004dc200();
         unsigned int uiBytesPerPixelOld = pkImageNew->FUN_0070ec90();
         unsigned char* pucPixelsTmp = pkImageNew->FUN_0064dac0(0, 0);
-        unsigned char* pucBuffer = (unsigned char*)FUN_00401000(uiWidth * uiHeightRes * 3);
+        unsigned char* pucBuffer = (unsigned char*)FormHeap_Allocate(uiWidth * uiHeightRes * 3);
         unsigned int uiOutPos = 0;
         SSBitmapHeader kHeader;
         unsigned __int64 uiWritten;
@@ -7214,7 +7214,7 @@ void SaveScreenshot(const char* pcPath)
         *(unsigned int*)kHeader.ausClrImportant = 0;
         kFileLast.SetAndReturnPointer(&kHeader, 0x36, &uiWritten);
         kFileLast.SetAndReturnPointer(pucBuffer, uiWidth * uiHeightRes * uiBytesPerPixelOld, &uiWritten);
-        FUN_00401030(pucBuffer);
+        FormHeap_Free(pucBuffer);
         if (!pcPath)
         {
             char acMessage[260];
@@ -7495,7 +7495,7 @@ struct H
     void DeleteAllItems();
     void FUN_009370b0();
     void FUN_008b3180();
-    void FUN_005702e0(int, int);
+    void Set3D(int, int);
     void FUN_00483710();
     void FUN_0046ffb0();
     void FUN_00937030();
@@ -7720,7 +7720,7 @@ FUN_0087dcb0::~FUN_0087dcb0()
             m_d0.FUN_009370b0();
             m_e0.FUN_009370b0();
             ((H*)this)->FUN_008b3180();
-            ((H*)this)->FUN_005702e0(0, 0);
+            ((H*)this)->Set3D(0, 0);
         }
     }
 }

@@ -848,7 +848,7 @@ struct ShaderEntryList
 struct ShaderEntryNodePool
 {
     void* first;
-    void __thiscall FUN_0040fbf0(int count);
+    void __thiscall Lock(int count);
 };
 extern ShaderEntryNodePool DAT_011c5f80;
 extern ShaderEntryNode* DAT_011c5f58;
@@ -902,7 +902,7 @@ void ShaderEntryOwner::FUN_00e93cc0()
                     if (pNext)
                         pNext->previous = pPrev;
                     candidate->element = 0;
-                    DAT_011c5f80.FUN_0040fbf0(0);
+                    DAT_011c5f80.Lock(0);
                     candidate->previous = 0;
                     candidate->next = DAT_011c5f58;
                     --DAT_011c5f84;

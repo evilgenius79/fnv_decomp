@@ -1297,7 +1297,7 @@ extern "C" __declspec(dllimport) void __stdcall fnv_Import_LeaveCriticalSection(
 class GameLockA {
 public:
     bool FUN_0078d200();
-    void FUN_0040fbf0(int a);
+    void Lock(int a);
 };
 class GameLockB {
 public:
@@ -4503,13 +4503,13 @@ struct Pointer354 {
 };
 struct Array354 { Pointer354 FUN_00c45e50(unsigned int index); };
 extern Array354 _DAT_01202e20;
-struct LockState354 { unsigned int owner, recursion; void FUN_0040fbf0(int); };
+struct LockState354 { unsigned int owner, recursion; void Lock(int); };
 extern LockState354 _DAT_01202e40;
 unsigned int gm_GetCurrentThreadId();
 long FUN_0043b460(volatile long*, long comparand, long exchange);
 void FUN_0040fca0(unsigned long);
 void FUN_0040fbe0();
-inline void LockState354::FUN_0040fbf0(int) {
+inline void LockState354::Lock(int) {
     unsigned int thread=gm_GetCurrentThreadId();
     if (owner == thread) {
         ++recursion;
@@ -5363,7 +5363,7 @@ struct Key8 { int a; int b; };
 struct Lock40 {
     int owner;
     int count;
-    void FUN_0040fbf0(int a);
+    void Lock(int a);
     void Unlock() { count--; if (count == 0) owner = 0; }
 };
 struct Iter40 {
@@ -6493,7 +6493,7 @@ struct MyRef {
 struct OwnerWord {
     int owner;
 };
-inline void GameLockA::FUN_0040fbf0(int a) {
+inline void GameLockA::Lock(int a) {
     int passes;
     int spins;
     passes = a;

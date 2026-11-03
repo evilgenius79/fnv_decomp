@@ -1475,7 +1475,7 @@ struct FUN_00cb7790_state
 {
     unsigned int owner;
     unsigned int depth;
-    void __thiscall FUN_0040fbf0(int);
+    void __thiscall Lock(int);
 };
 extern FUN_00cb7790_state DAT_01267b80;
 struct FUN_00cb7790_class

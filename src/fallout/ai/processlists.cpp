@@ -9798,8 +9798,8 @@ struct FUN_009640b0_player
 struct FUN_0040fbf0_lock
 {
     bool FUN_0078d200();
-    void FUN_0040fbf0(char* apName);
-    void FUN_0040fba0();
+    void Lock(char* apName);
+    void Unlock();
 };
 
 void __cdecl FUN_008d5bc0();
@@ -9879,19 +9879,19 @@ void FUN_0096d810_shell::FUN_0096d810()
         if (m_bUpdateLowProcesses && !FUN_00525420() && ((FUN_0040fbf0_lock*)&DAT_011f11a0)->FUN_0078d200())
         {
             UpdateLowProcesses(0.0f, false);
-            ((FUN_0040fbf0_lock*)&DAT_011f11a0)->FUN_0040fba0();
+            ((FUN_0040fbf0_lock*)&DAT_011f11a0)->Unlock();
         }
         if (m_bUpdateLowListProcessLists && !FUN_00525420())
         {
-            ((FUN_0040fbf0_lock*)&DAT_011f11a0)->FUN_0040fbf0(0);
+            ((FUN_0040fbf0_lock*)&DAT_011f11a0)->Lock(0);
             UpdateLowListProcessLists(0.0f, false);
-            ((FUN_0040fbf0_lock*)&DAT_011f11a0)->FUN_0040fba0();
+            ((FUN_0040fbf0_lock*)&DAT_011f11a0)->Unlock();
         }
         if (m_bRunSecondProcessUpdate)
         {
-            ((FUN_0040fbf0_lock*)&DAT_011f11a0)->FUN_0040fbf0(0);
+            ((FUN_0040fbf0_lock*)&DAT_011f11a0)->Lock(0);
             FUN_0096b810(0.0f, false);
-            ((FUN_0040fbf0_lock*)&DAT_011f11a0)->FUN_0040fba0();
+            ((FUN_0040fbf0_lock*)&DAT_011f11a0)->Unlock();
         }
         if (m_fCrimeListUpdateTimer <= DAT_01012060)
             UpdateCrimeLists();
@@ -10388,7 +10388,7 @@ struct FUN_0096a2d0
     FUN_0096a2d0();
     void FUN_005ae3d0(Actor* const&);
 };
-TESObjectREFR* __cdecl FUN_004839c0(unsigned int);
+TESObjectREFR* __cdecl LookupFormByID(unsigned int);
 struct Target96
 {
     int unk00;
@@ -10401,7 +10401,7 @@ FUN_0096a2d0* Target96::FUN_0096f450(unsigned int uiControllerId, Actor96* pExcl
     FUN_0096a2d0* reference = 0;
     Actor96* actor = 0;
     Actor96* result = 0;
-    TESObjectREFR* mobile = FUN_004839c0(uiControllerId);
+    TESObjectREFR* mobile = LookupFormByID(uiControllerId);
     for (unsigned int i = 0; i < entries.FUN_0055b980(); ++i)
     {
         result = entries.FUN_00968670(i);

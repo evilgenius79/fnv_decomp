@@ -947,7 +947,7 @@ struct FUN_00acb1a0_cls
     void ResetListSentinel();
 };
 extern int DAT_010a30fc;
-void __cdecl FUN_00401030(void*);
+void __cdecl FormHeap_Free(void*);
 class Sub_00acb6b0
 {
   public:
@@ -1162,7 +1162,7 @@ struct FUN_00acde90_class
 {
     void __thiscall FUN_00acde90();
 };
-void __cdecl FUN_00401030(void* apMemory);
+void __cdecl FormHeap_Free(void* apMemory);
 struct FUN_00acdff0_prim
 {
     int unk00;
@@ -1411,7 +1411,7 @@ struct FUN_00ad0550_cls
     void* m_24;
     void Initialize();
 };
-void* __cdecl FUN_00401000(unsigned int size);
+void* __cdecl FormHeap_Allocate(unsigned int size);
 int __cdecl FUN_00ec36a6();
 struct FUN_00ac9da0_Class
 {
@@ -1798,7 +1798,7 @@ struct S_00ad53d0_bad : S_00ad53d0_exc
     __forceinline S_00ad53d0_bad(const char* what) throw() : S_00ad53d0_exc(what)
     {}
 };
-void* __cdecl FUN_00401000(unsigned int);
+void* __cdecl FormHeap_Allocate(unsigned int);
 // @fnv 0x00ad53d0
 void* __cdecl FUN_00ad53d0(unsigned int n)
 {
@@ -1810,7 +1810,7 @@ void* __cdecl FUN_00ad53d0(unsigned int n)
     {
         throw S_00ad53d0_bad(0);
     }
-    return FUN_00401000(n * 0x38);
+    return FormHeap_Allocate(n * 0x38);
 }
 
 struct PoolX
@@ -32043,7 +32043,7 @@ struct TreeNode00acf0b0
     {
         FUN_00ad5490();
         if (flags & 1)
-            FUN_00401030(this);
+            FormHeap_Free(this);
         Dead11();
     }
 };
@@ -32056,7 +32056,7 @@ void FUN_00acb1a0_cls::FUN_00acf0b0(void* p)
         FUN_00acf0b0(node->m_08);
         node = node->m_00;
         ((TreeNode00acf0b0*)p)->Destroy(0);
-        FUN_00401030(p);
+        FormHeap_Free(p);
     }
 }
 
@@ -37665,7 +37665,7 @@ String* __cdecl FUN_00ad6690(String* _First, String* _Last, String* _Dest)
 }  // namespace fnv_00ad6690
 
 namespace fnv_00ad6e20 {
-void FUN_00401030(void* p);
+void FormHeap_Free(void* p);
 inline void* operator new(unsigned int, void* p)
 {
     return p;
@@ -37674,7 +37674,7 @@ inline void operator delete(void*, void*)
 {}
 inline void FreeQ(void* p)
 {
-    FUN_00401030(p);
+    FormHeap_Free(p);
 }
 struct VBQ
 {
@@ -38909,7 +38909,7 @@ struct SBQ_acbb80 : basic_streambufB610
     }
     void deallocate(char* p, unsigned int)
     {
-        FUN_00401030(p);
+        FormHeap_Free(p);
     }
     int FUN_00acbb80(int _Meta);
 };

@@ -348,7 +348,7 @@ struct Mesh
     unsigned int* FUN_00699af0(unsigned short);
     Vector3 FUN_00558220(unsigned short);
 };
-Door* __cdecl FUN_004839c0(unsigned int);
+Door* __cdecl LookupFormByID(unsigned int);
 struct AvoidPoints
 {
     float SumNodeValues(Vector3&);
@@ -434,7 +434,7 @@ bool Search::ExpandNode(Node* node, NodeArray* output)
                 else
                 {
                     unsigned int door = *edgeData->FUN_00699af0(triangle);
-                    Door* id = FUN_004839c0(door);
+                    Door* id = LookupFormByID(door);
                     if (id)
                     {
                         DoorLockX result(id);

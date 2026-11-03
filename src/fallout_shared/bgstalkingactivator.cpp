@@ -625,12 +625,12 @@ struct FUN_00428110_shell
 {
     FUN_004280f0_shell* FUN_00428110(unsigned int* a1, unsigned int a2);
 };
-TESForm* __cdecl FUN_004839c0(unsigned int a);
+TESForm* __cdecl LookupFormByID(unsigned int a);
 struct FUN_004ff8a0_shell : public BGSTalkingActivator
 {
     void FUN_004ff8a0(void* arg);
 };
-// Calls FUN_004534f0, then conditionally replaces m_pTempRef with an Actor cast of the form returned by FUN_004839c0.
+// Calls FUN_004534f0, then conditionally replaces m_pTempRef with an Actor cast of the form returned by LookupFormByID.
 // @fnv 0x004ff8a0
 void FUN_004ff8a0_shell::FUN_004ff8a0(void* arg)
 {
@@ -639,7 +639,7 @@ void FUN_004ff8a0_shell::FUN_004ff8a0(void* arg)
     if (((FUN_00428110_shell*)arg)->FUN_00428110(&local, 0x800000)->FUN_004280f0())
     {
         m_pTempRef =
-            (TESObjectREFR*)(m_pTempRef != 0 ? dynamic_cast<Actor*>(FUN_004839c0((unsigned int)m_pTempRef)) : 0);
+            (TESObjectREFR*)(m_pTempRef != 0 ? dynamic_cast<Actor*>(LookupFormByID((unsigned int)m_pTempRef)) : 0);
     }
 }
 

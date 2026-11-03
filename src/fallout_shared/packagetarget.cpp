@@ -475,14 +475,14 @@ void C680590Target::SaveLoad()
     }
 }
 
-TESForm* FUN_004839c0(unsigned int formID);
+TESForm* LookupFormByID(unsigned int formID);
 
 struct FUN_006806e0_target : PackageTargetRecord
 {
     void ResolveTargetForm();
 };
 
-// For reference or object target types, replaces pTargetForm with the TESForm resolved from its formID via FUN_004839c0.
+// For reference or object target types, replaces pTargetForm with the TESForm resolved from its formID via LookupFormByID.
 // @fnv 0x006806e0
 void FUN_006806e0_target::ResolveTargetForm()
 {
@@ -491,7 +491,7 @@ void FUN_006806e0_target::ResolveTargetForm()
     case PACK_TARG_TYPE_PTT_REFERENCE:
     case PACK_TARG_TYPE_PTT_OBJECT:
         unsigned int formID = reinterpret_cast<unsigned int>(pTargetForm);
-        pTargetForm = FUN_004839c0(formID);
+        pTargetForm = LookupFormByID(formID);
     }
 }
 

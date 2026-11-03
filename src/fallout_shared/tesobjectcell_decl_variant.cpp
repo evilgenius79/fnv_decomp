@@ -17,7 +17,7 @@ class TES
 extern TES* g_TES;
 struct ModelLoader
 {
-    void FUN_00444850(TESObjectREFR*, void*, int);
+    void QueueReference(TESObjectREFR*, void*, int);
 };
 extern ModelLoader* g_pModelLoader;
 class TESBoundObject : public TESForm
@@ -42,7 +42,7 @@ void TESObjectCELL::FUN_005571a0(bool active)
             if (!reference->GetNiNode() || reference->FUN_005651e0())
             {
                 if (!reference->FUN_00440da0() && !reference->IsDeleted() && (!active || reference->FUN_0056b250()))
-                    g_pModelLoader->FUN_00444850(reference, list, 1);
+                    g_pModelLoader->QueueReference(reference, list, 1);
             }
             else
             {
@@ -61,7 +61,7 @@ void TESObjectCELL::FUN_005571a0(bool active)
             if (!other->GetNiNode() || other->FUN_005651e0())
             {
                 if (!other->FUN_00440da0() && !other->IsDeleted() && (!active || other->FUN_0056b250()))
-                    g_pModelLoader->FUN_00444850(other, list, 1);
+                    g_pModelLoader->QueueReference(other, list, 1);
             }
             else
             {

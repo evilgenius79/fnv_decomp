@@ -2597,8 +2597,8 @@ struct Worker53
     void FUN_005374f0();
     void FUN_0053a090(bool update, int unused);
 };
-void* __cdecl FUN_00401000(unsigned int size);
-void __cdecl FUN_00401030(void* memory);
+void* __cdecl FormHeap_Allocate(unsigned int size);
+void __cdecl FormHeap_Free(void* memory);
 struct LayerOwner53a940 : Owner53ace0
 {
     void FUN_0053abb0(unsigned char quadrant, unsigned short layer);
@@ -3080,7 +3080,7 @@ struct LandCell535d
     int FUN_00544c60();
     int FUN_00544c30();
 };
-TESForm* FUN_004839c0(unsigned int);
+TESForm* LookupFormByID(unsigned int);
 void ResolveFormID(unsigned int*, LandFile535d*);
 void FUN_0043b2b0(bool);
 extern const char DAT_01015890[];
@@ -3275,7 +3275,7 @@ bool LandOwner535d::FUN_00535d00()
                 if (_streamSize->FUN_00401680())
                     record.FUN_00535a60();
                 ResolveFormID(&record.formID, _streamSize);
-                data->baseTextures[record.quad7] = dynamic_cast<TESLandTexture*>(FUN_004839c0(record.formID));
+                data->baseTextures[record.quad7] = dynamic_cast<TESLandTexture*>(LookupFormByID(record.formID));
                 if (!data->baseTextures[record.quad7])
                 {
                     FNV_Warning(DAT_0102e120, FUN_00533fd0(), FUN_00534010(), record.formID, record.quad7);
@@ -3308,7 +3308,7 @@ bool LandOwner535d::FUN_00535d00()
                 if (record.formID)
                 {
                     ResolveFormID(&record.formID, _streamSize);
-                    _strEyeTexture = dynamic_cast<TESLandTexture*>(FUN_004839c0(record.formID));
+                    _strEyeTexture = dynamic_cast<TESLandTexture*>(LookupFormByID(record.formID));
                     if (!_strEyeTexture)
                     {
                         FNV_Warning(DAT_0102e088, FUN_00533fd0(), FUN_00534010(), record.formID, record.quad7);

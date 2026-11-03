@@ -2074,7 +2074,7 @@ namespace fnv_009d8ad0 {
 using ::TESForm;
 using ::TESObjectREFR;
 
-extern "C" TESForm* __cdecl FUN_004839c0(unsigned int formID);
+extern "C" TESForm* __cdecl LookupFormByID(unsigned int formID);
 
 struct MoveContext
 {
@@ -2107,7 +2107,7 @@ struct ProcedureController
     void FUN_009d8ad0(unsigned int);
 };
 
-// Calls FUN_004534f0, resolves currentForm through FUN_004839c0 and dynamic_cast, then refreshes the command target from context when refresh is set.
+// Calls FUN_004534f0, resolves currentForm through LookupFormByID and dynamic_cast, then refreshes the command target from context when refresh is set.
 // @fnv 0x009d8ad0
 void ProcedureController::FUN_009d8ad0(unsigned int value)
 
@@ -2117,7 +2117,7 @@ void ProcedureController::FUN_009d8ad0(unsigned int value)
 
     FUN_004534f0(value);
 
-    currentForm = (unsigned int)(currentForm ? dynamic_cast<TESObjectREFR*>(FUN_004839c0(currentForm)) : 0);
+    currentForm = (unsigned int)(currentForm ? dynamic_cast<TESObjectREFR*>(LookupFormByID(currentForm)) : 0);
 
     if (refresh)
 

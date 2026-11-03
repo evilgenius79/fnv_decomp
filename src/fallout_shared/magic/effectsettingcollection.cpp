@@ -151,7 +151,7 @@ struct GlobalObject_0045cf30
 };
 extern GlobalObject_0045cf30 g_011de4e8;
 
-TESForm* FUN_004839c0(unsigned int formID);
+TESForm* LookupFormByID(unsigned int formID);
 void FUN_0040fbe0(const char* format, ...);
 
 // Computes the save size of the effect setting collection, adding 4/2 bytes for save-load state and 4 bytes per flagged EffectSetting, then logs the result.
@@ -178,7 +178,7 @@ unsigned int FUN_00408c30()
         ChangedForm* changed = g_TESSaveLoadGame->GetCurrentChangedForm();
         if (changed)
         {
-            TESForm* form = FUN_004839c0(changed->formID);
+            TESForm* form = LookupFormByID(changed->formID);
             FUN_0040fbe0("GetSaveSize(): %-5i for form %08X %s with flags %08X ending at line %i in file %s",
                          size - uiStart, changed->formID, form->GetName(), *(unsigned int*)(&changed->changeType + 1),
                          0x77,

@@ -205,7 +205,7 @@ struct MenuTileField
     void __thiscall FUN_00a012d0(void* value, float fade, int flags);
 };
 extern char str_010702d8[];
-extern "C" void* __cdecl FUN_00a00940(const char* descriptor, int index);
+extern "C" void* __cdecl TraitNameToIDAdd(const char* descriptor, int index);
 struct TutorialMenuView
 {
     int unk00;
@@ -248,7 +248,7 @@ void TutorialMenuView::ApplyRecordToTiles(MenuRecord* record)
     }
     if (text40 != 0)
     {
-        text40->FUN_00a012d0(FUN_00a00940(str_010702d8, -1), 0.0f, 0);
+        text40->FUN_00a012d0(TraitNameToIDAdd(str_010702d8, -1), 0.0f, 0);
     }
 }
 
@@ -377,7 +377,7 @@ class BGSListForm : public TESForm
   public:
     HelpListNode* FUN_00500940();
 };
-TESForm* __cdecl FUN_004839c0(unsigned int auID);
+TESForm* __cdecl LookupFormByID(unsigned int auID);
 
 struct TForm2
 {
@@ -463,8 +463,8 @@ bool InitTutorialMenu(TESForm* apMsg, bool aFlag)
 
         if (aFlag)
         {
-            BGSListForm* pForm = FUN_004b71d0() ? dynamic_cast<BGSListForm*>(FUN_004839c0(0x165u))
-                                                : dynamic_cast<BGSListForm*>(FUN_004839c0(0x163u));
+            BGSListForm* pForm = FUN_004b71d0() ? dynamic_cast<BGSListForm*>(LookupFormByID(0x165u))
+                                                : dynamic_cast<BGSListForm*>(LookupFormByID(0x163u));
             if (pForm)
             {
                 ((HMenuX*)DAT_011db088)->pPages = pForm->FUN_00500940();

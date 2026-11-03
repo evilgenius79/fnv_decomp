@@ -1030,7 +1030,7 @@ struct GlobalObject_00633c90
 };
 extern int DAT_011daab4;
 extern char DAT_01070244;
-void* __cdecl FUN_00a00940(const char*, int);
+void* __cdecl TraitNameToIDAdd(const char*, int);
 void __cdecl FUN_00403d30(void*, int, unsigned);
 struct AudioView
 {
@@ -1085,7 +1085,7 @@ struct FUN_007cb330 : Menu
 // @fnv 0x007cb330
 FUN_007cb330::FUN_007cb330() : unk1b8(0)
 {
-    unk1d0 = FUN_00a00940(&DAT_01070244, -1);
+    unk1d0 = TraitNameToIDAdd(&DAT_01070244, -1);
     FUN_00403d30(&unk028, 0, 0x5c);
     unk1a8 = 0;
     unk1a4 = 0;
@@ -2045,7 +2045,7 @@ class FUN_007d6350
     FUN_007d6350(char*, char*, int, ...);
 };
 void __cdecl ClearStartMenuEntries();
-void* __cdecl FUN_00401000(int size);
+void* __cdecl FormHeap_Allocate(int size);
 extern char DAT_007d0440[];
 extern char DAT_007d0490[];
 extern char DAT_007d04d0[];
@@ -2251,7 +2251,7 @@ struct BookMenu;
 struct BookTile
 {
     virtual ~BookTile();
-    BookTile* FUN_00a01b00(const char*);
+    BookTile* ReadXML(const char*);
     BookMenu* FUN_00a03c90();
 };
 struct BookInterface
@@ -2317,7 +2317,7 @@ extern BookNodePointer DAT_011daa9c;
 // @fnv 0x007c5fc0
 extern "C" void FUN_007c5fc0(int value)
 {
-    BookTile* menu = FUN_004b7210()->FUN_00586150()->FUN_00a01b00("Data\\Menus\\CharGen\\SPECIALBookMenu.xml");
+    BookTile* menu = FUN_004b7210()->FUN_00586150()->ReadXML("Data\\Menus\\CharGen\\SPECIALBookMenu.xml");
     BookMenu* tile = menu->FUN_00a03c90();
     if (tile && tile->GetID() == FUN_007c6110())
     {

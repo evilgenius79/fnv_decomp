@@ -1043,7 +1043,7 @@ class FUN_0077ffd0_lbx
     virtual Tile* vfn_04(int);
 };
 
-void* __cdecl FUN_00a01860(const char* s);
+void* __cdecl TraitNameToID(const char* s);
 int __cdecl FUN_00ec62c0();
 
 // @fnv 0x0077ffd0
@@ -1077,7 +1077,7 @@ void __cdecl UpdateCurrentValue()
     InventoryMenu::ms_pInventoryMenu->m_kPageStates[idx].m_iSelectedItemIndex = res5;
     reinterpret_cast<FUN_0077ffd0_obj*>(
         reinterpret_cast<FUN_0077ffd0_list*>(&InventoryMenu::ms_pInventoryMenu->m_kItemList)
-            ->FUN_00825c00(FUN_00a01860("_current_value")))
+            ->FUN_00825c00(TraitNameToID("_current_value")))
         ->FUN_00a011b0();
     InventoryMenu::ms_pInventoryMenu->m_kPageStates[idx].m_iScrollOffset = FUN_00ec62c0();
 }
@@ -1535,15 +1535,15 @@ struct Sh004bddd0
 };
 struct Sh0088c650
 {
-    void FUN_0088c650(void* a, int b, void* c, bool d, bool e, bool f);
+    void EquipItem(void* a, int b, void* c, bool d, bool e, bool f);
 };
 struct Sh0088c790
 {
-    void FUN_0088c790(void* a, int b, void* c, bool d, bool e, bool f);
+    void UnequipItem(void* a, int b, void* c, bool d, bool e, bool f);
 };
 
 unsigned __cdecl FUN_0058db10(int arg);
-unsigned __cdecl FUN_004839c0(int arg);
+unsigned __cdecl LookupFormByID(int arg);
 
 class SettingString
 {
@@ -1592,7 +1592,7 @@ void Menu75b::FUN_00780d60()
     void* c = (void*)FUN_0044ddc0(DAT_011d9ea8);
     list.FUN_005ae3d0(&c);
 
-    if ((FUN_0044ddc0(DAT_011d9ea8) == FUN_0058db10(0) || FUN_0044ddc0(DAT_011d9ea8) == FUN_004839c0(0xccef2)) &&
+    if ((FUN_0044ddc0(DAT_011d9ea8) == FUN_0058db10(0) || FUN_0044ddc0(DAT_011d9ea8) == LookupFormByID(0xccef2)) &&
         ((Gp75*)g_thePlayer)->emb.v2(0x10) == ((Gp75*)g_thePlayer)->emb.v7(0x10))
     {
         Interface::ShowMessage(DAT_011d2af0.GetString(), 0, 0, 0, 2.0f, false);
@@ -1604,12 +1604,12 @@ void Menu75b::FUN_00780d60()
     else if (!((Sh004bddd0*)DAT_011d9ea8)->FUN_004bddd0(false))
     {
         ((Sh0088c650*)g_thePlayer)
-            ->FUN_0088c650(a, (int)((Sh00726070*)DAT_011d9ea8)->FUN_00726070(), b, false, false, true);
+            ->EquipItem(a, (int)((Sh00726070*)DAT_011d9ea8)->FUN_00726070(), b, false, false, true);
     }
     else
     {
         ((Sh0088c790*)g_thePlayer)
-            ->FUN_0088c790(a, (int)((Sh00726070*)DAT_011d9ea8)->FUN_00726070(), b, false, false, true);
+            ->UnequipItem(a, (int)((Sh00726070*)DAT_011d9ea8)->FUN_00726070(), b, false, false, true);
     }
 
 done:
@@ -2393,7 +2393,7 @@ struct VTSoundHandle
     unsigned int m_uiState;
     unsigned int m_uiValue1;
     ~VTSoundHandle();
-    bool FUN_00ad8830(bool bLoop);
+    bool Play(bool bLoop);
 };
 class VTAudio
 {
@@ -2602,7 +2602,7 @@ void VTMenu::FUN_00780140(int m_uiSoundID, VTTile* pkTile)
             VTForm* pkRefOut = DAT_011d9ea8->FUN_0044ddc0();
             VTItemData* pkItem = DAT_011d9ea8->FUN_00559450() ? *DAT_011d9ea8->FUN_00559450()->FUN_006815c0() : 0;
             if (FUN_00726070()->IsTraitNonZero(DAT_011d9eb8))
-                VTAudio::FUN_00453a70()->FUN_00ad7550("UIVATSInsufficientAP", 0x121).FUN_00ad8830(false);
+                VTAudio::FUN_00453a70()->FUN_00ad7550("UIVATSInsufficientAP", 0x121).Play(false);
             else if (pkRefOut->IsDeleted())
                 DispatchMessageToSink(DAT_011d47a4.FUN_00403df0(), 2, 0, 0, 2.0f, 0);
             else if (((VTPlayer*)DAT_011dea3c)->FUN_008a7570() != -1 && DAT_011d9ea8->FUN_004bddd0(0))

@@ -1159,7 +1159,7 @@ struct FUN_0080ab10_obj
 struct FUN_0080ab10_cls
 {
     void FUN_0082c660(float);
-    void FUN_00804210(int);
+    void Remove(int);
     FUN_0080ab10_obj* FUN_0059bb30();
     void FUN_0080ab10(float a1);
 };
@@ -1176,7 +1176,7 @@ void FUN_0080ab10_cls::FUN_0080ab10(float afValue)
         flag = (obj != 0 && obj->v266() != 0) ? obj->v266()->FUN_0047c850() : (unsigned char)1;
         if (obj->v139(0) || obj->v186() || !flag)
         {
-            this->FUN_00804210(0);
+            this->Remove(0);
         }
     }
 }

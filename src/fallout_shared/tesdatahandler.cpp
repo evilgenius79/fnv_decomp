@@ -2497,11 +2497,11 @@ char* FUN_00462e80_shell::FUN_00462e80()
 
 struct FUN_00464d30_shell : public TESDataHandler
 {
-    void FUN_00464d30(bool);
+    void DisableAssignFormIDs(bool);
 };
 
 // @fnv 0x00464d30
-void FUN_00464d30_shell::FUN_00464d30(bool abNewbool)
+void FUN_00464d30_shell::DisableAssignFormIDs(bool abNewbool)
 {
     *((bool*)((char*)this + 0x620)) = abNewbool;
 }
@@ -3253,7 +3253,7 @@ bool FUN_00463070_shell::LoadDataFiles(bool abDownloadedContentOnly)
             }
         }
     }
-    FUN_00464d30(true);
+    DisableAssignFormIDs(true);
     if (!abDownloadedContentOnly)
         InitializeMagicSystem();
     DAT_011c3f28 = 0;
@@ -3270,7 +3270,7 @@ bool FUN_00463070_shell::LoadDataFiles(bool abDownloadedContentOnly)
             ((FUN_0046a330_shell*)this)->ReportDataHandlerError(3);
     }
     g_dataHandler->SetSaveLoadGameState(-1);
-    FUN_00464d30(false);
+    DisableAssignFormIDs(false);
 
     pweatherlist = (LC3_Node*)GetTESWeatherList();
     while (pweatherlist && (pweather = (TESForm*)*pweatherlist->_ref_006815c0()) != 0)

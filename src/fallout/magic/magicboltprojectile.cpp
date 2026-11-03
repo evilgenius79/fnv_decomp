@@ -1643,9 +1643,9 @@ struct AudioPlaybackHandle
     AudioPlaybackHandle& operator=(const AudioPlaybackHandle&);
     bool FUN_00ad8ce0();
     void FUN_00ad8d10();
-    bool FUN_00ad8b60(float x, float y, float z);
-    void FUN_00ad8f20(SceneNode*);
-    bool FUN_00ad8830(bool);
+    bool SetPos(float x, float y, float z);
+    void SetNiNode(SceneNode*);
+    bool Play(bool);
 };
 struct SoundForm
 {
@@ -1664,7 +1664,7 @@ struct AudioManager
     static AudioManager* GetSingleton();
     AudioPlaybackHandle FUN_00ad73b0(unsigned int id, unsigned int flags);
 };
-TESForm* FUN_004839c0(unsigned int id);
+TESForm* LookupFormByID(unsigned int id);
 class MagicProjectile : public TESObjectREFR
 {
   public:
@@ -1732,7 +1732,7 @@ void MagicProjectile::InitializeProjectile(int arg1, int arg2)
     unsigned int referenceID = reinterpret_cast<unsigned int>(sourceReference);
     if (referenceID)
     {
-        sourceReference = dynamic_cast<TESObjectREFR*>(FUN_004839c0(referenceID));
+        sourceReference = dynamic_cast<TESObjectREFR*>(LookupFormByID(referenceID));
         if (sourceReference)
         {
             SceneNode* node = sourceReference->GetNode3D();
@@ -1754,9 +1754,9 @@ void MagicProjectile::InitializeProjectile(int arg1, int arg2)
         {
             sound = AudioManager::GetSingleton()->FUN_00ad73b0(soundID, 0x102);
             NiPoint3 position = GetPosition();
-            sound.FUN_00ad8b60(position.x, position.y, position.z);
-            sound.FUN_00ad8f20(soundNode);
-            sound.FUN_00ad8830(true);
+            sound.SetPos(position.x, position.y, position.z);
+            sound.SetNiNode(soundNode);
+            sound.Play(true);
         }
     }
 }
@@ -2903,7 +2903,7 @@ class BSSoundHandleEx
     unsigned int m_uiState;
     unsigned int m_uiValue1;
     ~BSSoundHandleEx();
-    bool FUN_00ad8b60(float fX, float fY, float fZ);
+    bool SetPos(float fX, float fY, float fZ);
     bool Play(bool bLoop);
 };
 
@@ -3004,7 +3004,7 @@ void AEProjectile::Impact(AEPoint3 kPos, int iIndex, AERefr* pkTarget, bool bSil
         unsigned int auiFormId = FUN_004fd400()->FUN_008ce390()->FUN_0084e3a0();
         BSSoundHandleEx kSound = BSAudio::GetSingleton()->FUN_00ad73b0(auiFormId, 0x102);
         AEPoint3 kSoundLoc = GetPosition();
-        kSound.FUN_00ad8b60(kSoundLoc.x, kSoundLoc.y, kSoundLoc.z);
+        kSound.SetPos(kSoundLoc.x, kSoundLoc.y, kSoundLoc.z);
         kSound.Play(false);
     }
 }

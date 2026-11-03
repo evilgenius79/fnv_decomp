@@ -1563,7 +1563,7 @@ struct MyPool
 };
 struct FUN_0040fbf0_Class
 {
-    void FUN_0040fbf0(int);
+    void Lock(int);
 };
 extern FUN_00a615c0_Class* DAT_011f4468;
 extern FUN_0040fbf0_Class DAT_011f4480;

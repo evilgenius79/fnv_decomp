@@ -1426,7 +1426,7 @@ struct NiPropertyState
 
 struct FUN_0040fbf0_shell
 {
-    void FUN_0040fbf0(char* name);
+    void Lock(char* name);
 };
 
 struct FUN_00a5e3a0_Helper
@@ -1500,7 +1500,7 @@ struct FUN_00a5a040_Class
 void FUN_00a5a040_Class::FUN_00a5a040()
 {
     NiPropertyState* ps = 0;
-    ((FUN_0040fbf0_shell*)&DAT_011f42a0)->FUN_0040fbf0(0);
+    ((FUN_0040fbf0_shell*)&DAT_011f42a0)->Lock(0);
     if (m18 != 0)
     {
         m18->FUN_00a5e3a0(ps);
@@ -2941,7 +2941,7 @@ struct A170Lock
 {
     int m_pOwnerObject;
     int m_uiItemCount;
-    void __thiscall FUN_0040fbf0(unsigned int);
+    void __thiscall Lock(unsigned int);
     void Unlock()
     {
         if (--m_uiItemCount == 0)
@@ -2979,7 +2979,7 @@ void FUN_00a5a170_cls::FUN_00a5a170(A170Set* apSource, bool abAllocate, A170Set*
         *apResult = apSource;
         return;
     }
-    DAT_011f42a0.FUN_0040fbf0(0);
+    DAT_011f42a0.Lock(0);
     A170Set* result;
     if (abAllocate)
     {

@@ -657,7 +657,7 @@ struct LockObject
 {
     unsigned int owner;
     unsigned int count;
-    void FUN_0040fbf0(const char*);
+    void Lock(const char*);
 };
 
 extern char DAT_012043f8;
@@ -699,7 +699,7 @@ void __cdecl FUN_00c88520(SceneObject* a0, SceneObject* a1)
         rotation.m128_f32[2] = q.z;
         rotation.m128_f32[3] = q.w;
         reinterpret_cast<FourFloatVector*>(&rotation)->FUN_005611c0();
-        reinterpret_cast<LockObject*>(&DAT_01267b80)->FUN_0040fbf0(0);
+        reinterpret_cast<LockObject*>(&DAT_01267b80)->Lock(0);
         ((void(__thiscall*)(SceneObject*, FourFloatVector*, FourFloatVector*))destination->vtable[58])(
             destination, reinterpret_cast<FourFloatVector*>(&position), reinterpret_cast<FourFloatVector*>(&rotation));
         if (--DAT_01267b84 == 0)

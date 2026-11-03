@@ -1685,7 +1685,7 @@ struct Sound
     Sound(const Sound&);
     ~Sound();
     Sound& operator=(const Sound&);
-    void FUN_00ad8830(int);
+    void Play(int);
     void FUN_00ad88f0();
     void FUN_00ad8d10();
     bool FUN_00ad8ce0();
@@ -1925,7 +1925,7 @@ void UpdateRadio(bool force)
     {
         String message3;
         Sound sound = FUN_00453a70()->FUN_00ad7550(DAT_0107ce80, 0x100121);
-        sound.FUN_00ad8830(0);
+        sound.Play(0);
         FUN_00406f60(&message3, DAT_011d25f8.FUN_00403df0(), DAT_011dd42c->form->FUN_0055d520());
         DAT_011dd430 = DAT_011dd42c;
         FUN_008324e0(0);
@@ -1941,7 +1941,7 @@ void UpdateRadio(bool force)
             DAT_011dd638.FUN_00ad88f0();
             DAT_011dd638.FUN_00ad8d10();
             DAT_011dd638 = FUN_00453a70()->FUN_00ad7550(DAT_0107ce34, 0x100031);
-            DAT_011dd638.FUN_00ad8830(0);
+            DAT_011dd638.Play(0);
         }
         DAT_011dd638.FUN_00ad89e0(
             FUN_004dd150((100 - DAT_011dd42c->state.FUN_00833c20()) / DAT_01017a40, DAT_01016264));
@@ -2002,7 +2002,7 @@ void UpdateRadio(bool force)
             else
                 DAT_011dd5bc.FUN_00ad89e0(FUN_00453a70()->FUN_00ad7ae0() * volume);
             volumeSet = true;
-            DAT_011dd5bc.FUN_00ad8830(0);
+            DAT_011dd5bc.Play(0);
             if (!DAT_011dd5bc.FUN_00ad8ce0())
                 FUN_00705210(track->FUN_0083c820()->FUN_006815c0()->FUN_00559450(), DAT_011dd5bc,
                              DAT_011dea3c->Position(), DAT_011dea3c, false);
@@ -2030,7 +2030,7 @@ void UpdateRadio(bool force)
         DAT_011dd5bc.FUN_00ad8d10();
         DAT_011dd5bc = FUN_00453a70()->FUN_00ad7550(DAT_0107ce34, 0x100031);
         DAT_011dd5bc.FUN_004f15a0(1);
-        DAT_011dd5bc.FUN_00ad8830(0);
+        DAT_011dd5bc.Play(0);
         DAT_011dd42c->state.SetFlag40(true);
         DAT_011dd42c->state.FUN_00833c40(false);
     }
@@ -2973,10 +2973,10 @@ class RadioUpdateSndHandle
     void FUN_00ad88f0();
     void FUN_00ad8d10();
     void FUN_00ad88b0();
-    void FUN_00ad8830(int);
+    void Play(int);
     int FUN_00ad8b30();
     void FUN_00ad89e0(float);
-    void FUN_00ad8b60(float, float, float);
+    void SetPos(float, float, float);
     void FUN_004f15a0(int);
     void FUN_00ad8be0(float, float);
     void FUN_00ad8e60(void (*)(void*), void*);
@@ -3023,7 +3023,7 @@ class RadioUpdateObj
     TESBoundObject* FUN_007af430();
     RadioUpdateObj* FUN_0084e3a0();
     bool FUN_00579200();
-    void FUN_0061f170(int, RadioUpdateObj*);
+    void RunResultScript(int, RadioUpdateObj*);
     bool FUN_0083c7b0();
     bool FUN_0083c7e0();
     bool FUN_0083b9f0();
@@ -3384,8 +3384,8 @@ void __cdecl FUN_00834260(FalloutRadio::RadioStationState* apState)
                 }
                 else if (bVal && (*it->FUN_006815c0())->active)
                 {
-                    (*it->FUN_006815c0())->snd4.FUN_00ad8830(0);
-                    (*it->FUN_006815c0())->snd10.FUN_00ad8830(0);
+                    (*it->FUN_006815c0())->snd4.Play(0);
+                    (*it->FUN_006815c0())->snd10.Play(0);
                 }
             }
             it = it->FUN_00726070();
@@ -3403,7 +3403,7 @@ void __cdecl FUN_00834260(FalloutRadio::RadioStationState* apState)
                 }
                 else if (bVal)
                 {
-                    (*(RadioUpdateSndHandle*)&DAT_011dd638).FUN_00ad8830(0);
+                    (*(RadioUpdateSndHandle*)&DAT_011dd638).Play(0);
                     ResetThreadFlags();
                 }
             }
@@ -3414,8 +3414,8 @@ void __cdecl FUN_00834260(FalloutRadio::RadioStationState* apState)
             }
             else if (bVal)
             {
-                (*(RadioUpdateSndHandle*)&DAT_011dd638).FUN_00ad8830(0);
-                (*(RadioUpdateSndHandle*)&DAT_011dd5bc).FUN_00ad8830(0);
+                (*(RadioUpdateSndHandle*)&DAT_011dd638).Play(0);
+                (*(RadioUpdateSndHandle*)&DAT_011dd5bc).Play(0);
             }
         }
         DAT_011dd5e8.FUN_004538c0();
@@ -3448,7 +3448,7 @@ void __cdecl FUN_00834260(FalloutRadio::RadioStationState* apState)
                     ((RadioUpdateState*)apState)
                         ->sub.ptr->FUN_0083c820()
                         ->FUN_0084e3a0()
-                        ->FUN_0061f170(0, ((RadioUpdateState*)apState)->form);
+                        ->RunResultScript(0, ((RadioUpdateState*)apState)->form);
                 ((RadioUpdateState*)apState)->sub.ptr->FUN_0083c820()->FUN_0083c7b0();
                 ((RadioUpdateState*)apState)->fc = ((RadioUpdateAudio*)::FUN_00453a70())->FUN_0063d040() + 50;
                 ((RadioUpdateState*)apState)->f10 = 0;
@@ -3501,7 +3501,7 @@ void __cdecl FUN_00834260(FalloutRadio::RadioStationState* apState)
                         ((RadioUpdateState*)apState)
                             ->sub.ptr->FUN_0083c820()
                             ->FUN_0084e3a0()
-                            ->FUN_0061f170(0, ((RadioUpdateState*)apState)->form);
+                            ->RunResultScript(0, ((RadioUpdateState*)apState)->form);
                     ((RadioUpdateState*)apState)->sub.ptr->FUN_0083c820()->FUN_0083c7b0();
                     ((RadioUpdateState*)apState)->fc = ((RadioUpdateAudio*)::FUN_00453a70())->FUN_0063d040() + 50;
                     ((RadioUpdateState*)apState)->f10 = 0;
@@ -3578,7 +3578,7 @@ void __cdecl FUN_00834260(FalloutRadio::RadioStationState* apState)
         }
 
         if (*aNext->FUN_006815c0() && (*aNext->FUN_006815c0())->snd4.FUN_00ad8ce0())
-            (*aNext->FUN_006815c0())->snd4.FUN_00ad8b60(pos.x, pos.y, pos.z);
+            (*aNext->FUN_006815c0())->snd4.SetPos(pos.x, pos.y, pos.z);
 
         if (bFound && !(*aNext->FUN_006815c0())->snd10.FUN_00ad8ce0())
         {
@@ -3587,14 +3587,14 @@ void __cdecl FUN_00834260(FalloutRadio::RadioStationState* apState)
             (*aNext->FUN_006815c0())->snd10 =
                 ((RadioUpdateAudio*)::FUN_00453a70())->FUN_00ad7550(radioUpdateStaticSound, 0x100012);
             (*aNext->FUN_006815c0())->snd10.FUN_004f15a0(1);
-            (*aNext->FUN_006815c0())->snd10.FUN_00ad8b60(pos.x, pos.y, pos.z);
+            (*aNext->FUN_006815c0())->snd10.SetPos(pos.x, pos.y, pos.z);
             (*aNext->FUN_006815c0())->snd10.FUN_00ad89e0(FUN_004dd150((float)(100 - aTmp) / 100.0, 0.75f));
-            (*aNext->FUN_006815c0())->snd10.FUN_00ad8830(0);
+            (*aNext->FUN_006815c0())->snd10.Play(0);
         }
         else if (bFound)
         {
             (*aNext->FUN_006815c0())->snd10.FUN_00ad89e0(FUN_004dd150((float)(100 - aTmp) / 100.0, 0.75f));
-            (*aNext->FUN_006815c0())->snd10.FUN_00ad8b60(pos.x, pos.y, pos.z);
+            (*aNext->FUN_006815c0())->snd10.SetPos(pos.x, pos.y, pos.z);
         }
         else if (!bFound && (*aNext->FUN_006815c0())->snd10.FUN_00ad8ce0())
         {
@@ -3692,9 +3692,9 @@ void __cdecl FUN_00834260(FalloutRadio::RadioStationState* apState)
                     }
                     (*aNext->FUN_006815c0())->snd4.FUN_00ad8e60(Callback57e0, ((RadioUpdateState*)apState));
                     (*aNext->FUN_006815c0())->snd4.FUN_00ad8fd0(((RadioUpdateState*)apState)->fc);
-                    (*aNext->FUN_006815c0())->snd4.FUN_00ad8b60(pos.x, pos.y, pos.z);
+                    (*aNext->FUN_006815c0())->snd4.SetPos(pos.x, pos.y, pos.z);
                     (*aNext->FUN_006815c0())->snd4.FUN_00ad89e0((float)aTmp / 100.0);
-                    (*aNext->FUN_006815c0())->snd4.FUN_00ad8830(0);
+                    (*aNext->FUN_006815c0())->snd4.Play(0);
                 }
                 if (bCurrentVal && !(*aNext->FUN_006815c0())->b1d && !aState)
                 {

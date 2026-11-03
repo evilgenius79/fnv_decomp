@@ -418,7 +418,7 @@ struct PhysicsLock
 {
     int owner;
     int count;
-    void FUN_0040fbf0(const char*);
+    void Lock(const char*);
     void unlock()
     {
         if (--count == 0)
@@ -522,7 +522,7 @@ void CollisionSync::FUN_00c65b00()
         forcedQ.z = rot.z;
         forcedQ.w = rot.w;
         forcedQ.FUN_005611c0();
-        DAT_01267b80.FUN_0040fbf0(0);
+        DAT_01267b80.Lock(0);
         b->vtable->SetGeometryTransform(b, &forcedPos, &forcedQ);
         DAT_01267b80.unlock();
     }
@@ -558,7 +558,7 @@ void CollisionSync::FUN_00c65b00()
             nearQ.z = rot.z;
             nearQ.w = rot.w;
             nearQ.FUN_005611c0();
-            DAT_01267b80.FUN_0040fbf0(0);
+            DAT_01267b80.Lock(0);
             b->vtable->SetGeometryTransform(b, &nearPos, &nearQ);
             DAT_01267b80.unlock();
         }
@@ -597,7 +597,7 @@ void CollisionSync::FUN_00c65b00()
         flaggedQ.z = rot.z;
         flaggedQ.w = rot.w;
         flaggedQ.FUN_005611c0();
-        DAT_01267b80.FUN_0040fbf0(0);
+        DAT_01267b80.Lock(0);
         b->vtable->SetGeometryTransform(b, &flaggedPos, &flaggedQ);
         DAT_01267b80.unlock();
     }

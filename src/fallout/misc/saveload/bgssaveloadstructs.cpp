@@ -786,7 +786,7 @@ struct BGSSaveLoadGame
 {
     SavedEntryMap* FUN_00559450();
 };
-TESForm* __cdecl FUN_004839c0(unsigned int);
+TESForm* __cdecl LookupFormByID(unsigned int);
 bool __cdecl FUN_0084bcd0(unsigned int, SavedBuffer*);
 struct SavedStats
 {
@@ -815,7 +815,7 @@ void SavedStats::LoadStats()
         }
         else
         {
-            TESForm* form = FUN_004839c0(entryId);
+            TESForm* form = LookupFormByID(entryId);
             if (form)
             {
                 SetupResponse(form, pEntry->topic, &map);

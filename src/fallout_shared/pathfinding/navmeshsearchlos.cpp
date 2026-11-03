@@ -349,7 +349,7 @@ struct ConfigValue
 extern ConfigValue g_navConfig;
 extern float g_navModifier;
 extern float __cdecl FUN_00404010(float v, float fTargetUpperBound);
-extern MaterialObject* __cdecl FUN_004839c0(unsigned int materialID);
+extern MaterialObject* __cdecl LookupFormByID(unsigned int materialID);
 // @fnv 0x006aacb0
 unsigned char PathSearch::ExpandNeighbors(NodeCost* origin, FlagCollection* output)
 {
@@ -396,7 +396,7 @@ unsigned char PathSearch::ExpandNeighbors(NodeCost* origin, FlagCollection* outp
                                                 {
                                                     int materialID =
                                                         connectedMesh->FUN_00699af0(connectedTri)->material;
-                                                    material = FUN_004839c0(materialID);
+                                                    material = LookupFormByID(materialID);
                                                     if (material)
                                                     {
                                                         void* filterRef;

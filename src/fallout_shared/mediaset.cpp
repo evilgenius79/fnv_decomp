@@ -893,7 +893,7 @@ struct BSSoundHandleEx
     int v2;
     BSSoundHandleEx();
     ~BSSoundHandleEx();
-    bool FUN_00ad8830(bool);
+    bool Play(bool);
 };
 struct BSAudio598060
 {
@@ -1004,7 +1004,7 @@ bool This598060::UpdateSoundState(unsigned int auiTime, bool abEnabled, Ctrl5980
         {
             if (this->m_bc != 0 && !this->m_30)
             {
-                FUN_00453a70()->FUN_00ad73b0((int)this->m_bc->FUN_0084e3a0(), 0x901).FUN_00ad8830(false);
+                FUN_00453a70()->FUN_00ad73b0((int)this->m_bc->FUN_0084e3a0(), 0x901).Play(false);
             }
             ptrLocal = &this->m_48;
             this->m_30 = 1;
@@ -1013,7 +1013,7 @@ bool This598060::UpdateSoundState(unsigned int auiTime, bool abEnabled, Ctrl5980
         {
             if (this->m_30 && this->m_c0 != 0)
             {
-                FUN_00453a70()->FUN_00ad73b0((int)this->m_c0->FUN_0084e3a0(), 0x901).FUN_00ad8830(false);
+                FUN_00453a70()->FUN_00ad73b0((int)this->m_c0->FUN_0084e3a0(), 0x901).Play(false);
             }
             ptrLocal = &this->m_68;
             this->m_30 = 0;
@@ -1022,7 +1022,7 @@ bool This598060::UpdateSoundState(unsigned int auiTime, bool abEnabled, Ctrl5980
         {
             if (this->m_30 && this->m_c0 != 0)
             {
-                FUN_00453a70()->FUN_00ad73b0((int)this->m_c0->FUN_0084e3a0(), 0x901).FUN_00ad8830(false);
+                FUN_00453a70()->FUN_00ad73b0((int)this->m_c0->FUN_0084e3a0(), 0x901).Play(false);
             }
             ptrLocal = &this->m_58;
             this->m_30 = 0;
@@ -1086,7 +1086,7 @@ struct BSSoundHandleEx
     unsigned int uiState;
     unsigned int uiFlags;
     ~BSSoundHandleEx();
-    bool FUN_00ad8830();
+    bool Play();
 };
 struct DungeonAudio
 {
@@ -1118,7 +1118,7 @@ bool DungeonMediaSet::UpdatePlayback(bool active, unsigned int time, int mediaTy
         if (!playing && !bEffectFlag)
         {
             if (m_pSound1 && !bEffectFlag)
-                ((DungeonAudio*)BSAudio::GetSingleton())->FUN_00ad73b0(m_pSound1->GetFormID(), 0x901, 0).FUN_00ad8830();
+                ((DungeonAudio*)BSAudio::GetSingleton())->FUN_00ad73b0(m_pSound1->GetFormID(), 0x901, 0).Play();
             DAT_011ca9fc = time - 1;
             bEffectFlag = true;
             FalloutAudioMedia::PlayMedia((MEDIATYPE)mediaType, m_kMediaSetEntry1.Name.String(),
@@ -1153,7 +1153,7 @@ bool DungeonMediaSet::UpdatePlayback(bool active, unsigned int time, int mediaTy
         if (fading)
         {
             if (m_pSound2)
-                ((DungeonAudio*)BSAudio::GetSingleton())->FUN_00ad73b0(m_pSound2->GetFormID(), 0x901, 0).FUN_00ad8830();
+                ((DungeonAudio*)BSAudio::GetSingleton())->FUN_00ad73b0(m_pSound2->GetFormID(), 0x901, 0).Play();
             DAT_011ca9fc = time + m_fMediaParameter3 * 1000.0;
             if (DAT_011dd374)
                 DAT_011dd374->FUN_007037c0(DAT_011ca9fc);

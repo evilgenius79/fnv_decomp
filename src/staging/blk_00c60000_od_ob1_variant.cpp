@@ -3224,7 +3224,7 @@ class FNVSubHelper
 class FNVCtxHelper
 {
   public:
-    void __thiscall FUN_00853130(void* a, void* b);
+    void __thiscall GetAt(void* a, void* b);
 };
 
 inline bool InList(void*& p)
@@ -3280,7 +3280,7 @@ bool FUN_00c64c40_cls::FUN_00c64c40(void* a1, FNVListObj* a2)
                 out = 0;
                 if (*(void**)((char*)a1 + 0x5c4) != 0 && m9 != 0)
                 {
-                    static_cast<FNVCtxHelper*>(*(void**)((char*)a1 + 0x5c4))->FUN_00853130(m9, &out);
+                    static_cast<FNVCtxHelper*>(*(void**)((char*)a1 + 0x5c4))->GetAt(m9, &out);
                 }
                 if (out != 0)
                 {
@@ -3920,7 +3920,7 @@ extern Pool_11f6238 DAT_011f6238;
 extern char* DAT_0109b220;
 extern const char str_010c36b0[];
 char* __cdecl FUN_00a5b690(const char* text);
-void __cdecl FUN_00401030(void* buffer);
+void __cdecl FormHeap_Free(void* buffer);
 
 struct NiFixedString
 {
@@ -3941,12 +3941,12 @@ struct NiFixedString
 
     static void operator delete(void* p)
     {
-        FUN_00401030(p);
+        FormHeap_Free(p);
     }
 
     static void operator delete(void* p, unsigned int size)
     {
-        FUN_00401030(p);
+        FormHeap_Free(p);
     }
 };
 

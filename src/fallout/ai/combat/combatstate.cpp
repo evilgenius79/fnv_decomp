@@ -4685,7 +4685,7 @@ class TESObjectREFR : public TESForm
     virtual void v1();
 };
 
-TESForm* __cdecl FUN_004839c0(TESObjectREFR* p);
+TESForm* __cdecl LookupFormByID(TESObjectREFR* p);
 
 class FUN_009a3220_cls
 {
@@ -4695,11 +4695,11 @@ class FUN_009a3220_cls
     void FUN_009a3220(int unkArg);
 };
 
-// Re-resolves m_04 through FUN_004839c0 and dynamic_cast to TESObjectREFR, or clears it to null when m_04 is null.
+// Re-resolves m_04 through LookupFormByID and dynamic_cast to TESObjectREFR, or clears it to null when m_04 is null.
 // @fnv 0x009a3220
 void FUN_009a3220_cls::FUN_009a3220(int unkArg)
 {
-    m_04 = m_04 != 0 ? dynamic_cast<TESObjectREFR*>(FUN_004839c0(m_04)) : 0;
+    m_04 = m_04 != 0 ? dynamic_cast<TESObjectREFR*>(LookupFormByID(m_04)) : 0;
 }
 
 struct ElementProxy
@@ -9556,11 +9556,11 @@ class Holder9A2
     void ResolveRef(TESFile9A2* pkFile);
 };
 
-// Replaces m_pkRef with the result of FUN_004839c0 cast to TESObjectREFR, or null if m_pkRef is null.
+// Replaces m_pkRef with the result of LookupFormByID cast to TESObjectREFR, or null if m_pkRef is null.
 // @fnv 0x009a2cc0
 void Holder9A2::ResolveRef(TESFile9A2* pkFile)
 {
-    m_pkRef = m_pkRef ? dynamic_cast<TESObjectREFR*>(FUN_004839c0(m_pkRef)) : 0;
+    m_pkRef = m_pkRef ? dynamic_cast<TESObjectREFR*>(LookupFormByID(m_pkRef)) : 0;
 }
 
 namespace fnv_0099b5a0 {
@@ -11540,7 +11540,7 @@ struct RefCalls_9a2a30
 };
 class BGSLoadFormBuffer;
 
-TESForm* __cdecl FUN_004839c0(unsigned int);
+TESForm* __cdecl LookupFormByID(unsigned int);
 struct RefSlot
 {
     TESObjectREFR* ref;
@@ -11698,14 +11698,14 @@ void HostA::FUN_009a2a30(BGSLoadFormBuffer* buffer)
     {
         if (slots[i])
         {
-            slots[i]->ref = slots[i]->ref ? dynamic_cast<TESObjectREFR*>(FUN_004839c0((unsigned int)slots[i]->ref)) : 0;
+            slots[i]->ref = slots[i]->ref ? dynamic_cast<TESObjectREFR*>(LookupFormByID((unsigned int)slots[i]->ref)) : 0;
             if (slots[i]->ref)
                 ((RefCalls_9a2a30*)slots[i]->ref)->FUN_00564db0(true);
         }
     }
     if (member18C)
         member18C->ResolveRef(buffer);
-    actor = actor ? dynamic_cast<Actor*>(FUN_004839c0((unsigned int)actor)) : 0;
+    actor = actor ? dynamic_cast<Actor*>(LookupFormByID((unsigned int)actor)) : 0;
     if (index != -1)
         SetMode(index);
     for (unsigned int j = 0; j < 7; j++)

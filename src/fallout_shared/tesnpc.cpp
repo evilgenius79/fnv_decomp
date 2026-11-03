@@ -2826,8 +2826,8 @@ extern void __cdecl FUN_00485950(unsigned int tag, unsigned int value);
 extern void __cdecl AppendChunk(unsigned int tag, void* ptr, unsigned int length);
 extern void __cdecl FUN_00485710(unsigned int tag, const void* ptr, unsigned int length);
 extern void __cdecl FUN_00403d30(void*, int, unsigned int);
-extern void* __cdecl FUN_00401000(unsigned int size);
-extern void __cdecl FUN_00401030(void*);
+extern void* __cdecl FormHeap_Allocate(unsigned int size);
+extern void __cdecl FormHeap_Free(void*);
 extern bool __cdecl FUN_00401500();
 
 struct NPCSerializer
@@ -2898,21 +2898,21 @@ void NPCSerializer::WriteToStream()
     if (formID != 0)
     {
         unsigned int values = formID * 4;
-        float* bytes = (float*)FUN_00401000(values);
+        float* bytes = (float*)FormHeap_Allocate(values);
         FUN_00403d30(bytes, 0, values);
         for (unsigned int index = 0; index < formID; ++index)
         {
             bytes[index] = *((FaceMatrix*)((char*)this + 0x134))->FUN_0060b370(index, 0).FUN_00629ab0();
         }
         FUN_00485710(0x53474746, bytes, formID);
-        FUN_00401030(bytes);
+        FormHeap_Free(bytes);
         bytes = 0;
     }
     formID = ((FaceMatrix*)((char*)this + 0x154))->FUN_009611e0();
     if (formID != 0)
     {
         unsigned int bytesSecond = formID * 4;
-        float* valuesSecond = (float*)FUN_00401000(bytesSecond);
+        float* valuesSecond = (float*)FormHeap_Allocate(bytesSecond);
         FUN_00403d30(valuesSecond, 0, bytesSecond);
         for (unsigned int indexSecond = 0; indexSecond < formID; ++indexSecond)
         {
@@ -2920,21 +2920,21 @@ void NPCSerializer::WriteToStream()
                 *((FaceMatrix*)((char*)this + 0x154))->FUN_0060b370(indexSecond, 0).FUN_00629ab0();
         }
         FUN_00485710(0x41474746, valuesSecond, formID);
-        FUN_00401030(valuesSecond);
+        FormHeap_Free(valuesSecond);
         valuesSecond = 0;
     }
     formID = ((FaceMatrix*)((char*)this + 0x174))->FUN_009611e0();
     if (formID != 0)
     {
         unsigned int bytesThird = formID * 4;
-        float* valuesThird = (float*)FUN_00401000(bytesThird);
+        float* valuesThird = (float*)FormHeap_Allocate(bytesThird);
         FUN_00403d30(valuesThird, 0, bytesThird);
         for (unsigned int indexThird = 0; indexThird < formID; ++indexThird)
         {
             valuesThird[indexThird] = *((FaceMatrix*)((char*)this + 0x174))->FUN_0060b370(indexThird, 0).FUN_00629ab0();
         }
         FUN_00485710(0x53544746, valuesThird, formID);
-        FUN_00401030(valuesThird);
+        FormHeap_Free(valuesThird);
         valuesThird = 0;
     }
 
@@ -6718,7 +6718,7 @@ struct H3370
     void FUN_00484ab0(bool);
 };
 void __cdecl ResolveFormID(void*, void*);
-TESForm* __cdecl FUN_004839c0(void*);
+TESForm* __cdecl LookupFormByID(void*);
 void* __cdecl FUN_00ec43fb(void*, int, void*, void*, int);
 void __cdecl FUN_005b5e40(void*, void*, void*, void*);
 struct C3370
@@ -6856,7 +6856,7 @@ void C3370::FUN_00603370()
     {
         a = field130;
         ResolveFormID(&a, ((H3370*)this)->FUN_00484e60(-1));
-        field130 = dynamic_cast<TESClass*>(FUN_004839c0(a));
+        field130 = dynamic_cast<TESClass*>(LookupFormByID(a));
     }
     if (v81())
         ((H3370*)this)->InitAttributesAndSkills(false);
@@ -6866,7 +6866,7 @@ void C3370::FUN_00603370()
         if (b)
         {
             ResolveFormID(&b, ((H3370*)this)->FUN_00484e60(-1));
-            field1d4 = dynamic_cast<TESCombatStyle*>(FUN_004839c0(b));
+            field1d4 = dynamic_cast<TESCombatStyle*>(LookupFormByID(b));
             if (!field1d4)
                 FUN_005b5e40(&DAT_0104a600, b, ((H3370*)this)->FUN_0084e3a0(), v76());
         }
@@ -7378,7 +7378,7 @@ struct Buffer75
     bool FUN_0042ce90();
 };
 
-TESForm* FUN_004839c0(unsigned int);
+TESForm* LookupFormByID(unsigned int);
 
 struct Cell75
 {
@@ -7628,7 +7628,7 @@ void NPC75::FUN_00609220(Buffer75* buffer)
         buffer->FUN_00864980(&skills, 28);
 
     if (buffer->FUN_00428110(0x400).FUN_004280f0())
-        npcClass = dynamic_cast<TESClass*>(FUN_004839c0(buffer->FUN_008648a0()));
+        npcClass = dynamic_cast<TESClass*>(LookupFormByID(buffer->FUN_008648a0()));
 
     unsigned char changed1 = 0;
 
@@ -7645,7 +7645,7 @@ void NPC75::FUN_00609220(Buffer75* buffer)
 
         TESRace* newRace = 0;
 
-        newRace = dynamic_cast<TESRace*>(FUN_004839c0(buffer->FUN_008648a0()));
+        newRace = dynamic_cast<TESRace*>(LookupFormByID(buffer->FUN_008648a0()));
 
         if (newRace != race.FUN_00726070())
         {
@@ -7653,7 +7653,7 @@ void NPC75::FUN_00609220(Buffer75* buffer)
             changed1 |= 0x1b;
         }
 
-        originalRace = dynamic_cast<TESRace*>(FUN_004839c0(buffer->FUN_008648a0()));
+        originalRace = dynamic_cast<TESRace*>(LookupFormByID(buffer->FUN_008648a0()));
     }
 
     if (updateHeight27)
@@ -7713,8 +7713,8 @@ void NPC75::FUN_00609220(Buffer75* buffer)
         float oldLength23 = hairLength;
         float oldColor22 = (float)hairColor;
 
-        hair = dynamic_cast<TESHair*>(FUN_004839c0(buffer->FUN_008648a0()));
-        eyes = dynamic_cast<TESEyes*>(FUN_004839c0(buffer->FUN_008648a0()));
+        hair = dynamic_cast<TESHair*>(LookupFormByID(buffer->FUN_008648a0()));
+        eyes = dynamic_cast<TESEyes*>(LookupFormByID(buffer->FUN_008648a0()));
 
         buffer->FUN_00864980(&hairLength, 4);
         buffer->FUN_00864980(&hairColor, 4);
@@ -7745,7 +7745,7 @@ void NPC75::FUN_00609220(Buffer75* buffer)
                 for (unsigned int index = 0; index < count33; ++index)
                 {
                     BGSHeadPart* part = 0;
-                    part = dynamic_cast<BGSHeadPart*>(FUN_004839c0(buffer->FUN_008648a0()));
+                    part = dynamic_cast<BGSHeadPart*>(LookupFormByID(buffer->FUN_008648a0()));
                     if (part)
                         parts.FUN_005ae3d0(part);
                 }

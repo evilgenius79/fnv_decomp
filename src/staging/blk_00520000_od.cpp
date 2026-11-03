@@ -1773,7 +1773,7 @@ bool Collection::FindNextRef(State* state, Ref** result, Ref** item, unsigned in
     return false;
 }
 
-extern "C" void __cdecl FUN_00401030(void*);
+extern "C" void __cdecl FormHeap_Free(void*);
 extern "C" void FUN_0044e360(unsigned long);
 
 struct ArrayItem
@@ -1808,7 +1808,7 @@ void __thiscall Cls::FUN_00529330()
     }
     {
         void* p = this->m_8;
-        FUN_00401030(p);
+        FormHeap_Free(p);
     }
     FUN_0044e360(this->m_iWordAt04);
 }
@@ -1990,15 +1990,15 @@ struct FUN_00528be0 : QueueBase528be0
     ~FUN_00528be0();
 };
 
-// Calls FUN_00528e40(true), then passes m_buckets and unk04 to FUN_00401030.
+// Calls FUN_00528e40(true), then passes m_buckets and unk04 to FormHeap_Free.
 // @fnv 0x00528be0
 FUN_00528be0::~FUN_00528be0()
 {
     FUN_00528e40(true);
     void* buckets = m_buckets;
-    FUN_00401030(buckets);
+    FormHeap_Free(buckets);
     void* buffer = unk04;
-    FUN_00401030(buffer);
+    FormHeap_Free(buffer);
 }
 
 }

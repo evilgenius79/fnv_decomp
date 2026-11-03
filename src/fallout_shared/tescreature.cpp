@@ -1585,7 +1585,7 @@ struct CreatureRecordFile
     unsigned int GetField25C();
     bool FUN_00401680();
     unsigned short FUN_00403570();
-    void FUN_00472890(void*, unsigned int);
+    void GetChunkData(void*, unsigned int);
     void ReadChunkInt(void*);
     void ReadChunkData(void*);
 };
@@ -1932,7 +1932,7 @@ bool CreatureRecord::FUN_005f7ec0(CreatureRecordFile* file)
         {
         case 0x44494445: {  // EDID
             char* editorID = (char*)_alloca(file->GetField25C());
-            file->FUN_00472890(editorID, 512);
+            file->GetChunkData(editorID, 512);
             SetEditorID(editorID);
             break;
         }
@@ -1960,7 +1960,7 @@ bool CreatureRecord::FUN_005f7ec0(CreatureRecordFile* file)
             case 0x4f544e43: {
                 CreatureContainerEntry item;
                 FUN_00403d30(&item, 0, 8);
-                file->FUN_00472890(&item, 8);
+                file->GetChunkData(&item, 8);
                 if (file->FUN_00401680())
                     item.FUN_00462230();
                 DAT_011cb5f8 = CreatureContainerComponent::AddContainerObject(&item);
@@ -1997,7 +1997,7 @@ bool CreatureRecord::FUN_005f7ec0(CreatureRecordFile* file)
         case 0x54444941: {
             CreatureAIData ai;
             FUN_00403d30(&ai, 0, 20);
-            file->FUN_00472890(&ai, 20);
+            file->GetChunkData(&ai, 20);
             if (file->FUN_00401680())
                 ai.SwapEndianFields();
             if (file->FUN_00403570() < 4 && ai.aggression > 1)
@@ -2045,7 +2045,7 @@ bool CreatureRecord::FUN_005f7ec0(CreatureRecordFile* file)
         case 0x4d414e53: {
             CreatureFactionEntry faction;
             FUN_00403d30(&faction, 0, 8);
-            file->FUN_00472890(&faction, 8);
+            file->GetChunkData(&faction, 8);
             if (file->FUN_00401680())
                 faction.FUN_00503210();
             CreatureActorComponent::FUN_0047d800(faction.faction, faction.rank);
@@ -2070,7 +2070,7 @@ bool CreatureRecord::FUN_005f7ec0(CreatureRecordFile* file)
             break;
         }
         case 0x53424341:
-            file->FUN_00472890(&data, 24);
+            file->GetChunkData(&data, 24);
             if (file->FUN_00401680())
                 data.SwapEndianness();
             if (file->FUN_00403570() < 8)
@@ -2095,7 +2095,7 @@ bool CreatureRecord::FUN_005f7ec0(CreatureRecordFile* file)
             if (file->GetField25C())
             {
                 char* model = (char*)_alloca(file->GetField25C());
-                file->FUN_00472890(model, 0);
+                file->GetChunkData(model, 0);
             }
             break;
         }
@@ -2103,7 +2103,7 @@ bool CreatureRecord::FUN_005f7ec0(CreatureRecordFile* file)
             if (file->GetField25C())
             {
                 char* model2 = (char*)_alloca(file->GetField25C());
-                file->FUN_00472890(model2, 0);
+                file->GetChunkData(model2, 0);
             }
             break;
         }
@@ -2139,7 +2139,7 @@ bool CreatureRecord::FUN_005f7ec0(CreatureRecordFile* file)
                 reach = (unsigned char)oldReach;
             }
             else
-                file->FUN_00472890(&reach, 1);
+                file->GetChunkData(&reach, 1);
             break;
         }
         case 0x52435343: {

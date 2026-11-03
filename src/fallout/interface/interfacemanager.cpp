@@ -5992,7 +5992,7 @@ struct SceneGraph : public NiNode
     SceneGraph(const char*, bool, NiCamera*);
     char _pad_ac[0x14];
     NiCamera* GetCamera();
-    void FUN_00c52020(float, int, int, int);
+    void SetCameraFOV(float, int, int, int);
 };
 
 struct FaderManager
@@ -6060,7 +6060,7 @@ SceneGraph* FUN_00712e90_shell::FUN_00712e90(SceneGraph* apGraph, char* apName, 
     }
     else
     {
-        pscene_graph->FUN_00c52020(runtimeFloatSettingDefault65, 0, 0, 0);
+        pscene_graph->SetCameraFOV(runtimeFloatSettingDefault65, 0, 0, 0);
     }
     return pscene_graph;
 }
@@ -8699,7 +8699,7 @@ struct PlayerObj
 extern PlayerObj* DAT_011dea3c;
 struct DebugText
 {
-    int FUN_00a0f8b0(const char*, float, float, int, int, float, int, const void*);
+    int CreateLine(const char*, float, float, int, int, float, int, const void*);
 };
 DebugText* __cdecl FUN_00a0d9e0(bool);
 struct FormObj
@@ -9382,14 +9382,14 @@ void FUN_00710ad0_shell::DrawDebugInfo()
         FUN_00714d70(baseY);
         m_pReference = (Refr*)baseY;
         FUN_00406f60(&aai, kStr0, m_pReference->FUN_0055d520(), m_pReference->FUN_0084e3a0());
-        FUN_00a0d9e0(true)->FUN_00a0f8b0(aai.FUN_00559450(), DAT_0103a1c4, (float)found, 2, -1, DAT_01012054, 0, 0);
+        FUN_00a0d9e0(true)->CreateLine(aai.FUN_00559450(), DAT_0103a1c4, (float)found, 2, -1, DAT_01012054, 0, 0);
         if (m_fdd)
         {
             if (m_pReference->FUN_005d43c0()->FUN_00418800() != 0)
             {
                 FUN_00406f60(&aai, kStr1, m_pReference->FUN_005d43c0()->FUN_00418800()->fv130(),
                              m_pReference->FUN_005d43c0()->FUN_00418800()->FUN_0084e3a0());
-                FUN_00a0d9e0(true)->FUN_00a0f8b0(aai.FUN_00559450(), DAT_0103a1c4, (float)lineH, 2, -1, DAT_01012054, 0,
+                FUN_00a0d9e0(true)->CreateLine(aai.FUN_00559450(), DAT_0103a1c4, (float)lineH, 2, -1, DAT_01012054, 0,
                                                  0);
                 lineH += savedY;
             }
@@ -9402,7 +9402,7 @@ void FUN_00710ad0_shell::DrawDebugInfo()
                     {
                         FUN_00406f60(&aai, kStr2, abo->FUN_008d8520()->pv4c8()->fv130(),
                                      abo->FUN_008d8520()->pv4c8()->FUN_0084e3a0());
-                        FUN_00a0d9e0(true)->FUN_00a0f8b0(aai.FUN_00559450(), DAT_0103a1c4, (float)lineH, 2, -1,
+                        FUN_00a0d9e0(true)->CreateLine(aai.FUN_00559450(), DAT_0103a1c4, (float)lineH, 2, -1,
                                                          DAT_01012054, 0, 0);
                         lineH += savedY;
                     }
@@ -9412,14 +9412,14 @@ void FUN_00710ad0_shell::DrawDebugInfo()
             {
                 FUN_00406f60(&aai, kStr3, m_pReference->FUN_00567790()->fv130(),
                              m_pReference->FUN_00567790()->FUN_0084e3a0());
-                FUN_00a0d9e0(true)->FUN_00a0f8b0(aai.FUN_00559450(), DAT_0103a1c4, (float)lineH, 2, -1, DAT_01012054, 0,
+                FUN_00a0d9e0(true)->CreateLine(aai.FUN_00559450(), DAT_0103a1c4, (float)lineH, 2, -1, DAT_01012054, 0,
                                                  0);
                 lineH += savedY;
             }
             if ((short)m_pReference->FUN_005d43c0()->FUN_00418770() != 1)
             {
                 FUN_00406f60(&aai, kStr4, (int)m_pReference->FUN_005d43c0()->FUN_00418770());
-                FUN_00a0d9e0(true)->FUN_00a0f8b0(aai.FUN_00559450(), DAT_0103a1c4, (float)lineH, 2, -1, DAT_01012054, 0,
+                FUN_00a0d9e0(true)->CreateLine(aai.FUN_00559450(), DAT_0103a1c4, (float)lineH, 2, -1, DAT_01012054, 0,
                                                  0);
                 lineH += savedY;
             }
@@ -9437,7 +9437,7 @@ void FUN_00710ad0_shell::DrawDebugInfo()
                         FUN_00406f60(&aai, kStr6, aco->FUN_008d8520()->pv4c8()->fv130(),
                                      aco->FUN_008d8520()->pv4c8()->FUN_0084e3a0(), aco->FUN_008d8520()->pv4d0());
                     }
-                    FUN_00a0d9e0(true)->FUN_00a0f8b0(aai.FUN_00559450(), DAT_0103a1c4, (float)lineH, 2, -1,
+                    FUN_00a0d9e0(true)->CreateLine(aai.FUN_00559450(), DAT_0103a1c4, (float)lineH, 2, -1,
                                                      DAT_01012054, 0, 0);
                     lineH += savedY;
                 }
@@ -9445,7 +9445,7 @@ void FUN_00710ad0_shell::DrawDebugInfo()
             if (m_pReference->FUN_00568680())
             {
                 FUN_00406f60(&aai, kStr7, (int)(m_pReference->FUN_00430830()->z * DAT_0102f248));
-                FUN_00a0d9e0(true)->FUN_00a0f8b0(aai.FUN_00559450(), DAT_0103a1c4, (float)lineH, 2, -1, DAT_01012054, 0,
+                FUN_00a0d9e0(true)->CreateLine(aai.FUN_00559450(), DAT_0103a1c4, (float)lineH, 2, -1, DAT_01012054, 0,
                                                  0);
                 lineH += savedY;
                 float dr[3];
@@ -9465,14 +9465,14 @@ void FUN_00710ad0_shell::DrawDebugInfo()
                         FUN_00406f60(&aai, kStr8, FUN_00509510(dn) ? kStr9 : kStr10, dn, (double)dr[0], (double)dr[1],
                                      (double)dr[2], (int)(cy->GetFurnitureHeading(dn) * DAT_0102f248),
                                      m_pReference->FUN_00567f80(ce, 1) ? kStr11 : kStr12);
-                        FUN_00a0d9e0(true)->FUN_00a0f8b0(aai.FUN_00559450(), DAT_0103a1c4, (float)lineH, 2, -1,
+                        FUN_00a0d9e0(true)->CreateLine(aai.FUN_00559450(), DAT_0103a1c4, (float)lineH, 2, -1,
                                                          DAT_01012054, 0, 0);
                         lineH += savedY;
                     }
                     else
                     {
                         FUN_00406f60(&aai, kStr13, FUN_00509510(dn) ? kStr9 : kStr10, dn);
-                        FUN_00a0d9e0(true)->FUN_00a0f8b0(aai.FUN_00559450(), DAT_0103a1c4, (float)lineH, 2, -1,
+                        FUN_00a0d9e0(true)->CreateLine(aai.FUN_00559450(), DAT_0103a1c4, (float)lineH, 2, -1,
                                                          DAT_01012054, 0, 0);
                         lineH += savedY;
                     }
@@ -9484,13 +9484,13 @@ void FUN_00710ad0_shell::DrawDebugInfo()
                 LockObj* lockObj = m_pReference->FUN_00569160();
                 FUN_00406f60(&aai, kStr14, DAT_01184a98[lockObj->FUN_004309e0(m_pReference)]->FUN_00403df0(),
                              lockObj->FUN_005021a0() ? kStr15 : kStr16);
-                FUN_00a0d9e0(true)->FUN_00a0f8b0(aai.FUN_00559450(), DAT_0103a1c4, (float)lineH, 2, -1, DAT_01012054, 0,
+                FUN_00a0d9e0(true)->CreateLine(aai.FUN_00559450(), DAT_0103a1c4, (float)lineH, 2, -1, DAT_01012054, 0,
                                                  0);
                 lineH += savedY;
                 if (lockObj->m_f4 != 0)
                 {
                     FUN_00406f60(&aai, kStr17, lockObj->m_f4->m_fn.FUN_00408da0());
-                    FUN_00a0d9e0(true)->FUN_00a0f8b0(aai.FUN_00559450(), DAT_0103a1c4, (float)lineH, 2, -1,
+                    FUN_00a0d9e0(true)->CreateLine(aai.FUN_00559450(), DAT_0103a1c4, (float)lineH, 2, -1,
                                                      DAT_01012054, 0, 0);
                     lineH += savedY;
                 }
@@ -9517,7 +9517,7 @@ void FUN_00710ad0_shell::DrawDebugInfo()
                     s6c45 = cellB28->FUN_0055d520();
                 }
                 FUN_00406f60(&aai, kStr20, s705, s6c45);
-                FUN_00a0d9e0(true)->FUN_00a0f8b0(aai.FUN_00559450(), DAT_0103a1c4, (float)lineH, 2, -1, DAT_01012054, 0,
+                FUN_00a0d9e0(true)->CreateLine(aai.FUN_00559450(), DAT_0103a1c4, (float)lineH, 2, -1, DAT_01012054, 0,
                                                  0);
                 lineH += savedY;
             }
@@ -9535,7 +9535,7 @@ void FUN_00710ad0_shell::DrawDebugInfo()
                 if (abk & 8)
                     FUN_00406d50(buf, 256, kStr25);
                 FUN_00406f60(&aai, FUN_00464f30(buf, false));
-                FUN_00a0d9e0(true)->FUN_00a0f8b0(aai.FUN_00559450(), DAT_0103a1c4, (float)lineH, 2, -1, DAT_01012054, 0,
+                FUN_00a0d9e0(true)->CreateLine(aai.FUN_00559450(), DAT_0103a1c4, (float)lineH, 2, -1, DAT_01012054, 0,
                                                  0);
                 lineH += savedY;
             }
@@ -9549,12 +9549,12 @@ void FUN_00710ad0_shell::DrawDebugInfo()
         FUN_00714d70(0);
         elseBase = (int)((FontMgr*)FUN_005bd5b0(*DAT_011f33c8.FUN_0043d4d0() - 1))->FUN_005bd5c0()->FUN_005bd580() + 3;
         elseLineH = *DAT_011debac.FUN_0043d4d0();
-        FUN_00a0d9e0(true)->FUN_00a0f8b0(kStr26, DAT_0103a1c4, (float)elseLineH, 2, -1, DAT_01012054, 0, 0);
+        FUN_00a0d9e0(true)->CreateLine(kStr26, DAT_0103a1c4, (float)elseLineH, 2, -1, DAT_01012054, 0, 0);
     }
     y6 = lineH;
     while (lineH < DAT_011d8c78)
     {
-        FUN_00a0d9e0(true)->FUN_00a0f8b0(kStr26, DAT_0103a1c4, (float)lineH, 2, -1, DAT_01012054, 0, 0);
+        FUN_00a0d9e0(true)->CreateLine(kStr26, DAT_0103a1c4, (float)lineH, 2, -1, DAT_01012054, 0, 0);
         lineH += savedY;
     }
     DAT_011d8c78 = y6;
@@ -9781,7 +9781,7 @@ extern const float DAT_01016970;
 
 struct FUN_00717230_bsobj
 {
-    void FUN_00a1b020();
+    void GetStringDimensions();
 };
 
 FUN_00717230_bsobj* __stdcall FUN_005bd5b0(float* out, int arg, void* holder, float scale, int zero);
@@ -9805,7 +9805,7 @@ unsigned char FUN_00717230_cls::FUN_00717230(int arg)
         int u1;
         int u2;
     } p;
-    FUN_005bd5b0(&p.f, arg, m_18, DAT_01016970, 0)->FUN_00a1b020();
+    FUN_005bd5b0(&p.f, arg, m_18, DAT_01016970, 0)->GetStringDimensions();
     return ((int)p.f <= m_14) ? 1 : 0;
 }
 
@@ -10714,7 +10714,7 @@ struct Manager
 };
 void CreateFontManager();
 CursorTile* FUN_0076bfe0();
-void FUN_00771700(int);
+void UpdateVisibilityState(int);
 // @fnv 0x0070b240
 void Manager::FUN_0070b240()
 {
@@ -10751,7 +10751,7 @@ void Manager::FUN_0070b240()
     accumulatorA.FUN_00559450()->FUN_004a1020(first);
     accumulatorB.FUN_00559450()->FUN_004a1020(first);
     CursorTile* e = FUN_0076bfe0();
-    FUN_00771700(4);
+    UpdateVisibilityState(4);
     if (e)
         e->Set(0xfa3, 0);
     cursor->FUN_0056c7f0()->SetAppCulled(true);
@@ -11536,7 +11536,7 @@ struct CameraData
 };
 struct SceneCamera
 {
-    void FUN_00c52020(float, int, int, int);
+    void SetCameraFOV(float, int, int, int);
     CameraData* FUN_006629f0();
 };
 SceneCamera* FUN_0045c670();
@@ -11565,7 +11565,7 @@ void PickOwner::UpdatePickObjects()
     c.SetByteAtOffset17(1);
     c.FUN_00705fc0(((PickWorld*)g_TES)->FUN_0084e3a0());
     c.FUN_006ecd40(0);
-    FUN_0045c670()->FUN_00c52020(FUN_00710ab0((FUN_00710ab0_Class*)DAT_011dea3c), 0, 0, 0);
+    FUN_0045c670()->SetCameraFOV(FUN_00710ab0((FUN_00710ab0_Class*)DAT_011dea3c), 0, 0, 0);
     FUN_0045c670()->FUN_006629f0()->MapScreenToRay((int)screenX, (int)screenY, d, e, 0);
     if (c.FUN_00e98e20(d, e, 0))
     {
@@ -12198,7 +12198,7 @@ int FUN_00719490_cls::FUN_00719490(float* p)
 }
 
 void FUN_009ff8a0(const char*, bool);
-int FUN_00a01860(const char*);
+int TraitNameToID(const char*);
 void FUN_00719580(void*);
 void UpdateStartMenuTile();
 struct MenuView
@@ -12288,7 +12288,7 @@ void Context::UpdateControllerState(int unused)
     FUN_009ff8a0("&xenon;", FUN_004b71d0());
     FUN_004b7210();
     FUN_009ff8a0("&xbox;", FUN_004b71d0());
-    target->Set(FUN_00a01860("_Has360Controller"), FUN_004b71d0());
+    target->Set(TraitNameToID("_Has360Controller"), FUN_004b71d0());
     FUN_00719580(root);
     void* position = root ? root->children.GetHeadPos() : 0;
     while (position)
@@ -14073,7 +14073,7 @@ class BSSoundHandleEx
     ~BSSoundHandleEx();
 
     BSSoundHandleEx& FUN_00418900(const BSSoundHandleEx& kOther);
-    bool FUN_00ad8830(bool bUnk);
+    bool Play(bool bUnk);
 
     BSSoundHandleEx& operator=(const BSSoundHandleEx& kOther)
     {
@@ -14101,7 +14101,7 @@ static const char s_szUIPopUpQuestNew[] = "UIPopUpQuestNew";
 static const char s_szUIMenuCancel[] = "UIMenuCancel";
 static const char s_szUILevelUp[] = "UILevelUp";
 
-// Maps recognized values to editor IDs, assigns each fetched handle, then calls FUN_00ad8830(false).
+// Maps recognized values to editor IDs, assigns each fetched handle, then calls Play(false).
 // @fnv 0x00717280
 void FUN_00717280(int aiSoundIndex)
 {
@@ -14139,7 +14139,7 @@ void FUN_00717280(int aiSoundIndex)
     default:
         return;
     }
-    kSound.FUN_00ad8830(false);
+    kSound.Play(false);
 }
 
 }
@@ -14399,7 +14399,7 @@ struct TileX
 
 struct CheckX
 {
-    bool FUN_004a4020();
+    bool IsConsoleOpen();
 };
 extern CheckX* FUN_0071b160(int a);
 
@@ -14487,7 +14487,7 @@ struct CursorX
 // @fnv 0x007118d0
 void CursorX::FUN_007118d0()
 {
-    if (FUN_004b71d0() && !b7d && !FUN_0071b160(1)->FUN_004a4020())
+    if (FUN_004b71d0() && !b7d && !FUN_0071b160(1)->IsConsoleOpen())
         return;
     AutoMemHelper kMarker(0xd, true, "D:\\_Fallout3\\Platforms\\Common\\Code\\Fallout\\Interface\\InterfaceManager.cpp",
                           0xc51);
@@ -14696,7 +14696,7 @@ bool FUN_005d4a40();
 unsigned int FUN_00457fe0();
 bool FUN_00702450(int iMenuID);
 bool FUN_007024e0();
-TESForm* FUN_004839c0(unsigned int auiFormId);
+TESForm* LookupFormByID(unsigned int auiFormId);
 bool InitTutorialMenu(BGSMessage* pkMessage, int iArg);
 void FUN_005b5e40(const char* pcFormat, ...);
 
@@ -14731,7 +14731,7 @@ void TutorialState::FUN_007182e0()
                  (!m_akEntries[m_iCurrent].m_uiMenu || FUN_00702450(m_akEntries[m_iCurrent].m_uiMenu + 1001)) &&
                  FUN_007024e0())
         {
-            BGSMessage* pkMessage = dynamic_cast<BGSMessage*>(FUN_004839c0(m_iCurrent + 0x168));
+            BGSMessage* pkMessage = dynamic_cast<BGSMessage*>(LookupFormByID(m_iCurrent + 0x168));
             if (!pkMessage || !InitTutorialMenu(pkMessage, 0) || !SetFlag2(m_iCurrent))
                 FUN_005b5e40(s_szTutorialError);
             m_uiDueTime = 0;
@@ -14859,7 +14859,7 @@ struct TutorialMessageView718
 {
     bool IsFlagSet();
 };
-extern "C" ::TESForm* __cdecl FUN_004839c0(unsigned int);
+extern "C" ::TESForm* __cdecl LookupFormByID(unsigned int);
 bool __cdecl FUN_005d4a40();
 
 struct TutorialMessageState718
@@ -14890,7 +14890,7 @@ bool TutorialMessageGate718::FUN_00718630(int aeID, unsigned int aiMenuID, unsig
             else
                 kMessages[aeID].uiMenuID = 0;
             ::BGSMessage* pmsg;
-            ::TESForm* pform = FUN_004839c0(aeID + 360);
+            ::TESForm* pform = LookupFormByID(aeID + 360);
             pmsg = pform ? dynamic_cast< ::BGSMessage*>(pform) : 0;
             bshow = pmsg && ((TutorialMessageView718*)pmsg)->IsFlagSet() && FUN_005d4a40() && !kMessages[aeID].bSeen;
         }

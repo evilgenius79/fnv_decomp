@@ -477,7 +477,7 @@ struct MemoryPool
     int unk1c;
     int unk20;
     int unk24;
-    void FUN_0040fbf0(char*);
+    void Lock(char*);
     void FUN_00aa7260();
 };
 extern MemoryPool* DAT_011f67b8[];
@@ -821,7 +821,7 @@ struct FUN_00aa7300_pool
 {
     int m_00;
     int m_04;
-    void FUN_0040fbf0(const char* name);
+    void Lock(const char* name);
 };
 class FUN_00aa7300_cls
 {
@@ -3366,7 +3366,7 @@ extern const char DAT_010a27f4[];
 struct MatrixPoolLock
 {
     unsigned int owner, count, unk08, unk0c, unk10, unk14, unk18, unk1c;
-    void FUN_0040fbf0(const char*);
+    void Lock(const char*);
 };
 struct MatrixPool
 {
@@ -3388,7 +3388,7 @@ struct MatrixPool
     {
         if (!pointer)
             return;
-        lock.FUN_0040fbf0(DAT_010a27f4);
+        lock.Lock(DAT_010a27f4);
         FUN_00aa6e00(pointer);
         unsigned int page = ((unsigned int)pointer - begin) >> 12;
         --pageCounts[page];

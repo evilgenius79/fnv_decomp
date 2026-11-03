@@ -425,7 +425,7 @@ struct RecordReader
     unsigned int GetField25C();
     void ReadChunkInt(unsigned int*);
     void ReadChunkData(unsigned short*);
-    void FUN_00472890(void*, unsigned int);
+    void GetChunkData(void*, unsigned int);
     unsigned short FUN_00403570();
     bool FUN_00401680();
 };
@@ -630,7 +630,7 @@ bool ClothingLoader::ReadFromStream(RecordReader* reader)
         {
         case 0x44494445: {
             char* pEditorId = (char*)_alloca(reader->GetField25C());
-            reader->FUN_00472890(pEditorId, 0x200);
+            reader->GetChunkData(pEditorId, 0x200);
             reinterpret_cast<ClothingVirtual*>(this)->ReadEditorID(pEditorId);
             break;
         }
@@ -667,7 +667,7 @@ bool ClothingLoader::ReadFromStream(RecordReader* reader)
             if (reader->FUN_00403570() < 11)
             {
                 unsigned int bipedData;
-                reader->FUN_00472890(&bipedData, 4);
+                reader->GetChunkData(&bipedData, 4);
                 if (reader->FUN_00401680())
                     reinterpret_cast<BipedFlags*>(&bipedData)->FUN_00512810();
                 (&this->biped)->bipedType = ((unsigned char*)&bipedData)[2];
@@ -675,7 +675,7 @@ bool ClothingLoader::ReadFromStream(RecordReader* reader)
             }
             else
             {
-                reader->FUN_00472890(&(&this->biped)->bipedMask, 8);
+                reader->GetChunkData(&(&this->biped)->bipedMask, 8);
                 if (reader->FUN_00401680())
                     reinterpret_cast<BipedFlags*>(&(&this->biped)->bipedMask)->FUN_00503210();
             }
@@ -684,13 +684,13 @@ bool ClothingLoader::ReadFromStream(RecordReader* reader)
         }
         case 0x54434d42: {
             char* buffer = (char*)_alloca(reader->GetField25C());
-            reader->FUN_00472890(buffer, 0);
+            reader->GetChunkData(buffer, 0);
             (&this->biped)->fifth.ReadModel(buffer);
             break;
         }
         case 0x4c444f4d: {
             char* buffer = (char*)_alloca(reader->GetField25C());
-            reader->FUN_00472890(buffer, 0);
+            reader->GetChunkData(buffer, 0);
             (&this->biped)->male.ReadModel(buffer);
             break;
         }
@@ -712,7 +712,7 @@ bool ClothingLoader::ReadFromStream(RecordReader* reader)
         }
         case 0x32444f4d: {
             char* buffer = (char*)_alloca(reader->GetField25C());
-            reader->FUN_00472890(buffer, 0);
+            reader->GetChunkData(buffer, 0);
             (&this->biped)->male4.ReadModel(buffer);
             break;
         }
@@ -726,25 +726,25 @@ bool ClothingLoader::ReadFromStream(RecordReader* reader)
         }
         case 0x4e4f4349: {
             char* buffer = (char*)_alloca(reader->GetField25C());
-            reader->FUN_00472890(buffer, 0);
+            reader->GetChunkData(buffer, 0);
             (&this->biped)->firstIcon.FUN_00489100(buffer);
             break;
         }
         case 0x4f43494d: {
             char* buffer = (char*)_alloca(reader->GetField25C());
-            reader->FUN_00472890(buffer, 0);
+            reader->GetChunkData(buffer, 0);
             (&this->biped)->firstTexture.FUN_0047a380(buffer);
             break;
         }
         case 0x3243494d: {
             char* buffer = (char*)_alloca(reader->GetField25C());
-            reader->FUN_00472890(buffer, 0);
+            reader->GetChunkData(buffer, 0);
             (&this->biped)->secondTexture.FUN_0047a380(buffer);
             break;
         }
         case 0x33444f4d: {
             char* buffer = (char*)_alloca(reader->GetField25C());
-            reader->FUN_00472890(buffer, 0);
+            reader->GetChunkData(buffer, 0);
             (&this->biped)->female.ReadModel(buffer);
             break;
         }
@@ -758,7 +758,7 @@ bool ClothingLoader::ReadFromStream(RecordReader* reader)
         }
         case 0x34444f4d: {
             char* buffer = (char*)_alloca(reader->GetField25C());
-            reader->FUN_00472890(buffer, 0);
+            reader->GetChunkData(buffer, 0);
             (&this->biped)->female4.ReadModel(buffer);
             break;
         }
@@ -772,7 +772,7 @@ bool ClothingLoader::ReadFromStream(RecordReader* reader)
         }
         case 0x324f4349: {
             char* buffer = (char*)_alloca(reader->GetField25C());
-            reader->FUN_00472890(buffer, 0);
+            reader->GetChunkData(buffer, 0);
             (&this->biped)->secondIcon.FUN_00489100(buffer);
             break;
         }

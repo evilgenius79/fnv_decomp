@@ -323,7 +323,7 @@ struct ActiveEffect_LoadGame_Helper
 
 struct FUN_005abf60_shell
 {
-    ScriptLocals* FUN_005abf60();
+    ScriptLocals* CreateEventList();
 };
 
 struct FUN_008579e0_shell
@@ -363,7 +363,7 @@ void FUN_00827d30_class::FUN_00827d30(Actor* apActor)
     {
         if (m_pScriptLocals == 0)
         {
-            m_pScriptLocals = ((FUN_005abf60_shell*)pScript)->FUN_005abf60();
+            m_pScriptLocals = ((FUN_005abf60_shell*)pScript)->CreateEventList();
         }
         if (m_pScriptLocals != 0)
         {

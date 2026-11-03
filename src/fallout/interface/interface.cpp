@@ -1764,7 +1764,7 @@ bool QueueMessage(const char*, const char*, const char*, int, void*, int, int, c
                   float, float, float);
 // Shows a warning message via QueueMessage when the interface manager's modifier key is held, returning the result; otherwise returns false.
 // @fnv 0x00703e80
-bool FUN_00703e80(const char* aText, const char* apcIconFilename, const char* apcTitle, void* afpResult,
+bool ShowMessageBox(const char* aText, const char* apcIconFilename, const char* apcTitle, void* afpResult,
                   int aiFirstButtonResult, int aiWarningContext, float afBackgroundTextureOpacityOverride,
                   float afMenuWidthOverride, const char* axFirst, ...)
 {
@@ -5523,7 +5523,7 @@ class Model
 };
 struct Loader_S
 {
-    NiNode* FUN_00447080(const char*, int, bool, bool, bool, bool);
+    NiNode* LoadModel(const char*, int, bool, bool, bool, bool);
 };
 extern bool DAT_011d8908;
 class FileFinder
@@ -5543,7 +5543,7 @@ NiNode* FUN_00707660(const char* path, bool* flag)
     if (g_modelLoader && !DAT_011d8908)
     {
         *flag = true;
-        return ((Loader_S*)g_modelLoader)->FUN_00447080(path, 0, true, false, false, false);
+        return ((Loader_S*)g_modelLoader)->LoadModel(path, 0, true, false, false, false);
     }
     else if (FileFinder::Exist(path, 0, 0, -1))
     {
@@ -6805,7 +6805,7 @@ struct MapMenuR6
 
 int __cdecl FUN_00556870(V3Maker*);
 // free helpers; conventions read from add esp evidence
-extern "C" void* __cdecl FUN_00401000(unsigned int);
+extern "C" void* __cdecl FormHeap_Allocate(unsigned int);
 extern "C" void __stdcall FUN_00401050(void*, unsigned int, unsigned int, void*);
 extern "C" void* __cdecl FUN_00aa1070(unsigned int);
 extern "C" void* __cdecl FUN_00aa13e0(unsigned int);
@@ -7395,10 +7395,10 @@ void FUN_007046f0(bool abShow, bool abInstant, bool abActivate)
 
 namespace s7094f0 {
 
-struct Lock
+struct SpinLock
 {
-    void FUN_0040fbf0(int iArg);
-    void FUN_0040fba0();
+    void Lock(int iArg);
+    void Unlock();
 };
 
 struct InterfaceManagerView
@@ -7757,7 +7757,7 @@ struct NameTile
     int unk28;
 };
 
-extern Lock DAT_011d89c0;
+extern SpinLock DAT_011d89c0;
 extern int DAT_011d8950;
 extern TESObjectREFR* DAT_011d8954;
 extern int DAT_011d8958;
@@ -7774,7 +7774,7 @@ bool FUN_00706130(TESObjectREFR* pkRef);
 int FUN_00705070(TESObjectREFR* pkRef, int iArg0, int iArg1);
 int GetOrCreateMenuTile(int iArg);
 bool InitStartMenu(int iArg0, int iArg1);
-void FUN_00771700(int iArg);
+void UpdateVisibilityState(int iArg);
 bool FUN_007a8ba0();
 bool DestroyCompanionWheelMenu(Actor* pkActor);
 
@@ -7784,7 +7784,7 @@ static const char s_szPlayerNameEntryMenu[] = "Player Name Entry Menu";
 // @fnv 0x007094f0
 void FUN_007094f0()
 {
-    DAT_011d89c0.FUN_0040fbf0(0);
+    DAT_011d89c0.Lock(0);
     if (DAT_011d8950 && (!FUN_004b7210()->m_iModalCount || DAT_011d8950 == 6 || DAT_011d8950 == 7))
     {
         bool bPickResultFound = false;
@@ -7809,7 +7809,7 @@ void FUN_007094f0()
         case 6:
             bPickResultFound = InitStartMenu(1, 0);
             if (bPickResultFound)
-                FUN_00771700(4);
+                UpdateVisibilityState(4);
             break;
         case 7:
             bPickResultFound = FUN_007a8ba0();
@@ -7847,7 +7847,7 @@ void FUN_007094f0()
             DAT_011d899c = 0;
         }
     }
-    DAT_011d89c0.FUN_0040fba0();
+    DAT_011d89c0.Unlock();
 }
 
 }
@@ -8388,7 +8388,7 @@ extern char DAT_0106ed20[], DAT_0106ed18[], DAT_0106ed0c[], DAT_0106ecfc[], DAT_
     DAT_01019f08[], DAT_0106ece8[], DAT_01047008[], DAT_0106ece0[], DAT_0106ecd8[], DAT_0106ecd0[], DAT_0106ecc8[],
     DAT_01020768[], DAT_01030018[], DAT_01018348[];
 
-int FUN_00a01860(const char*);
+int TraitNameToID(const char*);
 float FUN_0048ebc0(DisplayForm*, bool);
 DisplayTile* FUN_00a08b20(DisplayTile*, const char*);
 
@@ -8418,9 +8418,9 @@ void FUN_00707e30(DisplayItem* item, DisplayTile* root)
 
         int maskB = 0;
 
-        int label3 = FUN_00a01860(DAT_0106ed20);
+        int label3 = TraitNameToID(DAT_0106ed20);
 
-        int text3 = FUN_00a01860(DAT_0106ed18);
+        int text3 = TraitNameToID(DAT_0106ed18);
 
         int value = 0x1009;
         float modY4 = 0.0f;

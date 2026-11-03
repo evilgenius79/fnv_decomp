@@ -5268,8 +5268,8 @@ struct Elem
     int m_08;
     int m_0c;
 };
-void* __cdecl FUN_00401000(unsigned int n);
-void __cdecl FUN_00401030(void* p);
+void* __cdecl FormHeap_Allocate(unsigned int n);
+void __cdecl FormHeap_Free(void* p);
 void* __cdecl memcpy(void* dst, const void* src, unsigned int n);
 struct Arr994350
 {

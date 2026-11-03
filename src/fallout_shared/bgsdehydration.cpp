@@ -2029,8 +2029,8 @@ namespace fnv_00508a40 {
 class Script
 {
   public:
-    ScriptLocals* FUN_005abf60();
-    bool FUN_005ac1e0(TESObjectREFR*, ScriptLocals*, TESObjectREFR*, bool);
+    ScriptLocals* CreateEventList();
+    bool Execute(TESObjectREFR*, ScriptLocals*, TESObjectREFR*, bool);
 };
 struct ExtraDataList
 {
@@ -2223,7 +2223,7 @@ struct GlobalObject_0041a250
     GlobalObject_0041a250();
     ~GlobalObject_0041a250();
     void FUN_00418900(const GlobalObject_0041a250&);
-    bool FUN_00ad8830(bool);
+    bool Play(bool);
 };
 struct BSAudio
 {
@@ -2282,9 +2282,9 @@ bool Action::TryAddTopic(TopicInfo* pTopicInfo, TESObjectREFR* reference, int ar
                 if (extra && !extra->FUN_00418800())
                 {
                     extra->FUN_00419ed0(pScript);
-                    extra->FUN_00419f80(extra->FUN_00418800()->FUN_005abf60());
+                    extra->FUN_00419f80(extra->FUN_00418800()->CreateEventList());
                     TESObjectREFR* temporary = new FUN_0055a2f0;
-                    pScript->FUN_005ac1e0(temporary, extra->FUN_00418830(), 0, false);
+                    pScript->Execute(temporary, extra->FUN_00418830(), 0, false);
                 }
                 reinterpret_cast<ActorActions*>(actor)->AddTopic(script, extra, true);
             }
@@ -2299,7 +2299,7 @@ bool Action::TryAddTopic(TopicInfo* pTopicInfo, TESObjectREFR* reference, int ar
                 QueueUIMessage(sound.String(), 0, 0, 0, 2.0f, false);
                 GlobalObject_0041a250 message;
                 message.FUN_00418900(BSAudio::FUN_00453a70()->FUN_00ad7550("ITMPickupOrganic", 0x120));
-                message.FUN_00ad8830(false);
+                message.Play(false);
             }
         }
         else if (actor == DAT_011dea3c)
@@ -2925,7 +2925,7 @@ struct ActivateReference
     ActivateLock* FUN_00569160();
     ActivateExtra* FUN_005691f0();
     void FUN_005789b0();
-    void FUN_00573170(ActivateActor*, int, int, int);
+    void Activate(ActivateActor*, int, int, int);
     void* FUN_00567790();
 };
 struct ActivateActorAction
@@ -3143,7 +3143,7 @@ struct BSSoundHandleEx
     int unk00, unk04, unk08;
     ~BSSoundHandleEx();
     bool Play(bool);
-    bool FUN_00ad8b60(float, float, float);
+    bool SetPos(float, float, float);
 };
 struct BSAudio
 {
@@ -3202,7 +3202,7 @@ bool ActivateObject::FUN_00516dc0(ActivateReference* apTarget, TESObjectREFR* ac
                         char message[256];
                         FUN_00406d00(message, 255, DAT_011d5110.FUN_00403df0(), lock->key->name.FUN_00408da0());
                         DispatchMessageToSink(message, 0, DAT_0102b108, 0, DAT_010162c0, 0);
-                        DAT_011c92d0->FUN_00573170(DAT_011dea3c, 0, 0, 1);
+                        DAT_011c92d0->Activate(DAT_011dea3c, 0, 0, 1);
                         DAT_011c92d0 = 0;
                         return true;
                     }
@@ -3248,7 +3248,7 @@ bool ActivateObject::FUN_00516dc0(ActivateReference* apTarget, TESObjectREFR* ac
         {
             BSSoundHandleEx sound = FUN_00453a70()->FUN_00ad73b0(FUN_008ce390()->FUN_0084e3a0(), 0x102);
             ActivatePoint position = *apTarget->GetPosition();
-            sound.FUN_00ad8b60(position.x, position.y, position.z);
+            sound.SetPos(position.x, position.y, position.z);
             sound.Play(false);
         }
         if (actor2 == DAT_011dea3c)
@@ -3276,7 +3276,7 @@ struct ResolveBase
 {
     void FUN_006796c0();
 };
-TESForm* FUN_004839c0(unsigned int formID);
+TESForm* LookupFormByID(unsigned int formID);
 struct FUN_009f2220_obj : ResolveBase
 {
     int unk00;
@@ -3322,7 +3322,7 @@ struct FUN_009f2220_obj : ResolveBase
     Actor* actorA4;
     void ResolveReferences();
 };
-// Resolves each stored form ID in refList, refA0 and actorA4 via FUN_004839c0, removing list entries whose reference no longer resolves.
+// Resolves each stored form ID in refList, refA0 and actorA4 via LookupFormByID, removing list entries whose reference no longer resolves.
 // @fnv 0x009f2220
 void FUN_009f2220_obj::ResolveReferences()
 {
@@ -3334,7 +3334,7 @@ void FUN_009f2220_obj::ResolveReferences()
         TESObjectREFR* ref = iter5->GetItem();
         unsigned int formID3 = (unsigned int)ref;
         if (formID3)
-            ref = dynamic_cast<TESObjectREFR*>(FUN_004839c0(formID3));
+            ref = dynamic_cast<TESObjectREFR*>(LookupFormByID(formID3));
         if (!ref)
         {
             if (!aPrev)
@@ -3357,10 +3357,10 @@ void FUN_009f2220_obj::ResolveReferences()
     }
     unsigned int actorID2 = (unsigned int)actorA4;
     if (actorID2)
-        actorA4 = dynamic_cast<Actor*>(FUN_004839c0(actorID2));
+        actorA4 = dynamic_cast<Actor*>(LookupFormByID(actorID2));
     unsigned int refID9 = (unsigned int)refA0;
     if (refID9)
-        refA0 = dynamic_cast<TESObjectREFR*>(FUN_004839c0(refID9));
+        refA0 = dynamic_cast<TESObjectREFR*>(LookupFormByID(refID9));
 }
 
 template <int N> struct SlotTag
@@ -3410,9 +3410,9 @@ struct AudioPlaybackHandle
     int unk04;
     int unk08;
     ~AudioPlaybackHandle();
-    bool FUN_00ad8b60(float, float, float);
-    void FUN_00ad8f20(SceneView*);
-    bool FUN_00ad8830(bool);
+    bool SetPos(float, float, float);
+    void SetNiNode(SceneView*);
+    bool Play(bool);
 };
 struct AudioView
 {
@@ -3538,9 +3538,9 @@ bool FUN_005113f0_shell::FUN_005113f0(ActivationRef* ref, ActivationRef* activat
             AudioView::FUN_00453a70()->FUN_00ad7480(FUN_00407820()->FUN_00511840(), i | 0x40000102, FUN_00407820());
         if (p)
             ((PlayerView*)DAT_011dea3c)->FUN_005d43c0()->FUN_0041a6a0(&AB);
-        AB.FUN_00ad8b60(h.x, h.y, h.z);
-        AB.FUN_00ad8f20(((NodeView*)ref)->Node());
-        AB.FUN_00ad8830(false);
+        AB.SetPos(h.x, h.y, h.z);
+        AB.SetNiNode(((NodeView*)ref)->Node());
+        AB.Play(false);
     }
     if (unk80)
         unk80->Activate(ref, activator, arg3, arg4, arg5);

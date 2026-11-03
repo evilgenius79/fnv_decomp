@@ -63,7 +63,7 @@ class TESForm
 class TESCombatStyle : public TESForm
 {
 };
-TESForm* __cdecl FUN_004839c0(unsigned int);
+TESForm* __cdecl LookupFormByID(unsigned int);
 void* __cdecl FUN_00ec43fb(void*, int, void*, void*, int);
 extern int DAT_0118627c, DAT_01183028;
 void __cdecl FNV_Warning(const char*, ...);
@@ -195,7 +195,7 @@ void PackageInit::FUN_00674930()
     if (kCombatStyle)
     {
         ResolveFormID(&kCombatStyle, FUN_00484e60(-1));
-        FUN_00673400(dynamic_cast<TESCombatStyle*>(FUN_004839c0(kCombatStyle)));
+        FUN_00673400(dynamic_cast<TESCombatStyle*>(LookupFormByID(kCombatStyle)));
         if (!FUN_006733e0())
             FNV_Warning("FORMS: Could not find combat style (%08X) on package '%s' (%08X).", kCombatStyle,
                         GetDebugName(), FUN_0084e3a0());

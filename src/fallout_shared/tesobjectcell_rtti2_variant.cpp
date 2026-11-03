@@ -220,7 +220,7 @@ struct ProcessListB54
 extern ProcessListB54 DAT_011e0e80;
 struct LoaderB54
 {
-    void FUN_00444850(TESObjectREFRB54* pRef, void* p, int i);
+    void QueueReference(TESObjectREFRB54* pRef, void* p, int i);
 };
 extern LoaderB54* DAT_011c3b3c;
 void __cdecl FUN_005ac190(TESObjectREFRB54* pRef, void* p);
@@ -235,7 +235,7 @@ class SceneB54
     void RecalcLeveledActorBases(bool b);
     void ProcessCellReferences();
     void FUN_00541ac0();
-    void FUN_00541ae0();
+    void CellRefLockLeave();
     NodeB54* FUN_009604f0();
     void FUN_00548880(TESObjectREFRB54* pRef, int i);
     void FUN_005535f0();
@@ -309,7 +309,7 @@ void SceneB54::FUN_0054bcf0(bool bArg)
                         TESObjectREFRB54* pTarget = pRef;
                         pTarget->Vf260();
                     }
-                    ((LoaderB54*)DAT_011c3b3c)->FUN_00444850(pRef, pCell9, 0);
+                    ((LoaderB54*)DAT_011c3b3c)->QueueReference(pRef, pCell9, 0);
                     if (pRef->IsVf1d0())
                     {
                         bool bProcess3 = true;
@@ -325,7 +325,7 @@ void SceneB54::FUN_0054bcf0(bool bArg)
                 }
             }
         }
-        FUN_00541ae0();
+        CellRefLockLeave();
     }
     if (bArg)
         FUN_005535f0();

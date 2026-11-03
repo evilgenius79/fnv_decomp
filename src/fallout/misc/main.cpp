@@ -3569,7 +3569,7 @@ struct BSFaceGenNiNode
 };
 struct SceneGraph_008746d0
 {
-    void FUN_00c52020(float, int, int, int);
+    void SetCameraFOV(float, int, int, int);
 };
 struct PC_00605d70
 {
@@ -3679,14 +3679,14 @@ void FUN_008746d0_shell::FUN_008746d0(BSRenderedTexture* apRenderTexture)
     NiAVObject* p1stPersonNode = (NiAVObject*)pscenegraph;
     bool bwas1stPersonCulled = p1stPersonNode->FUN_00456610();
     p1stPersonNode->SetAppCulled(false);
-    p1stperson3d->FUN_00c52020(FUN_00874900((PC_00605d70*)g_thePlayer), 0, 0, 0);
+    p1stperson3d->SetCameraFOV(FUN_00874900((PC_00605d70*)g_thePlayer), 0, 0, 0);
     BSShaderManager::SetFOV(FUN_00874900((PC_00605d70*)g_thePlayer));
     pculler->FUN_004a0fd0(*(Flt*)((char*)this + 0x90));
     FUN_00b6bee0(((BSFaceGenNiNode*)p1stperson3d)->GetAnimationData(), p1stPersonNode, pculler);
     BSShaderRenderUtility::SetRenderCamera(((BSFaceGenNiNode*)p1stperson3d)->GetAnimationData(),
                                            *(Flt*)((char*)this + 0x90), false);
     pculler->FUN_004a0fd0(0);
-    p1stperson3d->FUN_00c52020(FUN_00710ab0((PC_00605d70*)g_thePlayer), 0, 0, 0);
+    p1stperson3d->SetCameraFOV(FUN_00710ab0((PC_00605d70*)g_thePlayer), 0, 0, 0);
     BSShaderManager::SetFOV(FUN_00710ab0((PC_00605d70*)g_thePlayer));
     p1stPersonNode->SetAppCulled(bwas1stPersonCulled);
     if (m_kFieldAfterWeaponFlags)
@@ -3751,7 +3751,7 @@ struct FUN_00875e40_Src
 struct BSFaceGenNiNode
 {
     void* GetAnimationData();
-    void FUN_00c52020(float f, int a, void* b, int c);
+    void SetCameraFOV(float f, int a, void* b, int c);
 };
 struct FUN_00710ab0_Class;
 float __fastcall FUN_00710ab0(FUN_00710ab0_Class* p);
@@ -3775,13 +3775,13 @@ void FUN_00875e40_shell::FUN_00875e40(BSShaderAccumulator* pAccum, BSRenderedTex
 {
     BSFaceGenNiNode* pkSceneGraph = (BSFaceGenNiNode*)FUN_0045c670();
     if (DAT_011f2250.GetFlags() != 4)
-        pkSceneGraph->FUN_00c52020(FUN_00710ab0((FUN_00710ab0_Class*)g_thePlayer), 0, 0, 0);
+        pkSceneGraph->SetCameraFOV(FUN_00710ab0((FUN_00710ab0_Class*)g_thePlayer), 0, 0, 0);
     BSShaderManager::SetFOV(FUN_00710ab0((FUN_00710ab0_Class*)g_thePlayer));
     {
         NiObjectCopyInfo kInfo(0x101);
         FUN_00875e40_Clone* pkCamera = ((FUN_00875e40_Src*)pkSceneGraph->GetAnimationData())->Clone(kInfo);
         if (DAT_011f2250.GetFlags() != 4)
-            pkSceneGraph->FUN_00c52020(FUN_00874900((const char*)g_thePlayer), 0, pkCamera, 0);
+            pkSceneGraph->SetCameraFOV(FUN_00874900((const char*)g_thePlayer), 0, pkCamera, 0);
         AutoMemHelper kMemHelper(0x27, true, "D:\\_Fallout3\\Platforms\\Common\\Code\\Fallout\\Misc\\Main.cpp", 0x234c);
         pAccum->SetupDepth((NiCamera*)pkSceneGraph->GetAnimationData(), (NiCamera*)pkCamera, pTexture);
         delete pkCamera;
@@ -8779,19 +8779,19 @@ struct Service
     void FUN_00867a40(float);
     int* FUN_0043d4d0();
     void FUN_00455640();
-    void FUN_0040fbf0(int);
+    void Lock(int);
     void FUN_00978550();
     void FUN_009777a0();
     void FUN_0096eb40();
     void FUN_0096e9b0();
     void FUN_008d0600(float, int);
-    void FUN_0040fba0();
+    void Unlock();
     void FUN_00878080(bool);
     void FUN_0049fff0();
     void FUN_00712e60(void*);
     int FUN_0044ddc0();
     float FUN_00710ab0();
-    void FUN_00c52020(float, int, int, bool);
+    void SetCameraFOV(float, int, int, bool);
     void* FUN_006629f0();
     void FUN_0045bc80(bool, bool);
     void FUN_00b5ac90(void*);
@@ -8983,7 +8983,7 @@ void MainLoop::FUN_0086e650()
         if (*DAT_011c3ea4.FUN_0043d4d0() == 1)
             DAT_011dea10->FUN_00455640();
     }
-    DAT_011f11a0.FUN_0040fbf0(0);
+    DAT_011f11a0.Lock(0);
     DAT_011e0e80.FUN_00978550();
     if (*DAT_011c3ea4.FUN_0043d4d0() != 1)
     {
@@ -9004,7 +9004,7 @@ void MainLoop::FUN_0086e650()
             DAT_011e0e80.FUN_0096e9b0();
         }
     }
-    DAT_011f11a0.FUN_0040fba0();
+    DAT_011f11a0.Unlock();
     FUN_00446ef0()->FUN_00878080(true);
     if (FUN_0086ef60())
         FUN_00a61cd0();
@@ -9018,7 +9018,7 @@ void MainLoop::FUN_0086e650()
     FUN_0049fef0()->FUN_0049fff0();
     FUN_00524c90()->FUN_00712e60(&DAT_011ad840);
     if (DAT_011f2250.FUN_0044ddc0() != 4)
-        FUN_0045c670()->FUN_00c52020(DAT_011dea3c->FUN_00710ab0(), 0, 0, true);
+        FUN_0045c670()->SetCameraFOV(DAT_011dea3c->FUN_00710ab0(), 0, 0, true);
     FUN_00b54000(DAT_011dea3c->FUN_00710ab0());
     void* sceneB = DAT_011deb7c.FUN_00559450()->FUN_006629f0();
     void* replacement5 = 0;
@@ -9443,8 +9443,8 @@ struct ShadowBoolSetting
 };
 struct ShadowLock
 {
-    void FUN_0040fbf0(int);
-    void FUN_0040fba0();
+    void Lock(int);
+    void Unlock();
 };
 struct ShadowActors
 {
@@ -9657,7 +9657,7 @@ void ShadowHost::FUN_00871290()
                 playerShadow32 = system->FUN_00b5cbd0(DAT_011dea3c->FUN_00950bb0(0));
                 ++count33;
             }
-            DAT_011f1180.FUN_0040fbf0(0);
+            DAT_011f1180.Lock(0);
             ShadowActor** actors8 = ((ShadowActors*)&DAT_011e0e80)->FUN_00871a30();
             int actorCount72 = ((ShadowActors*)&DAT_011e0e80)->FUN_00472380();
             for (int i = 0; i < actorCount72 && count33 < limit; ++i)
@@ -9676,7 +9676,7 @@ void ShadowHost::FUN_00871290()
                     }
                 }
             }
-            DAT_011f1180.FUN_0040fba0();
+            DAT_011f1180.Unlock();
             system->FUN_00b5cde0(playerShadow32);
             ShadowNode* playerNode50 = DAT_011dea3c->FUN_00950bb0(1);
             if (playerNode50)
@@ -10540,7 +10540,7 @@ NiRenderer* __cdecl FUN_0043c4b0();
 
 struct FaceGenHelper
 {
-    void FUN_00c52020(float, int, int, int);
+    void SetCameraFOV(float, int, int, int);
 };
 
 void* __cdecl FUN_00450b80(int);
@@ -10615,7 +10615,7 @@ void MainShell::FUN_00874c10()
         }
     }
 
-    ((FaceGenHelper*)pFaceGenNode2)->FUN_00c52020(FUN_00874900((const char*)g_thePlayer), 0, 0, 0);
+    ((FaceGenHelper*)pFaceGenNode2)->SetCameraFOV(FUN_00874900((const char*)g_thePlayer), 0, 0, 0);
 
     if (((!((PlayerHelper*)g_thePlayer)->FUN_00950bb0(0)->FUN_00456610() &&
           !((PlayerHelper*)g_thePlayer)->FUN_00950bb0(1)->FUN_00456610() == 0) ||
@@ -10802,7 +10802,7 @@ struct Scene
     void FUN_006426a0(int, Scene*, Scene*);
     Context* FUN_008d80e0();
     Scene* FUN_006629f0();
-    void FUN_00c52020(float, int, int, int);
+    void SetCameraFOV(float, int, int, int);
     void FUN_00ba3130(int, int);
 };
 struct Output : Scene
@@ -11088,7 +11088,7 @@ void Main::FUN_00875110(Scene* root, Scene* firstPerson, Scene* extra, Scene* pa
         camera.FUN_00559450()->FUN_00712e60(DAT_011ad840);
     else
         camera.FUN_00559450()->FUN_00712e60(Rect(0, 1, 1, 0));
-    renderSlot52->FUN_00c52020(DAT_011dea3c->FUN_00874900(), 0, 0, 0);
+    renderSlot52->SetCameraFOV(DAT_011dea3c->FUN_00874900(), 0, 0, 0);
     FUN_00b54000(DAT_011dea3c->FUN_00874900());
     camera.FUN_00559450()->FUN_00a6faf0(viewSlot23->FUN_0045bbe0());
     if (firstPerson)
@@ -11189,7 +11189,7 @@ void Main::FUN_00875110(Scene* root, Scene* firstPerson, Scene* extra, Scene* pa
         FUN_00450b80(0)->FUN_008750e0(DAT_011f426c);
     }
     if (DAT_011f2250.FUN_0044ddc0() != 4)
-        FUN_0045c670()->FUN_00c52020(DAT_011dea3c->FUN_00710ab0(), 0, 0, 0);
+        FUN_0045c670()->SetCameraFOV(DAT_011dea3c->FUN_00710ab0(), 0, 0, 0);
     FUN_00b54000(DAT_011dea3c->FUN_00710ab0());
     if (extra && !extra->FUN_0043b230()->FUN_00456610())
     {
@@ -11210,7 +11210,7 @@ void Main::FUN_00875110(Scene* root, Scene* firstPerson, Scene* extra, Scene* pa
     }
     if (extra)
         extra->FUN_006426a0(2, texture.FUN_00559450(), DAT_011deb7c.FUN_00559450()->FUN_006629f0());
-    renderSlot52->FUN_00c52020(DAT_011dea3c->FUN_00874900(), 0, 0, 0);
+    renderSlot52->SetCameraFOV(DAT_011dea3c->FUN_00874900(), 0, 0, 0);
     FUN_00b54000(DAT_011dea3c->FUN_00874900());
 }
 }
@@ -13195,7 +13195,7 @@ struct ISMgr
 };
 struct ISHolder
 {
-    void FUN_00c52020(float f, int a, int b, bool c);
+    void SetCameraFOV(float f, int a, int b, bool c);
 };
 extern ImageSpaceEffectParam DAT_011ad840;
 struct StateObj
@@ -13315,7 +13315,7 @@ void* MainX::UpdateCamera()
     ((ISMgr*)FUN_0045c670()->GetAnimationData())->FUN_00712e60(DAT_011ad840);
     if (DAT_011f2250.CallGetFlags() != 4)
     {
-        ((ISHolder*)FUN_0045c670())->FUN_00c52020(FUN_00710ab0(g_thePlayer), 0, 0, true);
+        ((ISHolder*)FUN_0045c670())->SetCameraFOV(FUN_00710ab0(g_thePlayer), 0, 0, true);
     }
     BSShaderManager::SetFOV(FUN_00710ab0(g_thePlayer));
     if (bFlag9C)

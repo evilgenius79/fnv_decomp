@@ -1485,7 +1485,7 @@ struct blob12
 };
 struct FUN_00497f20_shell : public Animation
 {
-    void FUN_00497f20(TESIdleForm*, Actor*, int, int);
+    void PlayIdle(TESIdleForm*, Actor*, int, int);
 };
 
 struct BSFadeNode
@@ -1742,7 +1742,7 @@ struct VTable0x390
 };
 
 // @fnv 0x00497f20
-void FUN_00497f20_shell::FUN_00497f20(TESIdleForm* apIdleForm, Actor* apActor, int aeSection, int aeType)
+void FUN_00497f20_shell::PlayIdle(TESIdleForm* apIdleForm, Actor* apActor, int aeSection, int aeType)
 {
     AutoMemContext tempMemContext((MEM_CONTEXT)0x33, true,
                                   "D:\\_Fallout3\\Platforms\\Common\\Code\\Fallout Shared\\Animation.cpp", 0x129d);
@@ -4493,7 +4493,7 @@ struct MessageProvider
     virtual void slot_12c();
     virtual int GetDisplayValue();
 };
-extern "C" MessageProvider* __cdecl FUN_004839c0(int);
+extern "C" MessageProvider* __cdecl LookupFormByID(int);
 int __cdecl FUN_0040fbe0(const char*, ...);
 extern "C" const char DAT_01012cb0[];
 extern "C" const char DAT_01012c78[];
@@ -4520,7 +4520,7 @@ unsigned short __cdecl GetMessageSize(void* unused, ParameterObject* param)
         MessageInfo* message = DAT_011de45c->FUN_004fd3e0();
         if (message)
         {
-            MessageProvider* provider = FUN_004839c0(message->id);
+            MessageProvider* provider = LookupFormByID(message->id);
             FUN_0040fbe0(DAT_01012cb0, count - usInitialSize, message->id, provider->GetDisplayValue(),
                          *(int*)((char*)message + 5), 0x11f3, DAT_0101d930);
         }
@@ -7179,7 +7179,7 @@ struct FUN_004965d0 : NiMemObject
     void LoadQueuedAnim(float, Animation*);
 };
 typedef struct FUN_004965d0 IdleLoadTask;
-extern TESForm* __cdecl FUN_004839c0(unsigned int);
+extern TESForm* __cdecl LookupFormByID(unsigned int);
 extern void __cdecl FUN_005b5e40(const char*, ...);
 extern const char DAT_0101d930[], DAT_01015718[], DAT_010156a8[], DAT_0101dcec[], DAT_01015588[], DAT_01015500[],
     DAT_010154a0[], DAT_01015440[];
@@ -7200,7 +7200,7 @@ IdleLoadTask* __cdecl LoadIdleAnimation(Actor* actor, Animation* animation, floa
             IdleLog* log = ((IdleStream*)DAT_011de45c)->FUN_004fd3c0();
             if (log)
             {
-                IdleLogName* name = (IdleLogName*)FUN_004839c0(log->id);
+                IdleLogName* name = (IdleLogName*)LookupFormByID(log->id);
                 FUN_005b5e40(DAT_01015718, DAT_0101d930, 0x121c, log->id, name->Name(), log->index,
                              *(unsigned int*)&log->flags);
             }
@@ -7218,7 +7218,7 @@ IdleLoadTask* __cdecl LoadIdleAnimation(Actor* actor, Animation* animation, floa
         ((IdleStream*)DAT_011de45c)->FUN_008579e0(&size, 2);
         TESIdleForm* idle = 0;
         if (id4)
-            idle = dynamic_cast<TESIdleForm*>(FUN_004839c0(id4));
+            idle = dynamic_cast<TESIdleForm*>(LookupFormByID(id4));
         if (idle)
         {
             result2 = new IdleLoadTask(idle, 7, 1, actor, 1, 0);
@@ -7236,7 +7236,7 @@ IdleLoadTask* __cdecl LoadIdleAnimation(Actor* actor, Animation* animation, floa
         IdleLog* logEndA = ((IdleStream*)DAT_011de45c)->FUN_004fd3c0();
         if (logEndA)
         {
-            IdleLogName* nameEnd = (IdleLogName*)FUN_004839c0(logEndA->id);
+            IdleLogName* nameEnd = (IdleLogName*)LookupFormByID(logEndA->id);
             if (position > start + blockSize4)
                 FUN_005b5e40(DAT_01015588, position - (start + blockSize4), DAT_0101d930, 0x1237, logEndA->id,
                              nameEnd->Name(), logEndA->index, *(unsigned int*)&logEndA->flags);
@@ -7918,7 +7918,7 @@ unsigned short FakeAnim::GetSerializedSize(void* apRef)
         MessageRecord* message = (MessageRecord*)DAT_011de45c->FUN_004fd3e0();
         if (message)
         {
-            MessageProvider* provider = FUN_004839c0(message->id);
+            MessageProvider* provider = LookupFormByID(message->id);
             FUN_0040fbe0(DAT_01012cb0, p - i, message->id, provider->GetDisplayValue(),
                          *(unsigned int*)message->parameter, 5560, DAT_0101d930);
         }
@@ -7945,7 +7945,7 @@ extern char UNK_01015318;
 
 void __cdecl FUN_004975e0(void* pA, unsigned int uB, void* pC, float fD);
 void* __cdecl FUN_00653270(void* pKey, unsigned int uVal);
-void* __cdecl FUN_004839c0(unsigned int uVal);
+void* __cdecl LookupFormByID(unsigned int uVal);
 struct Stream_00499b90
 {
     unsigned int FUN_00825c00();
@@ -8421,7 +8421,7 @@ void Holder_00499b90::WriteToStream(Class2_00499b90* pClass2)
         if (u4c4 != 0)
         {
             MemObj_00499b90* p54;
-            p54 = (MemObj_00499b90*)FUN_004839c0(*(unsigned int*)u4c4);
+            p54 = (MemObj_00499b90*)LookupFormByID(*(unsigned int*)u4c4);
             FUN_0040fbe0((const char*)&UNK_010153a0, (int)(u50_2 - uStart7), *(unsigned int*)u4c4, p54->FUN_0130(),
                          *reinterpret_cast<const unsigned int*>(&((const PaddedByte*)u4c4)->value), 0x1628,
                          &UNK_0101d930);

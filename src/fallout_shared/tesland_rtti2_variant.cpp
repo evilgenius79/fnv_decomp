@@ -43,7 +43,7 @@ __if_exists(::TESForm::Revert)
 }
 extern void* DAT_01187020;
 
-TESForm* FUN_004839c0(unsigned int auiFormId);
+TESForm* LookupFormByID(unsigned int auiFormId);
 
 struct LandSaveGroup5391
 {
@@ -88,7 +88,7 @@ bool FUN_005391d0_class::FUN_005391d0(LandSaveGroup5391* apGroupFORM)
         {
         case 8:
         case 9: {
-            void* found = dynamic_cast< ::TESObjectCELL*>(FUN_004839c0(apGroupFORM->formID));
+            void* found = dynamic_cast< ::TESObjectCELL*>(LookupFormByID(apGroupFORM->formID));
             if (found && FUN_007af430() == found)
                 bretval = false;
             break;

@@ -577,7 +577,7 @@ struct FUN_00401660_t
 };
 struct FUN_00472890_t
 {
-    bool FUN_00472890(void*, unsigned int);
+    bool GetChunkData(void*, unsigned int);
 };
 struct FUN_00403570_t
 {
@@ -671,7 +671,7 @@ void FUN_00403280_t::FUN_00403280(TESFile* apFile, int aiChunk)
     case 0x53444f4d: {
         unsigned int uiChunkSize = ((FUN_00401660_t*)apFile)->GetField25C();
         char* pChunkData = (char*)_alloca(uiChunkSize);
-        ((FUN_00472890_t*)apFile)->FUN_00472890(pChunkData, uiChunkSize);
+        ((FUN_00472890_t*)apFile)->GetChunkData(pChunkData, uiChunkSize);
         AlchTexSwap::LoadTextureSwapList(pChunkData, uiChunkSize, ((FUN_00403570_t*)apFile)->FUN_00403570());
         break;
     }

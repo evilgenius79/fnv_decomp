@@ -109,7 +109,7 @@ class TESDataHandler
     bool LoadPluginFiles(bool);
     void MarkGameSettingsLoaded();
     void ReportDataHandlerError(int);
-    void FUN_00464d30(bool);
+    void DisableAssignFormIDs(bool);
     bool FUN_00467780(TESFile*, bool);
     void FUN_00464d50(TESForm*);
     void FUN_00464d70(TESForm*);

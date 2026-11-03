@@ -1490,8 +1490,8 @@ struct Snd
     unsigned int unk04;
     unsigned int unk08;
     ~Snd();
-    void FUN_00ad8b60(float x, float y, float z);
-    void FUN_00ad8830(int a);
+    void SetPos(float x, float y, float z);
+    void Play(int a);
 };
 
 struct WeapHolder
@@ -2426,15 +2426,15 @@ void ProjCls::FUN_009ae6e0()
                             if (s1)
                             {
                                 Snd snd = FUN_00453a70()->FUN_00ad7480(s1->FUN_00511840(0x4102), s1);
-                                snd.FUN_00ad8b60(pos.x, pos.y, pos.z);
-                                snd.FUN_00ad8830(0);
+                                snd.SetPos(pos.x, pos.y, pos.z);
+                                snd.Play(0);
                             }
                             SndSrc* s2 = wt->GetGrass();
                             if (s2)
                             {
                                 Snd snd = FUN_00453a70()->FUN_00ad7480(s2->FUN_00511840(0x4102), s2);
-                                snd.FUN_00ad8b60(pos.x, pos.y, pos.z);
-                                snd.FUN_00ad8830(0);
+                                snd.SetPos(pos.x, pos.y, pos.z);
+                                snd.Play(0);
                             }
                         }
                     }

@@ -1884,7 +1884,7 @@ extern int DAT_011e0618[77];
 extern unsigned char DAT_011e074c;
 extern int DAT_011e0750;
 
-FUN_0066e920_Class* __cdecl FUN_0066e920(int index);
+FUN_0066e920_Class* __cdecl GetActorValueInfo(int index);
 
 // If not yet built, maps each of 0x4d objects whose unk44 bit 0 is set to a running count in DAT_011e0618, stores the total in DAT_011e0750 and sets DAT_011e074c.
 // @fnv 0x00937fd0
@@ -1896,7 +1896,7 @@ void __cdecl FUN_00937fd0()
 
         for (int index = 0; index < 0x4d; ++index)
         {
-            FUN_0066e920_Class* object = FUN_0066e920(index);
+            FUN_0066e920_Class* object = GetActorValueInfo(index);
 
             if (object && (object->unk44 & 1))
             {
@@ -5090,7 +5090,7 @@ struct RV5 : VSlot<RV4, 1>
 };
 struct TickRef : VSlot<RV5, 0>
 {
-    bool FUN_00573170(TickPlayer*, bool, void*, int);
+    bool Activate(TickPlayer*, bool, void*, int);
     bool FUN_00568680();
     TickProc* FUN_008d8520();
     int GetExtraDataShort();
@@ -5151,7 +5151,7 @@ struct BSSoundHandleEx
     BSSoundHandleEx& operator=(const BSSoundHandleEx&);
     bool FUN_00ad8ce0();
     void FUN_00ad8da0(int);
-    bool FUN_00ad8830(bool);
+    bool Play(bool);
     void FUN_00ad88f0();
     bool FUN_00ad8930();
     void SetPositionFromArray(MPt*);
@@ -6082,7 +6082,7 @@ struct TickPlayer : VSlot<AV17, 0>
     int unke3c, unke40;
     int unke44, unke48, unke4c;
     void FUN_0093e860(float);
-    void FUN_00950110(bool);
+    void ToggleFirstPerson(bool);
     bool FUN_004eaf60();
     TickAnimation* FUN_00950a60(bool);
     void FUN_0093e770(int, bool);
@@ -6120,7 +6120,7 @@ struct TickPlayer : VSlot<AV17, 0>
     void FUN_009481d0();
     void UpdateFaceAnimation(float);
     void FUN_008885e0(TickAnimation*, float);
-    void FUN_0094ae40(bool, bool);
+    void UpdateCamera(bool, bool);
     int FUN_008a7570();
     void FUN_00950340(bool);
     bool FUN_0093a740();
@@ -6145,7 +6145,7 @@ struct TickPlayer : VSlot<AV17, 0>
     void FUN_009462c0(bool, bool);
     bool FUN_008843a0();
     bool FUN_008a6970();
-    void FUN_008a6840(bool);
+    void SetWantsWeaponOut(bool);
     void FUN_009673d0(float);
     bool FUN_00437bf0();
     bool FUN_00437bd0();
@@ -6227,7 +6227,7 @@ extern char DAT_011a28e0, DAT_011841cc;
 extern "C" void FUN_00709c40(int);
 void FUN_007d0a70();
 void FUN_00961d50();
-extern "C" void FUN_00703e80(const char*, int, int, void (*)(), int, int, float, float, const char*, const char*, int);
+extern "C" void ShowMessageBox(const char*, int, int, void (*)(), int, int, float, float, const char*, const char*, int);
 extern "C" TickShadow* FUN_00450b80(int);
 extern "C" bool FUN_00702360();
 extern "C" TickRef* FUN_00703350();
@@ -6272,7 +6272,7 @@ void FUN_00705640();
 extern bool DAT_011e0780, DAT_011a3b31, DAT_011e0bc0;
 extern float DAT_011e07c4, DAT_011e0b60, DAT_011e0bbc, DAT_011e07c8, DAT_011e0b58;
 extern MSetting DAT_011cde8c;
-extern "C" void FUN_00771700(int);
+extern "C" void UpdateVisibilityState(int);
 extern MSetting DAT_011cd4cc, DAT_011cd198, DAT_011cd984, DAT_011ccf50;
 extern float DAT_011e08fc, DAT_011e0bb8, DAT_011e08f4, DAT_011e07bc;
 extern const double DAT_01023128, DAT_0101ff48, DAT_010240c0;
@@ -6308,9 +6308,9 @@ void TickPlayer::FUN_0093e860(float elapsed)
     if (DAT_011f21d0)
     {
         if (DAT_011f21d1)
-            DAT_011dea3c->FUN_00950110(true);
+            DAT_011dea3c->ToggleFirstPerson(true);
         else
-            DAT_011dea3c->FUN_00950110(false);
+            DAT_011dea3c->ToggleFirstPerson(false);
         DAT_011f21d0 = false;
     }
     switch (DAT_011f2250.FUN_0044ddc0())
@@ -6331,7 +6331,7 @@ void TickPlayer::FUN_0093e860(float elapsed)
             FUN_00453a70()->FUN_00ad7da0(*DAT_011ca7c0.FUN_00403e20());
             if (!DAT_011f6df0.FUN_00ad8ce0())
                 DAT_011f6df0 = FUN_00453a70()->FUN_00ad7550(DAT_0108b088, 0x31);
-            DAT_011f6df0.FUN_00ad8830(false);
+            DAT_011f6df0.Play(false);
         }
     }
     if (unke1c > 0.0)
@@ -6566,7 +6566,7 @@ void TickPlayer::FUN_0093e860(float elapsed)
     }
     if (GetField688())
     {
-        GetField688()->FUN_00573170(this, false, 0, 1);
+        GetField688()->Activate(this, false, 0, 1);
         SetField688(0);
         return;
     }
@@ -6622,7 +6622,7 @@ void TickPlayer::FUN_0093e860(float elapsed)
         unk64a = !unk64a;
         UpdateFaceAnimation(elapsed);
         FUN_008885e0(FUN_00950a60(!unk64a), elapsed);
-        FUN_0094ae40(false, false);
+        UpdateCamera(false, false);
         return;
     }
     TickProc* processD = FUN_008d8520();
@@ -6727,7 +6727,7 @@ void TickPlayer::FUN_0093e860(float elapsed)
             vf2a0();
             FUN_00709c40(0);
             if (DAT_011de134->IsField5Set())
-                FUN_00703e80(DAT_011d4b40.FUN_00403df0(), 0, 0, FUN_00961d50, 1, 0x17, 0.0f, 0.0f,
+                ShowMessageBox(DAT_011d4b40.FUN_00403df0(), 0, 0, FUN_00961d50, 1, 0x17, 0.0f, 0.0f,
                              DAT_011d400c.FUN_00403df0(), DAT_011d4528.FUN_00403df0(), 0);
             else
                 FUN_007d0a70();
@@ -6744,7 +6744,7 @@ void TickPlayer::FUN_0093e860(float elapsed)
         unk64a = !unk64a;
         UpdateFaceAnimation(elapsed);
         FUN_008885e0(FUN_00950a60(!unk64a), elapsed);
-        FUN_0094ae40(false, false);
+        UpdateCamera(false, false);
         FUN_008d6f30()->UpdateRefPlacement(this, 1, 0);
         FUN_00450b80(0)->FUN_00b5d9f0(vf1d0(), true);
         unk7b4 = FUN_008d6f30()->FUN_005474b0(0);
@@ -6844,14 +6844,14 @@ void TickPlayer::FUN_0093e860(float elapsed)
                             if (!BuildActionMenu(&list, target))
                             {
                                 int count = target->GetExtraDataShort();
-                                if (target->FUN_00573170(this, false, 0, count))
+                                if (target->Activate(this, false, 0, count))
                                     activateFallback = false;
                             }
                         }
                         else
                         {
                             int count = target->GetExtraDataShort();
-                            if (target->FUN_00573170(this, false, 0, count))
+                            if (target->Activate(this, false, 0, count))
                                 activateFallback = false;
                         }
                     }
@@ -6859,7 +6859,7 @@ void TickPlayer::FUN_0093e860(float elapsed)
                         failed = true;
                     if (activateFallback && unk68->vf4c8())
                     {
-                        if (!unk68->vf4c8()->FUN_00573170(this, false, 0, 1))
+                        if (!unk68->vf4c8()->Activate(this, false, 0, 1))
                             failed = true;
                         else
                             failed = false;
@@ -6874,7 +6874,7 @@ void TickPlayer::FUN_0093e860(float elapsed)
                     if (!sound.FUN_00ad8ce0() && errorSound)
                         sound = FUN_00453a70()->FUN_00ad7480(errorSound->FUN_00511840(), 0x121, errorSound);
                     if (!sound.FUN_00ad8930())
-                        sound.FUN_00ad8830(false);
+                        sound.Play(false);
                     FUN_005d43c0()->FUN_0041a090(&sound);
                 }
                 flag = true;
@@ -6923,13 +6923,13 @@ void TickPlayer::FUN_0093e860(float elapsed)
                     FUN_008a6970())
                 {
                     weaponToggled = true;
-                    FUN_008a6840(false);
+                    SetWantsWeaponOut(false);
                     DAT_011e0bc1 = true;
                 }
                 else if (!DAT_011e0bc1 && !FUN_008a6970())
                 {
                     if (!(GetVtbl20Result() & 0x800))
-                        FUN_008a6840(true);
+                        SetWantsWeaponOut(true);
                     DAT_011e0bc1 = true;
                 }
             }
@@ -6974,7 +6974,7 @@ void TickPlayer::FUN_0093e860(float elapsed)
                     animGroup &= ~0x400;
                     sound = FUN_00453a70()->FUN_00ad7550(DAT_0108b064, 0x40102);
                     sound.SetPositionFromArray(vf1f4());
-                    sound.FUN_00ad8830(false);
+                    sound.Play(false);
                     vf340(0xb);
                 }
                 else
@@ -6982,7 +6982,7 @@ void TickPlayer::FUN_0093e860(float elapsed)
                     animGroup |= 0x400;
                     sound = FUN_00453a70()->FUN_00ad7550(DAT_0108b050, 0x40102);
                     sound.SetPositionFromArray(vf1f4());
-                    sound.FUN_00ad8830(false);
+                    sound.Play(false);
                     vf340(0xa);
                 }
                 if (!unk64f)
@@ -7416,7 +7416,7 @@ axesDone:
             else
             {
                 DAT_011e0780 = true;
-                FUN_008a6840(true);
+                SetWantsWeaponOut(true);
                 if (FUN_00950090() || unk64a)
                 {
                     FUN_009500a0();
@@ -7428,7 +7428,7 @@ axesDone:
         }
         else
         {
-            FUN_00453a70()->FUN_00ad7550(DAT_01077d84, 0x121).FUN_00ad8830(false);
+            FUN_00453a70()->FUN_00ad7550(DAT_01077d84, 0x121).Play(false);
             DAT_011e0780 = false;
         }
         flag = true;
@@ -7444,11 +7444,11 @@ axesDone:
                 if (!DAT_011e07b8)
                 {
                     DAT_011e0bc0 = unk64b;
-                    FUN_00950110(false);
+                    ToggleFirstPerson(false);
                     DAT_011e07c4 = 0.0f;
                     DAT_011e07b9 = false;
                     DAT_011e07b8 = true;
-                    FUN_00771700(0x14);
+                    UpdateVisibilityState(0x14);
                     DAT_011e0b60 = 0.0f;
                     DAT_011e0bbc = DAT_011e0b5c;
                 }
@@ -7460,12 +7460,12 @@ axesDone:
             DAT_011e07c4 = 0.0f;
             DAT_011e07b9 = false;
             DAT_011e07b8 = false;
-            FUN_00771700(1);
+            UpdateVisibilityState(1);
             if (DAT_011e07c8 < *DAT_011cde8c.FUN_00403e20() && (FUN_004b71d0() || DAT_011e0bbc == DAT_011e0b5c) &&
                 !FUN_005a03f0(0x10))
             {
                 if (DAT_011e0bc0)
-                    FUN_00950110(!unk64e);
+                    ToggleFirstPerson(!unk64e);
                 unk64d = false;
                 unk64e = false;
             }
@@ -7544,14 +7544,14 @@ axesDone:
                     if (!BuildActionMenu(&list, target))
                     {
                         int count = target->GetExtraDataShort();
-                        if (target->FUN_00573170(this, false, 0, count))
+                        if (target->Activate(this, false, 0, count))
                             activateFallback = false;
                     }
                 }
                 else
                 {
                     int count = target->GetExtraDataShort();
-                    if (target->FUN_00573170(this, false, 0, count))
+                    if (target->Activate(this, false, 0, count))
                         activateFallback = false;
                     else if (target->FUN_00569160() && target->FUN_00569160()->FUN_004309e0(target) != 5 &&
                              !target->FUN_0057b460())
@@ -7562,7 +7562,7 @@ axesDone:
                 failed = true;
             if (activateFallback && unk68->vf4c8())
             {
-                if (!unk68->vf4c8()->FUN_00573170(this, false, 0, 1))
+                if (!unk68->vf4c8()->Activate(this, false, 0, 1))
                     failed = true;
                 else
                     failed = false;
@@ -7578,7 +7578,7 @@ axesDone:
             if (!failSound.FUN_00ad8ce0() && errorSound)
                 failSound = FUN_00453a70()->FUN_00ad7480(errorSound->FUN_00511840(), 0x121, errorSound);
             if (!failSound.FUN_00ad8930())
-                failSound.FUN_00ad8830(false);
+                failSound.Play(false);
             FUN_005d43c0()->FUN_0041a090(&failSound);
         }
         flag = true;
@@ -7613,7 +7613,7 @@ axesDone:
             FUN_00950340(true);
             DAT_011e07b9 = true;
             DAT_011e07b8 = true;
-            FUN_00771700(0x14);
+            UpdateVisibilityState(0x14);
             DAT_011e07c3 = true;
         }
     }
@@ -7641,7 +7641,7 @@ axesDone:
     FUN_008885e0(FUN_00950a60(!unk64a), elapsed);
     ProcessEvents();
     if (!DAT_011f21d0)
-        FUN_0094ae40(false, false);
+        UpdateCamera(false, false);
     FUN_008d6f30()->UpdateRefPlacement(this, 1, 0);
     FUN_00450b80(0)->FUN_00b5d9f0(vf1d0(), true);
     if (unk68->vf6b8())
@@ -7752,7 +7752,7 @@ axesDone:
                                     {
                                         FUN_00453a70()
                                             ->FUN_00ad73b0(ambient->FUN_0084e3a0(), 0x101)
-                                            .FUN_00ad8830(false);
+                                            .Play(false);
                                         DAT_011e0ba8 = FUN_00457fe0() + FUN_00944460(1500, 2000);
                                     }
                                 }

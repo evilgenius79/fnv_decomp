@@ -1871,7 +1871,7 @@ struct NamedType
 {
     float FUN_00526ac0();
 };
-NamedType* __cdecl FUN_004839c0(int);
+NamedType* __cdecl LookupFormByID(int);
 void* __cdecl FUN_00ec43fb(void*, int, void*, void*, int);
 struct Animation
 {
@@ -2987,7 +2987,7 @@ void FleeUpdate::Process::FUN_00918860(Actor* actor)
             }
             if (!actor->FUN_008b3bb0())
             {
-                NamedType* type = FUN_004839c0(0x3a);
+                NamedType* type = LookupFormByID(0x3a);
                 float hour = DAT_011de7b8.FUN_00867da0();
                 if (hour < FUN_007df1f0())
                     hour += 24.0;

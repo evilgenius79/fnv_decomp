@@ -1875,11 +1875,11 @@ struct ConsoleText
     int currentLine;
     void WriteLine(const char*);
     void DrawConsoleLines();
-    void FUN_0071d0a0(const char*, char*);
+    void Print(const char*, char*);
 };
 // Formats the text, appends it to the console line queue, wraps it into lines using the console font, and trims overflow lines.
 // @fnv 0x0071d0a0
-void ConsoleText::FUN_0071d0a0(const char* format, char* arguments)
+void ConsoleText::Print(const char* format, char* arguments)
 {
     if (FUN_00705ea0() && !FUN_0070edf0())
         return;

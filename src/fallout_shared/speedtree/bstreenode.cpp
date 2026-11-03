@@ -1763,7 +1763,7 @@ void S_0066d880::FUN_0066d880(S_0066d880_List* list)
 }
 
 extern void* __cdecl FUN_00aa13e0(unsigned int size);
-extern void* __cdecl FUN_00401000(unsigned int size);
+extern void* __cdecl FormHeap_Allocate(unsigned int size);
 extern float DAT_01016b78;
 extern void* __cdecl GetFltValueAtOffset16();
 
@@ -1958,7 +1958,7 @@ struct FUN_006694e0
     void FUN_0066b0d0(void* p);
     static void* operator new[](unsigned int size)
     {
-        return FUN_00401000(size);
+        return FormHeap_Allocate(size);
     }
 };
 struct FUN_0066b640

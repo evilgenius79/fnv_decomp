@@ -2180,7 +2180,7 @@ struct ItemObj
 extern Loader* DAT_011c3b3c;
 extern int DAT_011f36bc;
 extern int DAT_011f36e4;
-void __cdecl FUN_00401030(void*);
+void __cdecl FormHeap_Free(void*);
 struct FUN_0048fb50
 {
     void* f00;
@@ -2338,7 +2338,7 @@ FUN_0048fb50::~FUN_0048fb50()
         {
             itemValB2 = *nodeBq->FUN_006815c0();
             itemCopy2 = itemValB2;
-            FUN_00401030(itemCopy2);
+            FormHeap_Free(itemCopy2);
             nodeBq = nodeBq->FUN_00726070();
         }
         m134.FUN_00470470();
@@ -2475,7 +2475,7 @@ struct FUN_005ae3d0_S
 };
 struct PlayerCharacter;
 extern PlayerCharacter* g_thePlayer;
-TESForm* __cdecl FUN_004839c0(unsigned int a);
+TESForm* __cdecl LookupFormByID(unsigned int a);
 MyNode* __cdecl FUN_00c802d0(MyNode* a);
 void __cdecl SetFlagRecursive(int a, void* b);
 void __fastcall FinishScriptRunLockIfActive(void* a);
@@ -3229,7 +3229,7 @@ void __thiscall AnimSelf::Load(BGSLoadFormBuffer* apBuffer)
         for (j = 0; j < (unsigned int)count; j++)
         {
             LoadedIdle* rawNew = new LoadedIdle;
-            rawNew->idle = dynamic_cast<TESIdleForm*>(FUN_004839c0(apBuffer->FUN_008648a0()));
+            rawNew->idle = dynamic_cast<TESIdleForm*>(LookupFormByID(apBuffer->FUN_008648a0()));
             apBuffer->FUN_00864980(&rawNew->value, 4);
             m_134.FUN_005ae3d0((ExtraDataList**)&rawNew);
         }
@@ -3243,7 +3243,7 @@ void __thiscall AnimSelf::Load(BGSLoadFormBuffer* apBuffer)
     }
     else if (formA5 != 0)
     {
-        formA5 = formA5 != 0 ? (int)dynamic_cast<TESIdleForm*>(FUN_004839c0((unsigned int)formA5)) : 0;
+        formA5 = formA5 != 0 ? (int)dynamic_cast<TESIdleForm*>(LookupFormByID((unsigned int)formA5)) : 0;
         if (formA5 == 0)
         {
             apBuffer->AddToOffset(apBuffer->FUN_00864a60());

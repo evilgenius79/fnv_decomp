@@ -3671,7 +3671,7 @@ extern "C" __declspec(dllimport) void __stdcall fnv_Import_LeaveCriticalSection(
 class GameLockA {
 public:
     bool FUN_0078d200();
-    void FUN_0040fbf0(int a);
+    void Lock(int a);
 };
 
 class GameLockB {
@@ -3707,7 +3707,7 @@ void __cdecl FUN_00c459d0(unsigned char a1)
     if (a1 != 0) {
         flag = DAT_01202e40.FUN_0078d200();
     } else {
-        DAT_01202e40.FUN_0040fbf0(0);
+        DAT_01202e40.Lock(0);
     }
     if (flag) {
         got = fnv_Import_TryEnterCriticalSection(&DAT_011f4380) ? true : false;
@@ -10437,7 +10437,7 @@ bool __cdecl FUN_00c511f0(FUN_00c511f0_cls* obj)
 
 // 0x00c52020  1072 bytes  /MT /Od /Oy- /GS /EHsc /Gy   -- byte-identical reconstruction
 // thiscall (ret 0x10): (float fov, unsigned char flag, C52020Obj* obj, unsigned char arg4)
-// called from 0xc51d67 as FUN_00c52020(*pSetting, 1, 0, 0).
+// called from 0xc51d67 as SetCameraFOV(*pSetting, 1, 0, 0).
 //
 // Frame 0xcc + push esi.  Named band -0x04..-0x88 (bucket-sorted: descending name-hash
 // bucket, ties by reverse declaration order), expression temps -0x8c..-0xcc in code order.
@@ -10633,12 +10633,12 @@ struct C52020Obj {
     float m_110;
     void FUN_00a6faf0(NiFrustum* apFrustum);
     void Update(const NiUpdateData& kData);
-    void FUN_00c52020(float m_fFirstFloat, unsigned char ucFlag, C52020Obj* pObj, unsigned char ucArg4);
+    void SetCameraFOV(float m_fFirstFloat, unsigned char ucFlag, C52020Obj* pObj, unsigned char ucArg4);
 };
 
 // Builds a NiFrustum from m_fFirstFloat and a width/height ratio (from DAT_011f4748 when set), applies it to the target (pObj or m_ac) and calls Update.
 // @fnv 0x00c52020
-void C52020Obj::FUN_00c52020(float afFov, unsigned char ucFlag, C52020Obj* apTarget, unsigned char ucArg4)
+void C52020Obj::SetCameraFOV(float afFov, unsigned char ucFlag, C52020Obj* apTarget, unsigned char ucArg4)
 {
     C52020Obj* aTarget;      // pTarget          [ebp-0x08]
     float aStart;

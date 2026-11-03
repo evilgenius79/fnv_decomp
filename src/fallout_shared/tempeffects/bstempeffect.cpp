@@ -223,7 +223,7 @@ struct FUN_00682990_SGLShim
 };
 
 extern void* DAT_011de45c;
-TESForm* FUN_004839c0(unsigned int);
+TESForm* LookupFormByID(unsigned int);
 
 struct FUN_00682990_shell
 {
@@ -244,7 +244,7 @@ bool FUN_00682990_shell::FUN_00682990()
     reinterpret_cast<FUN_00682990_SGLShim*>(DAT_011de45c)->FUN_00857aa0(&formID, 4);
 
     *reinterpret_cast<TESObjectCELL**>(reinterpret_cast<char*>(this) + 0x0c) =
-        dynamic_cast<TESObjectCELL*>(FUN_004839c0(formID));
+        dynamic_cast<TESObjectCELL*>(LookupFormByID(formID));
 
     if (!*reinterpret_cast<TESObjectCELL**>(reinterpret_cast<char*>(this) + 0x0c) ||
         !(*reinterpret_cast<TESObjectCELL**>(reinterpret_cast<char*>(this) + 0x0c))->FUN_00545cb0())

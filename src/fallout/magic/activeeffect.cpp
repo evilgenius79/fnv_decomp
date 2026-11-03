@@ -1093,7 +1093,7 @@ class ActiveEffectUpdateShell
     ActiveEffectUpdateShell(MagicCaster*, MagicItem*, EffectItem*);
     void AddFlags(unsigned int);
     void UpdateEffect(float);
-    void FUN_00804210(bool abNow);
+    void Remove(bool abNow);
     float m_fEffectMagnitude;
     MagicItem* pSpell;
     EffectItem* pEffect;
@@ -1116,7 +1116,7 @@ class ActiveEffectUpdateShell
 };
 
 // @fnv 0x00804210
-void ActiveEffectUpdateShell::FUN_00804210(bool abNow)
+void ActiveEffectUpdateShell::Remove(bool abNow)
 {
     bPickResultFound = true;
     AddFlags(0x200);
@@ -1521,8 +1521,8 @@ struct AudioPlaybackHandle
     AudioPlaybackHandle();
     ~AudioPlaybackHandle();
     void __thiscall FUN_00418900(AudioPlaybackHandle* other);
-    bool __thiscall FUN_00ad8b60(float x, float y, float z);
-    bool __thiscall FUN_00ad8830(int b);
+    bool __thiscall SetPos(float x, float y, float z);
+    bool __thiscall Play(int b);
     bool __thiscall FUN_00ad8ce0();
     void __thiscall FUN_00ad88f0();
     void __thiscall FUN_00ad8d10();
@@ -1772,8 +1772,8 @@ void __thiscall Self::PlaySoundForEffect()
                         NiPoint3 pt5;
                         AudioPlaybackHandle sound2 = FUN_00453a70()->FUN_00ad73b0(var10_2, 0x102);
                         pt5 = *objC2->GetPoint1f4();
-                        sound2.FUN_00ad8b60(pt5.x, pt5.y, pt5.z);
-                        sound2.FUN_00ad8830(flag_);
+                        sound2.SetPos(pt5.x, pt5.y, pt5.z);
+                        sound2.Play(flag_);
                     }
                 }
                 if (flag_)
@@ -2531,7 +2531,7 @@ class TESForm
 class TESBoundObject : public TESForm
 {
 };
-TESForm* FUN_004839c0(unsigned int id);
+TESForm* LookupFormByID(unsigned int id);
 MagicCaster* FUN_00818c60(MagicCaster* pkCaster);
 MagicTarget* FUN_00825550(MagicTarget* pkTarget);
 
@@ -2553,7 +2553,7 @@ void ActiveEffect805670::FUN_00805670(Actor* apActor)
         pTarget = FUN_00825550(pkTarget);
     source = pSource;
     if (pkTarget)
-        pSource = dynamic_cast<TESBoundObject*>(FUN_004839c0((unsigned int)source));
+        pSource = dynamic_cast<TESBoundObject*>(LookupFormByID((unsigned int)source));
     if (DAT_011de45c->FUN_008df040() >= 0x2a)
     {
         BSSimpleList<MagicHitEffect*>* it = pHitEffectList;
@@ -2608,7 +2608,7 @@ struct FUN_00470440
     FUN_00470440* m_pkNext;
     FUN_00470440(BGSPerkEntry* const& item);
 };
-TESForm* FUN_004839c0(unsigned int id);
+TESForm* LookupFormByID(unsigned int id);
 void __cdecl FNV_Warning(const char* fmt, ...);
 
 struct FUN_00806420_shell : public ActiveEffect
@@ -2631,7 +2631,7 @@ void FUN_00806420_shell::FUN_00806420(BGSLoadFormBuffer* apBuffer)
     apBuffer->ReadFormIdentifier(&m_pEffectInstance);
     apBuffer->ReadFormIdentifier(&pTarget);
     apBuffer->ReadFormIdentifier(&pMagicItem);
-    pSource = dynamic_cast<TESBoundObject*>(FUN_004839c0(((BufShell806420*)apBuffer)->FUN_008648a0()));
+    pSource = dynamic_cast<TESBoundObject*>(LookupFormByID(((BufShell806420*)apBuffer)->FUN_008648a0()));
     int count = ((BufShell806420*)apBuffer)->FUN_00864a60();
     for (unsigned int i = 0; i < (unsigned int)count; ++i)
     {
@@ -2784,7 +2784,7 @@ class TESFormStandin_5d40
 };
 
 class TESForm;
-TESForm* FUN_004839c0(unsigned int id);
+TESForm* LookupFormByID(unsigned int id);
 void __cdecl FNV_Warning(const char* fmt, ...);
 ActiveEffect* FUN_00805920(Actor*);
 
@@ -2831,7 +2831,7 @@ void FUN_00805d40(ActiveEffectList_5d40* apList, ActorStandin_5d40* apActor)
             cf = (SaveLoadRecord_5d40*)((TESSaveLoadGame_5d40*)g_TESSaveLoadGame)->FUN_004fd3c0();
             if (cf)
             {
-                q = (TESFormStandin_5d40*)FUN_004839c0(cf->formID);
+                q = (TESFormStandin_5d40*)LookupFormByID(cf->formID);
                 FNV_Warning(
                     "SAVELOAD: (LoadGame Buffer error) Block Header is incorrect in file %s on line %i.  Currently loading form is %08X %s with version %i and flags %08X",
                     "D:\\_Fallout3\\Platforms\\Common\\Code\\Fallout\\Magic\\ActiveEffect.cpp", 1000, cf->formID,
@@ -2885,7 +2885,7 @@ void FUN_00805d40(ActiveEffectList_5d40* apList, ActorStandin_5d40* apActor)
         c = (SaveLoadRecord_5d40*)((TESSaveLoadGame_5d40*)g_TESSaveLoadGame)->FUN_004fd3c0();
         if (c)
         {
-            j = (TESFormStandin_5d40*)FUN_004839c0(c->formID);
+            j = (TESFormStandin_5d40*)LookupFormByID(c->formID);
             if (e > (unsigned int)a + i)
             {
                 FNV_Warning(

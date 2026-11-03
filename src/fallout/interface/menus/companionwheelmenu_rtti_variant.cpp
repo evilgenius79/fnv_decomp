@@ -1821,7 +1821,7 @@ extern const char DAT_011846d4, DAT_011841cc;
 Actor* FUN_00ec43fb(Reference*, int, const void*, const void*, int);
 void FUN_005ac750(Idle*, unsigned int, int);
 Reference* FUN_00564480(int, int);
-bool FUN_005accb0(void*, void*, void*, Reference*, void*, void*, void*, Idle**, int*, void**, int*, int*);
+bool ExtractArgs(void*, void*, void*, Reference*, void*, void*, void*, Idle**, int*, void**, int*, int*);
 // @fnv 0x005c8a50
 bool FUN_005c8a50(void* paramInfo, void* scriptData, Reference* source, void* containing, void* script, void* locals,
                   double* result, void* offset)
@@ -1832,7 +1832,7 @@ bool FUN_005c8a50(void* paramInfo, void* scriptData, Reference* source, void* co
     void* object4 = 0;
     int immediateA = 0;
     int _usePriority = 0;
-    if (!FUN_005accb0(paramInfo, scriptData, offset, source, containing, script, locals, &idleVal, &force, &object4,
+    if (!ExtractArgs(paramInfo, scriptData, offset, source, containing, script, locals, &idleVal, &force, &object4,
                       &immediateA, &_usePriority))
         return false;
     bool forceFlag4 = false;

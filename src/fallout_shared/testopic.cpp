@@ -1165,7 +1165,7 @@ struct FUN_0083c520
 struct TopicInfo_Ext
 {
     TESQuest* FUN_006733e0();
-    void FUN_0061f170(bool, TESObjectREFR*);
+    void RunResultScript(bool, TESObjectREFR*);
     void FUN_0061f150();
 };
 bool __fastcall FUN_00579200(char const*);
@@ -1183,7 +1183,7 @@ DialogueItem* FUN_0061b320_shell::FUN_0061b320(TESObjectREFR* apSpeaker, TESObje
         if (abRunImmediate && pDialogueItem && pDialogueItem->GetInfo() &&
             FUN_00579200((char const*)pDialogueItem->GetInfo()))
         {
-            ((TopicInfo_Ext*)pDialogueItem->GetInfo())->FUN_0061f170(false, apSpeaker);
+            ((TopicInfo_Ext*)pDialogueItem->GetInfo())->RunResultScript(false, apSpeaker);
             ((TopicInfo_Ext*)pDialogueItem->GetInfo())->FUN_0061f150();
         }
         return pDialogueItem;
@@ -1697,7 +1697,7 @@ bool FUN_00935a40_cls::HasEntryWithKey(int key)
 namespace fnv_00619030 {
 extern PlayerCharacter* g_thePlayer;
 
-extern TESForm* FUN_004839c0(unsigned int formID);
+extern TESForm* LookupFormByID(unsigned int formID);
 extern void ResolveFormID(unsigned int* formID, TESFile* file);
 extern void FNV_Warning(const char* fmt, ...);
 
@@ -1750,7 +1750,7 @@ void TESTopic_Shell::InitializeTopic()
                 for (int i = 0; i < count; i++)
                 {
                     unsigned int formID = questInfo->m_kInfoLinks.GetAt(i).nID;
-                    TESTopicInfo* pTopicInfo = dynamic_cast<TESTopicInfo*>(FUN_004839c0(formID));
+                    TESTopicInfo* pTopicInfo = dynamic_cast<TESTopicInfo*>(LookupFormByID(formID));
                     questInfo->m_kInfoLinks.GetAt(i).pInfo = pTopicInfo;
                     if (pTopicInfo)
                     {
@@ -1774,7 +1774,7 @@ void TESTopic_Shell::InitializeTopic()
                     else
                     {
                         unsigned int uiChunkType = (unsigned int)questInfo->pQuest;
-                        TESQuest* quest = dynamic_cast<TESQuest*>(FUN_004839c0(uiChunkType));
+                        TESQuest* quest = dynamic_cast<TESQuest*>(LookupFormByID(uiChunkType));
                         ((BSSimpleArray_Helper*)&questInfo->m_kInfoLinks)->RemoveAt(i, true);
                         count--;
                         i--;
@@ -1784,13 +1784,13 @@ void TESTopic_Shell::InitializeTopic()
                 if (questInfo->pQuest)
                 {
                     unsigned int uiChunkType = (unsigned int)questInfo->pQuest;
-                    questInfo->pQuest = dynamic_cast<TESQuest*>(FUN_004839c0(uiChunkType));
+                    questInfo->pQuest = dynamic_cast<TESQuest*>(LookupFormByID(uiChunkType));
                 }
                 else if (questInfo->m_pAlternateQuest)
                 {
                     unsigned int formID = (unsigned int)questInfo->m_pAlternateQuest;
                     ResolveFormID(&formID, GetFile(-1));
-                    questInfo->m_pAlternateQuest = dynamic_cast<TESQuest*>(FUN_004839c0(formID));
+                    questInfo->m_pAlternateQuest = dynamic_cast<TESQuest*>(LookupFormByID(formID));
                 }
                 else
                 {
@@ -1996,7 +1996,7 @@ struct ConversationDataView
 struct InfoView
 {
     bool FUN_00579200();
-    void FUN_0061f170(bool, TESObjectREFR*);
+    void RunResultScript(bool, TESObjectREFR*);
     void FUN_0061f150();
     ConversationDataView* GetField38();
     int GetSignedByteAtOffset36();
@@ -2102,8 +2102,8 @@ unsigned int __cdecl GenerateConversation(TESObjectREFR* speaker, TESObjectREFR*
         }
         if (base && ((ItemView*)base)->FUN_0084e3a0() && ((ItemView*)base)->FUN_0084e3a0()->FUN_00579200())
         {
-            ((ItemView*)base)->FUN_0084e3a0()->FUN_0061f170(false, speaker);
-            ((ItemView*)base)->FUN_0084e3a0()->FUN_0061f170(true, speaker);
+            ((ItemView*)base)->FUN_0084e3a0()->RunResultScript(false, speaker);
+            ((ItemView*)base)->FUN_0084e3a0()->RunResultScript(true, speaker);
             ((ItemView*)base)->FUN_0084e3a0()->FUN_0061f150();
         }
         history->AddTail(base);

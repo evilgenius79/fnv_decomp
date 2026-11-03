@@ -700,7 +700,7 @@ void FUN_005fe470_shell::CopyFromIdleForm(TESForm* apForm)
 
 struct FormCopyMap
 {
-    bool FUN_00853130(TESForm* key, TESForm*& value);
+    bool GetAt(TESForm* key, TESForm*& value);
 };
 struct IdleArrayMethods
 {
@@ -735,12 +735,12 @@ TESIdleForm* IdleCopy::CopyIdleForm(unsigned char flag, FormCopyMap* map)
     TESForm* k;
     i = dynamic_cast<TESIdleForm*>(FUN_004867a0(flag, map));
     h = 0;
-    if (!map->FUN_00853130(m_pParentIdleForm, h) || !h)
+    if (!map->GetAt(m_pParentIdleForm, h) || !h)
         h = m_pParentIdleForm;
     s = static_cast<TESIdleForm*>(h);
     static_cast<IdleCopy*>(i)->FUN_008d8040(s);
     h = 0;
-    if (!map->FUN_00853130(m_pIdleForm, h) || !h)
+    if (!map->GetAt(m_pIdleForm, h) || !h)
         h = m_pIdleForm;
     p = static_cast<TESIdleForm*>(h);
     static_cast<IdleCopy*>(i)->FUN_00673400(p);
@@ -985,7 +985,7 @@ struct IdleInit : TESIdleForm
     void FUN_00484ab0(int);
     void InitLoad();
 };
-TESForm* __cdecl FUN_004839c0(unsigned int);
+TESForm* __cdecl LookupFormByID(unsigned int);
 void __cdecl ResolveFormID(unsigned int*, TESFile*);
 void __cdecl FNV_Warning(const char*, ...);
 // Initializes the idle form once: sets up the add-topic list, validates the anim group, resolves parent and previous idle forms, and marks it initialized.
@@ -1015,7 +1015,7 @@ void IdleInit::InitLoad()
     if (uiFormId)
     {
         ResolveFormID(&uiFormId, GetFile(-1));
-        TESIdleForm* parent = dynamic_cast<TESIdleForm*>(FUN_004839c0(uiFormId));
+        TESIdleForm* parent = dynamic_cast<TESIdleForm*>(LookupFormByID(uiFormId));
         if (!parent)
         {
             BSStringT<char> name;
@@ -1028,7 +1028,7 @@ void IdleInit::InitLoad()
     if (uiFormId)
     {
         ResolveFormID(&uiFormId, GetFile(-1));
-        TESIdleForm* previous = dynamic_cast<TESIdleForm*>(FUN_004839c0(uiFormId));
+        TESIdleForm* previous = dynamic_cast<TESIdleForm*>(LookupFormByID(uiFormId));
         if (!previous)
         {
             BSStringT<char> name;

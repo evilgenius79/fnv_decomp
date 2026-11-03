@@ -246,7 +246,7 @@ BSExtraData* __cdecl FUN_0040f9e0(BaseExtraList* apList, int aeType)
 
 struct FUN_0040fbf0_shell : public RecursiveSpinLock
 {
-    void FUN_0040fbf0(char*);
+    void Lock(char*);
 };
 
 unsigned int __cdecl gm_GetCurrentThreadId(void);
@@ -259,7 +259,7 @@ struct Interface
 };
 
 // @fnv 0x0040fbf0
-void FUN_0040fbf0_shell::FUN_0040fbf0(char* apName)
+void FUN_0040fbf0_shell::Lock(char* apName)
 {
     __declspec(align(32)) unsigned int uicurrentThread = gm_GetCurrentThreadId();
     if (m_uiOwningThreadID == uicurrentThread)
@@ -15980,7 +15980,7 @@ int FUN_00420bc0_cls::FUN_00420bc0(int aiIndex)
 }
 
 extern char DAT_010151f0;
-void __cdecl FUN_00401030(void* pointer);
+void __cdecl FormHeap_Free(void* pointer);
 
 struct FUN_00421160_shell
 {
@@ -15997,7 +15997,7 @@ void FUN_00421160_shell::FUN_00421160()
 {
     m_vftable = &DAT_010151f0;
     void* changes = m_pChangesMap;
-    FUN_00401030(changes);
+    FormHeap_Free(changes);
     FUN_0040ecb0();
 }
 
@@ -16700,19 +16700,19 @@ struct ExtraCopyList : ExtraDataList
 };
 struct ExtraCopyLock
 {
-    void FUN_0040fbf0(const char*);
-    void FUN_0040fba0();
+    void Lock(const char*);
+    void Unlock();
 };
 struct ScriptCopyHelper
 {
-    ScriptLocals* FUN_005abf60();
+    ScriptLocals* CreateEventList();
 };
 
 // Copies extra-data entries from source into this list, transferring or cloning script extras depending on transfer, under a lock.
 // @fnv 0x00412490
 void ExtraCopyList::FUN_00412490(ExtraCopyList* source, bool transfer)
 {
-    ((ExtraCopyLock*)&DAT_011c3920)->FUN_0040fbf0("ExtraDataList::CopyListForReference()");
+    ((ExtraCopyLock*)&DAT_011c3920)->Lock("ExtraDataList::CopyListForReference()");
     BSExtraData* extra = source->pHead;
     bool advance = true;
     while (extra)
@@ -16755,14 +16755,14 @@ void ExtraCopyList::FUN_00412490(ExtraCopyList* source, bool transfer)
                 ExtraScript* scriptExtra = new ExtraScript(script);
                 AddExtra(scriptExtra);
                 ((FUN_00419f80_shell*)this)
-                    ->FUN_00419f80(((ScriptCopyHelper*)((FUN_00418800_shell*)source)->FUN_00418800())->FUN_005abf60());
+                    ->FUN_00419f80(((ScriptCopyHelper*)((FUN_00418800_shell*)source)->FUN_00418800())->CreateEventList());
             }
             break;
         }
         if (extra && advance)
             extra = ((ExtraCopyData*)extra)->FUN_0044ddc0();
     }
-    ((ExtraCopyLock*)&DAT_011c3920)->FUN_0040fba0();
+    ((ExtraCopyLock*)&DAT_011c3920)->Unlock();
 }
 
 namespace ExtraSave {
@@ -17001,12 +17001,12 @@ struct Extra
     Extra* FUN_0044ddc0();
     unsigned int FUN_0084e3a0();
 };
-struct Lock
+struct SpinLock
 {
-    void FUN_0040fbf0(const char*);
-    void FUN_0040fba0();
+    void Lock(const char*);
+    void Unlock();
 };
-extern Lock DAT_011c3920;
+extern SpinLock DAT_011c3920;
 bool __cdecl FUN_00401500();
 void __cdecl FUN_00485910(unsigned int, int);
 void __cdecl FUN_00485910(unsigned int, unsigned int);
@@ -17028,7 +17028,7 @@ struct ExtraList
 // @fnv 0x00412970
 void ExtraList::WriteToSave()
 {
-    DAT_011c3920.FUN_0040fbf0(0);
+    DAT_011c3920.Lock(0);
     Extra* extra = head;
     while (extra)
     {
@@ -17536,7 +17536,7 @@ void ExtraList::WriteToSave()
         }
         extra = extra->FUN_0044ddc0();
     }
-    DAT_011c3920.FUN_0040fba0();
+    DAT_011c3920.Unlock();
 }
 }
 
@@ -17549,7 +17549,7 @@ struct File
 {
     int FUN_004726b0();
     bool ReadChunkInt(void*);
-    bool FUN_00472890(void*, unsigned int);
+    bool GetChunkData(void*, unsigned int);
     bool FUN_00401680();
     unsigned int GetField25C();
     bool FUN_004726f0();
@@ -18131,7 +18131,7 @@ void loader::List::LoadExtraData(File* file, void* owner)
         }
         else
             data = extra->data;
-        file->FUN_00472890(data, 0x14);
+        file->GetChunkData(data, 0x14);
         if (file->FUN_00401680())
             data->FUN_0060ce80();
         data->FUN_00430a90(true);
@@ -18139,7 +18139,7 @@ void loader::List::LoadExtraData(File* file, void* owner)
     }
     case 0x4f445258: {
         Radio data;
-        file->FUN_00472890(&data, 0x10);
+        file->GetChunkData(&data, 0x10);
         if (file->FUN_00401680())
             data.FUN_00414220();
         SetRadioData(&data);
@@ -18194,7 +18194,7 @@ void loader::List::LoadExtraData(File* file, void* owner)
             value = (unsigned char)oldValue;
         }
         else
-            file->FUN_00472890(&value, 1);
+            file->GetChunkData(&value, 1);
         FUN_0041ac30(value);
         break;
     }
@@ -18209,7 +18209,7 @@ void loader::List::LoadExtraData(File* file, void* owner)
         RegionList* m_pRegions = new RegionList(0);
         Region* pRegion = 0;
         unsigned int* pRegions = new unsigned int[count];
-        file->FUN_00472890(pRegions, size);
+        file->GetChunkData(pRegions, size);
         for (unsigned int index = 0; index < count; ++index)
         {
             if (file->FUN_00401680())
@@ -18226,7 +18226,7 @@ void loader::List::LoadExtraData(File* file, void* owner)
     break;
     case 0x544d4358: {
         unsigned char value = 0;
-        file->FUN_00472890(&value, 1);
+        file->GetChunkData(&value, 1);
         break;
     }
     case 0x4f4d4358: {
@@ -18237,7 +18237,7 @@ void loader::List::LoadExtraData(File* file, void* owner)
     }
     case 0x54454358: {
         unsigned char value = 0;
-        file->FUN_00472890(&value, 1);
+        file->GetChunkData(&value, 1);
         break;
     }
     case 0x53414358: {
@@ -18267,7 +18267,7 @@ void loader::List::LoadExtraData(File* file, void* owner)
     case 0x4c535058: {
         LinkedData data;
         memset(&data, 0, 0x14);
-        file->FUN_00472890(&data, 0x14);
+        file->GetChunkData(&data, 0x14);
         if (file->FUN_00401680())
             data.FUN_00414220();
         FUN_0041ad00(data.ref, 0, &data.posX, data.heading);
@@ -18295,7 +18295,7 @@ void loader::List::LoadExtraData(File* file, void* owner)
     }
     case 0x444f4c58: {
         Point data(0.0f, 0.0f, 0.97f);
-        file->FUN_00472890(&data, 12);
+        file->GetChunkData(&data, 12);
         if (file->FUN_00401680())
         {
             endian(&data.x, EndianTag());
@@ -18308,7 +18308,7 @@ void loader::List::LoadExtraData(File* file, void* owner)
     case 0x50534558: {
         ParentData data;
         memset(&data, 0, 8);
-        file->FUN_00472890(&data, 8);
+        file->GetChunkData(&data, 8);
         if (file->FUN_00401680())
             data.FUN_00503210();
         FUN_0041da40(data.ref);
@@ -18341,7 +18341,7 @@ void loader::List::LoadExtraData(File* file, void* owner)
             extra->flags = (unsigned char)value;
         }
         else
-            file->FUN_00472890(&extra->flags, 1);
+            file->GetChunkData(&extra->flags, 1);
         break;
     }
     case 0x4f544158: {
@@ -18355,7 +18355,7 @@ void loader::List::LoadExtraData(File* file, void* owner)
         if (size > 1)
         {
             char* data = new char[size];
-            file->FUN_00472890(data, size);
+            file->GetChunkData(data, size);
             SetTextOverride(data);
             delete[] data;
         }
@@ -18369,7 +18369,7 @@ void loader::List::LoadExtraData(File* file, void* owner)
             FUN_0040ff60(extra);
         }
         PackageRef* pData = new PackageRef;
-        file->FUN_00472890(pData, 8);
+        file->GetChunkData(pData, 8);
         if (file->FUN_00401680())
             pData->FUN_00462230();
         extra->list.FUN_005ae3d0(pData);
@@ -18384,7 +18384,7 @@ void loader::List::LoadExtraData(File* file, void* owner)
         }
         PackageCombat value;
         memset(&value, 0, 12);
-        file->FUN_00472890(&value, 12);
+        file->GetChunkData(&value, 12);
         if (file->FUN_00401680())
         {
             endian(&value.ref, EndianTag());
@@ -18400,7 +18400,7 @@ void loader::List::LoadExtraData(File* file, void* owner)
     case 0x52434458: {
         TeleportLoad data;
         memset(&data, 0, 28);
-        file->FUN_00472890(&data, 28);
+        file->GetChunkData(&data, 28);
         if (file->FUN_00401680())
         {
             endian(&data.ref, EndianTag());
@@ -18464,14 +18464,14 @@ void loader::List::LoadExtraData(File* file, void* owner)
         NavDoor pData;
         unsigned int size = file->GetField25C();
         char* buffer = new char[size];
-        file->FUN_00472890(buffer, size);
+        file->GetChunkData(buffer, size);
         pData.LoadFormRef(owner, file, buffer);
         delete[] buffer;
         break;
     }
     case 0x50444e58: {
         NavPortal pData;
-        file->FUN_00472890(&pData, 8);
+        file->GetChunkData(&pData, 8);
         if (file->FUN_00401680())
             pData.FUN_004141e0();
         PortalExtra extra(pData);
@@ -18496,7 +18496,7 @@ void loader::List::LoadExtraData(File* file, void* owner)
             break;
         Power pData;
         memset(&pData, 0, 8);
-        file->FUN_00472890(&pData, 8);
+        file->GetChunkData(&pData, 8);
         if (file->FUN_00401680())
         {
             endian(&pData.ref, EndianTag());
@@ -18520,7 +18520,7 @@ void loader::List::LoadExtraData(File* file, void* owner)
     case 0x4d525058: {
         Primitive data;
         memset(&data, 0, 32);
-        file->FUN_00472890(&data, 32);
+        file->GetChunkData(&data, 32);
         if (file->FUN_00401680())
             data.FUN_00414290();
         void* primitive = FUN_004a4e90(data.type, &data, &data.r);
@@ -18531,7 +18531,7 @@ void loader::List::LoadExtraData(File* file, void* owner)
     case 0x50434f58: {
         OcclusionLoad data;
         memset(&data, 0, 36);
-        file->FUN_00472890(&data, 36);
+        file->GetChunkData(&data, 36);
         if (file->FUN_00401680())
             data.FUN_004140f0();
         Plane* pData = new Plane;
@@ -18546,7 +18546,7 @@ void loader::List::LoadExtraData(File* file, void* owner)
     case 0x4c545058: {
         OcclusionLoad data;
         memset(&data, 0, 36);
-        file->FUN_00472890(&data, 36);
+        file->GetChunkData(&data, 36);
         if (file->FUN_00401680())
             data.FUN_004140f0();
         break;
@@ -18555,7 +18555,7 @@ void loader::List::LoadExtraData(File* file, void* owner)
         break;
     case 0x44525058: {
         PatrolValue value;
-        file->FUN_00472890(&value, 4);
+        file->GetChunkData(&value, 4);
         if (file->FUN_00401680())
             value.FUN_00503210();
         PatrolData* data = new PatrolData(&value);
@@ -18564,7 +18564,7 @@ void loader::List::LoadExtraData(File* file, void* owner)
     }
     case 0x44524f58: {
         ActionData* data = new ActionData;
-        file->FUN_00472890(data, 16);
+        file->GetChunkData(data, 16);
         if (file->FUN_00401680())
             data->ProcessAllElements();
         FUN_0041fec0(data);
@@ -18572,7 +18572,7 @@ void loader::List::LoadExtraData(File* file, void* owner)
     }
     case 0x444f5058: {
         DroppedData* data = new DroppedData;
-        file->FUN_00472890(data, 8);
+        file->GetChunkData(data, 8);
         if (file->FUN_00401680())
             data->FUN_00462230();
         FUN_00420210(data);
@@ -18597,7 +18597,7 @@ void loader::List::LoadExtraData(File* file, void* owner)
     }
     case 0x49525458: {
         TriData* data = new TriData;
-        file->FUN_00472890(data, 4);
+        file->GetChunkData(data, 4);
         if (file->FUN_00401680())
             data->FUN_00503210();
         FUN_00420fd0(data);
@@ -18935,7 +18935,7 @@ struct RunOnceOwner
 };
 
 signed char __fastcall FUN_0086a460(DurationData* sched);
-void __cdecl FUN_00401030(RunOnceItem* item);
+void __cdecl FormHeap_Free(RunOnceItem* item);
 
 struct FUN_00410220_shell
 {
@@ -18971,7 +18971,7 @@ void FUN_0041d7b0_cls::RemoveRunOnceItems(char abKeepFlag)
             {
                 reinterpret_cast<ContNode*>(owner->pRunOnceList)->FUN_00905330(&item);
                 RunOnceItem* doomed = item;
-                FUN_00401030(doomed);
+                FormHeap_Free(doomed);
                 cur = owner->pRunOnceList;
             }
             else
@@ -19601,7 +19601,7 @@ struct FixupItem
 {
     void AddActor(Actor*);
 };
-TESForm* __cdecl FUN_004839c0(unsigned int);
+TESForm* __cdecl LookupFormByID(unsigned int);
 void* __cdecl FUN_0040a250(void*);
 void* __cdecl FUN_00825550(void*);
 void __cdecl InitLoadGameForEffects(FixupStream*, FixupNode*);
@@ -19634,7 +19634,7 @@ void FixupList::FixupReferences(FixupStream* stream, TESForm* base)
         if (heading)
         {
             heading->value0c =
-                heading->value0c ? dynamic_cast<TESObjectREFR*>(FUN_004839c0((unsigned int)heading->value0c)) : 0;
+                heading->value0c ? dynamic_cast<TESObjectREFR*>(LookupFormByID((unsigned int)heading->value0c)) : 0;
         }
     }
     if (stream->FUN_00428110().Test(DAT_01183d64))
@@ -19665,7 +19665,7 @@ void FixupList::FixupReferences(FixupStream* stream, TESForm* base)
             if (linked)
             {
                 linked->value0c =
-                    linked->value0c ? dynamic_cast<TESObjectREFR*>(FUN_004839c0((unsigned int)linked->value0c)) : 0;
+                    linked->value0c ? dynamic_cast<TESObjectREFR*>(LookupFormByID((unsigned int)linked->value0c)) : 0;
                 if (!linked->value0c)
                     RemoveExtra(0x6c);
             }
@@ -19679,7 +19679,7 @@ void FixupList::FixupReferences(FixupStream* stream, TESForm* base)
                 pCombatExtra->value1c = pCombatExtra->value1c ? FUN_00825550(pCombatExtra->value1c) : 0;
                 pCombatExtra->value20 =
                     pCombatExtra->value20
-                        ? dynamic_cast<TESObjectREFR*>(FUN_004839c0((unsigned int)pCombatExtra->value20))
+                        ? dynamic_cast<TESObjectREFR*>(LookupFormByID((unsigned int)pCombatExtra->value20))
                         : 0;
             }
         }
@@ -19690,7 +19690,7 @@ void FixupList::FixupReferences(FixupStream* stream, TESForm* base)
             {
                 pMagicExtra->value1c =
                     pMagicExtra->value1c
-                        ? dynamic_cast<TESObjectREFR*>(FUN_004839c0((unsigned int)pMagicExtra->value1c))
+                        ? dynamic_cast<TESObjectREFR*>(LookupFormByID((unsigned int)pMagicExtra->value1c))
                         : 0;
                 InitLoadGameForEffects(stream, (FixupNode*)&pMagicExtra->value20);
             }
@@ -19702,7 +19702,7 @@ void FixupList::FixupReferences(FixupStream* stream, TESForm* base)
             {
                 pFollowerExtra->value0c =
                     pFollowerExtra->value0c
-                        ? dynamic_cast<TESObjectREFR*>(FUN_004839c0((unsigned int)pFollowerExtra->value0c))
+                        ? dynamic_cast<TESObjectREFR*>(LookupFormByID((unsigned int)pFollowerExtra->value0c))
                         : 0;
                 if (pFollowerExtra->value0c)
                 {
@@ -19719,7 +19719,7 @@ void FixupList::FixupReferences(FixupStream* stream, TESForm* base)
             {
                 pMobileExtra->value0c =
                     pMobileExtra->value0c
-                        ? dynamic_cast<MobileObject*>(FUN_004839c0((unsigned int)pMobileExtra->value0c))
+                        ? dynamic_cast<MobileObject*>(LookupFormByID((unsigned int)pMobileExtra->value0c))
                         : 0;
             }
         }
@@ -19731,9 +19731,9 @@ void FixupList::FixupReferences(FixupStream* stream, TESForm* base)
                 if (package)
                 {
                     package->value0c =
-                        package->value0c ? dynamic_cast<TESPackage*>(FUN_004839c0((unsigned int)package->value0c)) : 0;
+                        package->value0c ? dynamic_cast<TESPackage*>(LookupFormByID((unsigned int)package->value0c)) : 0;
                     package->value14 = package->value14
-                                           ? dynamic_cast<TESObjectREFR*>(FUN_004839c0((unsigned int)package->value14))
+                                           ? dynamic_cast<TESObjectREFR*>(LookupFormByID((unsigned int)package->value14))
                                            : 0;
                     if (package->value0c)
                     {
@@ -19757,7 +19757,7 @@ void FixupList::FixupReferences(FixupStream* stream, TESForm* base)
                         bool shouldRemove = false;
                         if (followerID)
                         {
-                            followerID = followerID ? (unsigned int)dynamic_cast<Actor*>(FUN_004839c0(followerID)) : 0;
+                            followerID = followerID ? (unsigned int)dynamic_cast<Actor*>(LookupFormByID(followerID)) : 0;
                             if (followerID)
                                 current->SetItem(followerID);
                             else
@@ -19804,7 +19804,7 @@ void FixupList::FixupReferences(FixupStream* stream, TESForm* base)
                 {
                     pTargetExtra->value0c =
                         pTargetExtra->value0c
-                            ? dynamic_cast<TESObjectREFR*>(FUN_004839c0((unsigned int)pTargetExtra->value0c))
+                            ? dynamic_cast<TESObjectREFR*>(LookupFormByID((unsigned int)pTargetExtra->value0c))
                             : 0;
                 }
             }
@@ -19824,7 +19824,7 @@ void FixupList::FixupReferences(FixupStream* stream, TESForm* base)
                 {
                     pFriendHitExtra->value0c =
                         pFriendHitExtra->value0c
-                            ? dynamic_cast<TESObjectREFR*>(FUN_004839c0((unsigned int)pFriendHitExtra->value0c))
+                            ? dynamic_cast<TESObjectREFR*>(LookupFormByID((unsigned int)pFriendHitExtra->value0c))
                             : 0;
                 }
             }
@@ -19833,7 +19833,7 @@ void FixupList::FixupReferences(FixupStream* stream, TESForm* base)
                 ExtraFixup* owner = GetExtraData(0x5f);
                 if (owner)
                 {
-                    owner->value14 = owner->value14 ? FUN_004839c0((unsigned int)owner->value14) : 0;
+                    owner->value14 = owner->value14 ? LookupFormByID((unsigned int)owner->value14) : 0;
                 }
             }
             if (stream->FUN_00428110().Test(DAT_01183f54))
@@ -19843,7 +19843,7 @@ void FixupList::FixupReferences(FixupStream* stream, TESForm* base)
                 {
                     pWaterExtra->value0c =
                         pWaterExtra->value0c
-                            ? dynamic_cast<TESObjectREFR*>(FUN_004839c0((unsigned int)pWaterExtra->value0c))
+                            ? dynamic_cast<TESObjectREFR*>(LookupFormByID((unsigned int)pWaterExtra->value0c))
                             : 0;
                     if (pWaterExtra->value0c)
                         ((FixupEffects*)((FixupRef*)pWaterExtra->value0c)->FUN_005d43c0())->FUN_0041e340(actor);
@@ -20331,7 +20331,7 @@ struct FUN_00425ff0
 };
 struct ScriptHelper
 {
-    ScriptLocals* FUN_005abf60();
+    ScriptLocals* CreateEventList();
 };
 struct Extras
 {
@@ -20412,7 +20412,7 @@ extern p376::Manager* DAT_011c3f2c;
 extern p376::AnimationInfo DAT_011977d8[];
 extern char DAT_010152d0[], DAT_01015718[], DAT_010156a8[], DAT_01015610[], DAT_01015588[], DAT_01015500[],
     DAT_010154a0[], DAT_01015440[];
-TESForm* __cdecl FUN_004839c0(unsigned int);
+TESForm* __cdecl LookupFormByID(unsigned int);
 void __cdecl FUN_005b5e40(const char*, ...);
 void* __cdecl FUN_00403d30(void*, int, unsigned int);
 namespace p376 {
@@ -20432,7 +20432,7 @@ void Extras::FUN_00424960(unsigned int auiChangeFlags, unsigned int unused, TESO
             Header* header = DAT_011de45c->FUN_004fd3c0();
             if (header)
             {
-                TESForm* form = FUN_004839c0(header->formID);
+                TESForm* form = LookupFormByID(header->formID);
                 FUN_005b5e40(DAT_01015718, DAT_010152d0, 0x2c2c, header->formID, form->GetName(), header->version,
                              *reinterpret_cast<unsigned int*>(&header->changes));
             }
@@ -20522,7 +20522,7 @@ void Extras::FUN_00424960(unsigned int auiChangeFlags, unsigned int unused, TESO
                     }
                     DAT_011de45c->FUN_008579e0(&lock->flags, 1);
                     if (qidnYUK)
-                        lock->key = dynamic_cast<TESKey*>(FUN_004839c0(qidnYUK));
+                        lock->key = dynamic_cast<TESKey*>(LookupFormByID(qidnYUK));
                 }
                 FUN_00419050(lock);
             }
@@ -20551,7 +20551,7 @@ void Extras::FUN_00424960(unsigned int auiChangeFlags, unsigned int unused, TESO
             {
                 unsigned int qidnYUK;
                 DAT_011de45c->FUN_00857aa0(&qidnYUK, 4);
-                TESForm* qbfQdhM = FUN_004839c0(qidnYUK);
+                TESForm* qbfQdhM = LookupFormByID(qidnYUK);
                 if (qbfQdhM)
                     FUN_00419700(qbfQdhM);
             }
@@ -20562,7 +20562,7 @@ void Extras::FUN_00424960(unsigned int auiChangeFlags, unsigned int unused, TESO
             {
                 unsigned int id;
                 DAT_011de45c->FUN_00857aa0(&id, 4);
-                TESGlobal* form = dynamic_cast<TESGlobal*>(FUN_004839c0(id));
+                TESGlobal* form = dynamic_cast<TESGlobal*>(LookupFormByID(id));
                 if (form)
                     SetExtraDataValue(form);
             }
@@ -20603,14 +20603,14 @@ void Extras::FUN_00424960(unsigned int auiChangeFlags, unsigned int unused, TESO
                 usBlockSize = true;
                 unsigned int qidnYUK;
                 DAT_011de45c->FUN_00857aa0(&qidnYUK, 4);
-                Script* qtOMjSX = dynamic_cast<Script*>(FUN_004839c0(qidnYUK));
+                Script* qtOMjSX = dynamic_cast<Script*>(LookupFormByID(qidnYUK));
                 if (qtOMjSX)
                     FUN_00419ed0(qtOMjSX);
                 ScriptLocals* qbfQdhM = FUN_00418830();
                 if (!qbfQdhM)
                 {
                     if (qtOMjSX)
-                        qbfQdhM = ((ScriptHelper*)qtOMjSX)->FUN_005abf60();
+                        qbfQdhM = ((ScriptHelper*)qtOMjSX)->CreateEventList();
                     FUN_00419f80(qbfQdhM);
                 }
                 if (!qbfQdhM)
@@ -20653,7 +20653,7 @@ void Extras::FUN_00424960(unsigned int auiChangeFlags, unsigned int unused, TESO
                 ((PackageVirtual*)quYjuqT)->Init();
             }
             if (!quYjuqT)
-                quYjuqT = dynamic_cast<TESPackage*>(FUN_004839c0(qidnYUK));
+                quYjuqT = dynamic_cast<TESPackage*>(LookupFormByID(qidnYUK));
             if (quYjuqT)
                 FUN_0041c930(quYjuqT, qoPB, qtOMjSX, qCWCA, qbfQdhM, 0);
             break;
@@ -20701,7 +20701,7 @@ void Extras::FUN_00424960(unsigned int auiChangeFlags, unsigned int unused, TESO
                 unsigned char qAXSCg;
                 DAT_011de45c->FUN_00857aa0(&qYePyBl, 4);
                 DAT_011de45c->FUN_008579e0(&qAXSCg, 1);
-                TESPackage* qxDeKK = dynamic_cast<TESPackage*>(FUN_004839c0(qYePyBl));
+                TESPackage* qxDeKK = dynamic_cast<TESPackage*>(LookupFormByID(qYePyBl));
                 if (qxDeKK)
                     FUN_0041d700(qxDeKK, qAXSCg);
             }
@@ -20714,7 +20714,7 @@ void Extras::FUN_00424960(unsigned int auiChangeFlags, unsigned int unused, TESO
             DAT_011de45c->FUN_00857aa0(&qidnYUK, 4);
             DAT_011de45c->FUN_008579e0(&qoPB.position, 12);
             DAT_011de45c->FUN_008579e0(&qtOMjSX, 4);
-            qoPB.form = FUN_004839c0(qidnYUK);
+            qoPB.form = LookupFormByID(qidnYUK);
             TESWorldSpace* qbfQdhM = dynamic_cast<TESWorldSpace*>(qoPB.form);
             TESObjectCELL* qCWCA = dynamic_cast<TESObjectCELL*>(qoPB.form);
             if (qbfQdhM || qCWCA)
@@ -20826,7 +20826,7 @@ void Extras::FUN_00424960(unsigned int auiChangeFlags, unsigned int unused, TESO
                 DAT_011de45c->FUN_00857aa0(&id, 4);
                 if (((RefHelper*)reference)->FUN_005653d0())
                 {
-                    TESWorldSpace* world = dynamic_cast<TESWorldSpace*>(FUN_004839c0(id));
+                    TESWorldSpace* world = dynamic_cast<TESWorldSpace*>(LookupFormByID(id));
                     if (world)
                     {
                         FUN_0041d390(((WorldHelper*)world)->FUN_005f36f0());
@@ -20877,7 +20877,7 @@ void Extras::FUN_00424960(unsigned int auiChangeFlags, unsigned int unused, TESO
                 DAT_011de45c->FUN_00857aa0(&id, 4);
                 if (id)
                 {
-                    TESForm* form = FUN_004839c0(id);
+                    TESForm* form = LookupFormByID(id);
                     if (dynamic_cast<TESObjectCELL*>(form) || dynamic_cast<TESWorldSpace*>(form))
                         FUN_0041b1e0(form);
                 }
@@ -20921,7 +20921,7 @@ void Extras::FUN_00424960(unsigned int auiChangeFlags, unsigned int unused, TESO
         Header* qbfQdhM = DAT_011de45c->FUN_004fd3c0();
         if (qbfQdhM)
         {
-            TESForm* form = FUN_004839c0(qbfQdhM->formID);
+            TESForm* form = LookupFormByID(qbfQdhM->formID);
             if (qidnYUK > pActor + bLoadedScript)
                 FUN_005b5e40(DAT_01015588, qidnYUK - (pActor + bLoadedScript), DAT_010152d0, 0x2ee9, qbfQdhM->formID,
                              form->GetName(), qbfQdhM->version, *reinterpret_cast<unsigned int*>(&qbfQdhM->changes));
@@ -22582,8 +22582,8 @@ struct SaveRecQ
 class ProfQ
 {
   public:
-    void FUN_0040fbf0(int);
-    void FUN_0040fba0();
+    void Lock(int);
+    void Unlock();
 };
 class GameQ
 {
@@ -22620,7 +22620,7 @@ extern char DAT_011843e4;
 void* FUN_00ec43fb(void*, int, void*, void*, int);
 unsigned short FUN_00805a00(int, int);
 int FUN_0044a670(int);
-FormQ* FUN_004839c0(int);
+FormQ* LookupFormByID(int);
 void FUN_0040fbe0(const char*, ...);
 class ExtraDataListQ
 {
@@ -22633,7 +22633,7 @@ class ExtraDataListQ
 // @fnv 0x00422c40
 unsigned short ExtraDataListQ::FUN_00422c40(unsigned int aiFlags, ObjQ* apObj)
 {
-    DAT_011c3920.FUN_0040fbf0(0);
+    DAT_011c3920.Lock(0);
     ExtQ* p_gslscu;
     unsigned short size = 0;
     unsigned short start = size;
@@ -22922,7 +22922,7 @@ unsigned short ExtraDataListQ::FUN_00422c40(unsigned int aiFlags, ObjQ* apObj)
         SaveRecQ* pRec = DAT_011de45c->FUN_004fd3e0();
         if (pRec)
         {
-            FormQ* pForm = FUN_004839c0(pRec->formID);
+            FormQ* pForm = LookupFormByID(pRec->formID);
             FUN_0040fbe0("GetSaveSize(): %-5i for form %08X %s with flags %08X ending at line %i in file %s",
                          size - start, pRec->formID, pForm->f76(), *(int*)((char*)pRec + 5), 0x29b5,
                          "D:\\_Fallout3\\Platforms\\Common\\Code\\Fallout Shared\\ExtraDataList.cpp");
@@ -22933,7 +22933,7 @@ unsigned short ExtraDataListQ::FUN_00422c40(unsigned int aiFlags, ObjQ* apObj)
                          "D:\\_Fallout3\\Platforms\\Common\\Code\\Fallout Shared\\ExtraDataList.cpp");
         }
     }
-    DAT_011c3920.FUN_0040fba0();
+    DAT_011c3920.Unlock();
     return size;
 }
 }  // namespace fnv_00422c40
@@ -23557,7 +23557,7 @@ struct BSSpinLockUnlock
     void Unlock();
 };
 void __cdecl ResolveFormID(unsigned int*, TESFile*);
-TESForm* __cdecl FUN_004839c0(unsigned int);
+TESForm* __cdecl LookupFormByID(unsigned int);
 void __cdecl FNV_Warning(const char*, ...);
 struct ResolveList;
 struct ResolveForm : TESForm
@@ -23692,7 +23692,7 @@ struct ResolvePatrol
 {
     void FUN_0067c6c0(TESForm*);
 };
-// Iterates the extra data list, resolving form references via FUN_004839c0 and removing invalid entries with FUN_00410020.
+// Iterates the extra data list, resolving form references via LookupFormByID and removing invalid entries with FUN_00410020.
 // @fnv 0x00416be0
 void ResolveExtraOwner::FUN_00416be0(TESForm* owner)
 {
@@ -23710,7 +23710,7 @@ void ResolveExtraOwner::FUN_00416be0(TESForm* owner)
             if (pNode)
             {
                 ResolveFormID(&pNode, owner->GetFile(-1));
-                sourceFile->ref = dynamic_cast<TESObjectREFR*>(FUN_004839c0(pNode));
+                sourceFile->ref = dynamic_cast<TESObjectREFR*>(LookupFormByID(pNode));
                 if (!sourceFile->ref)
                     FNV_Warning("MASTERFILE: Could not find radio range position ref (%08X).", pNode);
                 else if (static_cast<ResolveForm*>(static_cast<TESForm*>(sourceFile->ref))->FUN_00575d10())
@@ -23725,7 +23725,7 @@ void ResolveExtraOwner::FUN_00416be0(TESForm* owner)
             {
                 unsigned int id = data->unk04;
                 ResolveFormID(&id, sourceFile);
-                data->unk04 = reinterpret_cast<int>(dynamic_cast<TESKey*>(FUN_004839c0(id)));
+                data->unk04 = reinterpret_cast<int>(dynamic_cast<TESKey*>(LookupFormByID(id)));
                 if (!data->unk04)
                 {
                     FNV_Warning("MASTERFILE: Unable to find key %08X for lock data. Lock will be removed.", id);
@@ -23759,7 +23759,7 @@ void ResolveExtraOwner::FUN_00416be0(TESForm* owner)
             ResolveMedia* data = reinterpret_cast<ResolveMedia*>(static_cast<ResolveExtraPointer*>(pNode)->value);
             unsigned int id = data->FUN_0059bb30();
             ResolveFormID(&id, owner->GetFile(-1));
-            if (dynamic_cast<MediaLocationController*>(FUN_004839c0(id)))
+            if (dynamic_cast<MediaLocationController*>(LookupFormByID(id)))
                 data->FUN_007037c0(id);
             else
                 FNV_Warning(
@@ -23775,7 +23775,7 @@ void ResolveExtraOwner::FUN_00416be0(TESForm* owner)
             ResolveExtraValue* extra = static_cast<ResolveExtraValue*>(pNode);
             unsigned int id = reinterpret_cast<unsigned int>(extra->form);
             ResolveFormID(&id, sourceFile);
-            extra->form = FUN_004839c0(id);
+            extra->form = LookupFormByID(id);
             if (!extra->form)
             {
                 FNV_Warning("MASTERFILE: Unable to find ownership owner form %08X. Ownership will be removed.", id);
@@ -23787,7 +23787,7 @@ void ResolveExtraOwner::FUN_00416be0(TESForm* owner)
             ResolveExtraValue* extra = static_cast<ResolveExtraValue*>(pNode);
             unsigned int id = reinterpret_cast<unsigned int>(extra->form);
             ResolveFormID(&id, sourceFile);
-            extra->form = dynamic_cast<TESGlobal*>(FUN_004839c0(id));
+            extra->form = dynamic_cast<TESGlobal*>(LookupFormByID(id));
             if (!extra->form)
             {
                 FNV_Warning("MASTERFILE: Unable to find ownership condition global %08X. Ownership will be removed.",
@@ -23800,7 +23800,7 @@ void ResolveExtraOwner::FUN_00416be0(TESForm* owner)
             ResolveExtraValue* extra = static_cast<ResolveExtraValue*>(pNode);
             unsigned int id = reinterpret_cast<unsigned int>(extra->form);
             ResolveFormID(&id, sourceFile);
-            extra->form = dynamic_cast<AlchemyItem*>(FUN_004839c0(id));
+            extra->form = dynamic_cast<AlchemyItem*>(LookupFormByID(id));
             if (!extra->form)
             {
                 FNV_Warning("MASTERFILE: Unable to find poison %08X. Poison data will be removed.", id);
@@ -23812,7 +23812,7 @@ void ResolveExtraOwner::FUN_00416be0(TESForm* owner)
             ResolveExtraValue* extra = static_cast<ResolveExtraValue*>(pNode);
             unsigned int id = reinterpret_cast<unsigned int>(extra->form);
             ResolveFormID(&id, sourceFile);
-            extra->form = dynamic_cast<TESClimate*>(FUN_004839c0(id));
+            extra->form = dynamic_cast<TESClimate*>(LookupFormByID(id));
             if (!extra->form)
             {
                 FNV_Warning("MASTERFILE: Unable to find cell climate %08X. Climate data will be removed.", id);
@@ -23824,7 +23824,7 @@ void ResolveExtraOwner::FUN_00416be0(TESForm* owner)
             ResolveExtraValue* extra = static_cast<ResolveExtraValue*>(pNode);
             unsigned int id = reinterpret_cast<unsigned int>(extra->form);
             ResolveFormID(&id, sourceFile);
-            extra->form = dynamic_cast<TESImageSpace*>(FUN_004839c0(id));
+            extra->form = dynamic_cast<TESImageSpace*>(LookupFormByID(id));
             if (!extra->form)
             {
                 FNV_Warning("MASTERFILE: Unable to find cell imagespace %08X. ImageSpace data will be removed.", id);
@@ -23842,7 +23842,7 @@ void ResolveExtraOwner::FUN_00416be0(TESForm* owner)
             ResolveExtraValue* extra = static_cast<ResolveExtraValue*>(pNode);
             unsigned int id = reinterpret_cast<unsigned int>(extra->form);
             ResolveFormID(&id, sourceFile);
-            extra->form = dynamic_cast<BGSAcousticSpace*>(FUN_004839c0(id));
+            extra->form = dynamic_cast<BGSAcousticSpace*>(LookupFormByID(id));
             if (!extra->form)
             {
                 FNV_Warning("MASTERFILE: Unable to find cell acoustic space %08X. AcousticSpace data will be removed.",
@@ -23855,7 +23855,7 @@ void ResolveExtraOwner::FUN_00416be0(TESForm* owner)
             ResolveExtraValue* extra = static_cast<ResolveExtraValue*>(pNode);
             unsigned int id = reinterpret_cast<unsigned int>(extra->form);
             ResolveFormID(&id, sourceFile);
-            extra->form = dynamic_cast<TESWaterForm*>(FUN_004839c0(id));
+            extra->form = dynamic_cast<TESWaterForm*>(LookupFormByID(id));
             if (!extra->form)
             {
                 FNV_Warning("MASTERFILE: Unable to find cell water type %08X. Water data will be removed.", id);
@@ -23867,7 +23867,7 @@ void ResolveExtraOwner::FUN_00416be0(TESForm* owner)
             ResolveExtraValue* extra = static_cast<ResolveExtraValue*>(pNode);
             unsigned int id = reinterpret_cast<unsigned int>(extra->form);
             ResolveFormID(&id, sourceFile);
-            extra->form = dynamic_cast<BGSMusicType*>(FUN_004839c0(id));
+            extra->form = dynamic_cast<BGSMusicType*>(LookupFormByID(id));
             if (!extra->form)
             {
                 FNV_Warning("MASTERFILE: Unable to find cell music type %08X. Music data will be removed.", id);
@@ -23879,7 +23879,7 @@ void ResolveExtraOwner::FUN_00416be0(TESForm* owner)
             ResolveExtraValue* extra = static_cast<ResolveExtraValue*>(pNode);
             unsigned int id = reinterpret_cast<unsigned int>(extra->form);
             ResolveFormID(&id, sourceFile);
-            extra->form = FUN_004839c0(id);
+            extra->form = LookupFormByID(id);
             if (!extra->form)
             {
                 FNV_Warning(
@@ -23893,7 +23893,7 @@ void ResolveExtraOwner::FUN_00416be0(TESForm* owner)
             ResolveExtraValue* extra = static_cast<ResolveExtraValue*>(pNode);
             unsigned int id = reinterpret_cast<unsigned int>(extra->form);
             ResolveFormID(&id, sourceFile);
-            extra->form = dynamic_cast<TESObjectREFR*>(FUN_004839c0(id));
+            extra->form = dynamic_cast<TESObjectREFR*>(LookupFormByID(id));
             if (!extra->form)
             {
                 FNV_Warning(
@@ -23918,7 +23918,7 @@ void ResolveExtraOwner::FUN_00416be0(TESForm* owner)
             ResolveExtraValue* extra = static_cast<ResolveExtraValue*>(pNode);
             unsigned int id = reinterpret_cast<unsigned int>(extra->form);
             ResolveFormID(&id, sourceFile);
-            extra->form = dynamic_cast<TESObjectREFR*>(FUN_004839c0(id));
+            extra->form = dynamic_cast<TESObjectREFR*>(LookupFormByID(id));
             if (!extra->form)
             {
                 FNV_Warning(
@@ -23942,7 +23942,7 @@ void ResolveExtraOwner::FUN_00416be0(TESForm* owner)
             ResolveExtraValue* extra = static_cast<ResolveExtraValue*>(pNode);
             unsigned int id = reinterpret_cast<unsigned int>(extra->form);
             ResolveFormID(&id, sourceFile);
-            extra->form = dynamic_cast<TESObjectREFR*>(FUN_004839c0(id));
+            extra->form = dynamic_cast<TESObjectREFR*>(LookupFormByID(id));
             if (!extra->form)
             {
                 FNV_Warning("MASTERFILE: Unable to find linked reference %08X. Linked reference data will be removed.",
@@ -23960,7 +23960,7 @@ void ResolveExtraOwner::FUN_00416be0(TESForm* owner)
                 unsigned int list = reinterpret_cast<unsigned int>(extra->array->items[index]);
                 list = 0;
                 ResolveFormID(&list, sourceFile);
-                extra->array->items[index] = dynamic_cast<TESObjectREFR*>(FUN_004839c0(list));
+                extra->array->items[index] = dynamic_cast<TESObjectREFR*>(LookupFormByID(list));
                 if (list && !extra->array->items[index])
                 {
                     FNV_Warning(
@@ -23989,7 +23989,7 @@ void ResolveExtraOwner::FUN_00416be0(TESForm* owner)
             {
                 unsigned int id = reinterpret_cast<unsigned int>(extra->pair->items[index]);
                 ResolveFormID(&id, sourceFile);
-                extra->pair->items[index] = dynamic_cast<TESObjectREFR*>(FUN_004839c0(id));
+                extra->pair->items[index] = dynamic_cast<TESObjectREFR*>(LookupFormByID(id));
                 if (id && !extra->pair->items[index])
                 {
                     FNV_Warning(
@@ -24028,7 +24028,7 @@ void ResolveExtraOwner::FUN_00416be0(TESForm* owner)
             {
                 unsigned int ref = reinterpret_cast<unsigned int>(*extra->FUN_006815c0());
                 ResolveFormID(&ref, sourceFile);
-                TESObjectREFR* id = dynamic_cast<TESObjectREFR*>(FUN_004839c0(ref));
+                TESObjectREFR* id = dynamic_cast<TESObjectREFR*>(LookupFormByID(ref));
                 if (ref && !id)
                 {
                     FNV_Warning(
@@ -24052,7 +24052,7 @@ void ResolveExtraOwner::FUN_00416be0(TESForm* owner)
                 ResolveItem* item = static_cast<ResolveItem*>(*node->FUN_006815c0());
                 unsigned int id = reinterpret_cast<unsigned int>(item->ref);
                 ResolveFormID(&id, sourceFile);
-                item->ref = dynamic_cast<TESObjectREFR*>(FUN_004839c0(id));
+                item->ref = dynamic_cast<TESObjectREFR*>(LookupFormByID(id));
                 if (!item->ref)
                 {
                     FNV_Warning("MASTERFILE: Unable to find activate reference %08X.", id);
@@ -24093,7 +24093,7 @@ void ResolveExtraOwner::FUN_00416be0(TESForm* owner)
             ResolveExtraValue* extra = static_cast<ResolveExtraValue*>(pNode);
             unsigned int id = reinterpret_cast<unsigned int>(extra->form);
             ResolveFormID(&id, sourceFile);
-            extra->form = dynamic_cast<TESObjectREFR*>(FUN_004839c0(id));
+            extra->form = dynamic_cast<TESObjectREFR*>(LookupFormByID(id));
             if (!extra->form)
             {
                 FNV_Warning(
@@ -24106,7 +24106,7 @@ void ResolveExtraOwner::FUN_00416be0(TESForm* owner)
             ResolveExtraValue* extra = static_cast<ResolveExtraValue*>(pNode);
             unsigned int id = reinterpret_cast<unsigned int>(extra->form);
             ResolveFormID(&id, sourceFile);
-            extra->form = dynamic_cast<TESObjectREFR*>(FUN_004839c0(id));
+            extra->form = dynamic_cast<TESObjectREFR*>(LookupFormByID(id));
             if (!extra->form)
             {
                 FNV_Warning("MASTERFILE: Unable to find XMarker target %08X. XMarker target data will be removed.", id);
@@ -24118,7 +24118,7 @@ void ResolveExtraOwner::FUN_00416be0(TESForm* owner)
             ResolveExtraValue* extra = static_cast<ResolveExtraValue*>(pNode);
             unsigned int id = reinterpret_cast<unsigned int>(extra->form);
             ResolveFormID(&id, sourceFile);
-            extra->form = dynamic_cast<BGSEncounterZone*>(FUN_004839c0(id));
+            extra->form = dynamic_cast<BGSEncounterZone*>(LookupFormByID(id));
             if (!extra->form)
             {
                 FNV_Warning("Unable to find encounter zone %08X. Encounter zone data will be removed.", id);
@@ -24130,7 +24130,7 @@ void ResolveExtraOwner::FUN_00416be0(TESForm* owner)
             ResolveExtraValue* extra = static_cast<ResolveExtraValue*>(pNode);
             unsigned int id = reinterpret_cast<unsigned int>(extra->form);
             ResolveFormID(&id, sourceFile);
-            extra->form = FUN_004839c0(id);
+            extra->form = LookupFormByID(id);
             if (extra->form)
             {
                 switch (static_cast<ResolveForm*>(extra->form)->FUN_00401170())
@@ -24155,7 +24155,7 @@ void ResolveExtraOwner::FUN_00416be0(TESForm* owner)
             ResolveExtraValue* extra = static_cast<ResolveExtraValue*>(pNode);
             unsigned int id = reinterpret_cast<unsigned int>(extra->form);
             ResolveFormID(&id, sourceFile);
-            extra->form = dynamic_cast<TESObjectREFR*>(FUN_004839c0(id));
+            extra->form = dynamic_cast<TESObjectREFR*>(LookupFormByID(id));
             if (extra->form == owner)
                 extra->form = 0;
             if (!extra->form)
@@ -24192,7 +24192,7 @@ void ResolveExtraOwner::FUN_00416be0(TESForm* owner)
             ResolveExtraValue* extra = static_cast<ResolveExtraValue*>(pNode);
             unsigned int id = reinterpret_cast<unsigned int>(extra->form);
             ResolveFormID(&id, sourceFile);
-            extra->form = dynamic_cast<TESAmmo*>(FUN_004839c0(id));
+            extra->form = dynamic_cast<TESAmmo*>(LookupFormByID(id));
             if (!extra->form)
             {
                 FNV_Warning("Unable to find ammo %08X. Ammo data will be removed.", id);

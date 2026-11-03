@@ -1293,7 +1293,7 @@ extern "C" __declspec(dllimport) void __stdcall fnv_Import_LeaveCriticalSection(
 class GameLockA {
 public:
     bool FUN_0078d200();
-    void FUN_0040fbf0(int a);
+    void Lock(int a);
 };
 class GameLockB {
 public:
@@ -4984,7 +4984,7 @@ bool FUN_00c50f90(FUN_00c511f0_cls* a, FUN_00c511f0_cls* b);
 bool __cdecl FUN_00c511f0(FUN_00c511f0_cls* obj);
 // 0x00c52020  1072 bytes  /MT /Od /Oy- /GS /EHsc /Gy   -- byte-identical reconstruction
 // thiscall (ret 0x10): (float fov, unsigned char flag, C52020Obj* obj, unsigned char arg4)
-// called from 0xc51d67 as FUN_00c52020(*pSetting, 1, 0, 0).
+// called from 0xc51d67 as SetCameraFOV(*pSetting, 1, 0, 0).
 //
 // Frame 0xcc + push esi.  Named band -0x04..-0x88 (bucket-sorted: descending name-hash
 // bucket, ties by reverse declaration order), expression temps -0x8c..-0xcc in code order.
@@ -5171,7 +5171,7 @@ struct C52020Obj {
     float m_110;
     void FUN_00a6faf0(NiFrustum* apFrustum);
     void Update(const NiUpdateData& kData);
-    void FUN_00c52020(float m_fFirstFloat, unsigned char ucFlag, C52020Obj* pObj, unsigned char ucArg4);
+    void SetCameraFOV(float m_fFirstFloat, unsigned char ucFlag, C52020Obj* pObj, unsigned char ucArg4);
 };
 extern "C" void* g_012031e8;
 extern unsigned int DAT_010c1040;

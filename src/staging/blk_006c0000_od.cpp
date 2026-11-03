@@ -2476,8 +2476,8 @@ class AutoMemContext
 
 struct SpinLock6c67
 {
-    void FUN_0040fbf0(const char* pcName);
-    void FUN_0040fba0();
+    void Lock(const char* pcName);
+    void Unlock();
     int m_kNextStreamField[2];
 };
 
@@ -2513,7 +2513,7 @@ struct Queue6c67
 // @fnv 0x006c6700
 void Queue6c67::ClearQueue(bool abFreeNodes)
 {
-    m_kLock.FUN_0040fbf0(0);
+    m_kLock.Lock(0);
     AutoMemContext kMemContext(MEM_CONTEXT_MEM_CONTEXT_TASK_OVERHEAD, true,
                                "d:\\_fallout3\\platforms\\common\\code\\bsmain\\ThreadSafeStructures.inl", 0x115);
     int iCapacity = m_pkTable->FUN_00559450();
@@ -2533,7 +2533,7 @@ void Queue6c67::ClearQueue(bool abFreeNodes)
         m_pkTail = m_pkHead;
         m_pkTable = new FUN_006c73b0(iCapacity);
     }
-    m_kLock.FUN_0040fba0();
+    m_kLock.Unlock();
 }
 
 struct FUN_006c6ae0_Base

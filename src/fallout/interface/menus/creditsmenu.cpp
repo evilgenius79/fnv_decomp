@@ -645,7 +645,7 @@ extern SettingGS DAT_011d34f8;
 extern SettingStr DAT_011d39b4;
 unsigned int __cdecl FUN_0044a670(const char* apString);
 int __cdecl FUN_004b75a0(const char* apA, const char* apB);
-void __cdecl FUN_00703e80(const char* apMessage, int a2, int a3, void(__cdecl* apCallback)(), int a5, int a6, float a7,
+void __cdecl ShowMessageBox(const char* apMessage, int a2, int a3, void(__cdecl* apCallback)(), int a5, int a6, float a7,
                           float a8, const char* apButton1, const char* apButton2, int a11);
 
 // Checks the save name against listed entries, shows a dialog on a match, and otherwise calls two follow-up functions.
@@ -667,7 +667,7 @@ void __cdecl CheckSaveNameConflict()
                     FUN_004b75a0(DAT_011de134->kName.FUN_00559450(),
                                  ((ValueReferencePair*)DAT_011d9474)->FUN_00559450()))
                 {
-                    FUN_00703e80(DAT_011d39b4.FUN_004c69f0(), 0, 0, FUN_00761410, 0, 0x12, 0.0f, 0.0f,
+                    ShowMessageBox(DAT_011d39b4.FUN_004c69f0(), 0, 0, FUN_00761410, 0, 0x12, 0.0f, 0.0f,
                                  DAT_011d34f8.FUN_00403df0(), DAT_011d3684.FUN_00403df0(), 0);
                     return;
                 }
@@ -1222,7 +1222,7 @@ struct CreditGlobal
 };
 extern CreditInputManager* DAT_011dea0c;
 extern CreditPlayer* DAT_011dea3c;
-TESForm* FUN_004839c0(unsigned int);
+TESForm* LookupFormByID(unsigned int);
 int FUN_004b7220();
 const char* FUN_004b7650(int);
 void FUN_00406d50(char*, unsigned int, const char*);
@@ -1571,7 +1571,7 @@ struct CreditMenu
 void CreditMenu::FUN_0075fb90()
 {
     CreditInput* input9 = DAT_011dea0c->FUN_00877720();
-    BGSPerk* perk3 = dynamic_cast<BGSPerk*>(FUN_004839c0(0xed568));
+    BGSPerk* perk3 = dynamic_cast<BGSPerk*>(LookupFormByID(0xed568));
     bool wacky = input9->FUN_00a24180(0x1d, 0) || input9->FUN_00a24180(0x9d, 0) || DAT_011dea3c->HasPerk(perk3, 0);
     if (DAT_011c3f3c && reinterpret_cast<CreditGlobal*>(DAT_011c3f3c)->FUN_00526ac0() == 2.0)
         wacky = true;

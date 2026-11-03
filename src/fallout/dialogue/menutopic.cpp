@@ -1336,7 +1336,7 @@ struct NamedForm83f3
     unsigned int FUN_0084e3a0();
 };
 
-TESForm* __cdecl FUN_004839c0(unsigned int auiFormId);
+TESForm* __cdecl LookupFormByID(unsigned int auiFormId);
 void __cdecl FUN_0040fbe0(const char* pcFormat, ...);
 void __cdecl FUN_005b5e40(const char* pcFormat, ...);
 
@@ -1388,7 +1388,7 @@ void MenuTopic83f3::SaveTopic()
         SaveFormHeader83f3* pkHeader = g_TESSaveLoadGame->FUN_004fd3e0();
         if (pkHeader)
         {
-            TESForm* pkForm = FUN_004839c0(pkHeader->auiFormId);
+            TESForm* pkForm = LookupFormByID(pkHeader->auiFormId);
             FUN_0040fbe0("SaveGame(): %-5i for form %08X %s with flags %08X ending at line %i in file %s",
                          pcEnd - pcStart, pkHeader->auiFormId, pkForm->GetName(), *(unsigned int*)pkHeader->aucFlags,
                          0x2ff, "D:\\_Fallout3\\Platforms\\Common\\Code\\Fallout\\Dialogue\\MenuTopic.cpp");

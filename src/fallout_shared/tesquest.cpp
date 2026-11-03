@@ -1352,7 +1352,7 @@ extern "C" char UNK_01015500[];
 extern "C" char UNK_010154a0[];
 extern "C" char UNK_01015440[];
 void __cdecl FUN_005b5e40(const char*, ...);
-void* __cdecl FUN_004839c0(void*);
+void* __cdecl LookupFormByID(void*);
 struct StreamReader
 {
     bool FUN_00862110();
@@ -1421,7 +1421,7 @@ void QuestLoader::LoadQuestData(unsigned int flags, unsigned int extra)
             void* entry = ((StreamReader*)DAT_011de45c)->FUN_004fd3c0();
             if (entry)
             {
-                void* view = FUN_004839c0(*(void**)entry);
+                void* view = LookupFormByID(*(void**)entry);
                 FUN_005b5e40(UNK_01015718, UNK_0104ad80, 0xfaf, *(void**)entry, ((TagMethod*)*(void**)view)[76](view),
                              *(unsigned char*)((char*)entry + 9), *(unsigned int*)((char*)entry + 5));
             }
@@ -1530,7 +1530,7 @@ void QuestLoader::LoadQuestData(unsigned int flags, unsigned int extra)
             entry = ((StreamReader*)DAT_011de45c)->FUN_004fd3c0();
             if (entry)
             {
-                void* view = FUN_004839c0(*(void**)entry);
+                void* view = LookupFormByID(*(void**)entry);
                 if (actual > start + sizeRead)
                     FUN_005b5e40(UNK_01015588, actual - (start + sizeRead), UNK_0104ad80, 0x1010, *(void**)entry,
                                  ((TagMethod*)*(void**)view)[76](view), *(unsigned char*)((char*)entry + 9),
@@ -1751,7 +1751,7 @@ void FUN_0060e810_shell::WriteToBuffer(F810Buf* buf)
 
 struct ScriptX
 {
-    ScriptLocals* FUN_005abf60();
+    ScriptLocals* CreateEventList();
 };
 struct ScriptableBase
 {
@@ -1869,7 +1869,7 @@ void QuestShell::FUN_0060d720()
     if (m_pScriptLocals)
     {
         delete m_pScriptLocals;
-        m_pScriptLocals = FUN_00726070()->FUN_005abf60();
+        m_pScriptLocals = FUN_00726070()->CreateEventList();
     }
 
     FUN_00619b60(this);

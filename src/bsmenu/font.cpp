@@ -917,12 +917,12 @@ extern NiPoint3 NiPoint3_ZERO;
 const float TAB_WIDTH = 75.0f;
 
 struct FUN_00a1b020_t : public FontManager {
-    NiPoint3 FUN_00a1b020(const char* strText, int aiFont, float afWrapwidth, int aiStartIndex);
+    NiPoint3 GetStringDimensions(const char* strText, int aiFont, float afWrapwidth, int aiStartIndex);
 };
 
 // Measures wrapped text for a font: accumulates per-glyph widths, breaks lines at wrap points, and returns max line width, total height and line count.
 // @fnv 0x00a1b020
-NiPoint3 FUN_00a1b020_t::FUN_00a1b020(const char* strText, int aiFont, float afWrapwidth, int aiStartIndex)
+NiPoint3 FUN_00a1b020_t::GetStringDimensions(const char* strText, int aiFont, float afWrapwidth, int aiStartIndex)
 {
     float fprevLetterWidth;
     int inumLines;
@@ -1517,11 +1517,11 @@ struct AtlasShader : NiMemObjectAllocation {
 };
 struct AtlasPropertyPointer { AtlasShader* pointer;AtlasPropertyPointer(AtlasShader*);~AtlasPropertyPointer();AtlasPropertyPointer& FUN_006e5cc0(const AtlasPropertyPointer&); };
 struct AtlasPropertyNode { AtlasPropertyNode* next;AtlasPropertyNode* previous;AtlasPropertyPointer value; };
-struct AtlasPoolLock {void FUN_0040fbf0(bool);void FUN_0040fba0();};
+struct AtlasPoolLock {void Lock(bool);void Unlock();};
 extern AtlasPoolLock DAT_011c5f80;
 extern AtlasPropertyNode* DAT_011c5f58;
 void FUN_0043a080();
-struct AtlasNodeAllocator { unsigned count;AtlasPropertyNode* Allocate() { DAT_011c5f80.FUN_0040fbf0(false);if(!DAT_011c5f58)FUN_0043a080();AtlasPropertyNode* node=DAT_011c5f58;DAT_011c5f58=DAT_011c5f58->next;node->value.pointer=0;node->next=0;node->previous=0;DAT_011c5f80.FUN_0040fba0();return node;} };
+struct AtlasNodeAllocator { unsigned count;AtlasPropertyNode* Allocate() { DAT_011c5f80.Lock(false);if(!DAT_011c5f58)FUN_0043a080();AtlasPropertyNode* node=DAT_011c5f58;DAT_011c5f58=DAT_011c5f58->next;node->value.pointer=0;node->next=0;node->previous=0;DAT_011c5f80.Unlock();return node;} };
 struct AtlasPropertyList { AtlasPropertyNode* head;AtlasPropertyNode* tail;AtlasNodeAllocator allocator;
  AtlasPropertyNode* NewNode(){return allocator.Allocate();}
  void FUN_0049fa20(AtlasPropertyNode*);
@@ -5766,7 +5766,7 @@ TQShape* TQOwner::FUN_00a1a800(TQStr kPath, float fX, float fY, float fZ, int iW
 extern double _gModifierZero;
 
 struct FontManagerHelper {
-    NiPoint3 FUN_00a1b020(const char*, int, float, unsigned int);
+    NiPoint3 GetStringDimensions(const char*, int, float, unsigned int);
 };
 
 struct FontAlignmentManager : FontManager {
@@ -5777,7 +5777,7 @@ struct FUN_00a12370_shell : Font {
     void FUN_00a12370(const char* apTextString, float& afX, float& afY, int aiFlags, unsigned int aiStart);
 };
 
-// For flag values 2 and 4, calls FUN_00a1b020 and sets afX to negative half or full returned x; otherwise sets afX to zero.
+// For flag values 2 and 4, calls GetStringDimensions and sets afX to negative half or full returned x; otherwise sets afX to zero.
 // @fnv 0x00a12370
 void FUN_00a12370_shell::FUN_00a12370(const char* apTextString, float& afX, float& afY, int aiFlags, unsigned int aiStart)
 {
@@ -5787,11 +5787,11 @@ void FUN_00a12370_shell::FUN_00a12370(const char* apTextString, float& afX, floa
     switch (aiFlags & 0xf)
     {
     case 2:
-        stringDims = ((FontManagerHelper*)FontAlignmentManager::Instance())->FUN_00a1b020(apTextString, m_iFontNumber, fwrapWidth, aiStart);
+        stringDims = ((FontManagerHelper*)FontAlignmentManager::Instance())->GetStringDimensions(apTextString, m_iFontNumber, fwrapWidth, aiStart);
         afX = -stringDims.x / 2.0;
         break;
     case 4:
-        stringDims = ((FontManagerHelper*)FontAlignmentManager::Instance())->FUN_00a1b020(apTextString, m_iFontNumber, fwrapWidth, aiStart);
+        stringDims = ((FontManagerHelper*)FontAlignmentManager::Instance())->GetStringDimensions(apTextString, m_iFontNumber, fwrapWidth, aiStart);
         afX = -stringDims.x;
         break;
     default:

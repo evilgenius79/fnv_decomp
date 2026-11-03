@@ -2269,7 +2269,7 @@ struct SH_00418890
 };
 struct FUN_00ad8830_shell
 {
-    bool FUN_00ad8830(bool abFlag);
+    bool Play(bool abFlag);
 };
 struct FUN_00ad8a20
 {
@@ -2304,12 +2304,12 @@ void FUN_0063e0d0_shell::FUN_0063e0d0(float afVolume)
         if (iState == 3)
         {
             if (!FUN_00ad8930())
-                ((FUN_00ad8830_shell*)this)->FUN_00ad8830(false);
+                ((FUN_00ad8830_shell*)this)->Play(false);
         }
         else if (((Host*)this)->FUN_00639c90(1000))
         {
             if (!FUN_00ad8930())
-                ((FUN_00ad8830_shell*)this)->FUN_00ad8830(true);
+                ((FUN_00ad8830_shell*)this)->Play(true);
         }
         if (std::abs(((FUN_00ad8a20*)this)->Op() - afVolume) > (double)0.01f)
             ((FUN_00ad89e0_shell*)this)->FUN_00ad89e0(afVolume);
@@ -3161,7 +3161,7 @@ class SaveWeatherState : public BGSSaveLoadGame
 extern SettingT<GameSettingCollection> originalRuntimeFloatSetting71;
 extern SettingT<GameSettingCollection> originalRuntimeFloatSetting72;
 extern SettingT<GameSettingCollection> originalRuntimeFloatSetting73;
-TESForm* FUN_004839c0(unsigned int);
+TESForm* LookupFormByID(unsigned int);
 class SkyWeatherUpdate : public Sky
 {
   public:
@@ -3182,7 +3182,7 @@ void SkyWeatherUpdate::FUN_0063d1d0()
     {
         m_pQueuedWeather = static_cast<ClimateWeather*>(m_pCurrentClimate)->FUN_0063d5c0();
         if (!m_pQueuedWeather)
-            m_pQueuedWeather = dynamic_cast<TESWeather*>(FUN_004839c0(0x15e));
+            m_pQueuedWeather = dynamic_cast<TESWeather*>(LookupFormByID(0x15e));
         BSSimpleList<WeatherRegion*>* region = g_dataHandler->FUN_004169d0();
         while (region && region->GetItem())
         {

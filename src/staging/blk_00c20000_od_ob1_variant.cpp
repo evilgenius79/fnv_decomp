@@ -1822,7 +1822,7 @@ struct LockX
 {
     int m_iOwner;
     int m_iArrayLength;
-    void FUN_0040fbf0(int i);
+    void Lock(int i);
     void Unlock()
     {
         if (--m_iArrayLength == 0)
@@ -1843,7 +1843,7 @@ struct ListQ
 bool ListQ::FUN_00c3f960(SPX pSceneObject)
 {
     bool bFound = false;
-    m_kLock.FUN_0040fbf0(0);
+    m_kLock.Lock(0);
     for (unsigned int i = 0; i < m_uiCount && !bFound; i++)
         bFound = Test(i, pSceneObject);
     m_kLock.Unlock();
@@ -4790,7 +4790,7 @@ struct LockObj
 {
     void* owner;
     int count;
-    void __thiscall FUN_0040fbf0(const char* name);
+    void __thiscall Lock(const char* name);
     __forceinline void Unlock()
     {
         count = count - 1;
@@ -4817,7 +4817,7 @@ bool Owner::FUN_00c3f160(int a, int b, int c)
     int local4, local5, local6, receiver, answer;
     int extra14, done, status, extra4, extra5;
     int slot2, spare4, spare5, spare6, spare8, spare9, extra15;
-    lock.FUN_0040fbf0(0);
+    lock.Lock(0);
     H* node = FUN_00c3f750();
     bool found = pass(node, a, b, c);
     lock.Unlock();
@@ -5743,7 +5743,7 @@ struct F1f0Lock
 {
     unsigned int m_pOwnerObject;
     unsigned int m_lLockCount;
-    void __thiscall FUN_0040fbf0(unsigned int);
+    void __thiscall Lock(unsigned int);
     void Unlock()
     {
         m_lLockCount = m_lLockCount - 1;
@@ -5794,7 +5794,7 @@ struct F1f0Cls
 // @fnv 0x00c3f1f0
 bool F1f0Cls::FUN_00c3f1f0(int a1, int a2, int a3, bool a4)
 {
-    m_lock.FUN_0040fbf0(0);
+    m_lock.Lock(0);
     Dead34();
     bool r = FUN_00c3f750()->Test(a1, a2, a3, a4);
     m_lock.Unlock();
@@ -5809,7 +5809,7 @@ struct SpinLockS
 {
     unsigned int owningThread;
     unsigned int lockCount;
-    void __thiscall FUN_0040fbf0(const char* name)
+    void __thiscall Lock(const char* name)
     {
         unsigned int threadID = FUN_0040fc90();
         if (owningThread == threadID)
@@ -5863,7 +5863,7 @@ static __forceinline void Dead35()
 // @fnv 0x00c3f430
 bool ManagerS::FUN_00c3f430(int a, int b, int c, int d, unsigned char e)
 {
-    lock.FUN_0040fbf0(0);
+    lock.Lock(0);
     bool result = FUN_00c3f750()->FUN_00c3ffb0(a, b, c, d, e);
     Dead35();
     lock.Unlock();

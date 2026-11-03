@@ -997,7 +997,7 @@ extern xFltSetting xg_f_11db4d0, xg_f_11db544, xg_f_11db570, xg_f_11db5cc, xg_f_
     xg_f_11db5ec;
 struct xLoader
 {
-    xAV* FUN_00447080(const char*, int, bool, bool, bool, bool);
+    xAV* LoadModel(const char*, int, bool, bool, bool, bool);
 };
 extern xLoader* xg_loader_11c3b3c;
 struct xT2
@@ -1147,7 +1147,7 @@ void xRenderedMenu::Init()
     xAV* qdqWL = 0;
     if (!m_f8.FUN_00559450())
     {
-        qdqWL = xg_loader_11c3b3c->FUN_00447080(FUN_009611e0()->FUN_00a03c90()->FUN_007fd640(), 0, true, false, false,
+        qdqWL = xg_loader_11c3b3c->LoadModel(FUN_009611e0()->FUN_00a03c90()->FUN_007fd640(), 0, true, false, false,
                                                 false);
         m_f8.FUN_0066b0d0(qdqWL);
         xF4b7660(qdqWL);

@@ -141,7 +141,7 @@ void FUN_007c01b0()
 }  // namespace fnv_007c01b0
 
 extern void* DAT_011da918;
-void* __cdecl FUN_00a01860(const char* asName);
+void* __cdecl TraitNameToID(const char* asName);
 
 struct MenuBaseObject
 {
@@ -181,7 +181,7 @@ struct FUN_007bfb30_cls : MenuBaseObject
     FUN_007bfb30_cls();
 };
 
-// Initializes m_f40, m_b44, m_f48 and m_b46 to zero and stores the result of FUN_00a01860("_current_value") in DAT_011da918.
+// Initializes m_f40, m_b44, m_f48 and m_b46 to zero and stores the result of TraitNameToID("_current_value") in DAT_011da918.
 // @fnv 0x007bfb30
 FUN_007bfb30_cls::FUN_007bfb30_cls()
 {
@@ -189,7 +189,7 @@ FUN_007bfb30_cls::FUN_007bfb30_cls()
     m_b44 = 0;
     m_f48 = 0.0f;
     m_b46 = 0;
-    DAT_011da918 = FUN_00a01860("_current_value");
+    DAT_011da918 = TraitNameToID("_current_value");
 }
 
 namespace fnv_007c0220 {
@@ -301,7 +301,7 @@ extern float DAT_0104a494;
 extern float DAT_010162c0;
 extern int DAT_011da918;
 extern char str_01070250[];
-int __cdecl FUN_00a01860(const char* s);
+int __cdecl TraitNameToID(const char* s);
 
 struct FUN_007c04d0_sub2c
 {
@@ -336,7 +336,7 @@ bool FUN_007c04d0_cls::FUN_007c04d0(int a1, int aiUnused)
         {
             m_2c->FUN_00a012d0(DAT_011da918,
                                m_2c->FUN_00a011b0(DAT_011da918, 0) + (a1 == 0xf ? DAT_0104a494 : DAT_010162c0));
-            m_2c->SetTraitAndReset(FUN_00a01860(str_01070250), 1.0f);
+            m_2c->SetTraitAndReset(TraitNameToID(str_01070250), 1.0f);
             done = true;
         }
     }
@@ -511,8 +511,8 @@ bool MenuClass::FUN_007c0580()
         DAT_011dea3c->FUN_00969c30();
     }
     DAT_011dea3c->FUN_0094df80();
-    m_tile->FUN_00700320((int)FUN_00a01860("_current_value"), DAT_011dea3c->FUN_005cde20() - 1);
-    m_tile->SetTraitAndReset((int)FUN_00a01860("_SetInCode"), 1.0f);
+    m_tile->FUN_00700320((int)TraitNameToID("_current_value"), DAT_011dea3c->FUN_005cde20() - 1);
+    m_tile->SetTraitAndReset((int)TraitNameToID("_SetInCode"), 1.0f);
     UpdateClockText();
     return true;
 }
@@ -564,7 +564,7 @@ extern SwMenu* g_pkSleepWaitMenu_011da920;
 
 struct SwMenuRoot
 {
-    SwTile* FUN_00a01b00(const char* pcPath);
+    SwTile* ReadXML(const char* pcPath);
 };
 struct SwInterface
 {
@@ -582,7 +582,7 @@ struct SwSoundHandle
 {
     int unk00, unk04, unk08;
     ~SwSoundHandle();
-    bool FUN_00ad8830();
+    bool Play();
 };
 struct SwAudio
 {
@@ -621,7 +621,7 @@ SwTile* __cdecl CreateSleepWaitMenu(bool bSleep)
     SwMenu* pkOld_ = FUN_00a09030(FUN_00705770());
     if (pkOld_)
         delete pkOld_;
-    SwTile* pkTileTmp2 = pkInterfaceY->FUN_00586150()->FUN_00a01b00(s_szMenuPath);
+    SwTile* pkTileTmp2 = pkInterfaceY->FUN_00586150()->ReadXML(s_szMenuPath);
     g_pkSleepWaitMenu_011da920 = pkTileTmp2->FUN_00a03c90();
     if (g_pkSleepWaitMenu_011da920 && g_pkSleepWaitMenu_011da920->GetID() == FUN_00705770())
     {
@@ -631,7 +631,7 @@ SwTile* __cdecl CreateSleepWaitMenu(bool bSleep)
             FUN_005b5e40(s_szError);
             return 0;
         }
-        SwAudio::GetSingleton()->FUN_00ad7550(s_szSound, 0x121, 0).FUN_00ad8830();
+        SwAudio::GetSingleton()->FUN_00ad7550(s_szSound, 0x121, 0).Play();
         if (pkTileTmp2->FUN_00a011b0(0xfa7) == 6006.0 || pkTileTmp2->FUN_00a011b0(0xfa7) == 102.0)
             pkTileTmp2->FUN_00a012d0(0xfad, FUN_00a01530(), true);
         g_pkSleepWaitMenu_011da920->m_bSleep = bSleep;

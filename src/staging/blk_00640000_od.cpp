@@ -3940,8 +3940,8 @@ int __thiscall FUN_0064bda0_Class::FUN_0064bda0()
 
 struct FUN_0040fbf0_lock
 {
-    void FUN_0040fbf0(int);
-    void FUN_0040fba0();
+    void Lock(int);
+    void Unlock();
 };
 struct FUN_0064be40_shell
 {
@@ -3960,7 +3960,7 @@ void __cdecl FUN_005330e0(float* value, float minimum, float maximum);
 // @fnv 0x0064be40
 bool FUN_0064be40_shell::FUN_0064be40(float elapsed, int unused)
 {
-    ((FUN_0040fbf0_lock*)((char*)this + 0x1a0))->FUN_0040fbf0(0);
+    ((FUN_0040fbf0_lock*)((char*)this + 0x1a0))->Lock(0);
     bool updateNeeded = !*(bool*)((char*)this + 0x18e);
     if (updateNeeded)
     {
@@ -3979,7 +3979,7 @@ bool FUN_0064be40_shell::FUN_0064be40(float elapsed, int unused)
         *(float*)((char*)this + 0x144) += stage;
         SetEyeHeadingAndPitch(*(float*)((char*)this + 0x140), *(float*)((char*)this + 0x144));
     }
-    ((FUN_0040fbf0_lock*)((char*)this + 0x1a0))->FUN_0040fba0();
+    ((FUN_0040fbf0_lock*)((char*)this + 0x1a0))->Unlock();
     return updateNeeded;
 }
 
@@ -4934,7 +4934,7 @@ struct Hldr0044
 };
 
 extern "C" void __stdcall FUN_00ec7894(Hldr0044* p, void* dat);
-extern "C" void __cdecl FUN_00401000(int scaled);
+extern "C" void __cdecl FormHeap_Allocate(int scaled);
 extern "C" int DAT_01140ef8;
 
 // @fnv 0x00658c10
@@ -4955,7 +4955,7 @@ extern "C" void __cdecl FUN_00658c10(int aiValue, int aiUnused)
         }
     }
 
-    FUN_00401000(aiValue * 60);
+    FormHeap_Allocate(aiValue * 60);
 }
 
 class Base_b9895
@@ -5995,7 +5995,7 @@ struct FUN_0065e310_cls
 };
 
 extern "C" void __stdcall FUN_00ec7894(void* obj, void* dtor);
-extern "C" void* __cdecl FUN_00401000(unsigned int size);
+extern "C" void* __cdecl FormHeap_Allocate(unsigned int size);
 extern int DAT_01140ef8;
 
 // @fnv 0x0065e310
@@ -6014,7 +6014,7 @@ extern "C" void __cdecl FUN_0065e310(int count, int)
             FUN_00ec7894(&tmp, &DAT_01140ef8);
         }
     }
-    FUN_00401000((unsigned int)count * 12);
+    FormHeap_Allocate((unsigned int)count * 12);
 }
 }  // namespace fnv_0065e310
 
@@ -6105,7 +6105,7 @@ struct FUN_0065e5e0_Hldr
 };
 
 extern "C" void __stdcall FUN_00ec7894(FUN_0065e5e0_Hldr* p, void* dat);
-extern "C" void* __cdecl FUN_00401000(unsigned int size);
+extern "C" void* __cdecl FormHeap_Allocate(unsigned int size);
 extern "C" int DAT_01140ef8;
 
 // @fnv 0x0065e5e0
@@ -6126,7 +6126,7 @@ void* __cdecl FUN_0065e5e0(unsigned int n)
         }
     }
 
-    return FUN_00401000(n * 56);
+    return FormHeap_Allocate(n * 56);
 }
 }  // namespace fnv_0065e5e0
 
@@ -6141,7 +6141,7 @@ class FUN_0065e670_cls
 };
 
 extern "C" char DAT_01140ef8;
-int __cdecl FUN_00401000(unsigned int size);
+int __cdecl FormHeap_Allocate(unsigned int size);
 void __stdcall FUN_00ec7894(FUN_0065e670_cls* obj, char* msg);
 
 // @fnv 0x0065e670
@@ -6159,7 +6159,7 @@ void __cdecl FUN_0065e670(unsigned int count, int unused)
             FUN_00ec7894(&local, &DAT_01140ef8);
         }
     }
-    FUN_00401000(count * 0x1c);
+    FormHeap_Allocate(count * 0x1c);
 }
 }  // namespace fnv_0065e670
 
@@ -7250,7 +7250,7 @@ void __cdecl FUN_0065e3a0(int aiCount, int)
         holder.FUN_0044d6c0(0);
         FUN_00ec7894((Hldr0044*)&holder, (void*)&DAT_01140ef8);
     }
-    FUN_00401000(aiCount << 3);
+    FormHeap_Allocate(aiCount << 3);
 }
 
 struct B65E760Item

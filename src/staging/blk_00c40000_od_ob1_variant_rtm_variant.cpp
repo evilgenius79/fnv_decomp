@@ -1556,7 +1556,7 @@ class GameLockA
 {
   public:
     bool FUN_0078d200();
-    void FUN_0040fbf0(int a);
+    void Lock(int a);
 };
 class GameLockB
 {
@@ -5137,14 +5137,14 @@ extern Array354 _DAT_01202e20;
 struct LockState354
 {
     unsigned int owner, recursion;
-    void FUN_0040fbf0(int);
+    void Lock(int);
 };
 extern LockState354 _DAT_01202e40;
 unsigned int gm_GetCurrentThreadId();
 long FUN_0043b460(volatile long*, long comparand, long exchange);
 void FUN_0040fca0(unsigned long);
 void FUN_0040fbe0();
-inline void LockState354::FUN_0040fbf0(int)
+inline void LockState354::Lock(int)
 {
     unsigned int thread = gm_GetCurrentThreadId();
     if (owner == thread)
@@ -6364,7 +6364,7 @@ struct Lock40
 {
     int owner;
     int count;
-    void FUN_0040fbf0(int a);
+    void Lock(int a);
     void Unlock()
     {
         count--;
@@ -8237,7 +8237,7 @@ struct OwnerWord
 {
     int owner;
 };
-inline void GameLockA::FUN_0040fbf0(int a)
+inline void GameLockA::Lock(int a)
 {
     int passes;
     int spins;
@@ -13209,7 +13209,7 @@ struct C52520Camera
     {
         return m_ac;
     }
-    void FUN_00c52020(float m_fFirstFloat, unsigned char ucFlag, C52020Obj* pObj, unsigned char ucArg4);
+    void SetCameraFOV(float m_fFirstFloat, unsigned char ucFlag, C52020Obj* pObj, unsigned char ucArg4);
     void FUN_00c52520();
 };
 struct BoxColor

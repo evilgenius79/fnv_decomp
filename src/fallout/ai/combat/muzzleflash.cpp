@@ -139,7 +139,7 @@ struct S_009baf50_Obj
 };
 struct S_009baf50_Mgr
 {
-    S_009baf50_Obj* FUN_00447080(unsigned int, int, int, int, int, int);
+    S_009baf50_Obj* LoadModel(unsigned int, int, int, int, int, int);
 };
 extern S_009baf50_Mgr* DAT_011c3b3c;
 struct S_009baf50_Vec
@@ -176,7 +176,7 @@ void FUN_009bacb0::UpdateNodePosition(void* arg)
     {
         if (item->FUN_0048cee0())
         {
-            S_009baf50_Obj* obj = DAT_011c3b3c->FUN_00447080(item->v5(), 0, 1, 0, 0, 0);
+            S_009baf50_Obj* obj = DAT_011c3b3c->LoadModel(item->v5(), 0, 1, 0, 0, 0);
             if (obj)
             {
                 first = obj->FUN_00a5d680();

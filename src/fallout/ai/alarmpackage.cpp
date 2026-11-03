@@ -1540,7 +1540,7 @@ class TESBoundObject : public TESForm
 class TESFaction : public TESForm
 {
 };
-TESForm* __cdecl FUN_004839c0(void*);
+TESForm* __cdecl LookupFormByID(void*);
 void* __cdecl FUN_00ec43fb(void*, int, void*, void*, int);
 struct List009
 {
@@ -1585,7 +1585,7 @@ void Host009::ReadFromStream(Reader009* apReader)
     field.FUN_009a5ff0(apReader);
     apReader->FUN_008648e0(&c);
     apReader->FUN_008648e0(&d);
-    f = dynamic_cast<TESBoundObject*>(FUN_004839c0(apReader->FUN_008648a0()));
+    f = dynamic_cast<TESBoundObject*>(LookupFormByID(apReader->FUN_008648a0()));
     apReader->FUN_008648e0(&h);
     {
         unsigned count = apReader->FUN_00864a60();
@@ -1602,7 +1602,7 @@ void Host009::ReadFromStream(Reader009* apReader)
         for (unsigned uiFactionIndex = 0; uiFactionIndex < uiFactionCount; uiFactionIndex++)
         {
             void* pFaction = 0;
-            pFaction = dynamic_cast<TESFaction*>(FUN_004839c0(apReader->FUN_008648a0()));
+            pFaction = dynamic_cast<TESFaction*>(LookupFormByID(apReader->FUN_008648a0()));
             if (pFaction)
                 strings->FUN_005ae3d0(&pFaction);
         }

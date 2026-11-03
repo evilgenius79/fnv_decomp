@@ -1039,7 +1039,7 @@ struct Player
 struct GameMenu;
 struct GameTile
 {
-    GameTile* FUN_00a01b00();
+    GameTile* ReadXML();
     GameMenu* FUN_00a03c90();
     float FUN_00a011b0(int);
     void FUN_00a012d0(int, float);
@@ -1144,7 +1144,7 @@ class BSAudio
     BSSoundHandleEx GetSoundHandleByEditorID(const char*, unsigned int);
 };
 void* __cdecl FUN_00a09030(int);
-int __cdecl FUN_004839c0(void*);
+int __cdecl LookupFormByID(void*);
 void __cdecl DispatchMessageToSink(const char*, int, const char*, int, float, int);
 void __cdecl FUN_005b5e40(const char*);
 int __cdecl FUN_0044a670(const char*);
@@ -1193,7 +1193,7 @@ GameTile* __cdecl FUN_007c0a40(char* casino, int wager, int mode, int threshold)
     RecordList* node = DAT_011dea3c->FUN_005a6260();
     while (node && *node->FUN_006815c0())
     {
-        if (!(*node->FUN_006815c0())->owner || !FUN_004839c0((*node->FUN_006815c0())->owner))
+        if (!(*node->FUN_006815c0())->owner || !LookupFormByID((*node->FUN_006815c0())->owner))
         {
             DispatchMessageToSink(DAT_01076694, 0, DAT_01049638, 0, DAT_010162c0, 0);
             return 0;
@@ -1253,7 +1253,7 @@ GameTile* __cdecl FUN_007c0a40(char* casino, int wager, int mode, int threshold)
     }
     if (oldMenu)
         delete oldMenu;
-    GameTile* manager = tile->FUN_00586150(DAT_01076670)->FUN_00a01b00();
+    GameTile* manager = tile->FUN_00586150(DAT_01076670)->ReadXML();
     DAT_011da9a4 = manager->FUN_00a03c90();
     if (DAT_011da9a4 && DAT_011da9a4->Type() == FUN_007c1440() && DAT_011da9ac)
     {
@@ -2795,7 +2795,7 @@ struct SlotTextureLoader
 extern SlotTextureLoader* DAT_011dea10;
 struct SlotModelLoader
 {
-    void* FUN_00447080(const char*, int, bool, bool, bool, bool);
+    void* LoadModel(const char*, int, bool, bool, bool, bool);
 };
 extern SlotModelLoader* DAT_011c3b3c;
 void FUN_00406d00(char*, unsigned int, const char*, ...);
@@ -2896,13 +2896,13 @@ bool SlotMachineAssets::LoadAssets()
         FUN_00406d00(path, 260, "%sNV_SlotMachine-Symbol%s.dds", "Textures\\terminals\\NV_SlotMachine\\", "S");
         FUN_004b7240(path, normalized, 260);
         DAT_011dea10->FUN_004568c0(normalized, &special, false, false);
-        machine = DAT_011c3b3c->FUN_00447080(reinterpret_cast<SlotAssets*>(DAT_011da9ac)->FUN_00504e00(7)->GetPath(), 0,
+        machine = DAT_011c3b3c->LoadModel(reinterpret_cast<SlotAssets*>(DAT_011da9ac)->FUN_00504e00(7)->GetPath(), 0,
                                              true, false, false, false);
-        reel1 = DAT_011c3b3c->FUN_00447080("Meshes\\terminals\\NV_SlotMachine\\NV_SlotMachine-Reel01.NIF", 0, true,
+        reel1 = DAT_011c3b3c->LoadModel("Meshes\\terminals\\NV_SlotMachine\\NV_SlotMachine-Reel01.NIF", 0, true,
                                            false, false, false);
-        reel2 = DAT_011c3b3c->FUN_00447080("Meshes\\terminals\\NV_SlotMachine\\NV_SlotMachine-Reel02.NIF", 0, true,
+        reel2 = DAT_011c3b3c->LoadModel("Meshes\\terminals\\NV_SlotMachine\\NV_SlotMachine-Reel02.NIF", 0, true,
                                            false, false, false);
-        reel3 = DAT_011c3b3c->FUN_00447080("Meshes\\terminals\\NV_SlotMachine\\NV_SlotMachine-Reel03.NIF", 0, true,
+        reel3 = DAT_011c3b3c->LoadModel("Meshes\\terminals\\NV_SlotMachine\\NV_SlotMachine-Reel03.NIF", 0, true,
                                            false, false, false);
         loading = false;
         return InitReels();
@@ -3094,7 +3094,7 @@ struct FUN_0041a250
     unsigned int id, flags;
     void* data;
     ~FUN_0041a250();
-    void FUN_00ad8830();
+    void Play();
 };
 struct SlotsAudio
 {
@@ -3221,7 +3221,7 @@ void SlotsMenu::FUN_007c2460(int action, void* target)
             {
                 char sound[260];
                 FUN_00406d00(sound, 260, "GAMESlotsIncreaseBet0%i", soundIndex);
-                FUN_00453a70()->FUN_00ad7550(sound, 289, 0).FUN_00ad8830();
+                FUN_00453a70()->FUN_00ad7550(sound, 289, 0).Play();
                 soundIndex = soundIndex + 1 > 3 ? 1 : soundIndex + 1;
             }
             break;
@@ -3244,7 +3244,7 @@ void SlotsMenu::FUN_007c2460(int action, void* target)
             DAT_011da9a4->tile->FUN_00700320(DAT_011da998, bet);
             if (iOldBet != bet)
             {
-                FUN_00453a70()->FUN_00ad7550("GAMESlotsDecreaseBet", 289, 0).FUN_00ad8830();
+                FUN_00453a70()->FUN_00ad7550("GAMESlotsDecreaseBet", 289, 0).Play();
                 soundIndex = 1;
             }
             break;
@@ -3262,7 +3262,7 @@ void SlotsMenu::FUN_007c2460(int action, void* target)
                 DAT_011da9a4->tile->FUN_00700320(DAT_011da998, bet);
                 char sound[260];
                 FUN_00406d00(sound, 260, "GAMESlotsIncreaseBet0%i", soundIndex);
-                FUN_00453a70()->FUN_00ad7550(sound, 289, 0).FUN_00ad8830();
+                FUN_00453a70()->FUN_00ad7550(sound, 289, 0).Play();
                 soundIndex = soundIndex + 1 > 3 ? 1 : soundIndex + 1;
             }
             break;

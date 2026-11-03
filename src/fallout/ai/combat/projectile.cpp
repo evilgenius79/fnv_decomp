@@ -5357,8 +5357,8 @@ struct P062Sound
     unsigned int state;
     void FUN_00418900(const P062Sound&);
     void SetPositionFromArray(void*);
-    void FUN_00ad8f20(P062Scene*);
-    void FUN_00ad8830(bool);
+    void SetNiNode(P062Scene*);
+    void Play(bool);
 };
 struct P062Object
 {
@@ -5849,12 +5849,12 @@ P062Object* __cdecl CreateProjectile(P062Ammo* ammo, P062Object* owner, P062Obje
             projectile->sound.FUN_00418900(
                 FUN_00453a70()->FUN_00ad7480(ammo->FUN_004fd3e0()->FUN_00511840(), 0x40000012, ammo->FUN_004fd3e0()));
             projectile->sound.SetPositionFromArray(owner->soundContext());
-            projectile->sound.FUN_00ad8f20(projectile->scene());
+            projectile->sound.SetNiNode(projectile->scene());
             projectile->soundPercent = ammo->FUN_004fd3e0()->GetField45() * 100;
         }
         if (projectile->FUN_00444d00(1))
         {
-            projectile->sound.FUN_00ad8830(true);
+            projectile->sound.Play(true);
             projectile->soundReady = true;
         }
     }
@@ -9076,7 +9076,7 @@ void RemOwner::FUN_009c4c80(RemForm* apForm)
 class TESObjectWEAP : public TESForm
 {
 };
-TESForm* __cdecl FUN_004839c0(unsigned int);
+TESForm* __cdecl LookupFormByID(unsigned int);
 ActorCause* __cdecl FindStateByValue(unsigned int);
 struct LoadBuf52 : BGSLoadFormBuffer
 {
@@ -9235,7 +9235,7 @@ void LoadProjectile52::LoadProjectile(LoadBuf52* buffer)
     buffer->ReadTypedData(&floatE0, 4);
     buffer->ReadTypedData(&floatE4, 4);
     buffer->ReadTypedData(&floatE8, 4);
-    wordF8 = (unsigned int)dynamic_cast<TESObjectWEAP*>(FUN_004839c0(buffer->FUN_008648a0()));
+    wordF8 = (unsigned int)dynamic_cast<TESObjectWEAP*>(LookupFormByID(buffer->FUN_008648a0()));
     buffer->ReadFormIdentifier(&wordFC);
     buffer->ReadFormIdentifier(&word100);
     buffer->ReadTypedData(&position, 12);
@@ -9290,7 +9290,7 @@ void LoadProjectile52::LoadProjectile(LoadBuf52* buffer)
         buffer->ReadTypedData(&byte90, 1);
 }
 
-TESForm* __cdecl FUN_004839c0(unsigned int auiFormId);
+TESForm* __cdecl LookupFormByID(unsigned int auiFormId);
 
 struct LoadItem9c5
 {
@@ -9331,8 +9331,8 @@ struct FUN_009c5740_shell
 void FUN_009c5740_shell::LoadForm(BGSLoadFormBuffer* pkBuffer)
 {
     FUN_00932b70(pkBuffer);
-    m_pkRef0 = m_pkRef0 ? dynamic_cast<TESObjectREFR*>(FUN_004839c0((unsigned int)m_pkRef0)) : 0;
-    m_pkRef1 = m_pkRef1 ? dynamic_cast<TESObjectREFR*>(FUN_004839c0((unsigned int)m_pkRef1)) : 0;
+    m_pkRef0 = m_pkRef0 ? dynamic_cast<TESObjectREFR*>(LookupFormByID((unsigned int)m_pkRef0)) : 0;
+    m_pkRef1 = m_pkRef1 ? dynamic_cast<TESObjectREFR*>(LookupFormByID((unsigned int)m_pkRef1)) : 0;
     if (m_pkExtra)
         m_pkExtra->FUN_004bef60(pkBuffer);
     if (pkBuffer->GetVersion() >= 0xe)
@@ -11369,7 +11369,7 @@ struct BSSndHStruct
     BSSndHStruct();
     ~BSSndHStruct();
     bool SetPositionFromArray(NiPoint3*);
-    bool FUN_00ad8830(bool);
+    bool Play(bool);
 };
 
 struct BSAudio
@@ -11557,7 +11557,7 @@ void S9b41b0::Update(float afTime)
             BSSndHStruct h = BSAudioS::GetSingleton()->FUN_00ad7480(FUN_004181e0()->FUN_004fd3e0()->FUN_00511840(),
                                                                     0x102, FUN_004181e0()->FUN_004fd3e0());
             h.SetPositionFromArray(v1f4());
-            h.FUN_00ad8830(false);
+            h.Play(false);
         }
     }
     float f;

@@ -582,7 +582,7 @@ Tile* __cdecl FUN_007e7b60()
     return 0;
 }
 
-int __cdecl FUN_00a01860(const char* name);
+int __cdecl TraitNameToID(const char* name);
 bool __cdecl FUN_004b71d0();
 int __cdecl FUN_00ec7d40(int value);
 extern short DAT_011d8a5e;
@@ -642,7 +642,7 @@ void TraitScrollMenu::UpdateScrollAnimation()
 {
     if (scrollTile)
     {
-        int id = FUN_00a01860("_current_value");
+        int id = TraitNameToID("_current_value");
         if (scrollTile->FUN_00a011b0(id) != currentPosition * 10.0f)
             FUN_007e8310(scrollTile->FUN_00a011b0(id) * 0.1f - currentPosition);
     }
@@ -739,10 +739,10 @@ void FUN_007e82b0_shell::FUN_007e8310(float afDelta)
         FUN_00706f30(4);
         if (((TraitScrollMenu*)this)->scrollTile)
         {
-            int iID2 = FUN_00a01860("_current_value");
+            int iID2 = TraitNameToID("_current_value");
             float fScaled5 = ((TraitScrollMenu*)this)->currentPosition * 10.0;
             ((TraitScrollMenu*)this)->scrollTile->FUN_00a012d0(iID2, fScaled5, false);
-            ((TraitPokeTile*)((TraitScrollMenu*)this)->scrollTile)->SetTraitAndReset(FUN_00a01860("_SetInCode"), 1.0f);
+            ((TraitPokeTile*)((TraitScrollMenu*)this)->scrollTile)->SetTraitAndReset(TraitNameToID("_SetInCode"), 1.0f);
         }
     }
 }

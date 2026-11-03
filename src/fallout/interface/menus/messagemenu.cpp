@@ -373,7 +373,7 @@ struct InterfaceManager
     Tile* FUN_004fd400();
 };
 InterfaceManager* __cdecl FUN_004b7210();
-int __cdecl FUN_00a01860(const char* apTraitName);
+int __cdecl TraitNameToID(const char* apTraitName);
 struct FUN_007a8850
 {
     StrMem strMessage;
@@ -404,7 +404,7 @@ FUN_007a8850::FUN_007a8850()
     iTileID = -1;
     iCallbackID = -1;
     fDisplayTime = 0.0f;
-    fBackgroundAlpha = FUN_004b7210()->FUN_004fd400()->GetFloat(FUN_00a01860("_background_fill_alpha"));
+    fBackgroundAlpha = FUN_004b7210()->FUN_004fd400()->GetFloat(TraitNameToID("_background_fill_alpha"));
     iFlags = 0;
 }
 
@@ -572,7 +572,7 @@ struct Message
 };
 void* __cdecl operator new(unsigned int);
 void __cdecl operator delete(void*);
-void* FUN_00401000(unsigned int);
+void* FormHeap_Allocate(unsigned int);
 int FUN_0044a670(const char*);
 void FUN_00406d30(char*, unsigned int, const char*);
 int FUN_00408b20(const char*, const char*);
@@ -1065,7 +1065,7 @@ struct MsgSize
 
 struct MsgFont
 {
-    MsgSize FUN_00a1b020(const char* apText, int aiFont, float afWidth, int aiFlags);
+    MsgSize GetStringDimensions(const char* apText, int aiFont, float afWidth, int aiFlags);
 };
 
 struct MsgSound
@@ -1073,7 +1073,7 @@ struct MsgSound
     unsigned int unk0, unk4, unk8;
     ~MsgSound();
     bool IsNotEqual(int aiFlags);
-    void FUN_00ad8830(int aiFlags);
+    void Play(int aiFlags);
 };
 
 struct MsgAudio
@@ -1170,7 +1170,7 @@ MsgData* GetCurrentArrayElement();
 MsgAudio* FUN_00453a70();
 MsgFont* FUN_005bd5b0();
 MsgInterface* FUN_004b7210();
-int __cdecl FUN_00a01860(const char* apTrait);
+int __cdecl TraitNameToID(const char* apTrait);
 int __cdecl FUN_00647b70(int a, int b);
 float __cdecl FUN_0040ebd0(float a, float b);
 float __cdecl FUN_00404010(float a, float b);
@@ -1200,12 +1200,12 @@ void MsgMenu::PopulateFromMessageData()
     float fTheTextHeight = 0.0f;
     float fButtonsWidth = 0.0f;
     float fWidths = 0.0f;
-    float fHorBuf = FUN_00726070()->FUN_00a011b0(FUN_00a01860(s_szHorBuf));
+    float fHorBuf = FUN_00726070()->FUN_00a011b0(TraitNameToID(s_szHorBuf));
     if (pMessagePtr->kSound.FUN_004048e0() > 0 &&
         FUN_00453a70()->FUN_00ad7550(pMessagePtr->kSound.FUN_00559450(), 0x121).IsNotEqual(-1))
-        FUN_00453a70()->FUN_00ad7550(pMessagePtr->kSound.FUN_00559450(), 0x121).FUN_00ad8830(0);
+        FUN_00453a70()->FUN_00ad7550(pMessagePtr->kSound.FUN_00559450(), 0x121).Play(0);
     else
-        FUN_00453a70()->FUN_00ad7550(s_szPopUp, 0x121).FUN_00ad8830(0);
+        FUN_00453a70()->FUN_00ad7550(s_szPopUp, 0x121).Play(0);
     DAT_011da4f0->m_pTiles[3]->FUN_00a01350(0xfc4, pMessagePtr->kText.FUN_00559450(), true);
     if (pMessagePtr->pIcon)
     {
@@ -1214,7 +1214,7 @@ void MsgMenu::PopulateFromMessageData()
         float fIconWidth =
             pMessagePtr->uiWidth > 0 ? (float)pMessagePtr->uiWidth : DAT_011da4f0->m_pTiles[1]->FUN_00a011b0(0xfba);
         fIconHeightIn =
-            FUN_005bd5b0()->FUN_00a1b020(pMessagePtr->pIcon, 6, fIconWidth != 0.0 ? fIconWidth : DAT_01016970, 0).x;
+            FUN_005bd5b0()->GetStringDimensions(pMessagePtr->pIcon, 6, fIconWidth != 0.0 ? fIconWidth : DAT_01016970, 0).x;
         fIconHeightIn = fIconHeightIn + (pMessagePtr->uiWidth > 0 ? 0.0f : 100.0f);
     }
     else
@@ -1250,7 +1250,7 @@ void MsgMenu::PopulateFromMessageData()
                     fItemWidth = fItemWidth != 0.0 ? fItemWidth : DAT_01016970;
                     iMaxWidthCur =
                         FUN_00647b70(iMaxWidthCur,
-                                     (int)FUN_005bd5b0()->FUN_00a1b020(pText->FUN_00a011f0(0xfc4), 2, fItemWidth, 0).x);
+                                     (int)FUN_005bd5b0()->GetStringDimensions(pText->FUN_00a011f0(0xfc4), 2, fItemWidth, 0).x);
                 }
                 fListHeightTmp = pItemNew->FUN_00a011b0(0xfb0) + fListHeightTmp;
             }
@@ -1287,12 +1287,12 @@ void MsgMenu::PopulateFromMessageData()
     if (pMessagePtr->uiWidth > 0)
         fMaxWidthCur = FUN_00715d40() * (pMessagePtr->uiWidth / FUN_00706e50());
     else
-        fMaxWidthCur = DAT_011da4f0->FUN_00726070()->FUN_00a011b0(FUN_00a01860(s_szMaxMenuWidth));
+        fMaxWidthCur = DAT_011da4f0->FUN_00726070()->FUN_00a011b0(TraitNameToID(s_szMaxMenuWidth));
     fMaxWidthCur = fMaxWidthCur - fHorBuf * 2;
     if (DAT_011da4f0->m_pTiles[2]->IsTraitNonZero(0xfa3))
         fMaxWidthCur = fMaxWidthCur - 120.0;
     DAT_011da4f0->m_pTiles[3]->FUN_00a012d0(0xfba, fMaxWidthCur, true);
-    MsgSize kSizeFinal = FUN_005bd5b0()->FUN_00a1b020(pMessagePtr->kText.FUN_00559450(), 2,
+    MsgSize kSizeFinal = FUN_005bd5b0()->GetStringDimensions(pMessagePtr->kText.FUN_00559450(), 2,
                                                       DAT_011da4f0->m_pTiles[3]->FUN_00a011b0(0xfba), 0);
     fTheTextHeight = fHorBuf * 2 + kSizeFinal.x + fTheTextHeight;
     if (kSizeFinal.z > 1.0)
@@ -1309,8 +1309,8 @@ void MsgMenu::PopulateFromMessageData()
     {
         fWidths = FUN_00404010(fIconHeightIn, fTheTextHeight);
         fWidths = FUN_00404010(fWidths, fButtonsWidth);
-        fWidths = FUN_0040ebd0(fWidths, FUN_00726070()->FUN_00a011b0(FUN_00a01860(s_szMaxMenuWidth)));
-        fWidths = FUN_00404010(fWidths, FUN_00726070()->FUN_00a011b0(FUN_00a01860(s_szMinMenuWidth)));
+        fWidths = FUN_0040ebd0(fWidths, FUN_00726070()->FUN_00a011b0(TraitNameToID(s_szMaxMenuWidth)));
+        fWidths = FUN_00404010(fWidths, FUN_00726070()->FUN_00a011b0(TraitNameToID(s_szMinMenuWidth)));
     }
     else
     {
@@ -1376,7 +1376,7 @@ struct VDel
 struct Helper
 {
     void* FUN_00586150(const char* s);
-    Tile* FUN_00a01b00();
+    Tile* ReadXML();
     int FUN_00a03c90();
     void FUN_00a1dc70(Tile* tile, int zero);
     double FUN_00a011b0(int);
@@ -1408,7 +1408,7 @@ bool __cdecl FUN_007a8ba0()
     }
     if (FUN_007023c0())
         flag = 1;
-    Tile* pTile = ((Helper*)((Helper*)B)->FUN_00586150("Data\\Menus\\message_menu.xml"))->FUN_00a01b00();
+    Tile* pTile = ((Helper*)((Helper*)B)->FUN_00586150("Data\\Menus\\message_menu.xml"))->ReadXML();
     DAT_011da4f0 = ((Helper*)pTile)->FUN_00a03c90();
     if (DAT_011da4f0 != 0 &&
         ((int(__thiscall*)(void*))((*(void***)DAT_011da4f0)[13]))((void*)DAT_011da4f0) == FUN_007a8de0())

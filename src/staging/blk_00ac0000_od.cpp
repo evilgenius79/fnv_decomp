@@ -1977,7 +1977,7 @@ void FUN_00acb1a0_cls::ResetListSentinel()
 }
 
 extern int DAT_010a30fc;
-void __cdecl FUN_00401030(void*);
+void __cdecl FormHeap_Free(void*);
 
 class Sub_00acb6b0
 {
@@ -2029,7 +2029,7 @@ void FUN_00acb6b0_cls::FUN_00acb6b0()
     m_vft = &DAT_010a30fc;
     cur = m_38;
     prev = cur;
-    prev != 0 ? (prev->FUN_00acb720(), (((prev, 1) & 1) ? FUN_00401030(prev) : (void)0), prev) : 0;
+    prev != 0 ? (prev->FUN_00acb720(), (((prev, 1) & 1) ? FormHeap_Free(prev) : (void)0), prev) : 0;
     ((FUN_00ec3260_cls*)((char*)this + 4))->FUN_00ec3260();
 }
 
@@ -2343,7 +2343,7 @@ void FUN_00acde90_class::FUN_00acde90()
                               (*reinterpret_cast<int**>(reinterpret_cast<char*>(this) - 4))[1] - 4) = &DAT_010a318c;
 }
 
-void __cdecl FUN_00401030(void* apMemory);
+void __cdecl FormHeap_Free(void* apMemory);
 
 struct FUN_00acdff0_prim
 {
@@ -2369,7 +2369,7 @@ FUN_00acdff0_prim* FUN_00acdff0_cls::FUN_00acdff0(unsigned int auiFlags)
     ((FUN_00acdff0_prim*)((char*)this - 8))->BaseCleanup();
     if (auiFlags & 1)
     {
-        FUN_00401030((char*)this - 8);
+        FormHeap_Free((char*)this - 8);
     }
     return (FUN_00acdff0_prim*)((char*)this - 8);
 }
@@ -2857,7 +2857,7 @@ struct FUN_00ad0550_cls
     void Initialize();
 };
 
-void* __cdecl FUN_00401000(unsigned int size);
+void* __cdecl FormHeap_Allocate(unsigned int size);
 int __cdecl FUN_00ec36a6();
 
 // @fnv 0x00ad0550
@@ -2874,7 +2874,7 @@ void FUN_00ad0550_cls::Initialize()
     m_1c = 0;
     m_20 = 0;
     ((FUN_00ac9ff0_Class*)this)->FUN_00ac9ff0(0, 0);
-    int* p = (int*)FUN_00401000(4);
+    int* p = (int*)FormHeap_Allocate(4);
     m_24 = (p != 0) ? (*p = FUN_00ec36a6(), ((FUN_00ace790_class*)FUN_00ec34d4())->IncrementCounter(), (void*)p) : 0;
 }
 
@@ -3367,10 +3367,10 @@ struct FUN_0044d6c0_class
     void* __thiscall FUN_00ec78f1(void*** a);
 };
 
-void* __cdecl FUN_00401000(unsigned int size);
+void* __cdecl FormHeap_Allocate(unsigned int size);
 extern void* DAT_010176f8;
 
-// Checks that n * 0x1c does not overflow, throws an exception if it would, and otherwise allocates n * 0x1c bytes via FUN_00401000.
+// Checks that n * 0x1c does not overflow, throws an exception if it would, and otherwise allocates n * 0x1c bytes via FormHeap_Allocate.
 // @fnv 0x00ad5310
 void* __cdecl FUN_00ad5310(unsigned int n)
 {
@@ -3392,7 +3392,7 @@ void* __cdecl FUN_00ad5310(unsigned int n)
             _CxxThrowException(&obj, (_ThrowInfo*)0x1140ef8);
         }
     }
-    return FUN_00401000(n * 0x1c);
+    return FormHeap_Allocate(n * 0x1c);
 }
 }  // namespace fnv_00ad5310
 
@@ -4368,7 +4368,7 @@ struct FUN_00ad5430_err
 extern "C" char DAT_010176f8[];
 extern "C" char DAT_01140ef8[];
 extern "C" void __stdcall FUN_00ec7894(void* err2, const char* msg);
-void* __cdecl FUN_00401000(unsigned int size);
+void* __cdecl FormHeap_Allocate(unsigned int size);
 
 // Clamps count to zero, reports an error if count*0x18 would overflow, then allocates count*0x18 bytes and returns the pointer.
 // @fnv 0x00ad5430
@@ -4388,7 +4388,7 @@ void* __cdecl AllocateCountedBlocks(unsigned int count)
         err3.m_vptr = DAT_010176f8;
         FUN_00ec7894(&err3, DAT_01140ef8);
     }
-    return FUN_00401000(count * 0x18);
+    return FormHeap_Allocate(count * 0x18);
 }
 
 struct ByteFlag
@@ -4774,7 +4774,7 @@ struct S00aca220_Base
 {
     void FUN_00ec79a1();
 };
-void FUN_00401030(void* p);
+void FormHeap_Free(void* p);
 extern char DAT_010a307c;
 struct S00aca220_Obj : public S00aca220_Base
 {
@@ -4784,7 +4784,7 @@ struct S00aca220_Obj : public S00aca220_Base
     S00aca220_Sub m_sub;
     S00aca220_Obj* FUN_00aca220(int flags);
 };
-// Sets m_pVft, calls m_sub.FUN_0044a730(1, 0) and FUN_00ec79a1, and calls FUN_00401030(this) when bit 0 of flags is set; returns this.
+// Sets m_pVft, calls m_sub.FUN_0044a730(1, 0) and FUN_00ec79a1, and calls FormHeap_Free(this) when bit 0 of flags is set; returns this.
 // @fnv 0x00aca220
 S00aca220_Obj* S00aca220_Obj::FUN_00aca220(int flags)
 {
@@ -4797,7 +4797,7 @@ S00aca220_Obj* S00aca220_Obj::FUN_00aca220(int flags)
     m_sub.FUN_0044a730(1, 0);
     FUN_00ec79a1();
     if (flags & 1)
-        FUN_00401030(this);
+        FormHeap_Free(this);
     return this;
 }
 
@@ -4846,7 +4846,7 @@ struct S00aca340_Base
 {
     void FUN_00ec79a1();
 };
-void FUN_00401030(void* p);
+void FormHeap_Free(void* p);
 extern char DAT_010a3070;
 extern char DAT_010a307c;
 struct S00aca340_Obj : public S00aca340_Base
@@ -4857,7 +4857,7 @@ struct S00aca340_Obj : public S00aca340_Base
     S00aca340_Str m_str;
     S00aca340_Obj* FUN_00aca340(int a);
 };
-// Sets m_vft, clears m_str, calls FUN_00ec79a1, and calls FUN_00401030(this) when bit 0 of a is set; returns this.
+// Sets m_vft, clears m_str, calls FUN_00ec79a1, and calls FormHeap_Free(this) when bit 0 of a is set; returns this.
 // @fnv 0x00aca340
 S00aca340_Obj* S00aca340_Obj::FUN_00aca340(int aiFlags)
 {
@@ -4871,7 +4871,7 @@ S00aca340_Obj* S00aca340_Obj::FUN_00aca340(int aiFlags)
     m_str.Clear(true, 0);
     FUN_00ec79a1();
     if (aiFlags & 1)
-        FUN_00401030(this);
+        FormHeap_Free(this);
     return this;
 }
 
@@ -4994,7 +4994,7 @@ struct S00acede0_Obj
     void FUN_00acede0();
 };
 
-// If m_0c is set, calls FUN_0044a730(1, 0) on each element from m_0c to m_10, frees the m_0c block with FUN_00401030, then zeroes m_0c, m_10 and m_14.
+// If m_0c is set, calls FUN_0044a730(1, 0) on each element from m_0c to m_10, frees the m_0c block with FormHeap_Free, then zeroes m_0c, m_10 and m_14.
 // @fnv 0x00acede0
 void S00acede0_Obj::FUN_00acede0()
 {
@@ -5025,11 +5025,11 @@ void S00acede0_Obj::FUN_00acede0()
         for (; hhX != theta4; hhX = hhX + 1)
         {
             if (1 & (hhX->FUN_0044a730(1, 0), 0))
-                FUN_00401030(hhX);
+                FormHeap_Free(hhX);
         }
         p5 = m_14 - m_0c;
         p6 = m_0c;
-        FUN_00401030(p6);
+        FormHeap_Free(p6);
     }
     m_0c = 0;
     m_10 = 0;
@@ -5222,7 +5222,7 @@ void* S00ace060_Obj::FUN_00ace060(int flags)
     return reinterpret_cast<char*>(this) - 0x50;
 }
 
-void __cdecl FUN_00401030(void*);
+void __cdecl FormHeap_Free(void*);
 void __cdecl FUN_00ec3205(void*);
 extern int DAT_010a2fa4;
 extern int DAT_010a2f9c;
@@ -5248,7 +5248,7 @@ struct StreamOwner : StreamHeader, StreamComponent
 {
 };
 
-// On the owner at this-0x58: calls FUN_00acc8c0, sets the vtable, calls FUN_00ec3205, calls FUN_00401030 if bit 0 of flags is set, and returns the owner.
+// On the owner at this-0x58: calls FUN_00acc8c0, sets the vtable, calls FUN_00ec3205, calls FormHeap_Free if bit 0 of flags is set, and returns the owner.
 // @fnv 0x00ace150
 StreamOwner* StreamComponent::FUN_00ace150(unsigned int flags)
 {
@@ -5260,7 +5260,7 @@ StreamOwner* StreamComponent::FUN_00ace150(unsigned int flags)
     e->vtable = &DAT_010a2f9c;
     FUN_00ec3205(e);
     if (flags & 1)
-        FUN_00401030((char*)this - 0x58);
+        FormHeap_Free((char*)this - 0x58);
     return (StreamOwner*)((char*)this - 0x58);
 }
 

@@ -2082,11 +2082,11 @@ struct FUN_00472f60_cls : public TESFile
     int FUN_00472660();
     int FUN_005224a0();
     int FUN_008d8ac0(int);
-    void FUN_00472f60(FUN_00472f60_arg* p);
+    void InitializeForm(FUN_00472f60_arg* p);
 };
 
 // @fnv 0x00472f60
-void FUN_00472f60_cls::FUN_00472f60(FUN_00472f60_arg* apTarget)
+void FUN_00472f60_cls::InitializeForm(FUN_00472f60_arg* apTarget)
 {
     apTarget->FUN_004f15a0(FUN_00472660());
     if (apTarget->FUN_004077c0())
@@ -3095,7 +3095,7 @@ void FUN_00841250_cls::ProcessRef(FUN_00841250_ref* apRef, void* apFallback, uns
 struct FUN_00438fc0_file
 {
     unsigned int FUN_004726b0();
-    void FUN_00472890(void*, unsigned int);
+    void GetChunkData(void*, unsigned int);
     bool FUN_00401680();
 };
 
@@ -3117,7 +3117,7 @@ unsigned char NiPoint3::ReadFromFile(FUN_00438fc0_file* pFile)
     {
         if (pFile->FUN_004726b0() == 0x4f424d58)
         {
-            pFile->FUN_00472890(this, 12);
+            pFile->GetChunkData(this, 12);
             if (pFile->FUN_00401680())
             {
                 FUN_00401080(&x, EndianSizeTag<4>());
@@ -3444,8 +3444,8 @@ struct TagX
 {
 };
 void FUN_00401080(void* p, TagX t);
-void* FUN_00401000(unsigned int n);
-void FUN_00401030(void* p);
+void* FormHeap_Allocate(unsigned int n);
+void FormHeap_Free(void* p);
 bool FindFormEnumIndex(int id);
 void FUN_005b5e40(const char* fmt, ...);
 extern int g_iDat01187020;
@@ -3501,7 +3501,7 @@ void SelfX::InflateCompressedForm()
         bool bOk = FindFormEnumIndex(m240);
         if (!bOk)
             return;
-        char* pBufferVal = (char*)FUN_00401000(m244 + 1);
+        char* pBufferVal = (char*)FormHeap_Allocate(m244 + 1);
         if (!pBufferVal)
             return;
         if (m10->FUN_00b00650(pBufferVal, m244) != m244)
@@ -3515,7 +3515,7 @@ void SelfX::InflateCompressedForm()
             if (FUN_00401680())
                 FUN_00401080(&uiSize7, TagX());
             pBufferVal[m244] = 0;
-            m420 = (char*)FUN_00401000(uiSize7);
+            m420 = (char*)FormHeap_Allocate(uiSize7);
             m424 = uiSize7;
             ZStreamX kStream;
             char acState[0x1ba4];
@@ -3531,7 +3531,7 @@ void SelfX::InflateCompressedForm()
                 FUN_00b45db0(&kStream);
                 FUN_005b5e40("TESFile: Error initializing ZLib inflate stream.");
                 FUN_00473960();
-                FUN_00401030(pBufferVal);
+                FormHeap_Free(pBufferVal);
                 return;
             }
             kStream.m_uiAvailableInputBytes = m244 - 4;
@@ -3544,7 +3544,7 @@ void SelfX::InflateCompressedForm()
                 FUN_00b45db0(&kStream);
                 FUN_005b5e40("TESFile: Error inflating ZLib stream.");
                 FUN_00473960();
-                FUN_00401030(pBufferVal);
+                FormHeap_Free(pBufferVal);
                 return;
             }
             if (iRet6 != 1)
@@ -3552,12 +3552,12 @@ void SelfX::InflateCompressedForm()
                 FUN_00b45db0(&kStream);
                 FUN_005b5e40("TESFile: Error: ZLib stream did not terminate.");
                 FUN_00473960();
-                FUN_00401030(pBufferVal);
+                FormHeap_Free(pBufferVal);
                 return;
             }
             FUN_00b45db0(&kStream);
         }
-        FUN_00401030(pBufferVal);
+        FormHeap_Free(pBufferVal);
     }
 }
 }  // namespace fnv_004740a0
@@ -3587,12 +3587,12 @@ struct FUN_00472890_cls : TESFile
     bool FUN_00472100();
     unsigned int FUN_00471840();
     char* FUN_00473930();
-    bool FUN_00472890(char* data, unsigned int size);
+    bool GetChunkData(char* data, unsigned int size);
 };
 
 // Reads the current chunk into data, seeking the file or copying from compressed memory, and truncates with a warning if the buffer is too small.
 // @fnv 0x00472890
-bool FUN_00472890_cls::FUN_00472890(char* data, unsigned int size)
+bool FUN_00472890_cls::GetChunkData(char* data, unsigned int size)
 {
     if (m_uiChunkSize == 0)
         return true;

@@ -4845,7 +4845,7 @@ float __cdecl FUN_007177c0();
 float __cdecl FUN_00717820();
 float __cdecl FUN_00408840(float);
 void __cdecl FUN_00773190(RefX*);
-void __cdecl FUN_00401030(void*);
+void __cdecl FormHeap_Free(void*);
 int __cdecl FUN_00458030();
 extern bool DAT_011d96c5, DAT_011d97c0;
 extern float DAT_011d979c;
@@ -5060,7 +5060,7 @@ void HUDUpdate::FUN_00770430()
                     if (*((HUDSubtitleList*)m_kSubtitleArray)->FUN_00877a30(k) == m_pCurrentSubtitle)
                         FUN_00775670();
                     HUDSubtitle* j = *((HUDSubtitleList*)m_kSubtitleArray)->FUN_00877a30(k);
-                    FUN_00401030(j);
+                    FormHeap_Free(j);
                     ((HUDSubtitleList*)m_kSubtitleArray)->FUN_006bf8f0(k, true);
                     --k;
                 }
@@ -6341,7 +6341,7 @@ struct TimeGlobal
 };
 extern TimeGlobal DAT_011f6394;
 extern float DAT_011d979c;
-int FUN_00a00940(const char*, int);
+int TraitNameToIDAdd(const char*, int);
 int FUN_0077f9c0(int);
 float LinearInterpolate(float, float, float, float, float);
 struct Tile179
@@ -6353,7 +6353,7 @@ struct Tile179
 // @fnv 0x00778c20
 void FUN_00778c20(Tile179* tile, float value, float limit)
 {
-    static int trait = FUN_00a00940(str_01073500, -1);
+    static int trait = TraitNameToIDAdd(str_01073500, -1);
     int actual = FUN_0077f9c0(*g_011d1d54.FUN_0043d4d0());
     int lower = FUN_0077f9c0(*g_011d30d8.FUN_0043d4d0());
     int low = FUN_0077f9c0(*g_011d4d44.FUN_0043d4d0());
@@ -6421,7 +6421,7 @@ struct QSound
     QSound();
     ~QSound();
     QSound& operator=(const QSound&);
-    bool FUN_00ad8830(bool);
+    bool Play(bool);
 };
 struct QAudio
 {
@@ -6500,7 +6500,7 @@ float FUN_007177c0();
 struct QFont
 {
     static QFont* FUN_005bd5b0();
-    void FUN_00a1b020(PointX*, const char*, int, float, int = 0);
+    void GetStringDimensions(PointX*, const char*, int, float, int = 0);
 };
 void FUN_005b5e40(int, const char*, ...);
 int FUN_00406d30(char*, unsigned int, const char*);
@@ -6557,7 +6557,7 @@ void QHud::UpdateQuestNotification()
             aRepair = FUN_00453a70()->FUN_00ad7550(DAT_011d96bc->GetQuestNamesHead()->sound, 289);
         else
             aRepair = FUN_00453a70()->FUN_00ad7550(DAT_01073700, 289);
-        aRepair.FUN_00ad8830(false);
+        aRepair.Play(false);
         aBy = 0;
         aAlternate = DAT_011f6394.FUN_00825c00();
         aLocation = ((QTile*)HUDMainMenu_pme->m_pTiles[14])->children.FUN_0073ac90()[0];
@@ -6579,7 +6579,7 @@ void QHud::UpdateQuestNotification()
         aLocation->Set(4025, aActor);
         {
             PointX aImpact;
-            QFont::FUN_005bd5b0()->FUN_00a1b020(&aImpact, aLocation->FUN_00a011f0(4036),
+            QFont::FUN_005bd5b0()->GetStringDimensions(&aImpact, aLocation->FUN_00a011f0(4036),
                                                 (int)aLocation->FUN_00a011b0(4025), aLocation->FUN_00a011b0(4026), 0);
             aBy = (int)aImpact.x;
             aLocation->Set(4002, (float)-(aImpact.y + 15.0), true);
@@ -6640,7 +6640,7 @@ void QHud::UpdateQuestNotification()
                 aActor = 8;
                 if (DAT_011d96bc->GetQuestNamesHead()->kind == 3 && DAT_011d96bc->GetQuestNamesHead()->textFont != -1)
                     aActor = DAT_011d96bc->GetQuestNamesHead()->textFont;
-                QFont::FUN_005bd5b0()->FUN_00a1b020(&aData7, aPoint4, aActor, DAT_01016970, 0);
+                QFont::FUN_005bd5b0()->GetStringDimensions(&aData7, aPoint4, aActor, DAT_01016970, 0);
                 aOverrideFlagA = (int)((_unused - (1.0f + aOverrideFlag3) * aData7.x) * aOverrideFlag3);
                 aInv = ((QTile*)HUDMainMenu_pme->m_pTiles[14])->children.FUN_00559450();
                 {
@@ -6668,7 +6668,7 @@ void QHud::UpdateQuestNotification()
                                 tile->Set(4009, 0);
                                 tile->Set(4001, aOverrideFlagA);
                                 PointX size;
-                                QFont::FUN_005bd5b0()->FUN_00a1b020(&size, character, (int)tile->FUN_00a011b0(4025),
+                                QFont::FUN_005bd5b0()->GetStringDimensions(&size, character, (int)tile->FUN_00a011b0(4025),
                                                                     tile->FUN_00a011b0(4026), 0);
                                 if (index <= aGy)
                                     tile->Set(4002, 0);
@@ -6889,7 +6889,7 @@ extern SettingX DAT_011d2238;
 extern SettingX DAT_011d9774;
 extern SettingX DAT_011d4f30;
 extern const char str_01073724[];
-int __cdecl FUN_00a01860(const char* name);
+int __cdecl TraitNameToID(const char* name);
 struct TileAnimationUpdater
 {
     void UpdateTileAnimations(AnimatedTile* root);
@@ -6907,7 +6907,7 @@ void TileAnimationUpdater::UpdateTileAnimations(AnimatedTile* pRootTile)
             if (pChild)
             {
                 pChild->FUN_00a012d0(0xfa9, 0.0f, true);
-                pChild->FUN_00700320(FUN_00a01860(str_01073724), 0);
+                pChild->FUN_00700320(TraitNameToID(str_01073724), 0);
             }
         }
         tile = pRootTile->children.GetHeadPos();
@@ -7976,12 +7976,12 @@ struct xQNode
 struct xFontMgr
 {
     static xFontMgr* FUN_005bd5b0();
-    xSize FUN_00a1b020(const char*, int, float, int);
+    xSize GetStringDimensions(const char*, int, float, int);
 };
 struct xSound
 {
     ~xSound();
-    bool FUN_00ad8830(bool);
+    bool Play(bool);
     int m_iWordAt00, m_iWordAt04, m_8;
 };
 struct xAudio
@@ -8089,7 +8089,7 @@ void xQuestMenu::UpdateQuestMenu(xHolder* HOLDER)
             xSprintf(NAME, 0x104, s_szObjFmt, qaGEwZ++);
             qQMZREG->FUN_00707e10(NAME);
             xF774800(qQMZREG, 0);
-            xAudio::FUN_00453a70()->FUN_00ad7550(s_szQuestUpdate, 0x121).FUN_00ad8830(false);
+            xAudio::FUN_00453a70()->FUN_00ad7550(s_szQuestUpdate, 0x121).Play(false);
             qArxcFu->FUN_00905330(qArxcFu->FUN_006815c0());
         }
     }
@@ -8110,7 +8110,7 @@ void xQuestMenu::UpdateQuestMenu(xHolder* HOLDER)
             {
                 qXMUYT->FUN_00700320(0xfa2, qkJsUdT);
                 qIpA->FUN_00700320(0xfa2, qkJsUdT + 3);
-                xSize SZ = xFontMgr::FUN_005bd5b0()->FUN_00a1b020(
+                xSize SZ = xFontMgr::FUN_005bd5b0()->GetStringDimensions(
                     qXMUYT->FUN_00a011f0(0xfc4), (int)qXMUYT->FUN_00a011b0(0xfb9), qXMUYT->FUN_00a011b0(0xfba), 0);
                 qkJsUdT += (int)SZ.y;
             }
@@ -9006,7 +9006,7 @@ extern CompassSetting DAT_011d9774, DAT_011d12cc, DAT_011d2208, DAT_011d0364, DA
     DAT_011cdcbc, DAT_011d32d0;
 extern float DAT_011d979c;
 extern bool DAT_011d96c4;
-int __cdecl FUN_00a00940(const char* apName, int aiUnk);
+int __cdecl TraitNameToIDAdd(const char* apName, int aiUnk);
 float __cdecl LinearInterpolate(float afMin, float afMax, float afFrom, float afTo, float afVal);
 double __cdecl CompassMin(float afA, float afB);
 float __cdecl ComputeObjectAngleDelta(CompassPoint aPos, CompassPoint aOrigin);
@@ -9023,9 +9023,9 @@ void __cdecl FUN_005e58f0(int aiPerk, CompassRef* apRef, float* apValue);
 void __cdecl FUN_00779070(CompassMovie* apMovie, CompassTileList* apMapTiles, CompassTileList* apQuestTiles,
                           CompassTileList* apActorTiles)
 {
-    static int iDistanceID = FUN_00a00940("_Distance", -1);
-    static int iHeadingID = FUN_00a00940("_Heading", -1);
-    static int iAlphaDownID = FUN_00a00940("_AlphaDown", -1);
+    static int iDistanceID = TraitNameToIDAdd("_Distance", -1);
+    static int iHeadingID = TraitNameToIDAdd("_Heading", -1);
+    static int iAlphaDownID = TraitNameToIDAdd("_AlphaDown", -1);
     float fAngleDeg =
         (((CompassRef*)DAT_011dea3c)->GetAngleZ(0) + ((CompassRef*)DAT_011dea3c)->GetProcess()->GetAngleOffset()) *
         57.2957763671875;
@@ -9490,7 +9490,7 @@ class InterfaceManager
 struct SndX
 {
     bool IsValid();
-    bool FUN_00ad8830(bool);
+    bool Play(bool);
     bool FUN_00ad88b0();
 };
 extern HUDMainMenu* HUDMainMenu_pme;
@@ -9506,7 +9506,7 @@ void __cdecl SetHudVisible(bool);
 
 // Selects a HUD mode from the requested value and player state, then updates HUD flags, tile traits, and a sound handle.
 // @fnv 0x00771700
-void __cdecl FUN_00771700(int aiMenuMode)
+void __cdecl UpdateVisibilityState(int aiMenuMode)
 {
     if (!HUDMainMenu_pme)
         return;
@@ -9541,7 +9541,7 @@ void __cdecl FUN_00771700(int aiMenuMode)
             else if (DAT_011f2250.FUN_0044ddc0() == 4)
                 state = 8;
             else if (_g_thePlayer->FUN_005a03f0(1))
-                FUN_00771700(12);
+                UpdateVisibilityState(12);
             else if (_g_thePlayer->FUN_008bbc10())
                 state = 22;
             else
@@ -9723,7 +9723,7 @@ void __cdecl FUN_00771700(int aiMenuMode)
     if (((SndX*)HUDMainMenu_pme->m_kTargetDisplayData)->IsValid())
     {
         if (HUDMainMenu_pme->m_iHudValueFirstBeforeMode & 4)
-            ((SndX*)HUDMainMenu_pme->m_kTargetDisplayData)->FUN_00ad8830(false);
+            ((SndX*)HUDMainMenu_pme->m_kTargetDisplayData)->Play(false);
         else
             ((SndX*)HUDMainMenu_pme->m_kTargetDisplayData)->FUN_00ad88b0();
     }
@@ -9945,7 +9945,7 @@ class InterfaceManager;
 InterfaceManager* FUN_004b7210();
 bool FUN_004b71d0();
 HotkeyList* __cdecl FUN_004bf220(HUDPlayer* apPlayer);
-int __cdecl FUN_00a01860(const char* apTrait);
+int __cdecl TraitNameToID(const char* apTrait);
 int __cdecl FUN_00406d00(char* apDest, unsigned int auiSize, const char* apFormat, ...);
 int __cdecl FUN_00406d30(char* apDest, unsigned int auiSize, const char* apSrc);
 
@@ -10017,12 +10017,12 @@ void HUDHotkeys::FUN_0077da60()
                         }
                         if (!bHasIcon)
                         {
-                            ((HotkeyTile*)m_pTiles[40])->FUN_00700320(FUN_00a01860(s_szIconVisible), 0);
+                            ((HotkeyTile*)m_pTiles[40])->FUN_00700320(TraitNameToID(s_szIconVisible), 0);
                         }
                         else
                         {
-                            ((HotkeyTile*)m_pTiles[40])->FUN_00a01350(FUN_00a01860(s_szIconFilename), pIcon, true);
-                            ((HotkeyTile*)m_pTiles[40])->FUN_00700320(FUN_00a01860(s_szIconVisible), 1);
+                            ((HotkeyTile*)m_pTiles[40])->FUN_00a01350(TraitNameToID(s_szIconFilename), pIcon, true);
+                            ((HotkeyTile*)m_pTiles[40])->FUN_00700320(TraitNameToID(s_szIconVisible), 1);
                         }
                         DAT_011a0124 = iSelected;
                         delete pFinalItem;
@@ -10075,12 +10075,12 @@ void HUDHotkeys::FUN_0077da60()
                     }
                     if (!bIconTmp)
                     {
-                        ((HotkeyTile*)m_pTiles[40])->FUN_00700320(FUN_00a01860(s_szIconVisible), 0);
+                        ((HotkeyTile*)m_pTiles[40])->FUN_00700320(TraitNameToID(s_szIconVisible), 0);
                     }
                     else
                     {
-                        ((HotkeyTile*)m_pTiles[40])->FUN_00a01350(FUN_00a01860(s_szIconFilename), pIconPathOld, true);
-                        ((HotkeyTile*)m_pTiles[40])->FUN_00700320(FUN_00a01860(s_szIconVisible), 1);
+                        ((HotkeyTile*)m_pTiles[40])->FUN_00a01350(TraitNameToID(s_szIconFilename), pIconPathOld, true);
+                        ((HotkeyTile*)m_pTiles[40])->FUN_00700320(TraitNameToID(s_szIconVisible), 1);
                     }
                     delete pEntry;
                 }
@@ -10234,7 +10234,7 @@ struct VATSCreateMenuX
     virtual void v30();
     virtual int GetID();
     void FUN_00a1dc70(VATSCreateTileMenuX* apTile, bool abArg);
-    VATSCreateTileX* FUN_00a1ddb0(VATSCreateTileX* apParent, const char* apTemplate, int aiArg);
+    VATSCreateTileX* AddTileFromTemplate(VATSCreateTileX* apParent, const char* apTemplate, int aiArg);
     VATSCreateTileX* FUN_00726070();
     void FUN_00a1dc20(int aiArg);
 };
@@ -10732,8 +10732,8 @@ struct VATSCreateRefX
     VATSCreateFormX* GetObjectReference();
     VATSCreateProcX* GetProcess();
     bool FUN_005a2030() const;
-    void FUN_00950110(int aiArg);
-    void FUN_008a6840(int aiArg);
+    void ToggleFirstPerson(int aiArg);
+    void SetWantsWeaponOut(int aiArg);
     void SetProcessValue(float afArg);
     void SetActiveState(int a1, int a2, int a3);
 };
@@ -11323,7 +11323,7 @@ bool FUN_007e9200()
     {
         if (VATSCreateDAT_011f21d1)
         {
-            VATSCreateDAT_011dea3c->FUN_00950110(1);
+            VATSCreateDAT_011dea3c->ToggleFirstPerson(1);
         }
         return false;
     }
@@ -11417,7 +11417,7 @@ bool FUN_007e9200()
                 VATSCreateDAT_011f21e8 = VATSCreateDAT_011c3f2c->PlaceObjectReference(
                     VATSCreateDAT_011db0ac, qCTa, VATSCreateDAT_011f426c, VATSCreateDAT_011dea10->FUN_005f36f0(),
                     VATSCreateDAT_011dea10->FUN_004fd3e0(), 0, 0, 0);
-                VATSCreateDAT_011f21e8->FUN_008a6840(1);
+                VATSCreateDAT_011f21e8->SetWantsWeaponOut(1);
                 VATSCreateDAT_011f21e8->GetProcess()->FUN_008ff030(VATSCreateDAT_011f21e8);
                 VATSCreateDAT_011f21e8->SetProcessValue(0.0f);
             }
@@ -11446,7 +11446,7 @@ bool FUN_007e9200()
                 VATSCreateDAT_011f21ec = VATSCreateDAT_011c3f2c->PlaceObjectReference(
                     VATSCreateDAT_011db0b4, qXUDve, VATSCreateDAT_011f426c, VATSCreateDAT_011dea10->FUN_005f36f0(),
                     VATSCreateDAT_011dea10->FUN_004fd3e0(), 0, 0, 0);
-                VATSCreateDAT_011f21ec->FUN_008a6840(1);
+                VATSCreateDAT_011f21ec->SetWantsWeaponOut(1);
                 VATSCreateDAT_011f21ec->GetProcess()->FUN_008ff030(VATSCreateDAT_011f21ec);
                 VATSCreateDAT_011f21ec->SetProcessValue(0.0f);
             }
@@ -11610,7 +11610,7 @@ bool FUN_007e9200()
         VATSCreateDAT_011db0d4->m_pTiles[13]->SetInt(0xfb9, 7);
         VATSCreateDAT_011db0d4->m_pTiles[13]->Set(0xfc4, VATSCreateDAT_011d4da4.String(), 1);
         VATSCreateFUN_00774800(VATSCreateDAT_011db0d4->m_pTiles[13], 0);
-        VATSCreateDAT_011db0d4->m_pTiles[14] = qSVM->FUN_00a1ddb0(qnEqwa, "template_meter", 0);
+        VATSCreateDAT_011db0d4->m_pTiles[14] = qSVM->AddTileFromTemplate(qnEqwa, "template_meter", 0);
         VATSCreateDAT_011db0d4->m_pTiles[14]->SetInt(qOPw, 0x5a);
         VATSCreateDAT_011db0d4->m_pTiles[14]->Set(
             0xfa2, (float)(VATSCreateDAT_011db0d4->m_pTiles[12]->GetFloat(0xfa2) + 3.0), 1);
@@ -11619,7 +11619,7 @@ bool FUN_007e9200()
         VATSCreateDAT_011db0d4->m_pTiles[14]->SetInt(qrBzVM, 1);
         VATSCreateDAT_011db0d4->m_pTiles[14]->SetInt(0xfb8, 0xc8);
         VATSCreateFUN_00774800(VATSCreateDAT_011db0d4->m_pTiles[14], 3);
-        VATSCreateDAT_011db0d4->m_pTiles[15] = qSVM->FUN_00a1ddb0(qnEqwa, "template_meter_background", 0);
+        VATSCreateDAT_011db0d4->m_pTiles[15] = qSVM->AddTileFromTemplate(qnEqwa, "template_meter_background", 0);
         VATSCreateDAT_011db0d4->m_pTiles[15]->Set(
             0xfa2, (float)(VATSCreateDAT_011db0d4->m_pTiles[12]->GetFloat(0xfa2) + 3.0), 1);
         VATSCreateFUN_00774800(VATSCreateDAT_011db0d4->m_pTiles[15], 4);
@@ -11694,18 +11694,18 @@ bool FUN_007e9200()
         for (int qfpzU = 0; qfpzU < *VATSCreateDAT_011d32d0.Int(); qfpzU++)
         {
             VATSCreateTileX* qXSF =
-                VATSCreateDAT_011db0d4->FUN_00a1ddb0(VATSCreateDAT_011db0d4->m_pTiles[21], "compass_npc_icon", 0);
+                VATSCreateDAT_011db0d4->AddTileFromTemplate(VATSCreateDAT_011db0d4->m_pTiles[21], "compass_npc_icon", 0);
         }
         for (int qgqKr = 0; qgqKr < 10; qgqKr++)
         {
-            VATSCreateTileX* qBMjHz = VATSCreateDAT_011db0d4->FUN_00a1ddb0(VATSCreateDAT_011db0d4->m_pTiles[20],
+            VATSCreateTileX* qBMjHz = VATSCreateDAT_011db0d4->AddTileFromTemplate(VATSCreateDAT_011db0d4->m_pTiles[20],
                                                                            "template_compass_icon_quest", 0);
         }
-        qQGWBE = VATSCreateDAT_011db0d4->FUN_00a1ddb0(VATSCreateDAT_011db0d4->m_pTiles[20],
+        qQGWBE = VATSCreateDAT_011db0d4->AddTileFromTemplate(VATSCreateDAT_011db0d4->m_pTiles[20],
                                                       "template_compass_icon_player", 0);
         for (int qoqcoe = 0; qoqcoe < 10; qoqcoe++)
         {
-            VATSCreateTileX* qVCM = VATSCreateDAT_011db0d4->FUN_00a1ddb0(VATSCreateDAT_011db0d4->m_pTiles[19],
+            VATSCreateTileX* qVCM = VATSCreateDAT_011db0d4->AddTileFromTemplate(VATSCreateDAT_011db0d4->m_pTiles[19],
                                                                          "template_compass_icon_marker", 0);
         }
         qoPB = VATSCreateFUN_007f4890(VATSCreateFUN_00a09030(0x420), "EnemyHealth");
@@ -12020,7 +12020,7 @@ struct ClearMessagesList
     ClearMessagesList* FUN_00726070();
     void FUN_00470470();
 };
-void __cdecl FUN_00401030(void*);
+void __cdecl FormHeap_Free(void*);
 extern HUDMainMenu* HUDMainMenu_pme;
 struct HUDClearMessages : HUDMainMenu
 {
@@ -12035,7 +12035,7 @@ void HUDClearMessages::FUN_00775920()
     while (list && !list->FUN_008256d0())
     {
         void* message = *list->FUN_006815c0();
-        FUN_00401030(message);
+        FormHeap_Free(message);
         list = list->FUN_00726070();
     }
     ((ClearMessagesList*)m_kMessageList)->FUN_00470470();
@@ -12052,7 +12052,7 @@ struct VisibilityController
     static bool __cdecl FUN_004b71d0();
 };
 VisibilityController* __cdecl FUN_004b7210();
-int __cdecl FUN_00a01860(const char* text);
+int __cdecl TraitNameToID(const char* text);
 struct VisibilityTile;
 struct VisibilityChildren
 {
@@ -12081,7 +12081,7 @@ void __cdecl FUN_00719580(VisibilityTile* pTile)
     }
     if (!FUN_00408b20(pTile->FUN_00700300(), "xbox_button") || !FUN_00408b20(pTile->FUN_00700300(), "PCShortcutLabel"))
     {
-        pTile->FUN_00700320(FUN_00a01860("_360Controller"), FUN_004b7210()->FUN_004b71d0());
+        pTile->FUN_00700320(TraitNameToID("_360Controller"), FUN_004b7210()->FUN_004b71d0());
         pTile->FUN_00a074d0(4);
     }
 }

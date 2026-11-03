@@ -655,11 +655,11 @@ void FUN_00824570_shell::DispelMatchingActiveEffects(unsigned int formID, unsign
 
 struct FUN_008248e0_shell : public MagicTarget
 {
-    void FUN_008248e0(MagicItem* apItem, bool abImmediate);
+    void StopEffect(MagicItem* apItem, bool abImmediate);
 };
 
 // @fnv 0x008248e0
-void FUN_008248e0_shell::FUN_008248e0(MagicItem* apItem, bool abImmediate)
+void FUN_008248e0_shell::StopEffect(MagicItem* apItem, bool abImmediate)
 {
     if (!apItem)
         return;

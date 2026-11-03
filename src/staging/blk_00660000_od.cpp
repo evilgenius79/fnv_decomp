@@ -1197,7 +1197,7 @@ struct FUN_006665c0_Entry
     FUN_006665c0_Item* m_item;
 };
 
-void __cdecl FUN_00401030(void* p);
+void __cdecl FormHeap_Free(void* p);
 void __cdecl FUN_0044e360(void* p);
 
 struct FUN_006665c0_cls
@@ -1225,7 +1225,7 @@ void FUN_006665c0_cls::FUN_006665c0()
             (void)((pItemCopy != 0) ? pItemCopy->Dispose(1) : 0);
         }
         pEntries = m_08;
-        FUN_00401030(pEntries);
+        FormHeap_Free(pEntries);
     }
     FUN_0044e360(m_04);
 }
@@ -1706,7 +1706,7 @@ class TESForm
 class Actor : public TESForm
 {
 };
-TESForm* __cdecl FUN_004839c0(void* p);
+TESForm* __cdecl LookupFormByID(void* p);
 struct E640Item
 {
     void __thiscall ResolveActorFormId();
@@ -1719,7 +1719,7 @@ struct E640Cls : DetClassCls
 // @fnv 0x0066e640
 void E640Cls::FUN_0066e640(SaveBufCls* buffer)
 {
-    m_00 = m_00 ? dynamic_cast<Actor*>(FUN_004839c0(m_00)) : 0;
+    m_00 = m_00 ? dynamic_cast<Actor*>(LookupFormByID(m_00)) : 0;
     SaveNodeCls* n = m_04;
     while (n)
     {
@@ -1844,7 +1844,7 @@ void DetClassExtended::ClearAndReset()
     while (m_04 && !reinterpret_cast<SaveNodeExtended*>(m_04)->FUN_008256d0())
     {
         SaveItemCls* item = *m_04->FUN_006815c0();
-        FUN_00401030(item);
+        FormHeap_Free(item);
         reinterpret_cast<SaveNodeExtended*>(m_04)->FUN_0063f7b0();
     }
 

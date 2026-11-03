@@ -200,7 +200,7 @@ struct FUN_0080b6f0_owner
 {
     EffectSource* FUN_0059bb30();
     EffectSource* FUN_0045cd60();
-    void FUN_00804210(int);
+    void Remove(int);
 };
 class EffectHost
 {
@@ -412,7 +412,7 @@ void FUN_0080b6f0_cls::FUN_0080b6f0(int)
     if (a != 0 && b != 0)
     {
         if (a->v22c(0) || a->v2e8())
-            ((FUN_0080b6f0_owner*)this)->FUN_00804210(0);
+            ((FUN_0080b6f0_owner*)this)->Remove(0);
         else
             FUN_0080b8f0(a, b);
     }

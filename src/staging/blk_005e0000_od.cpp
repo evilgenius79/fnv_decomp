@@ -4765,7 +4765,7 @@ struct Vt130
 struct A8 : Vt130
 {
     bool FUN_004013e0();
-    SLoc* FUN_005abf60();
+    SLoc* CreateEventList();
     Clist* FUN_00500940();
     void FUN_005e1140(float value);
 };
@@ -4840,7 +4840,7 @@ bool Runner::RunScript(A8* apScript, void* apObject, SLoc* a3, int a4, bool a5, 
     }
     else
     {
-        vg = apScript->FUN_005abf60();
+        vg = apScript->CreateEventList();
         this->m8 = vg;
     }
 

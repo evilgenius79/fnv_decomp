@@ -8508,7 +8508,7 @@ struct VoiceResponse
 };
 struct VoiceInfo
 {
-    void FUN_0061f170(int, void*);
+    void RunResultScript(int, void*);
     void FUN_0061f150();
 };
 struct VoiceItem
@@ -8709,7 +8709,7 @@ SoundPlaybackHandle VoiceHost::PlayVoiceTopic(VoiceTopic* topic, void* listener,
         FUN_0057ace0(pInfo);
         if (pInfo)
         {
-            pInfo->FUN_0061f170(0, this);
+            pInfo->RunResultScript(0, this);
             pInfo->FUN_0061f150();
         }
         time->FUN_0083c7b0();
@@ -9432,7 +9432,7 @@ struct WorkerSaveLoad
 extern WorkerSaveLoad* DAT_011de45c;
 struct WorkerSpinLock
 {
-    void FUN_0040fbf0(const char*);
+    void Lock(const char*);
     void Unlock();
 };
 extern WorkerSpinLock DAT_011f11a0;
@@ -9468,7 +9468,7 @@ void WorkerMobile::FUN_00932750(unsigned int flags)
     if (DAT_011de45c->FUN_0055f5b0() && DAT_011de45c->FUN_0047c850() && m_pBaseProcess &&
         (FUN_00440da0() || FUN_00440d80()))
     {
-        DAT_011f11a0.FUN_0040fbf0(0);
+        DAT_011f11a0.Lock(0);
         ((WorkerDeleteQueue*)&DAT_011e0e80)->FUN_0096d470(this, FUN_00931850());
         delete m_pBaseProcess;
         m_pBaseProcess = 0;
@@ -11003,7 +11003,7 @@ struct GlobalObject_0041a250
     GlobalObject_0041a250();
     ~GlobalObject_0041a250();
     void FUN_00418900(const GlobalObject_0041a250&);
-    bool FUN_00ad8830(bool);
+    bool Play(bool);
     void* FUN_00559450(void*, unsigned);
 };
 struct Audio
@@ -11304,7 +11304,7 @@ void Obj::FUN_009339a0(float delta, Obj* target, bool skip)
             {
                 int progressA = FUN_005e3fa0();
                 _other.FUN_00418900(FUN_00453a70()->FUN_00ad73b0(id2, 0x105));
-                _other.FUN_00ad8830(false);
+                _other.Play(false);
             }
             else
             {
@@ -12830,8 +12830,8 @@ struct SoundRef
     SoundRef& FUN_00418900(const SoundRef&);
     unsigned int FUN_00559450();
     void FUN_00ad8be0(float, float);
-    bool FUN_00ad8b60(float, float, float);
-    void FUN_00ad8f20(void*);
+    bool SetPos(float, float, float);
+    void SetNiNode(void*);
     bool SetStaticAttenuation(int);
     void FUN_00ad8870(int, int);
     int FUN_00ad8b30();
@@ -13731,8 +13731,8 @@ float ActorObject::FUN_009344d0(const char* apSoundName, SoundRef* apSoundRef, u
             {
                 Point pos = *v125();
                 apSoundRef->FUN_00ad8be0(FUN_005790b0(), FUN_005790d0());
-                apSoundRef->FUN_00ad8b60(pos.x, pos.y, pos.z);
-                apSoundRef->FUN_00ad8f20(v116());
+                apSoundRef->SetPos(pos.x, pos.y, pos.z);
+                apSoundRef->SetNiNode(v116());
             }
             else
                 apSoundRef->SetStaticAttenuation((int)(*g_011e060c.FUN_00403e20() * DAT_01017a40));

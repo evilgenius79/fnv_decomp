@@ -931,7 +931,7 @@ class TESObjectREFR : public TESForm
 {
   public:
 };
-TESForm* __cdecl FUN_004839c0(unsigned int auiFormId);
+TESForm* __cdecl LookupFormByID(unsigned int auiFormId);
 
 struct FogSoundHandle
 {
@@ -1163,7 +1163,7 @@ void FogProjectileLoad::LoadProjectile(int a1, int a2)
             unsigned int uiFormID_2 = (unsigned int)pkNode->m_pkForm;
             unsigned char ucIndexZ = (unsigned char)pkNode->m_iValue;
             if (uiFormID_2)
-                pkNode->m_pkForm = dynamic_cast<TESObjectREFR*>(FUN_004839c0(uiFormID_2));
+                pkNode->m_pkForm = dynamic_cast<TESObjectREFR*>(LookupFormByID(uiFormID_2));
             if (FUN_00810fd0())
                 pkNode->m_iValue = FUN_00810fd0()->kList.FUN_00406ee0(ucIndexZ);
             pkNode = pkNode->m_pkNext;

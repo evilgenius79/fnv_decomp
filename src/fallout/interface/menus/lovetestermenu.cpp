@@ -970,7 +970,7 @@ struct GlobalObject_0041a250
     GlobalObject_0041a250();
     ~GlobalObject_0041a250();
     void FUN_copy(const void*);
-    bool FUN_00ad8830(bool);
+    bool Play(bool);
 };
 struct SH_00418890
 {
@@ -987,7 +987,7 @@ struct Audio
 };
 struct FUN_00ad8830_shell
 {
-    bool FUN_00ad8830(bool);
+    bool Play(bool);
 };
 struct Menu
 {
@@ -1012,7 +1012,7 @@ void FUN_007958e0()
             GlobalObject_0041a250 sound;
             ((SH_00418890*)&sound)
                 ->FUN_copy(&((Audio*)BSAudio::GetSingleton())->FUN_00ad7550("OBJBookSpecialNumberDown", 0x121));
-            ((FUN_00ad8830_shell*)&sound)->FUN_00ad8830(false);
+            ((FUN_00ad8830_shell*)&sound)->Play(false);
         }
         ((PlayerOps*)g_thePlayer)->FUN_0093a7c0(index, FUN_00647b70(value - 1, 1));
     }
@@ -1779,7 +1779,7 @@ struct GlobalObject_0041a250
     GlobalObject_0041a250();
     ~GlobalObject_0041a250();
     void FUN_00418900(const void*);
-    bool FUN_00ad8830(bool);
+    bool Play(bool);
 };
 struct BSAudioS_
 {
@@ -1834,7 +1834,7 @@ bool Menu170::StepPosition(bool increase)
             changed = true;
             GlobalObject_0041a250 sound;
             sound.FUN_00418900(&BSAudioS_::GetSingleton()->GetSoundHandleByEditorID("OBJBookSpecialPageTurn", 0x121));
-            sound.FUN_00ad8830(false);
+            sound.Play(false);
         }
         else
         {
@@ -1859,7 +1859,7 @@ bool Menu170::StepPosition(bool increase)
             changed = true;
             GlobalObject_0041a250 sound;
             sound.FUN_00418900(&BSAudioS_::GetSingleton()->GetSoundHandleByEditorID("OBJBookSpecialPageTurn", 0x121));
-            sound.FUN_00ad8830(false);
+            sound.Play(false);
         }
         else
         {
@@ -1978,7 +1978,7 @@ struct WorkerSound
     WorkerSound();
     ~WorkerSound();
     WorkerSound& operator=(const WorkerSound&);
-    bool FUN_00ad8830(bool);
+    bool Play(bool);
 };
 extern const char DAT_010747ac[];
 struct WorkerAudio
@@ -2004,7 +2004,7 @@ void FUN_00795a00(WorkerButton* button)
         {
             WorkerSound sound;
             sound = FUN_00453a70()->GetSoundHandleByEditorID(DAT_010747ac, 0x121);
-            sound.FUN_00ad8830(false);
+            sound.Play(false);
         }
         if (FUN_00794d80(DAT_011da2c8) < ((WorkerMenu*)DAT_011da2c8)->available)
             ((WorkerActor*)g_thePlayer)->FUN_0093a7c0(index, MinInt(value + 1, 10));
@@ -2056,7 +2056,7 @@ struct GlobalObject_0041a250
     GlobalObject_0041a250();
     ~GlobalObject_0041a250();
     void FUN_00418900(const GlobalObject_0041a250&);
-    bool FUN_00ad8830(bool);
+    bool Play(bool);
 };
 struct Audio_7caa80
 {
@@ -2099,7 +2099,7 @@ void __cdecl PlaySpecialBookSoundAndSetStat(Button_7caa80* button)
         {
             GlobalObject_0041a250 sound;
             sound.FUN_00418900(FUN_00453a70()->FUN_00ad7550("OBJBookSpecialNumber", 0x121));
-            sound.FUN_00ad8830(false);
+            sound.Play(false);
         }
         if (FUN_00794d80(DAT_011daa38) < DAT_011daa38->m_iEntryCount)
         {
@@ -2314,7 +2314,7 @@ struct Light109 : Scene109
 };
 struct Loader109
 {
-    Scene109* FUN_00447080(const char*, int, int, int, int, int);
+    Scene109* LoadModel(const char*, int, int, int, int, int);
 };
 extern Loader109* DAT_011c3b3c;
 void __cdecl FUN_004b7660(Scene109*);
@@ -2470,10 +2470,10 @@ struct Menu109
 // @fnv 0x007928e0
 void Menu109::Init()
 {
-    ((Menu109*)DAT_011da2c8)->front = DAT_011c3b3c->FUN_00447080(
+    ((Menu109*)DAT_011da2c8)->front = DAT_011c3b3c->LoadModel(
         "Meshes\\architecture\\Goodsprings\\NV_VitoMaticVigorTester_Activate.NIF", 0, 1, 0, 0, 0);
     FUN_004b7660(((Menu109*)DAT_011da2c8)->front);
-    ((Menu109*)DAT_011da2c8)->cabinet = DAT_011c3b3c->FUN_00447080(
+    ((Menu109*)DAT_011da2c8)->cabinet = DAT_011c3b3c->LoadModel(
         "Meshes\\architecture\\Goodsprings\\NV_VitoMaticVigorTester_Cabinet.NIF", 0, 1, 0, 0, 0);
     FUN_004b7660(((Menu109*)DAT_011da2c8)->cabinet);
     Matrix109 rotation5, turn1;

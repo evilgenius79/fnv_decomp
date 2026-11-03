@@ -1882,7 +1882,7 @@ FUN_0082f6c0::~FUN_0082f6c0()
 
 extern unsigned int DAT_011dd1f4;
 
-void __cdecl FUN_00401030(unsigned int p);
+void __cdecl FormHeap_Free(unsigned int p);
 
 struct FUN_0082f9c0_obj
 {
@@ -1905,7 +1905,7 @@ void __cdecl FUN_0082f9c0()
         }
         else
         {
-            FUN_00401030(c7 - 4);
+            FormHeap_Free(c7 - 4);
             r_2 = 0;
         }
         s = r_2;
@@ -1941,10 +1941,10 @@ struct SndXShell
     void __thiscall FUN_00ad89e0(float v);
     void __thiscall FUN_00ad88f0();
     void __thiscall FUN_00418900(const AudioPlaybackHandle& src);
-    void __thiscall FUN_00ad8f20(void* obj);
+    void __thiscall SetNiNode(void* obj);
     void __thiscall FUN_00ad9030(unsigned int v);
-    bool __thiscall FUN_00ad8b60(float x, float y, float z);
-    bool __thiscall FUN_00ad8830(bool v);
+    bool __thiscall SetPos(float x, float y, float z);
+    bool __thiscall Play(bool v);
     void __thiscall FUN_00ad8be0(float a, float b);
 };
 struct Entry
@@ -2408,37 +2408,37 @@ void __cdecl PlayWeaponSound(Weap* apWeapon, VObj1d0* apSource, ListObj* apListO
                 }
                 if (!a3 && apListObj != 0)
                 {
-                    ((SndXShell*)&aentry140->ch0)->FUN_00ad8f20(apListObj);
-                    ((SndXShell*)&aentry140->ch1)->FUN_00ad8f20(apListObj);
+                    ((SndXShell*)&aentry140->ch0)->SetNiNode(apListObj);
+                    ((SndXShell*)&aentry140->ch1)->SetNiNode(apListObj);
                 }
                 else if (apSource->VCall1d0() != 0)
                 {
                     if (!(a3 && kb52))
                     {
-                        ((SndXShell*)&aentry140->ch0)->FUN_00ad8f20(apSource->VCall1d0());
-                        ((SndXShell*)&aentry140->ch1)->FUN_00ad8f20(apSource->VCall1d0());
+                        ((SndXShell*)&aentry140->ch0)->SetNiNode(apSource->VCall1d0());
+                        ((SndXShell*)&aentry140->ch1)->SetNiNode(apSource->VCall1d0());
                     }
                 }
                 if (sndA != 0)
                 {
                     ((SndXShell*)&aentry140->ch0)->FUN_00ad9030(1);
-                    ((SndXShell*)&aentry140->ch0)->FUN_00ad8b60(jvec.x, jvec.y, jvec.z);
+                    ((SndXShell*)&aentry140->ch0)->SetPos(jvec.x, jvec.y, jvec.z);
                     ((SndXShell*)&aentry140->ch0)->FUN_00ad89e0(cf38);
-                    ((SndXShell*)&aentry140->ch0)->FUN_00ad8830(false);
+                    ((SndXShell*)&aentry140->ch0)->Play(false);
                 }
                 if (sndB != 0)
                 {
                     ((SndXShell*)&aentry140->ch1)->FUN_00ad9030(1);
-                    ((SndXShell*)&aentry140->ch1)->FUN_00ad8b60(jvec.x, jvec.y, jvec.z);
+                    ((SndXShell*)&aentry140->ch1)->SetPos(jvec.x, jvec.y, jvec.z);
                     ((SndXShell*)&aentry140->ch1)->FUN_00ad89e0(if68);
-                    ((SndXShell*)&aentry140->ch1)->FUN_00ad8830(false);
+                    ((SndXShell*)&aentry140->ch1)->Play(false);
                 }
                 if (!ib15)
                 {
                     ((SndXShell*)&aentry140->ch0)->FUN_00ad8be0((float)gb31 * 5.0, (float)cg59 * yf50 * 100.0);
                     ((SndXShell*)&aentry140->ch1)->FUN_00ad8be0((float)gb31 * 5.0, (float)cg59 * yf50 * 100.0);
-                    ((SndXShell*)&aentry140->ch0)->FUN_00ad8b60(jvec.x, jvec.y, jvec.z);
-                    ((SndXShell*)&aentry140->ch1)->FUN_00ad8b60(jvec.x, jvec.y, jvec.z);
+                    ((SndXShell*)&aentry140->ch0)->SetPos(jvec.x, jvec.y, jvec.z);
+                    ((SndXShell*)&aentry140->ch1)->SetPos(jvec.x, jvec.y, jvec.z);
                 }
             }
         }

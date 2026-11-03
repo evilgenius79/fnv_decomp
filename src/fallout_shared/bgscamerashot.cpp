@@ -505,7 +505,7 @@ struct NodePtrObj
 };
 struct ModelLoader
 {
-    int FUN_00447080(const char*, int, int, int, int, int);
+    int LoadModel(const char*, int, int, int, int, int);
     int FUN_0045a5e0(const char*);
 };
 extern ModelLoader* g_modelLoader;
@@ -609,7 +609,7 @@ struct BSSoundHandleEx
     int m_04;
     int m_08;
     ~BSSoundHandleEx();
-    bool FUN_00ad8830(bool);
+    bool Play(bool);
 };
 struct BSAudio
 {
@@ -685,7 +685,7 @@ void ShotThis::SetupCamera(void* param1, int iMode)
     void* myFoundPtr;
     if (model.FUN_0048cee0())
     {
-        m_spPositionNode.FUN_0066b0d0((void*)g_modelLoader->FUN_00447080(model.vfn_14(), 0, 1, 1, 0, 0));
+        m_spPositionNode.FUN_0066b0d0((void*)g_modelLoader->LoadModel(model.vfn_14(), 0, 1, 1, 0, 0));
     }
     myFoundPtr = m_spPositionNode.FUN_00559450()
                      ? FUN_00653270(&DAT_011f4a18, (void*)m_spPositionNode.FUN_00559450()->FUN_0045bc00(0))
@@ -792,7 +792,7 @@ void ShotThis::SetupCamera(void* param1, int iMode)
         {
             DAT_011ca729 = 1;
             BSSoundHandleEx camIn2 = BSAudio::FUN_00453a70()->FUN_00ad7550("UIVATSCameraIn", 0x121);
-            camIn2.FUN_00ad8830(false);
+            camIn2.Play(false);
         }
     }
     else
@@ -801,7 +801,7 @@ void ShotThis::SetupCamera(void* param1, int iMode)
         {
             DAT_011ca729 = 0;
             BSSoundHandleEx bannerOutPtr = BSAudio::FUN_00453a70()->FUN_00ad7550("UIVATSCameraOut", 0x121);
-            bannerOutPtr.FUN_00ad8830(false);
+            bannerOutPtr.Play(false);
         }
     }
     DAT_011dea3c->SyncHolderValue();
@@ -1020,7 +1020,7 @@ struct GObj
     virtual void w137();
     virtual void w138();
     virtual bool Check22c(int);
-    void FUN_00950110(int);
+    void ToggleFirstPerson(int);
     void FUN_0094a0c0(NiPoint3*, NiPoint3*, int);
 };
 class LenShell;
@@ -1130,7 +1130,7 @@ void Shot::UpdateCamera(float afTime)
     DAT_011ca77c = m6c.FUN_00559450()->FUN_0043c490();
     NiPoint3 pt = DAT_011ca77c;
     if (c75 && !reinterpret_cast<GObj*>(DAT_011dea3c)->Check22c(0))
-        reinterpret_cast<GObj*>(DAT_011dea3c)->FUN_00950110(1);
+        reinterpret_cast<GObj*>(DAT_011dea3c)->ToggleFirstPerson(1);
     else
     {
         if (IsFlagSet())
@@ -1181,7 +1181,7 @@ void Shot::UpdateCamera(float afTime)
                     if (bReset && !DAT_011ca729)
                     {
                         BSSoundHandleEx snd = BSAudio::FUN_00453a70()->FUN_00ad7550("UIVATSCameraIn", 0x121);
-                        snd.FUN_00ad8830(false);
+                        snd.Play(false);
                     }
                     DAT_011ca730 = (1.0f / DAT_011ca734) * (afTime - DAT_011ca72c);
                     if (DAT_011ca730 >= 1.0)

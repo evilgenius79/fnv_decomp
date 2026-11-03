@@ -2430,7 +2430,7 @@ struct SaveLoadDispatcher
 {
     int state00, state04, state08, state0c;
     ReconstructEntry* helper10;
-    bool FUN_00853130(int, ReconstructEntry**);
+    bool GetAt(int, ReconstructEntry**);
     void FUN_00844700(int, ReconstructEntry*);
     void ReconstructFormEntry(int, int, int, FormWithSaveCheck*, int, int);
 };
@@ -2452,7 +2452,7 @@ void SaveLoadDispatcher::ReconstructFormEntry(int value, int formID, int context
     {
         handle3 = GetCellCoordKey(formID, context);
         entry7 = 0;
-        if (!FUN_00853130(handle3, &entry7))
+        if (!GetAt(handle3, &entry7))
         {
             entry7 = (ReconstructEntry*)new ReconstructedCellStorage;
             FUN_00844700(handle3, entry7);
@@ -2671,7 +2671,7 @@ struct RegManager
 
     void EnsureObjectAndCall(void* apCell, int aiX, int aiY, RegRef* apRef, int aiUnk, int aiArg);
     void ProcessCell(void* apCell, RegRef* apRef, int aiUnk, int aiArg);
-    bool FUN_00853130(int aiKey, RegList** appList);
+    bool GetAt(int aiKey, RegList** appList);
     void FUN_00844700(int aiKey, RegList* apList);
     void FUN_00842310(RegRef* apRef, int aiArg);
 };
@@ -2722,7 +2722,7 @@ void RegManager::FUN_00842310(RegRef* apRef, int aiArg)
     {
         int iKey8 = g_aRegFormTypes[apRef->GetFormType()].iKey;
         RegList* pList5 = 0;
-        if (!FUN_00853130(iKey8, &pList5))
+        if (!GetAt(iKey8, &pList5))
         {
             pList5 = new RegList;
             FUN_00844700(iKey8, pList5);
@@ -3232,7 +3232,7 @@ struct RebuildFile
     bool FUN_00471ca0();
 
     unsigned int FUN_004726b0();
-    void FUN_00472890(void*, unsigned int);
+    void GetChunkData(void*, unsigned int);
     bool FUN_00401680();
     bool FUN_004726f0();
     void SkipCurrentForm();
@@ -3244,7 +3244,7 @@ struct RebuildFile
 struct RebuildMap
 {
 
-    bool FUN_00853130(unsigned int, RebuildMap**);
+    bool GetAt(unsigned int, RebuildMap**);
 
     bool HasFlagInAnyFile(int);
     bool FUN_00452420(unsigned int);
@@ -3290,7 +3290,7 @@ void ResolveFormID(unsigned int*, RebuildFile*);
 
 unsigned int PackShortPair(unsigned short, unsigned short);
 
-RebuildForm* FUN_004839c0(unsigned int);
+RebuildForm* LookupFormByID(unsigned int);
 
 void* FUN_00403d30(void*, int, unsigned int);
 
@@ -3411,7 +3411,7 @@ void RebuildRoot::RebuildForms(RebuildFile* file, RebuildOutput* output)
 
                     ResolveFormID(&id, file);
 
-                    if (worlds->FUN_00853130(id, &world8))
+                    if (worlds->GetAt(id, &world8))
                     {
 
                         if (cached && world8->HasFlagInAnyFile(5))
@@ -3431,7 +3431,7 @@ void RebuildRoot::RebuildForms(RebuildFile* file, RebuildOutput* output)
                 case 2:
                 case 4:
 
-                    if (world8->FUN_00853130(pData7->label, &block3))
+                    if (world8->GetAt(pData7->label, &block3))
                         file->FUN_00472150(true);
 
                     else
@@ -3445,7 +3445,7 @@ void RebuildRoot::RebuildForms(RebuildFile* file, RebuildOutput* output)
                 case 3:
                 case 5:
 
-                    if (block3->FUN_00853130(pData7->label, &subBlock))
+                    if (block3->GetAt(pData7->label, &subBlock))
                         file->FUN_00472150(true);
 
                     else
@@ -3509,7 +3509,7 @@ void RebuildRoot::RebuildForms(RebuildFile* file, RebuildOutput* output)
             else
             {
 
-                if (FUN_00853130(pData7->label, &recordC))
+                if (GetAt(pData7->label, &recordC))
                     file->FUN_00472150(true);
 
                 else
@@ -3548,7 +3548,7 @@ void RebuildRoot::RebuildForms(RebuildFile* file, RebuildOutput* output)
                         if (type3 == 0x434c4358)
                         {
 
-                            file->FUN_00472890(&coords9, 12);
+                            file->GetChunkData(&coords9, 12);
 
                             if (file->FUN_00401680())
                                 coords9.FUN_00462230();
@@ -3565,7 +3565,7 @@ void RebuildRoot::RebuildForms(RebuildFile* file, RebuildOutput* output)
 
                 DAT_011c3f30 = 0;
 
-                if (subBlock->FUN_00853130(key, &recordC))
+                if (subBlock->GetAt(key, &recordC))
                 {
 
                     if (recordC->FUN_00452420(1))
@@ -3575,7 +3575,7 @@ void RebuildRoot::RebuildForms(RebuildFile* file, RebuildOutput* output)
 
                         file->FUN_00472150(true);
 
-                        RebuildForm* form = FUN_004839c0(formId4);
+                        RebuildForm* form = LookupFormByID(formId4);
 
                         if (form)
                         {
@@ -3641,14 +3641,14 @@ void RebuildRoot::RebuildForms(RebuildFile* file, RebuildOutput* output)
             {
 
                 if (formId4 && (!DAT_011c3f30 || DAT_011c3f30->FUN_0084e3a0() != formId4))
-                    DAT_011c3f30 = FUN_004839c0(formId4);
+                    DAT_011c3f30 = LookupFormByID(formId4);
 
                 DAT_011c3f2c->FUN_00467bd0(file, 0, item.form, true);
 
                 file->FUN_00472150(true);
 
                 if (!item.form)
-                    item.form = FUN_004839c0(id);
+                    item.form = LookupFormByID(id);
 
                 if (item.form)
                     output->FUN_00843270(&item);
@@ -3708,7 +3708,7 @@ void RebuildRoot::RebuildForms(RebuildFile* file, RebuildOutput* output)
 
                 idA = key17;
 
-                worlds->FUN_00853130(idA, &world8);
+                worlds->GetAt(idA, &world8);
             }
             else
             {
@@ -3842,7 +3842,7 @@ struct FUN_00842600_shell : public FUN_00842180
 };
 struct FUN_00843750_shell : public BGSReconstructFormsInAllFilesMap
 {
-    bool FUN_00853130(TESFile* apFile, FUN_00842180*& rpMap) const;
+    bool GetAt(TESFile* apFile, FUN_00842180*& rpMap) const;
     void FUN_00844700(TESFile* apFile, FUN_00842180* apMap);
     void FUN_00843750(FUN_00843750_Form* apRef, unsigned int auiArg1, unsigned int auiArg2);
 };
@@ -3864,7 +3864,7 @@ void FUN_00843750_shell::FUN_00843750(FUN_00843750_Form* apRef, unsigned int aui
         return;
     }
     FUN_00842180* pFileMap = 0;
-    if (!FUN_00853130(pFile, pFileMap))
+    if (!GetAt(pFile, pFileMap))
     {
         pFileMap = new FUN_00842180;
         FUN_00844700(pFile, pFileMap);

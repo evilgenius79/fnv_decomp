@@ -1995,7 +1995,7 @@ bool FUN_00481f30(unsigned char);
 struct FUN_005512f0_shell
 {
     void FUN_00541ac0();
-    void FUN_00541ae0();
+    void CellRefLockLeave();
     ItemList* FUN_009604f0();
     void FUN_005512f0(ItemRef*);
 };
@@ -2033,7 +2033,7 @@ void FUN_005512f0_shell::FUN_005512f0(ItemRef* dest)
             }
             list = list->FUN_00726070();
         }
-        FUN_00541ae0();
+        CellRefLockLeave();
     }
 }
 
@@ -2649,7 +2649,7 @@ struct CellQ
 {
     void FUN_00541ac0();
     LstQ* FUN_009604f0();
-    void FUN_00541ae0();
+    void CellRefLockLeave();
     void FUN_005570d0();
 };
 // For each list entry with FUN_005651e0 false, FUN_00401170 equal to 0x25 and a Get3DQ() object, calls that object's GetHandlerQ()->Handle(obj).
@@ -2668,7 +2668,7 @@ void CellQ::FUN_005570d0()
         }
         pIter = pIter->FUN_00726070();
     }
-    FUN_00541ae0();
+    CellRefLockLeave();
 }
 
 class MapBase559F90

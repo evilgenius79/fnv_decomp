@@ -1651,7 +1651,7 @@ void __thiscall FUN_00d219e0_cls::SetLists(FUN_00d219e0_node* pFirstList, FUN_00
 
 extern int DAT_0101e594;
 struct VtblStub_0101e594 { void* m_ppVirtualMethodTable; };
-extern "C" void __cdecl FUN_00401030(VtblStub_0101e594*);
+extern "C" void __cdecl FormHeap_Free(VtblStub_0101e594*);
 struct FUN_00d26210
 {
     void* m_ppVirtualMethodTable;
@@ -1662,7 +1662,7 @@ FUN_00d26210::FUN_00d26210(char construct)
 {
     m_ppVirtualMethodTable = &DAT_0101e594;
     if (construct & 1)
-        FUN_00401030((VtblStub_0101e594*)this);
+        FormHeap_Free((VtblStub_0101e594*)this);
 }
 
 struct PairEntry

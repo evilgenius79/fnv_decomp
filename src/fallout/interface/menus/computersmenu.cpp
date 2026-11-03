@@ -860,7 +860,7 @@ struct ParamShell
     bool __thiscall IsTraitNonZero(int a1);
 };
 
-char const* __cdecl FUN_00a00940(char const* a1, int a2);
+char const* __cdecl TraitNameToIDAdd(char const* a1, int a2);
 
 class SetTileHelper
 {
@@ -876,7 +876,7 @@ bool SetTileHelper::FUN_0075a610(Tile* apTile)
 {
     if (((Shell*)this)->IsTileTraitEnabled() &&
         (apTile == 0 || (((Shell*)this)->ContainsKey(apTile) &&
-                         ((ParamShell*)apTile)->IsTraitNonZero((int)FUN_00a00940("_enabled", -1)))))
+                         ((ParamShell*)apTile)->IsTraitNonZero((int)TraitNameToIDAdd("_enabled", -1)))))
     {
         m_pTile10 = apTile;
         ((Shell*)this)->UpdateHighlight();
@@ -1721,7 +1721,7 @@ struct FUN_00483710
     int unkValue;
 
     ~FUN_00483710();
-    bool FUN_00ad8830(bool abFlag);
+    bool Play(bool abFlag);
 };
 
 struct FUN_00ad73b0_t
@@ -1739,7 +1739,7 @@ void Shell_759030::PlayNoteSound(BGSNote* apNote)
 {
     ((FUN_00ad73b0_t*)BSAudio::GetSingleton())
         ->FUN_00ad73b0(apNote->FUN_005e9100()->GetFormID(), 0x101)
-        .FUN_00ad8830(false);
+        .Play(false);
 }
 
 struct Setting
@@ -1933,7 +1933,7 @@ struct TextSound
     int flags;
     ~TextSound();
     void FUN_00ad8870();
-    void FUN_00ad8830(bool);
+    void Play(bool);
 };
 struct TextAudioManager
 {
@@ -2010,7 +2010,7 @@ void TextQueue::ProcessQueue()
             if (!reinterpret_cast<QueueMenu*>(DAT_011d9334)->mode)
             {
                 if (removed && *removed->FUN_00458b50() == *DAT_01072118)
-                    reinterpret_cast<QueueMenu*>(DAT_011d9334)->promptSound.FUN_00ad8830(false);
+                    reinterpret_cast<QueueMenu*>(DAT_011d9334)->promptSound.Play(false);
                 DAT_011d93d4 = gm_GetTickCount() + 500;
             }
             else if (removed && removed->FUN_007001f0() == reinterpret_cast<QueueMenu*>(DAT_011d9334)->activeTile)
@@ -2047,7 +2047,7 @@ void TextQueue::ProcessQueue()
                         else
                         {
                             (*FUN_0073ac90())->FUN_006ffea0();
-                            reinterpret_cast<QueueMenu*>(DAT_011d9334)->advanceSound.FUN_00ad8830(false);
+                            reinterpret_cast<QueueMenu*>(DAT_011d9334)->advanceSound.Play(false);
                         }
                         x = 0;
                         y = 0;
@@ -2069,11 +2069,11 @@ void TextQueue::ProcessQueue()
                             reinterpret_cast<QueueMenu*>(DAT_011d9334)
                                 ->positionTile->FUN_00a012d0(
                                     0xfa1,
-                                    x + tile->FUN_00a011b0(reinterpret_cast<int>(FUN_00a00940("_text_width", -1))),
+                                    x + tile->FUN_00a011b0(reinterpret_cast<int>(TraitNameToIDAdd("_text_width", -1))),
                                     true);
                             reinterpret_cast<QueueMenu*>(DAT_011d9334)
                                 ->positionTile->FUN_00a012d0(
-                                    0xfa2, y + tile->FUN_00a011b0(reinterpret_cast<int>(FUN_00a00940("_text_y", -1))),
+                                    0xfa2, y + tile->FUN_00a011b0(reinterpret_cast<int>(TraitNameToIDAdd("_text_y", -1))),
                                     true);
                         }
                         else if (!hasTrait)
@@ -2114,7 +2114,7 @@ struct LBTileValue
     void RemoveFromReactions();
     void FUN_00a09130(int aiOperator, LBTile* apTile, int aiID);
     void AppendFloatAction(int aiOperator, float afValue);
-    void FUN_00a09410(int aiFlag);
+    void Refresh(int aiFlag);
 };
 
 struct LBTileMenu
@@ -2201,7 +2201,7 @@ LBTile* LBListBox::AddItem(int aiObject, const char* apText, int(__cdecl* apSort
             pAction->RemoveFromReactions();
             pAction->FUN_00a09130(0x7d0, pTile, 0xfb0);
             pAction->AppendFloatAction(0x7d3, pParentTile->GetFloat(TraitNameToID("_number_of_visible_items", -1)));
-            pAction->FUN_00a09410(0);
+            pAction->Refresh(0);
         }
         return pTile;
     }
@@ -2234,7 +2234,7 @@ struct AnimationTile
     void Set(int trait, float value, bool propagate);
 };
 extern bool s_bAllowDetach;
-int __cdecl FUN_00a01860(const char* name);
+int __cdecl TraitNameToID(const char* name);
 struct AnimationList
 {
     int unk00;
@@ -2280,14 +2280,14 @@ void AnimationList::ClearEntries()
     count = 0;
     elapsed = 0.0f;
     if (tile)
-        tile->Set(FUN_00a01860("_num_filtered"), 0.0f, true);
+        tile->Set(TraitNameToID("_num_filtered"), 0.0f, true);
     UpdateScrollItems();
     currentTile = 0;
     UpdateHighlight();
 }
 
 float __cdecl FUN_004bd510(float, float);
-int __cdecl FUN_00a01860(const char*);
+int __cdecl TraitNameToID(const char*);
 
 struct MyTile : FUN_00a01230_shell
 {
@@ -2350,13 +2350,13 @@ MyTile* MyListBox::GetScrollTargetTile(int aiScrollCode)
     case 15:
         iTileIndex =
             m_tile0c ? (int)FUN_004bd510(
-                           -m_tile0c->FUN_00a011b0(0xfb0) / m_tile0c->FUN_00a011b0(FUN_00a01860("_scroll_delta")), 1.0f)
+                           -m_tile0c->FUN_00a011b0(0xfb0) / m_tile0c->FUN_00a011b0(TraitNameToID("_scroll_delta")), 1.0f)
                      : 0;
         break;
     case 16:
         iTileIndex =
             m_tile0c ? (int)FUN_004bd510(
-                           m_tile0c->FUN_00a011b0(0xfb0) / m_tile0c->FUN_00a011b0(FUN_00a01860("_scroll_delta")), 1.0f)
+                           m_tile0c->FUN_00a011b0(0xfb0) / m_tile0c->FUN_00a011b0(TraitNameToID("_scroll_delta")), 1.0f)
                      : 0;
         break;
     default:
@@ -2395,13 +2395,13 @@ MyTile* MyListBox::GetScrollTargetTile(int aiScrollCode)
                 }
             }
 
-            if (pFound_ && !pFound_->IsTraitNonZero((int)FUN_00a00940("_enabled", -1)))
+            if (pFound_ && !pFound_->IsTraitNonZero((int)TraitNameToIDAdd("_enabled", -1)))
             {
                 pFound_ = 0;
                 if (iTileIndex > 0 && ++curIdx > maxIdxTmp)
                 {
                     curIdx = maxIdxTmp - 1;
-                    while ((!pFound_ || !pFound_->IsTraitNonZero((int)FUN_00a00940("_enabled", -1))) && curIdx >= 0)
+                    while ((!pFound_ || !pFound_->IsTraitNonZero((int)TraitNameToIDAdd("_enabled", -1))) && curIdx >= 0)
                     {
                         pFound_ = FUN_0075a955(curIdx--, 0);
                     }
@@ -2410,7 +2410,7 @@ MyTile* MyListBox::GetScrollTargetTile(int aiScrollCode)
                 else if (iTileIndex < 0 && --curIdx < 0)
                 {
                     curIdx = 1;
-                    while ((!pFound_ || !pFound_->IsTraitNonZero((int)FUN_00a00940("_enabled", -1))) &&
+                    while ((!pFound_ || !pFound_->IsTraitNonZero((int)TraitNameToIDAdd("_enabled", -1))) &&
                            curIdx <= maxIdxTmp)
                     {
                         pFound_ = FUN_0075a955(curIdx++, 0);
@@ -2456,7 +2456,7 @@ struct ScrollData
 extern double DAT_01012060;
 float __cdecl FUN_004e4430(float afValue);
 int __cdecl FUN_00647b70(int aiMinimum, int aiValue);
-int __cdecl FUN_00a01860(const char* apText);
+int __cdecl TraitNameToID(const char* apText);
 
 // Computes the number of scroll items from the tile value and m_20, sets _scroll_delta on the tile and _number_of_items on the list.
 // @fnv 0x0075aef0
@@ -2483,13 +2483,13 @@ void FUN_0075aa50_cls::UpdateScrollItems()
             if (iNumberOfItems > 1)
             {
                 ((ScrollTileHelper*)((ScrollData*)this)->pTile0c)
-                    ->FUN_00a012d0(FUN_00a01860("_scroll_delta"), (m_20 - fTimeOffset) / (iNumberOfItems - 1), true);
+                    ->FUN_00a012d0(TraitNameToID("_scroll_delta"), (m_20 - fTimeOffset) / (iNumberOfItems - 1), true);
             }
         }
 
         if (((ScrollData*)this)->pTile14 != 0)
         {
-            ((ScrollData*)this)->pTile14->FUN_00700320(FUN_00a01860("_number_of_items"), iNumberOfItems);
+            ((ScrollData*)this)->pTile14->FUN_00700320(TraitNameToID("_number_of_items"), iNumberOfItems);
         }
     }
 }
@@ -2994,7 +2994,7 @@ struct HighlightTile;
 struct HighlightValue
 {
     void FUN_00a09130(int trait, HighlightTile* tile, int sourceTrait);
-    void FUN_00a09410(int mode);
+    void Refresh(int mode);
 };
 struct HighlightTile
 {
@@ -3018,8 +3018,8 @@ struct HighlightList
 // @fnv 0x0075abd0
 void HighlightList::UpdateHighlight()
 {
-    static const char* highlightY = FUN_00a00940("_highlight_y", -1);
-    static const char* selectedHeight = FUN_00a00940("_selected_height", -1);
+    static const char* highlightY = TraitNameToIDAdd("_highlight_y", -1);
+    static const char* selectedHeight = TraitNameToIDAdd("_selected_height", -1);
     if (root)
     {
         if (selected)
@@ -3027,9 +3027,9 @@ void HighlightList::UpdateHighlight()
             HighlightValue* heightValue = root->FUN_00a00f30(highlightY);
             HighlightValue* yValue = root->FUN_00a00f30(selectedHeight);
             heightValue->FUN_00a09130(2000, selected, 4002);
-            heightValue->FUN_00a09410(0);
+            heightValue->Refresh(0);
             yValue->FUN_00a09130(2000, selected, 4016);
-            yValue->FUN_00a09410(0);
+            yValue->Refresh(0);
             if (selected->GetSpeechChallengeFailure())
             {
                 HighlightTile* box = FUN_00a08b20(root, "lb_highlight_box");
@@ -3388,7 +3388,7 @@ struct SoundObj
     void* m_s0;
     void* m_s4;
     void* m_s8;
-    bool FUN_00ad8830(bool);
+    bool Play(bool);
 };
 struct Mgr
 {
@@ -3480,7 +3480,7 @@ void __thiscall HostF::FUN_00757f70(int aiTileIndex, TileF* apTile)
                 m_c1 = 1;
             }
         }
-        m_sound.FUN_00ad8830(false);
+        m_sound.Play(false);
     }
     else if (id == 13 && m_b0 < 2)
     {
@@ -3490,7 +3490,7 @@ void __thiscall HostF::FUN_00757f70(int aiTileIndex, TileF* apTile)
     {
         if (m_kNode.ContainsKey(apTile))
         {
-            m_sound.FUN_00ad8830(false);
+            m_sound.Play(false);
             obj = m_kNode.FindItemData(apTile);
             if (!obj)
             {

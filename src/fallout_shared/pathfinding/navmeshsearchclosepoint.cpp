@@ -2323,7 +2323,7 @@ class SettingT_GameSettingCollection_
 extern SettingT_GameSettingCollection_ DAT_011d6ef0;
 
 unsigned int __cdecl DialogueRandom();
-NMForm* __cdecl FUN_004839c0(unsigned int auiFormID);
+NMForm* __cdecl LookupFormByID(unsigned int auiFormID);
 
 struct FUN_006a8dc0_shell
 {
@@ -2366,7 +2366,7 @@ bool FUN_006a8dc0_shell::AddAdjacentNodes(NMNode* apNode, NMNodeArray* apNodes)
                 else
                 {
                     unsigned int auiFormId = *pMesh->FUN_00699af0(m_usTriangleIdentifier);
-                    NMForm* pPathNodeDoor = FUN_004839c0(auiFormId);
+                    NMForm* pPathNodeDoor = LookupFormByID(auiFormId);
                     if (pPathNodeDoor)
                     {
                         NMLock kLock(pPathNodeDoor);

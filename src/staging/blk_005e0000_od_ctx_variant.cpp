@@ -2374,7 +2374,7 @@ struct Vt130
 struct A8 : Vt130
 {
     bool FUN_004013e0();
-    SLoc* FUN_005abf60();
+    SLoc* CreateEventList();
     Clist* FUN_00500940();
     void FUN_005e1140(float value);
 };

@@ -296,7 +296,7 @@ struct FloatSetting
 extern FloatSetting g_setting_011d6ef0;
 
 struct TESForm;
-extern "C" TESForm* __cdecl FUN_004839c0(unsigned int auiFormId);
+extern "C" TESForm* __cdecl LookupFormByID(unsigned int auiFormId);
 
 struct DoorCheckSource
 {
@@ -360,7 +360,7 @@ bool HideSearch::ExpandNeighbors(NavSearchNodeInfo* pkInfo, NavSearchNodeList* p
                 else
                 {
                     unsigned int uiFormIDOut = *pMesh5->FUN_00699af0(usTriZ);
-                    TESForm* pForm2 = FUN_004839c0(uiFormIDOut);
+                    TESForm* pForm2 = LookupFormByID(uiFormIDOut);
                     if (pForm2)
                     {
                         DoorCheck kCheck_2(pForm2);

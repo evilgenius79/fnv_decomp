@@ -509,7 +509,7 @@ bool ActorValue::IsAIAttribute(Index index)
 
 // Returns the pointer stored at index aiIndex in the g_011d61c8 array if aiIndex is in [0, 0x4d), otherwise returns null.
 // @fnv 0x0066e920
-void* __cdecl FUN_0066e920(int aiIndex)
+void* __cdecl GetActorValueInfo(int aiIndex)
 {
     void* pinfo = 0;
     if (aiIndex >= 0 && aiIndex < 0x4d)
@@ -535,7 +535,7 @@ extern "C"
 }
 
 // @fnv 0x0066eac0
-const char* __cdecl FUN_0066eac0(ActorValue::Index index)
+const char* __cdecl GetActorValueName(ActorValue::Index index)
 {
     char* presult = 0;
     ActorValueInfo* pinfo = ActorValue::GetActorValueInfo(index);

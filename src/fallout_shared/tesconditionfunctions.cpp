@@ -266,7 +266,7 @@ bool __cdecl FUN_0059c430(TESObjectREFR* apRefObject, void* apParam1, void* apPa
     return true;
 }
 
-const char* __cdecl FUN_0066eac0(unsigned int);
+const char* __cdecl GetActorValueName(unsigned int);
 void __cdecl DebugLog(const char*, ...);
 
 struct ActorValueOwner_vtable
@@ -308,7 +308,7 @@ bool __cdecl FUN_0059c4f0(TESObjectREFR* reference, void* uiAvCode, void* pUnuse
         }
         if (tls_pad[0x268])
         {
-            DebugLog("GetActorValue: %s >> %0.2f", FUN_0066eac0(avCode), result);
+            DebugLog("GetActorValue: %s >> %0.2f", GetActorValueName(avCode), result);
         }
     }
     return true;
@@ -9153,7 +9153,7 @@ bool __cdecl FUN_0059c4c0(TESObjectREFR* reference, void* apUnused1, void* apUnu
 }
 
 extern int __tls_index;
-extern char const* __cdecl FUN_0066eac0(unsigned int);
+extern char const* __cdecl GetActorValueName(unsigned int);
 extern void __cdecl _DebugLog(char const*, ...);
 
 struct FUN_0059c5d0_RefInterface
@@ -9255,7 +9255,7 @@ bool __cdecl FUN_0059c5d0(TESObjectREFR* apRefObject, void* apParam1, void* apPa
                 ->GetBaseActorValue(iActorValueIndex);
 
         if (FUN_0059c5d0_TLSData.enabled)
-            _DebugLog("GetBaseActorValue: %s >> %0.2f", FUN_0066eac0(iActorValueIndex), afReturnValue);
+            _DebugLog("GetBaseActorValue: %s >> %0.2f", GetActorValueName(iActorValueIndex), afReturnValue);
     }
 
     return true;
@@ -17962,7 +17962,7 @@ class BaseV
     int unkFC;
     AVOwner kOwner;
 };
-const char* FUN_0066eac0(int);
+const char* GetActorValueName(int);
 class ActorV
 {
   public:
@@ -18093,7 +18093,7 @@ bool FUN_0059c680(ActorV* apActor, void* aiActorValue, void* apUnused, double& a
             afValue = pOwner->GetActorValue(eAV);
         }
         if (DAT_0126fd98.bDebug)
-            FUN_00703c00("GetActorValue: %s >> %0.2f", FUN_0066eac0(eAV), afValue);
+            FUN_00703c00("GetActorValue: %s >> %0.2f", GetActorValueName(eAV), afValue);
     }
     return true;
 }

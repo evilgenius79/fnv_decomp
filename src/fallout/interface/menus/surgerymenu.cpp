@@ -797,7 +797,7 @@ struct InterfaceX
 InterfaceX* GetInterfaceX();
 bool FUN_004b71d0();
 bool IsMenu(int);
-int FUN_00a01860(const char*);
+int TraitNameToID(const char*);
 int Button(int, int);
 float ScaleByConstant(float);
 float ScaleLimbWoundPercent(float);
@@ -934,12 +934,12 @@ void MenuX::FUN_007e23c0()
     char text[256];
     if (!IsMenu(0x41e))
     {
-        GetTile()->SetInt(FUN_00a01860("_IsTopMenu"), 0);
+        GetTile()->SetInt(TraitNameToID("_IsTopMenu"), 0);
         return;
     }
     else
     {
-        GetTile()->SetInt(FUN_00a01860("_IsTopMenu"), 1);
+        GetTile()->SetInt(TraitNameToID("_IsTopMenu"), 1);
     }
     Prepare();
     bool idle3 = false;
@@ -1009,7 +1009,7 @@ void MenuX::FUN_007e23c0()
     Update();
     tile54->SetFloat(0x1004, valueac / 100.0, true);
     PrintText(text, 256, "%i/%i", playerX->values.Current(16), playerX->values.Maximum(16));
-    tile48->SetText(FUN_00a01860("_Value"), text, true);
+    tile48->SetText(TraitNameToID("_Value"), text, true);
 }
 
 extern const char DAT_0106ed18[];
@@ -1025,7 +1025,7 @@ struct PainSound
     PainSound();
     ~PainSound();
     void FUN_00418900(const PainSound&);
-    bool FUN_00ad8830(bool);
+    bool Play(bool);
 };
 struct PainAudio
 {
@@ -1334,7 +1334,7 @@ float ScaleByConstant(float);
 unsigned int GetRandomNumberInRange(int, int);
 float LinearInterpolate(float, float, float, float, float);
 int FUN_00406d00(char*, int, const char*, ...);
-int FUN_00a01860(const char*);
+int TraitNameToID(const char*);
 struct PainMenu
 {
     int unk00;
@@ -1407,19 +1407,19 @@ void PainMenu::FUN_007e28b0()
         {
             PainSound painSound;
             painSound.FUN_00418900(FUN_00453a70()->FUN_00ad7550(DAT_010776b8, 0x121));
-            painSound.FUN_00ad8830(false);
+            painSound.Play(false);
         }
         else if (z < 85.0 && pain > 85.0)
         {
             PainSound painSound;
             painSound.FUN_00418900(FUN_00453a70()->FUN_00ad7550(DAT_010776a8, 0x121));
-            painSound.FUN_00ad8830(false);
+            painSound.Play(false);
         }
         else if (z < 100.0 && pain == 100.0)
         {
             PainSound painSound;
             painSound.FUN_00418900(FUN_00453a70()->FUN_00ad7550(DAT_01077698, 0x121));
-            painSound.FUN_00ad8830(false);
+            painSound.Play(false);
         }
     }
     last = DAT_011f6394.FUN_00825c00();
@@ -1433,7 +1433,7 @@ void PainMenu::FUN_007e28b0()
     }
     char time[256];
     FUN_00406d00(time, 256, DAT_01077674, g_thePlayer->values.get(37));
-    tile->FUN_00a01350(FUN_00a01860(DAT_0106ed18), time, true);
+    tile->FUN_00a01350(TraitNameToID(DAT_0106ed18), time, true);
 }
 
 struct ScreenPoint
@@ -1508,7 +1508,7 @@ struct AudioHandle
 {
     int id, a, b;
     bool FUN_00ad8930();
-    bool FUN_00ad8830(bool);
+    bool Play(bool);
     void FUN_00ad88f0();
 };
 struct SceneNode
@@ -1700,7 +1700,7 @@ float SurgeryView::UpdateWoundInteraction()
         if (h)
         {
             if (!activeSound.FUN_00ad8930())
-                activeSound.FUN_00ad8830(false);
+                activeSound.Play(false);
             if (hitTime > 0)
             {
                 if (((ClockValue&)g_timeGlobal).FUN_00825c00() - hitTime >
@@ -1741,7 +1741,7 @@ float SurgeryView::UpdateWoundInteraction()
         {
             PlaceSurgeryDecal(s, false);
             if (!idleSound.FUN_00ad8930())
-                idleSound.FUN_00ad8830(false);
+                idleSound.Play(false);
             if (activeSound.FUN_00ad8930())
                 activeSound.FUN_00ad88f0();
             hitTime = 0;
@@ -2318,7 +2318,7 @@ enum Index
 };
 const char* GetActorValueName(Index av);
 }
-int FUN_00a01860(const char* name);
+int TraitNameToID(const char* name);
 extern const double _gModifierZero;
 
 struct SurgeryLimbMenu
@@ -2386,7 +2386,7 @@ float SurgeryLimbMenu::FUN_007e58e0()
     LimbWoundData* wound_ = FUN_007e5720();
     if (!wound_)
     {
-        tile70->Set(FUN_00a01860("_Value"), 1.0f, true);
+        tile70->Set(TraitNameToID("_Value"), 1.0f, true);
         tile4C->Set(0xfc4, ActorValue::GetActorValueName(avC0), true);
         return 0;
     }
@@ -3035,7 +3035,7 @@ extern PickPlayer* DAT_011dea3c;
 extern int DAT_011dad9c;
 
 PickInterface* FUN_004b7210();
-int __cdecl FUN_00a00940(const char* apTrait, int aiDefault);
+int __cdecl TraitNameToIDAdd(const char* apTrait, int aiDefault);
 void __cdecl ComputeInjuryEffectScalars(float* apResistance, float* apMagnitude, float* apMouse, float afSkill,
                                         float afLockLevel, int aiPerception);
 float __cdecl LinearInterpolate(float afMin, float afMax, float afFrom, float afTo, float afValue);
@@ -3079,14 +3079,14 @@ struct PickMenu
 void PickMenu::UpdateLockpick(bool abForcing)
 {
     PickInterface* pInterfaceFinal = FUN_004b7210();
-    static int iMinResistanceTime = FUN_00a00940(s_szMinResistanceTime, -1);
-    static int iMaxResistanceTime = FUN_00a00940(s_szMaxResistanceTime, -1);
-    static int iMinMagnitude = FUN_00a00940(s_szMinMagnitude, -1);
-    static int iMaxMagnitude = FUN_00a00940(s_szMaxMagnitude, -1);
-    static int iMinXBoxMag = FUN_00a00940(s_szMinXBoxMag, -1);
-    static int iMaxXBoxMag = FUN_00a00940(s_szMaxXBoxMag, -1);
-    static int iMouseMinPercent = FUN_00a00940(s_szMouseMinPercent, -1);
-    static int iMouseMaxPercent = FUN_00a00940(s_szMouseMaxPercent, -1);
+    static int iMinResistanceTime = TraitNameToIDAdd(s_szMinResistanceTime, -1);
+    static int iMaxResistanceTime = TraitNameToIDAdd(s_szMaxResistanceTime, -1);
+    static int iMinMagnitude = TraitNameToIDAdd(s_szMinMagnitude, -1);
+    static int iMaxMagnitude = TraitNameToIDAdd(s_szMaxMagnitude, -1);
+    static int iMinXBoxMag = TraitNameToIDAdd(s_szMinXBoxMag, -1);
+    static int iMaxXBoxMag = TraitNameToIDAdd(s_szMaxXBoxMag, -1);
+    static int iMouseMinPercent = TraitNameToIDAdd(s_szMouseMinPercent, -1);
+    static int iMouseMaxPercent = TraitNameToIDAdd(s_szMouseMaxPercent, -1);
     float fMinResistance = FUN_00726070()->FUN_00a011b0(iMinResistanceTime);
     float fMaxResistance = FUN_00726070()->FUN_00a011b0(iMaxResistanceTime);
     float fMinMagnitude = FUN_00726070()->FUN_00a011b0(iMinMagnitude);
@@ -3501,7 +3501,7 @@ struct EventPlayer
     int unka0;
     EventValues values;
     EventEntry* FUN_00576260(EventForm*, int);
-    void FUN_0088c650(void*, int, void*, bool, bool, bool);
+    void EquipItem(void*, int, void*, bool, bool, bool);
     void FUN_0088b740(int, float);
 };
 struct EventScene
@@ -3578,7 +3578,7 @@ struct EventMenu
     EventWounds* FUN_007e5720();
     void OnButtonClick(int, int);
 };
-int __cdecl FUN_00a00940(const char*, int);
+int __cdecl TraitNameToIDAdd(const char*, int);
 EventForm* __cdecl FUN_0058db10(int);
 void __cdecl ComputeMedicineHealing(float&, float&, int, bool, float);
 float __cdecl FUN_0040ebd0(float, float);
@@ -3588,8 +3588,8 @@ void __cdecl UpdateBoneWounds(void*);
 // @fnv 0x007e1b10
 void EventMenu::OnButtonClick(int button, int arg)
 {
-    static int stimpak = FUN_00a00940("_StimpacCount", -1);
-    static int morphine = FUN_00a00940("_MorphineCount", -1);
+    static int stimpak = TraitNameToIDAdd("_StimpacCount", -1);
+    static int morphine = TraitNameToIDAdd("_MorphineCount", -1);
     int event = FUN_00720010(button);
     {
         float benefit;
@@ -3613,7 +3613,7 @@ void EventMenu::OnButtonClick(int button, int arg)
                                 FUN_00726070()->FUN_00a012d0(stimpak, FUN_00726070()->FUN_00a011b0(stimpak) - 1.0,
                                                              true);
                                 ((EventPlayer*)_g_thePlayer)
-                                    ->FUN_0088c650(
+                                    ->EquipItem(
                                         ((EventMenu*)DAT_011dada4)->entry->FUN_0044ddc0(),
                                         ((EventMenu*)DAT_011dada4)->entry->FUN_00726070(),
                                         ((EventMenu*)DAT_011dada4)->entry->FUN_00559450()
@@ -3630,7 +3630,7 @@ void EventMenu::OnButtonClick(int button, int arg)
                                 FUN_00726070()->FUN_00a012d0(morphine, FUN_00726070()->FUN_00a011b0(morphine) - 1.0,
                                                              true);
                                 ((EventPlayer*)_g_thePlayer)
-                                    ->FUN_0088c650(FUN_0058db10(4), item->FUN_00726070(),
+                                    ->EquipItem(FUN_0058db10(4), item->FUN_00726070(),
                                                    item->FUN_00559450() ? *(item->FUN_00559450()->FUN_006815c0()) : 0,
                                                    false, false, true);
                                 delete item;
@@ -3668,7 +3668,7 @@ void EventMenu::OnButtonClick(int button, int arg)
                                 break;
                             }
                             amount = ScaleLimbWoundPercent(((EventPlayer*)_g_thePlayer)->values.Damage(limb));
-                            gauge->FUN_00a012d0(FUN_00a01860("_Value"),
+                            gauge->FUN_00a012d0(TraitNameToID("_Value"),
                                                 ((EventPlayer*)_g_thePlayer)->values.Damage(limb) / 100.0, true);
                             label->FUN_00a01350(0xfc4, ActorValue::GetActorValueName((ActorValue::Index)limb), true);
                             FUN_007e5ee0(iOldLimb, limb);
@@ -3700,7 +3700,7 @@ void EventMenu::OnButtonClick(int button, int arg)
                                 break;
                             }
                             amount = ScaleLimbWoundPercent(((EventPlayer*)_g_thePlayer)->values.Damage(limb));
-                            gauge->FUN_00a012d0(FUN_00a01860("_Value"),
+                            gauge->FUN_00a012d0(TraitNameToID("_Value"),
                                                 ((EventPlayer*)_g_thePlayer)->values.Damage(limb) / 100.0, true);
                             label->FUN_00a01350(0xfc4, ActorValue::GetActorValueName((ActorValue::Index)limb), true);
                             FUN_007e5ee0(old2, limb);
@@ -4126,7 +4126,7 @@ int LimbPercentageMenu::GetLimbPercentage()
         break;
     }
     int result2 = (int)percentage;
-    tile70->Set(FUN_00a01860("_Value"), result2 / 100.0, true);
+    tile70->Set(TraitNameToID("_Value"), result2 / 100.0, true);
     tile4C->Set(0xfc4, ActorValue::GetActorValueName(avC0), true);
     return result2;
 }

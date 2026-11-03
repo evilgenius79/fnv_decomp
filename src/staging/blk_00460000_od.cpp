@@ -2383,7 +2383,7 @@ void ManagedSceneHolder::EnsureCurrentEntry()
         current = new ManagedSceneEntry;
 }
 
-void* __cdecl FUN_00401000(unsigned int size);
+void* __cdecl FormHeap_Allocate(unsigned int size);
 
 struct SpawnedItem_b10003
 {
@@ -2398,7 +2398,7 @@ struct SpawnedItem_b10003
     SpawnedItem_b10003();
     static void* operator new(unsigned int size) throw()
     {
-        return FUN_00401000(size);
+        return FormHeap_Allocate(size);
     }
 };
 
@@ -4369,7 +4369,7 @@ extern LoadTopic* DAT_011c3f38;
 extern LoadSaveGame* g_TESSaveLoadGame;
 extern LoadMap* DAT_011c54c8;
 extern unsigned int DAT_011c3f28, DAT_011c3f24, DAT_011c40a8;
-LoadForm* __cdecl FUN_004839c0(unsigned int);
+LoadForm* __cdecl LookupFormByID(unsigned int);
 int __cdecl FUN_00406d00(char*, unsigned int, const char*, ...);
 struct LoadHandler
 {
@@ -4842,7 +4842,7 @@ bool LoadHandler::FUN_00467780(LoadFile* file, bool mode)
                 DAT_011c40a8++;
                 if ((DAT_011c40a8 & 0xff) == 0)
                     g_TESSaveLoadGame->FUN_00861ea0();
-                form5 = FUN_004839c0(file->FUN_008d8ac0());
+                form5 = LookupFormByID(file->FUN_008d8ac0());
                 lookedUpTmp = true;
                 if (form5)
                     g_TESSaveLoadGame->AddLoadingTopic(form5);
@@ -4850,7 +4850,7 @@ bool LoadHandler::FUN_00467780(LoadFile* file, bool mode)
             else
             {
                 if (!lookedUpTmp)
-                    form5 = FUN_004839c0(file->FUN_008d8ac0());
+                    form5 = LookupFormByID(file->FUN_008d8ac0());
                 if (form5)
                 {
                     switch (form5->FUN_00401170())

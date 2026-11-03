@@ -4093,7 +4093,7 @@ unsigned int FUN_00656db0()
 }
 }  // namespace fnv_00656db0
 
-void __cdecl FUN_00401030(void*);
+void __cdecl FormHeap_Free(void*);
 struct Target
 {
     void FUN_0064fe10();
@@ -4104,7 +4104,7 @@ Target* Target::FUN_0064fde0(unsigned int flags)
 {
     FUN_0064fe10();
     if (flags & 1)
-        FUN_00401030(this);
+        FormHeap_Free(this);
     return this;
 }
 

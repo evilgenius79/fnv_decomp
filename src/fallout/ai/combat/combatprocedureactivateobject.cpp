@@ -685,7 +685,7 @@ struct CPStandIn00564db0
 {
     void FUN_00564db0(int);
 };
-extern "C" TESForm* __cdecl FUN_004839c0(TESObjectREFR*);
+extern "C" TESForm* __cdecl LookupFormByID(TESObjectREFR*);
 
 struct FUN_009cad70_shell : public CombatProcedure
 {
@@ -693,12 +693,12 @@ struct FUN_009cad70_shell : public CombatProcedure
     void FUN_009cad70(unsigned int);
 };
 
-// Calls FUN_004534f0 with arg, assigns the cast result of FUN_004839c0 to m_pReference, then calls FUN_00564db0(1) if non-null.
+// Calls FUN_004534f0 with arg, assigns the cast result of LookupFormByID to m_pReference, then calls FUN_00564db0(1) if non-null.
 // @fnv 0x009cad70
 void FUN_009cad70_shell::FUN_009cad70(unsigned int arg)
 {
     ((CPStandIn004534f0*)this)->FUN_004534f0(arg);
-    m_pReference = m_pReference ? dynamic_cast<TESObjectREFR*>(FUN_004839c0(m_pReference)) : 0;
+    m_pReference = m_pReference ? dynamic_cast<TESObjectREFR*>(LookupFormByID(m_pReference)) : 0;
     if (m_pReference)
         ((CPStandIn00564db0*)m_pReference)->FUN_00564db0(1);
 }
@@ -735,7 +735,7 @@ class TESBoundObject
   public:
     virtual void v0();
 };
-::TESForm* __cdecl FUN_004839c0(unsigned int);
+::TESForm* __cdecl LookupFormByID(unsigned int);
 struct ActivateObjectLoadView : CombatProcedure
 {
     void* m_pReference;
@@ -751,6 +751,6 @@ void ActivateObjectLoadView::FUN_009cad00(BGSLoadFormBuffer* apBuffer)
     FUN_00996ef0(apBuffer);
     apBuffer->ReadFormIdentifier(&m_pReference);
     m_pBaseObject =
-        dynamic_cast< ::TESBoundObject*>(FUN_004839c0(((BGSLoadGameBuffer*)apBuffer)->ReadFormIdentifier()));
+        dynamic_cast< ::TESBoundObject*>(LookupFormByID(((BGSLoadGameBuffer*)apBuffer)->ReadFormIdentifier()));
     apBuffer->ReadTypedData(&bFlag, 1);
 }

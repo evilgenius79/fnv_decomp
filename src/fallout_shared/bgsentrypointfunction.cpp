@@ -1157,7 +1157,7 @@ class TESForm
 };
 
 void FUN_00485d50(unsigned int&, TESFile*);
-TESForm* FUN_004839c0(unsigned int);
+TESForm* LookupFormByID(unsigned int);
 
 struct TESLevItem : TESForm
 {
@@ -1184,7 +1184,7 @@ void LevListData::FUN_005e6b70(TESForm* apOwner)
     {
         unsigned int itempint = (unsigned int)pLevItem;
         FUN_00485d50(itempint, apOwner->FUN_00484e60(-1));
-        pLevItem = dynamic_cast<TESLevItem*>(FUN_004839c0(itempint));
+        pLevItem = dynamic_cast<TESLevItem*>(LookupFormByID(itempint));
         if (!pLevItem)
         {
             if (static_cast<EntryPointOwnerView*>(apOwner)->FUN_00474cb0())

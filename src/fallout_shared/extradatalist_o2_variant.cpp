@@ -291,14 +291,14 @@ struct B5Lock
 {
     unsigned int owner;
     unsigned int count;
-    void FUN_0040fbf0(const char* name);
+    void Lock(const char* name);
 };
 extern B5Lock DAT_011f9ea0;
 void B5Owner::AddBound(const NiPointer<B5Item>& ptr)
 {
     if (ptr.m_pObject && m_1fc)
     {
-        DAT_011f9ea0.FUN_0040fbf0(0);
+        DAT_011f9ea0.Lock(0);
         pending.FUN_00a5a310(ptr);
         if (--DAT_011f9ea0.count == 0)
             DAT_011f9ea0.owner = 0;

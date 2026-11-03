@@ -143,7 +143,7 @@ struct MapMember
 };
 struct HolderLookup
 {
-    bool FUN_00853130(unsigned int key, void** value);
+    bool GetAt(unsigned int key, void** value);
     void FUN_00844700(unsigned int key, void* value);
 };
 struct CreatedShell
@@ -169,7 +169,7 @@ void FUN_00983280_holder::FUN_00983280(int value, StageHolder* pStageHolder)
 {
     ((MapMember*)((char*)this + 0x14))->AcquireLock();
     void* pCreatedShell = 0;
-    if (!((HolderLookup*)this)->FUN_00853130(*(unsigned int*)((char*)pStageHolder + 0x68), &pCreatedShell))
+    if (!((HolderLookup*)this)->GetAt(*(unsigned int*)((char*)pStageHolder + 0x68), &pCreatedShell))
     {
         pCreatedShell = new CreatedShell();
         ((CreatedShell*)pCreatedShell)->SetByteAtOffset(((HolderStatus*)pStageHolder)->GetDone());
@@ -245,7 +245,7 @@ struct FUN_00983420_class
     char pad[0x14];
     Lock lock;
 
-    bool FUN_00853130(void* key, CoverItem** out);
+    bool GetAt(void* key, CoverItem** out);
     void FUN_00844700(void* key, CoverItem* val);
 
     bool GetOrCreateCoverItem(void* arg1, Arg2* arg2);
@@ -257,7 +257,7 @@ bool FUN_00983420_class::GetOrCreateCoverItem(void* arg1, Arg2* arg2)
 {
     lock.Enter();
     CoverItem* pItem = 0;
-    if (!FUN_00853130(arg2->unk68, &pItem))
+    if (!GetAt(arg2->unk68, &pItem))
     {
         pItem = new CoverItem();
         pItem->SetByteAtOffset(arg2->FUN_00678ce0());
@@ -577,7 +577,7 @@ struct FUN_009835d0_cls
     int unk10;
     CoverLockCalls lock;
 
-    bool FUN_00853130(void* key, CoverItem** out);
+    bool GetAt(void* key, CoverItem** out);
     bool TryUseCoverItem(unsigned int key, unsigned int p2, unsigned int p3, float x, void* target, unsigned char d,
                          unsigned char e);
 };
@@ -591,7 +591,7 @@ bool FUN_009835d0_cls::TryUseCoverItem(unsigned int key, unsigned int p2, unsign
 
     lock.FUN_00aa5ff0();
     item = 0;
-    if (FUN_00853130((void*)key, &item))
+    if (GetAt((void*)key, &item))
     {
         if (!((CoverItemCalls*)item)->FUN_00982df0(p3))
         {
@@ -628,7 +628,7 @@ void CoverMapUnreserveReceiver::FUN_00983520(void* apOwner, Arg2* apLocation)
     {
         this->lock.Enter();
         CoverItem* item = 0;
-        if (this->FUN_00853130(apLocation->unk68, &item))
+        if (this->GetAt(apLocation->unk68, &item))
         {
             if (((CoverReservationUnreserveCalls*)item)->FUN_00982ff0(apOwner, apLocation))
             {

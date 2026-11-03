@@ -42,7 +42,7 @@ struct Item
 void* __cdecl operator new(unsigned);
 void __cdecl operator delete(void*);
 void __cdecl ResolveFormID(unsigned*, File*);
-TESForm* __cdecl FUN_004839c0(unsigned);
+TESForm* __cdecl LookupFormByID(unsigned);
 void* __cdecl FUN_00ec43fb(void*, int, void*, void*, int);
 void __cdecl FUN_005b5e40(const char*, ...);
 struct List
@@ -64,7 +64,7 @@ void List::FUN_00405760(File* file, const char* name)
     case 0x44494645:
         file->ReadChunkInt(&id);
         ResolveFormID(&id, file);
-        effect = dynamic_cast<EffectSetting*>(FUN_004839c0(id));
+        effect = dynamic_cast<EffectSetting*>(LookupFormByID(id));
         if (effect)
         {
             actorValue = new Item(effect);

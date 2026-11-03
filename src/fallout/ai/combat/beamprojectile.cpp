@@ -459,7 +459,7 @@ struct SoundPlaybackHandle
     int soundID, flags, unk08;
     ~SoundPlaybackHandle();
     void SetPositionFromArray(Scene*);
-    void FUN_00ad8830(int);
+    void Play(int);
 };
 struct SoundManager
 {
@@ -1044,7 +1044,7 @@ bool BeamEffect::FUN_009c43e0(int value, bool silent)
             {
                 SoundPlaybackHandle sound = FUN_00453a70()->FUN_00ad7480(owner->FUN_00511840(0x4102), owner);
                 sound.SetPositionFromArray(GetScene());
-                sound.FUN_00ad8830(0);
+                sound.Play(0);
             }
         }
         FUN_005de0a0(0x200, true);

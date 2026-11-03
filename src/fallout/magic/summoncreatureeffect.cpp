@@ -1209,7 +1209,7 @@ struct S_00828ba0 : SummonCreatureEffect
     int unk6c;
     unsigned char m_70;
     S_00828ba0_Owner* FUN_0059bb30();
-    void FUN_00804210(int a);
+    void Remove(int a);
     void SpawnSummonedActor(S_00828ba0_Actor* actor);
     void DispelOldestQualifyingEffect();
     void FUN_00828ba0(int unused);
@@ -1223,7 +1223,7 @@ void S_00828ba0::FUN_00828ba0(int unused)
     S_00828ba0_Actor* actor = FUN_0059bb30() ? FUN_0059bb30()->FUN_00822b40() : 0;
     if (!actor || (m_70 && (!m_4c || m_4c->vfn8b(0))))
     {
-        FUN_00804210(0);
+        Remove(0);
         return;
     }
     if (m_04 >= m_54 && !m_70)
@@ -2190,7 +2190,7 @@ struct DbeffectBaseCall
     void FUN_00806e70(void*);
 };
 
-TESForm* __cdecl FUN_004839c0(unsigned int);
+TESForm* __cdecl LookupFormByID(unsigned int);
 struct Dbeffect : SummonCreatureEffect
 {
     int unk04;
@@ -2214,7 +2214,7 @@ struct Dbeffect : SummonCreatureEffect
     int formId;
     void FUN_00829900(void* arg);
 };
-// Calls the base handler, resolves formId to an Actor via FUN_004839c0, and dispels the effect if the lookup fails.
+// Calls the base handler, resolves formId to an Actor via LookupFormByID, and dispels the effect if the lookup fails.
 // @fnv 0x00829900
 void Dbeffect::FUN_00829900(void* arg)
 {
@@ -2222,7 +2222,7 @@ void Dbeffect::FUN_00829900(void* arg)
     int iFormId = formId;
     if (iFormId)
     {
-        formId = (int)dynamic_cast<Actor*>(FUN_004839c0((unsigned int)iFormId));
+        formId = (int)dynamic_cast<Actor*>(LookupFormByID((unsigned int)iFormId));
         if (!formId)
             ((ActiveEffect*)this)->Dispel(true);
     }

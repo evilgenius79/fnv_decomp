@@ -1602,7 +1602,7 @@ struct ControlsView
 };
 struct LoaderView
 {
-    NiNode* FUN_00447080(const char*, int, bool, bool, bool, bool);
+    NiNode* LoadModel(const char*, int, bool, bool, bool, bool);
 };
 struct SettingView
 {
@@ -1801,7 +1801,7 @@ void FUN_007fd6c0_Class::UpdatePlayerFaceScene()
     savedCull = root->FUN_00456610();
     scene = (NiNode*)new NewScene(0);
     ((NiNode*)FUN_00450b80(3))->AddObject(scene, true);
-    light = (NodeView*)DAT_011c3b3c->FUN_00447080("Meshes\\Terminals\\PlayerFaceLights01.NIF", 0, true, false, false,
+    light = (NodeView*)DAT_011c3b3c->LoadModel("Meshes\\Terminals\\PlayerFaceLights01.NIF", 0, true, false, false,
                                                   false);
     scene->AddObject(root, true);
     scene->AddObject(light, true);
@@ -2318,7 +2318,7 @@ void Rendered82::FUN_007fba00(void* pRenderArg1, void* pRenderArg2, Target82* pS
 struct FUN_00483710
 {
     int a, b, c;
-    bool FUN_00ad8830(bool loop);
+    bool Play(bool loop);
     ~FUN_00483710();
 };
 namespace n7f8 {
@@ -2511,7 +2511,7 @@ void n7f8::Mgr::FUN_007f8170()
     }
     if (!IsUnk28Set())
         return;
-    FUN_00453a70()->FUN_00ad7550("UIPipBoyAccessDown", 0x121).FUN_00ad8830(false);
+    FUN_00453a70()->FUN_00ad7550("UIPipBoyAccessDown", 0x121).Play(false);
     m_154.FUN_00ad88f0();
     m_154.FUN_00ad8d10();
     FUN_007fa010(0);

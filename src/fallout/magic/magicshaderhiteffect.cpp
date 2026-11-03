@@ -3259,7 +3259,7 @@ struct Manager
 };
 extern Manager* DAT_011de45c;
 extern char DAT_011841cc, DAT_01183918, DAT_01183028;
-TESForm* __cdecl FUN_004839c0(void*);
+TESForm* __cdecl LookupFormByID(void*);
 void* __cdecl FUN_00ec43fb(void*, int, void*, void*, int);
 class Effect
 {
@@ -3337,12 +3337,12 @@ bool Effect::FUN_00822130()
     bool result2 = true;
     void* firstB;
     DAT_011de45c->FUN_00857aa0(&firstB, 4);
-    unk1c = reinterpret_cast<Ref*>(dynamic_cast<TESObjectREFR*>(FUN_004839c0(firstB)));
+    unk1c = reinterpret_cast<Ref*>(dynamic_cast<TESObjectREFR*>(LookupFormByID(firstB)));
     if (!unk1c || !unk1c->FUN_008d6f30() || !unk1c->FUN_008d6f30()->FUN_00450ff0())
         result2 = false;
     void* second;
     DAT_011de45c->FUN_00857aa0(&second, 4);
-    TESEffectShader* other7 = dynamic_cast<TESEffectShader*>(FUN_004839c0(second));
+    TESEffectShader* other7 = dynamic_cast<TESEffectShader*>(LookupFormByID(second));
     if (!other7)
         result2 = false;
     vfnd8(0, unk1c);

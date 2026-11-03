@@ -2433,7 +2433,7 @@ struct CombatEntry
 
 struct CombatEntryOwner
 {
-    bool __thiscall FUN_00853130(int key, CombatEntry** result);
+    bool __thiscall GetAt(int key, CombatEntry** result);
     void __thiscall RemoveKey(int key);
     void __thiscall RemoveEntry(int key);
 };
@@ -2442,7 +2442,7 @@ struct CombatEntryOwner
 void CombatEntryOwner::RemoveEntry(int key)
 {
     CombatEntry* entry = 0;
-    if (FUN_00853130(key, &entry))
+    if (GetAt(key, &entry))
     {
         RemoveKey(key);
         delete entry;
@@ -3379,14 +3379,14 @@ class TESImageSpaceModifier : public TESForm
     virtual ~TESImageSpaceModifier();
 };
 extern TESImageSpaceModifier* DAT_011c9708;
-TESForm* __cdecl FUN_004839c0(unsigned int);
-// Returns the cached TESImageSpaceModifier, looking it up by form ID 0x166 via FUN_004839c0 if not yet set.
+TESForm* __cdecl LookupFormByID(unsigned int);
+// Returns the cached TESImageSpaceModifier, looking it up by form ID 0x166 via LookupFormByID if not yet set.
 // @fnv 0x009ad630
 TESImageSpaceModifier* __cdecl FUN_009ad630()
 {
     if (DAT_011c9708 == 0)
     {
-        DAT_011c9708 = dynamic_cast<TESImageSpaceModifier*>(FUN_004839c0(0x166));
+        DAT_011c9708 = dynamic_cast<TESImageSpaceModifier*>(LookupFormByID(0x166));
     }
     return DAT_011c9708;
 }
@@ -8718,7 +8718,7 @@ float ComputeAmmoEffectValue(int, int, float);
 float FUN_006462e0(float, float);
 bool IsTargetInCone(HitActor*, HitActor*, int);
 float FUN_006463a0(int);
-HitWeapon* FUN_004839c0(int);
+HitWeapon* LookupFormByID(int);
 void FUN_005e58f0(int, HitActor*, HitWeapon*, HitActor*, float*);
 void FUN_005e58f0(int, HitActor*, HitActor*, HitWeapon*, float*);
 int FUN_009b65d0(unsigned short, int);
@@ -8811,7 +8811,7 @@ void HitDamage::FUN_009b5a30(bool skipBlock)
     if (attacker)
     {
         if (!weapon)
-            weapon = FUN_004839c0(500);
+            weapon = LookupFormByID(500);
         FUN_005e58f0(58, attacker, weapon, target, &penetration);
     }
     float bonus9 = 0.0f;

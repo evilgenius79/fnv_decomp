@@ -1019,7 +1019,7 @@ struct CacheLock
 {
     int state;
     unsigned int live;
-    void FUN_0040fbf0(const char*);
+    void Lock(const char*);
 };
 extern CacheLock DAT_011c5f80;
 extern CacheListNode* DAT_011c5f58;
@@ -1062,7 +1062,7 @@ struct CacheList
             if (next)
                 next->previous = previous;
             slot = 0;
-            DAT_011c5f80.FUN_0040fbf0(0);
+            DAT_011c5f80.Lock(0);
             node->previous = 0;
             node->next = DAT_011c5f58;
             DAT_011c5f80.live--;

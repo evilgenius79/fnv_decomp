@@ -3318,8 +3318,8 @@ void __cdecl FUN_006a1330(const char* pcPath, int iParamA, int iParamB)
     g_spB6A1330Root->AttachChildInAvailableSlot(spNode7, true);
 }
 
-void* FUN_00401000(unsigned int uiSize);
-void FUN_00401030(void* pvMem);
+void* FormHeap_Allocate(unsigned int uiSize);
+void FormHeap_Free(void* pvMem);
 
 class NiPoint369E
 {
@@ -3348,11 +3348,11 @@ class Helper69E
 
     static void* operator new(unsigned int uiSize)
     {
-        return FUN_00401000(uiSize);
+        return FormHeap_Allocate(uiSize);
     }
     static void operator delete(void* pvMem)
     {
-        FUN_00401030(pvMem);
+        FormHeap_Free(pvMem);
     }
 
     int unk00, unk04, unk08, unk0C;

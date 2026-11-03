@@ -396,7 +396,7 @@ void Thing::Save()
     DAT_011de45c->FUN_00857a10(&formID, 4);
 }
 
-TESForm* FUN_004839c0(unsigned int auiFormId);
+TESForm* LookupFormByID(unsigned int auiFormId);
 
 namespace s835fe0 {
 
@@ -407,11 +407,11 @@ struct RefHandle
     void ResolveRef(void* pvUnused);
 };
 
-// Replaces m_pkRef with the result of FUN_004839c0 cast to TESObjectREFR, or null if m_pkRef is null.
+// Replaces m_pkRef with the result of LookupFormByID cast to TESObjectREFR, or null if m_pkRef is null.
 // @fnv 0x00835fe0
 void RefHandle::ResolveRef(void* pvUnused)
 {
-    m_pkRef = m_pkRef ? dynamic_cast<TESObjectREFR*>(FUN_004839c0((unsigned int)m_pkRef)) : 0;
+    m_pkRef = m_pkRef ? dynamic_cast<TESObjectREFR*>(LookupFormByID((unsigned int)m_pkRef)) : 0;
 }
 
 }
@@ -453,7 +453,7 @@ struct FUN_0043a590_shell : public TeleportableReference
 };
 
 void __cdecl FUN_00485d50(unsigned int* formID, TESFile* file);
-TESForm* __cdecl FUN_004839c0(unsigned int formID);
+TESForm* __cdecl LookupFormByID(unsigned int formID);
 void __cdecl FUN_005b5e40(const char* fmt, ...);
 int __cdecl FUN_00ec7595(double x);
 int __cdecl FUN_00ec75b1(double x);
@@ -473,7 +473,7 @@ bool FUN_0043a590_shell::FUN_0043a590(TESForm* form)
 {
     unsigned int formID = (unsigned int)m_pLinkedDoorReference;
     FUN_00485d50(&formID, form->GetFile(-1));
-    m_pLinkedDoorReference = dynamic_cast<TESObjectREFR*>(FUN_004839c0(formID));
+    m_pLinkedDoorReference = dynamic_cast<TESObjectREFR*>(LookupFormByID(formID));
     if (!m_pLinkedDoorReference)
     {
         FUN_005b5e40(FNV_NoDoor, formID);

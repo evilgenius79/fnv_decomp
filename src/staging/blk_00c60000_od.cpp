@@ -2683,7 +2683,7 @@ Box0c64640* Box0c64640::FUN_00c64640()
 
 struct S_00c648a0_Map
 {
-    bool FUN_00853130(unsigned int, void**);
+    bool GetAt(unsigned int, void**);
 };
 
 struct S_00c648a0_Stream
@@ -3097,7 +3097,7 @@ void S_00c648a0::FUN_00c648a0(S_00c648a0_Stream* apStream)
         unsigned int uiLinkID = (unsigned int)unk08;
         void* pFound = 0;
         if (pStream->unk5c4 && uiLinkID)
-            pStream->unk5c4->FUN_00853130(uiLinkID, &pFound);
+            pStream->unk5c4->GetAt(uiLinkID, &pFound);
         pObject = pFound;
     }
     if (pObject)

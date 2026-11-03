@@ -731,7 +731,7 @@ extern char str_01012c78;
 extern char str_01012cb0;
 extern char str_01069ba0;
 
-void* __cdecl FUN_004839c0(void* object);
+void* __cdecl LookupFormByID(void* object);
 void __cdecl FUN_0040fbe0(const char* format, ...);
 
 typedef unsigned int(__fastcall* VirtualQuery)(void* object);
@@ -759,7 +759,7 @@ unsigned short RuntimeController::GetRuntimeFlags()
         char* current = DAT_011de45c->FUN_004fd3e0();
         if (current)
         {
-            void* related = FUN_004839c0(*reinterpret_cast<void**>(current));
+            void* related = LookupFormByID(*reinterpret_cast<void**>(current));
             FUN_0040fbe0(&str_01012cb0, usFlags - usInitialFlags, *reinterpret_cast<void**>(current),
                          reinterpret_cast<VirtualQuery>((*reinterpret_cast<void***>(related))[0x4c])(related),
                          *reinterpret_cast<unsigned int*>(current + 5), 0x72f, &str_01069ba0);
@@ -880,7 +880,7 @@ struct Obj18c
     void FUN_00685e60(void* p, int n);
 };
 void __cdecl FUN_00401460(void* dst, void* src, unsigned int n);
-void __cdecl FUN_00401030(void* p);
+void __cdecl FormHeap_Free(void* p);
 extern double DAT_01012060;
 extern void(__cdecl* DAT_00fdf0c8)();
 extern GlobalObjectO2_00a7b610 g_011f49d8;
@@ -2807,7 +2807,7 @@ void Decal688::FUN_00688b00()
         char* pcRecord = DAT_011de45c->FUN_004fd3e0();
         if (pcRecord)
         {
-            SaveForm688* pForm = (SaveForm688*)FUN_004839c0(*(void**)pcRecord);
+            SaveForm688* pForm = (SaveForm688*)LookupFormByID(*(void**)pcRecord);
             FUN_0040fbe0(
                 "SaveGame(): %-5i for form %08X %s with flags %08X ending at line %i in file %s", pcEnd - pStart,
                 *(unsigned int*)pcRecord, pForm->GetName(), *(unsigned int*)(pcRecord + 5), 0x783,
@@ -2975,7 +2975,7 @@ bool DecalLoad688::FUN_00688c90()
             DecalLoad688Header* form7 = ((DecalLoad688Runtime*)DAT_011de45c)->FUN_004fd3c0();
             if (form7)
             {
-                SaveForm688* obj_2 = (SaveForm688*)FUN_004839c0((void*)(form7->formID));
+                SaveForm688* obj_2 = (SaveForm688*)LookupFormByID((void*)(form7->formID));
                 FUN_005b5e40(str_01015718, &str_01069ba0, 1932, form7->formID, obj_2->GetName(), form7->version,
                              *(int*)&form7->dataSize);
             }
@@ -2993,7 +2993,7 @@ bool DecalLoad688::FUN_00688c90()
         DecalLoad688Header* form2 = ((DecalLoad688Runtime*)DAT_011de45c)->FUN_004fd3c0();
         if (form2)
         {
-            SaveForm688* obj3 = (SaveForm688*)FUN_004839c0((void*)(form2->formID));
+            SaveForm688* obj3 = (SaveForm688*)LookupFormByID((void*)(form2->formID));
             if (cur4 > count + base)
             {
                 FUN_005b5e40(str_01015588, cur4 - (count + base), &str_01069ba0, 2104, form2->formID, obj3->GetName(),

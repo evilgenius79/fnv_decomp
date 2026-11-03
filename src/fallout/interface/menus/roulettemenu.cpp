@@ -10214,7 +10214,7 @@ struct PlayerVirtual
 };
 struct RouletteTile
 {
-    RouletteTile* FUN_00a01b00();
+    RouletteTile* ReadXML();
     RouletteMenu* FUN_00a03c90();
     float FUN_00a011b0(int);
     void FUN_00a012d0(int, float);
@@ -10313,7 +10313,7 @@ RouletteTile* __cdecl FUN_007bbe20(RoulettePlayerStandIn* casino, int bet, int a
     }
     if (oldMenu)
         delete oldMenu;
-    RouletteTile* ui = list->FUN_00586150(DAT_01076254)->FUN_00a01b00();
+    RouletteTile* ui = list->FUN_00586150(DAT_01076254)->ReadXML();
     DAT_011da878 = ui->FUN_00a03c90();
     if (DAT_011da878 && ((MenuVirtual*)DAT_011da878)->GetID() == FUN_007bc820())
     {
@@ -14576,7 +14576,7 @@ struct List08
     List08();
     ~List08();
 };
-int __cdecl FUN_00a00940(const char*, int);
+int __cdecl TraitNameToIDAdd(const char*, int);
 extern const char DAT_01071ba0[];
 extern const char DAT_01071b94[];
 extern const char DAT_01071b88[];
@@ -14600,18 +14600,18 @@ struct FUN_007e6780 : Menu
     FUN_007e6780();
     virtual ~FUN_007e6780();
 };
-// Initializes eight global string handles by calling FUN_00a00940 with string constants and -1.
+// Initializes eight global string handles by calling TraitNameToIDAdd with string constants and -1.
 // @fnv 0x007e6780
 FUN_007e6780::FUN_007e6780()
 {
-    DAT_011daf6c = FUN_00a00940(DAT_01071ba0, -1);
-    DAT_011daf60 = FUN_00a00940(DAT_01071b94, -1);
-    DAT_011daf58 = FUN_00a00940(DAT_01071b88, -1);
-    DAT_011daf64 = FUN_00a00940(DAT_01071b7c, -1);
-    DAT_011daf68 = FUN_00a00940(DAT_01071b70, -1);
-    DAT_011daf78 = FUN_00a00940(DAT_01073cc0, -1);
-    DAT_011daf5c = FUN_00a00940(DAT_01071b64, -1);
-    DAT_011daf70 = FUN_00a00940(DAT_01073cb4, -1);
+    DAT_011daf6c = TraitNameToIDAdd(DAT_01071ba0, -1);
+    DAT_011daf60 = TraitNameToIDAdd(DAT_01071b94, -1);
+    DAT_011daf58 = TraitNameToIDAdd(DAT_01071b88, -1);
+    DAT_011daf64 = TraitNameToIDAdd(DAT_01071b7c, -1);
+    DAT_011daf68 = TraitNameToIDAdd(DAT_01071b70, -1);
+    DAT_011daf78 = TraitNameToIDAdd(DAT_01073cc0, -1);
+    DAT_011daf5c = TraitNameToIDAdd(DAT_01071b64, -1);
+    DAT_011daf70 = TraitNameToIDAdd(DAT_01073cb4, -1);
 }
 
 struct NiPoint3Ex : NiPoint3
@@ -15333,7 +15333,7 @@ struct AudioPlaybackHandle
     int iState;
     AudioPlaybackHandle();
     ~AudioPlaybackHandle();
-    bool FUN_00ad8830(bool abLoop);
+    bool Play(bool abLoop);
 };
 
 struct AudioMgr
@@ -15782,7 +15782,7 @@ void RouletteMenuX::FUN_007bd2a0()
         }
         if (s_fSpinTime == 0.0)
         {
-            FUN_00453a70()->FUN_00ad7550("GAMERouletteSpin", 0x121).FUN_00ad8830(false);
+            FUN_00453a70()->FUN_00ad7550("GAMERouletteSpin", 0x121).Play(false);
             m_pInfoTile->FUN_00700320(0xfa3, 0);
             m_pAnimCtrl->FUN_0047aab0(m_apSpinSeq[m_iRouletteResult], 0, 0, 1.0f, 0.0f, 0);
             m_bSpinning = true;
@@ -15969,7 +15969,7 @@ void RouletteMenuX::FUN_007bd2a0()
                 FUN_00406d00(szResult, 0x104, "%s %d %s%s", DAT_011d2ff4.FUN_00403df0(), iWinnings,
                              DAT_011d5050.FUN_00403df0(), DAT_011d3114.FUN_00403df0());
             }
-            FUN_00453a70()->FUN_00ad7550("GAMERouletteWin", 0x121).FUN_00ad8830(false);
+            FUN_00453a70()->FUN_00ad7550("GAMERouletteWin", 0x121).Play(false);
             ((RouletteMenuX*)DAT_011da878)->m_pInfoTile->SetTraitAndReset(0xfc4, 1.0f);
             ((RouletteMenuX*)DAT_011da878)->m_pInfoTile->FUN_00a01350(0xfc4, szResult, true);
             ((RouletteMenuX*)DAT_011da878)->m_pInfoTile->FUN_00700320(0xfa3, 1);
@@ -16066,7 +16066,7 @@ void RouletteMenuX::FUN_007bd2a0()
                     if (s_bValidBet)
                     {
                         s_bValidBet = !s_bValidBet;
-                        FUN_00453a70()->FUN_00ad7550("GAMERouletteValidBet", 0x121).FUN_00ad8830(false);
+                        FUN_00453a70()->FUN_00ad7550("GAMERouletteValidBet", 0x121).Play(false);
                     }
                     m_pValidMarker->FUN_00450f90(false);
                     m_pInvalidMarker->FUN_00450f90(true);
@@ -16083,7 +16083,7 @@ void RouletteMenuX::FUN_007bd2a0()
                     if (!s_bValidBet)
                     {
                         s_bValidBet = !s_bValidBet;
-                        FUN_00453a70()->FUN_00ad7550("GAMERouletteInvalidBet", 0x121).FUN_00ad8830(false);
+                        FUN_00453a70()->FUN_00ad7550("GAMERouletteInvalidBet", 0x121).Play(false);
                     }
                     m_pValidMarker->FUN_00450f90(true);
                     m_pInvalidMarker->FUN_00450f90(false);
@@ -16107,7 +16107,7 @@ void RouletteMenuX::FUN_007bd2a0()
             FUN_00406d00(szBroke, 0x104, DAT_011d2424.FUN_00403df0());
             DispatchMessageToSink(szBroke, 0, "Interface\\Icons\\Message Icons\\glow_message_vaultboy_surprised.dds", 0,
                                   2.0f, 0);
-            FUN_00453a70()->FUN_00ad7550("UIPopUpMessageGeneral", 0x121).FUN_00ad8830(false);
+            FUN_00453a70()->FUN_00ad7550("UIPopUpMessageGeneral", 0x121).Play(false);
             SetRouletteMenuTile();
         }
     }

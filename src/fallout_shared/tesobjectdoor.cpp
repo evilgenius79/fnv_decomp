@@ -1754,7 +1754,7 @@ struct ActivateObject
     void FUN_005789b0();
     ActivateProcess* FUN_008d8520();
     bool FUN_00891db0(ActivateKey*, int, int, int, unsigned*);
-    bool FUN_00573170(ActivateObject*, int, int, int);
+    bool Activate(ActivateObject*, int, int, int);
     bool FUN_0094df60();
     const char* FUN_0084e3a0();
     bool FUN_00575d10();
@@ -1770,9 +1770,9 @@ struct ActivateSound
     ActivateSound();
     ~ActivateSound();
     void FUN_00418900(const ActivateSound&);
-    void FUN_00ad8830(int);
-    void FUN_00ad8830();
-    void FUN_00ad8b60(float, float, float);
+    void Play(int);
+    void Play();
+    void SetPos(float, float, float);
 };
 struct ActivateAudio
 {
@@ -1930,13 +1930,13 @@ bool DoorActivation::ActivateDoor(ActivateObject* reference, ActivateObject* act
                         statePart3->FUN_00517360();
                         reference->FUN_005789b0();
                     }
-                    FUN_00453a70()->FUN_00ad7550("UILockpickingUnlock", 0x121, 0).FUN_00ad8830();
+                    FUN_00453a70()->FUN_00ad7550("UILockpickingUnlock", 0x121, 0).Play();
                     char message[256];
                     FUN_00406d00(message, 255, ((ActivateSetting*)&DAT_011d5110)->FUN_00403df0(),
                                  lockA->key->name.FUN_00408da0());
                     DispatchMessageToSink(message, 0, "Interface\\Icons\\Message Icons\\glow_message_key.dds", 0, 2.0f,
                                           0);
-                    ((ActivateObject*)DAT_011c9350)->FUN_00573170((ActivateObject*)DAT_011dea3c, 0, 0, 1);
+                    ((ActivateObject*)DAT_011c9350)->Activate((ActivateObject*)DAT_011dea3c, 0, 0, 1);
                     DAT_011c9350 = 0;
                     return true;
                 }
@@ -1997,9 +1997,9 @@ bool DoorActivation::ActivateDoor(ActivateObject* reference, ActivateObject* act
                 if (actor != (ActivateObject*)DAT_011dea3c)
                 {
                     ActivateVector position = reference->Position();
-                    sound.FUN_00ad8b60(position.x, position.y, position.z);
+                    sound.SetPos(position.x, position.y, position.z);
                 }
-                sound.FUN_00ad8830(0);
+                sound.Play(0);
                 if (actor == (ActivateObject*)DAT_011dea3c && !FUN_00453a70()->FUN_005bb4d0())
                     for (int i = 0; i < 4; ++i)
                         FUN_00453a70()->FUN_00ad7740(0);
@@ -2274,7 +2274,7 @@ struct BSAudioSoundHandle
     int f4;
     int f8;
     ~BSAudioSoundHandle();
-    void FUN_00ad8830(int);
+    void Play(int);
 };
 
 struct FUN_00ad73b0_t
@@ -2330,7 +2330,7 @@ void __cdecl PlaySoundForRef(unsigned int id)
                 {
                     BSAudioSoundHandle soundHandle =
                         FUN_00453a70()->FUN_00ad73b0(obj->FUN_00407840()->FUN_0084e3a0(), 0x121);
-                    soundHandle.FUN_00ad8830(0);
+                    soundHandle.Play(0);
                 }
             }
         }

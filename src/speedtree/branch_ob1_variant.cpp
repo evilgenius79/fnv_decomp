@@ -2694,7 +2694,7 @@ void FUN_00b32350_Vector::FUN_00b32350()
 }
 }  // namespace fnv_00b32350
 
-void* __cdecl FUN_00401000(unsigned int size);
+void* __cdecl FormHeap_Allocate(unsigned int size);
 struct B13970Tmp
 {
     int unk00;
@@ -2748,7 +2748,7 @@ struct FUN_00b37660
     FUN_00b37660(const B13970Tmp& t);
     static void* operator new(unsigned int size)
     {
-        return FUN_00401000(size);
+        return FormHeap_Allocate(size);
     }
     static void* operator new(unsigned int size, void* p)
     {

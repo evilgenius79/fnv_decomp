@@ -215,7 +215,7 @@ class FUN_00b276f0_cls
 
     void Reset();
 };
-extern void __cdecl FUN_00401030(void* p);
+extern void __cdecl FormHeap_Free(void* p);
 // InitBuffer
 extern "C" int __cdecl FUN_00b2e4a0(unsigned int count, int flag);
 extern "C" void __cdecl FUN_00b0fb80();
@@ -321,7 +321,7 @@ struct Hldr0044
     void Init(unsigned int* p);
 };
 extern "C" void __stdcall FUN_00ec7894(Hldr0044* p, void* dat);
-extern "C" void __cdecl FUN_00401000(unsigned int scaled);
+extern "C" void __cdecl FormHeap_Allocate(unsigned int scaled);
 extern "C" int DAT_01140ef8;
 extern "C" int DAT_010176f8;
 // @fnv 0x00b35f00
@@ -345,7 +345,7 @@ extern "C" void __cdecl FUN_00b35f00(unsigned int n)
         }
     }
 
-    FUN_00401000(n * 2);
+    FormHeap_Allocate(n * 2);
 }
 struct FUN_00b31270
 {
@@ -1975,7 +1975,7 @@ template <class I, class O, class C> inline O copyLoop(I _First, I _Last, O _Des
     return _Dest;
 }
 }
-void FUN_00401030(void* p);
+void FormHeap_Free(void* p);
 inline void* operator new(unsigned int, void* p)
 {
     return p;
@@ -1999,7 +1999,7 @@ inline void Del(FUN_00b2e740* p, unsigned int f)
     StrY* q = &p->s;
     q->FUN_0044a730(true, 0);
     if (f & 1)
-        FUN_00401030(p);
+        FormHeap_Free(p);
 }
 inline void DeadX()
 {
@@ -2131,14 +2131,14 @@ struct FUN_00b31480 : public VdVectorImpl<VdElemV>
 {
     ~FUN_00b31480();
 };
-void __cdecl FUN_00401030(void* p);
+void __cdecl FormHeap_Free(void* p);
 struct BufferPtr
 {
     void* m_pData;
     __forceinline ~BufferPtr()
     {
         void* pData = m_pData;
-        FUN_00401030(pData);
+        FormHeap_Free(pData);
     }
 };
 struct FUN_00b31c00
@@ -3401,7 +3401,7 @@ struct SxOwner
 };
 }
 using namespace setb3f;
-void __cdecl FUN_00401030(void* p);
+void __cdecl FormHeap_Free(void* p);
 struct FUN_00b3f0a0
 {
     int m_base[8];
@@ -3433,7 +3433,7 @@ struct B2AE90_Allocator
 {
     void deallocate(void* p)
     {
-        FUN_00401030(p);
+        FormHeap_Free(p);
     }
 };
 struct B2AE90_ArrayBase
@@ -3473,7 +3473,7 @@ struct B2AE90_Object : FUN_00b3f0a0
     FUN_00b3ce30 m_94;
     ~B2AE90_Object();
 };
-extern void __cdecl FUN_00401030(void* p);
+extern void __cdecl FormHeap_Free(void* p);
 template <class T> inline void swapq(T& l, T& r)
 {
     if (&l != &r)
@@ -3492,7 +3492,7 @@ struct AuxBaseQ
     AuxQ* m0;
     static void Dealloc(void* p)
     {
-        FUN_00401030(p);
+        FormHeap_Free(p);
     }
     ~AuxBaseQ()
     {

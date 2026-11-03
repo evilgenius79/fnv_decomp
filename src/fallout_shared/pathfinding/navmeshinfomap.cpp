@@ -758,7 +758,7 @@ struct NavigationRequest
 };
 struct BoundNavigationMap
 {
-    bool FUN_00853130(int entry, NavigationRequest** request);
+    bool GetAt(int entry, NavigationRequest** request);
     void RemoveKey(int entry);
 };
 struct ScopedNavPointer
@@ -844,7 +844,7 @@ struct NavigationOwner
 void NavigationOwner::ActivateNavigationEntry(int identifier)
 {
     NavigationRequest* entry;
-    if (reinterpret_cast<BoundNavigationMap*>(reinterpret_cast<char*>(this) + 0x1c)->FUN_00853130(identifier, &entry))
+    if (reinterpret_cast<BoundNavigationMap*>(reinterpret_cast<char*>(this) + 0x1c)->GetAt(identifier, &entry))
     {
         FUN_006b7b70(entry);
         bool isAccepted = false;
@@ -879,13 +879,13 @@ struct InfoArray
 struct InnerMap
 {
     virtual ~InnerMap();
-    bool FUN_00853130(unsigned int, InfoArray*&);
+    bool GetAt(unsigned int, InfoArray*&);
     bool RemoveKey(unsigned int);
     bool IsFieldCZero();
 };
 struct OuterMap
 {
-    bool FUN_00853130(unsigned int, InnerMap*&);
+    bool GetAt(unsigned int, InnerMap*&);
     bool RemoveKey(unsigned int);
 };
 struct MapOwner : NavMeshInfoMap
@@ -902,10 +902,10 @@ void MapOwner::FUN_006b7b70(NavMeshInfo* info)
     else
         map = info->m_uiParentSpaceID;
     InnerMap* array;
-    if (!reinterpret_cast<OuterMap&>(m_kNavMeshInfoArraysByWorldspace).FUN_00853130(map, array))
+    if (!reinterpret_cast<OuterMap&>(m_kNavMeshInfoArraysByWorldspace).GetAt(map, array))
         return;
     InfoArray* index;
-    if (!array->FUN_00853130(parent, index))
+    if (!array->GetAt(parent, index))
         return;
     unsigned int key = index->FUN_00719b20(info, 0, FUN_009a3830);
     if (key == -1)

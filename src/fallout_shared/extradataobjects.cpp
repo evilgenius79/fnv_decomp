@@ -4854,7 +4854,7 @@ FUN_004302d0::~FUN_004302d0()
     }
 }
 
-extern "C" void __cdecl FUN_00401030(void* p);
+extern "C" void __cdecl FormHeap_Free(void* p);
 struct FUN_00430ca0
 {
     unsigned int unk04;
@@ -4867,7 +4867,7 @@ struct FUN_00430ca0
 FUN_00430ca0::~FUN_00430ca0()
 {
     void* p = m_pData;
-    FUN_00401030(p);
+    FormHeap_Free(p);
     FUN_0040ecb0();
 }
 
@@ -5480,7 +5480,7 @@ bool ExtraLastFinishedSequence::FUN_00435310(BSExtraData* apExtra)
     return false;
 }
 
-void __cdecl FUN_00401030(void*);
+void __cdecl FormHeap_Free(void*);
 
 struct FUN_004355c0_cls
 {
@@ -5488,20 +5488,20 @@ struct FUN_004355c0_cls
     FUN_004355c0_cls* FUN_004355c0(int flags);
 };
 
-// Calls FUN_004355f0, then if bit 0 of flags is set calls FUN_00401030 on this, and returns this.
+// Calls FUN_004355f0, then if bit 0 of flags is set calls FormHeap_Free on this, and returns this.
 // @fnv 0x004355c0
 FUN_004355c0_cls* FUN_004355c0_cls::FUN_004355c0(int flags)
 {
     FUN_004355f0();
     if (flags & 1)
     {
-        FUN_00401030(this);
+        FormHeap_Free(this);
     }
     return this;
 }
 
 extern int DAT_01015e4c;
-extern "C" void __cdecl FUN_00401030(void*);
+extern "C" void __cdecl FormHeap_Free(void*);
 
 struct EmittanceSourceCleanup : BSExtraData
 {
@@ -5510,13 +5510,13 @@ struct EmittanceSourceCleanup : BSExtraData
     void __thiscall FUN_004355f0();
 };
 
-// Sets the vtable pointer, frees ownedSource via FUN_00401030, then calls FUN_0040ecb0.
+// Sets the vtable pointer, frees ownedSource via FormHeap_Free, then calls FUN_0040ecb0.
 // @fnv 0x004355f0
 void __thiscall EmittanceSourceCleanup::FUN_004355f0()
 {
     *reinterpret_cast<void**>(this) = &DAT_01015e4c;
     void* sourceToFree = ownedSource;
-    FUN_00401030(sourceToFree);
+    FormHeap_Free(sourceToFree);
     FUN_0040ecb0();
 }
 

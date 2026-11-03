@@ -2153,7 +2153,7 @@ struct Node_00855010
 };
 struct FUN_00855010_cls
 {
-    bool FUN_00853130(void* r1, Node_00855010** out);
+    bool GetAt(void* r1, Node_00855010** out);
     void FUN_00844700(void* r1, Node_00855010* out);
     void* GetOrCreateNode(void* a1, unsigned int a2);
 };
@@ -2165,14 +2165,14 @@ Guard_00855010::~Guard_00855010()
 Node_00855010::Node_00855010()
 {}
 
-// Looks up a node for the form via FUN_00853130, creates and registers one if missing, then calls FUN_00854e40 with a2 and returns it.
+// Looks up a node for the form via GetAt, creates and registers one if missing, then calls FUN_00854e40 with a2 and returns it.
 // @fnv 0x00855010
 void* FUN_00855010_cls::GetOrCreateNode(void* pForm, unsigned int uiValue)
 {
     void* out = reinterpret_cast<Form_00855010*>(pForm)->FUN_0084e3a0();
     Node_00855010* r1;
     {
-        bool found = FUN_00853130(out, &r1);
+        bool found = GetAt(out, &r1);
         if (!found)
         {
             Guard_00855010 g(0x11, 1, "D:\\_Fallout3\\Platforms\\Common\\Code\\Fallout Shared\\TESSaveLoadGame.cpp",
@@ -7050,7 +7050,7 @@ struct ExpiredCellMap
     ~ExpiredCellMap();
     void* FUN_004b9ba0();
     void FUN_006b7f20(void*&, unsigned int&, ExpiredCellList*&);
-    bool FUN_00853130(unsigned int, ExpiredCellList*&);
+    bool GetAt(unsigned int, ExpiredCellList*&);
     void FUN_00844700(unsigned int, ExpiredCellList*);
     void FUN_00438af0();
 };
@@ -7141,7 +7141,7 @@ struct ExpiredCalendar
 };
 extern ExpiredCalendar DAT_011de7b8;
 unsigned int __cdecl FUN_00526100();
-ExpiredReference* __cdecl FUN_004839c0(unsigned int);
+ExpiredReference* __cdecl LookupFormByID(unsigned int);
 struct ExpiredSaveLoadGame
 {
     ExpiredChangesMap* changes;
@@ -7210,7 +7210,7 @@ void ExpiredSaveLoadGame::PurgeExpiredCellChanges()
             }
             else
             {
-                ExpiredReference* form = FUN_004839c0(e);
+                ExpiredReference* form = LookupFormByID(e);
                 if (form && form->FUN_00401170() == 0x39)
                 {
                     ExpiredCell* cell = (ExpiredCell*)form;
@@ -7231,7 +7231,7 @@ void ExpiredSaveLoadGame::PurgeExpiredCellChanges()
                     storedCoordinates = new ExpiredCellCoordinates;
                     __memcpy(storedCoordinates, &p, 8);
                     ExpiredCellList* cells = 0;
-                    if (!expired.FUN_00853130(e, cells))
+                    if (!expired.GetAt(e, cells))
                     {
                         cells = new ExpiredCellList;
                         expired.FUN_00844700(e, cells);
@@ -7300,7 +7300,7 @@ void ExpiredSaveLoadGame::PurgeExpiredCellChanges()
         }
         else
         {
-            ExpiredReference* form = FUN_004839c0(f);
+            ExpiredReference* form = LookupFormByID(f);
             if (form)
             {
                 eb = form->FUN_00401170();
@@ -7330,7 +7330,7 @@ void ExpiredSaveLoadGame::PurgeExpiredCellChanges()
         if (a && q != 0x7fffffff && i != 0x7fffffff)
         {
             ExpiredCellList* cells = 0;
-            if (expired.FUN_00853130(a, cells))
+            if (expired.GetAt(a, cells))
             {
                 bool reset = false;
                 if (!cells)
@@ -7652,7 +7652,7 @@ struct List61 : Node61
 };
 struct Map61
 {
-    bool FUN_00853130(const char* k, List61*& v) const;
+    bool GetAt(const char* k, List61*& v) const;
 };
 class Own61
 {
@@ -7671,7 +7671,7 @@ void* Own61::RemoveCommand(const char* key, int a, int b)
     {
         bool found;
         Node61* it;
-        found = m_10->FUN_00853130(key, list);
+        found = m_10->GetAt(key, list);
         if (!found)
             return 0;
         it = list;
@@ -7907,7 +7907,7 @@ class EnchX
   public:
     FormX* FUN_00726070();
 };
-FormX* FUN_004839c0(unsigned int id);
+FormX* LookupFormByID(unsigned int id);
 void FUN_005b5e40(const char* fmt, ...);
 struct ListX
 {
@@ -7953,7 +7953,7 @@ void SelfX::FUN_00861820(BufX* pBuf)
     while (pkNode_dhyats)
     {
         unsigned int uiID = *pkNode_dhyats->FUN_006815c0();
-        FormX* pkForm = FUN_004839c0(uiID);
+        FormX* pkForm = LookupFormByID(uiID);
         if (pkForm)
         {
             FormX* pkBound = (FormX*)FUN_00ec43fb(pkForm, 0, &DAT_01183028, &DAT_01183108, 0);
@@ -7979,7 +7979,7 @@ void SelfX::FUN_00861820(BufX* pBuf)
     while (pkNode_dhyats)
     {
         unsigned int uiFormID_wk = *pkNode_dhyats->FUN_006815c0();
-        FormX* pkObj = FUN_004839c0(uiFormID_wk);
+        FormX* pkObj = LookupFormByID(uiFormID_wk);
         if (pkObj)
         {
             FormX* pkBoundObj_ai = (FormX*)FUN_00ec43fb(pkObj, 0, &DAT_01183028, &DAT_01183108, 0);
@@ -9734,7 +9734,7 @@ int FUN_00406d00(char*, unsigned int, const char*, ...);
 int FUN_00456a20(const char*, int, int, int);
 void FUN_00aff0b0(const char*);
 unsigned int FUN_0044a670(const char*);
-Form* FUN_004839c0(unsigned int);
+Form* LookupFormByID(unsigned int);
 int FUN_00408b20(const char*, const char*);
 
 extern char DAT_01039788;
@@ -9832,7 +9832,7 @@ void Main::FUN_00855ba0(const char* filename)
             Entry* entry = *node->FUN_006815c0();
             if (entry)
             {
-                Form* formSlot19 = FUN_004839c0(entry->id);
+                Form* formSlot19 = LookupFormByID(entry->id);
                 if (entry->size > statsSlot13.largest)
                     statsSlot13.largest = entry->size;
                 if (entry->size < statsSlot13.smallest)
@@ -10467,11 +10467,11 @@ struct Save77
 TESForm* Save77::FUN_00859a90(unsigned int id, Record77* record)
 {
     AutoMemContext scope6(static_cast<MEM_CONTEXT>(49), true, DAT_010804c8, 0x133b);
-    TESForm* pForm = (TESForm*)::FUN_004839c0(id);
+    TESForm* pForm = (TESForm*)::LookupFormByID(id);
     TESBoundObject* bound28 = 0;
     if (record->type != 2)
     {
-        bound28 = dynamic_cast<TESBoundObject*>((TESForm*)::FUN_004839c0(record->object));
+        bound28 = dynamic_cast<TESBoundObject*>((TESForm*)::LookupFormByID(record->object));
         if (!bound28)
         {
             FUN_005b5e40("SAVELOAD: Bound object %08X no longer exists.  Reference %08X will not be created.",

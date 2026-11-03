@@ -8086,7 +8086,7 @@ struct GlobalObject_0045cf30
     unsigned char* Bool();
 };
 extern GlobalObject_0045cf30 g_011de4e8;
-TESForm* __cdecl FUN_004839c0(unsigned int auiFormID);
+TESForm* __cdecl LookupFormByID(unsigned int auiFormID);
 void __cdecl FUN_0040fbe0(const char* apFormat, ...);
 extern const char DAT_01012c78[];
 extern const char DAT_01012cb0[];
@@ -8132,7 +8132,7 @@ unsigned short FUN_0090f8b0_shell::FUN_0090f8b0(unsigned int auiChangeFlags, uns
         unsigned char* pHeader = g_TESSaveLoadGame->FUN_004fd3e0();
         if (pHeader)
         {
-            TESForm* pForm = FUN_004839c0(*(unsigned int*)pHeader);
+            TESForm* pForm = LookupFormByID(*(unsigned int*)pHeader);
             FUN_0040fbe0(DAT_01012cb0, uiSaveSize - uiBaseSize, *(unsigned int*)pHeader, pForm->GetName(),
                          *(unsigned int*)(pHeader + 5), 0xeda, DAT_01088f50);
         }
@@ -8248,7 +8248,7 @@ struct FormView
     virtual void v75();
     virtual const char* Name();
 };
-extern FormView* __cdecl FUN_004839c0(unsigned);
+extern FormView* __cdecl LookupFormByID(unsigned);
 struct ProcessTail
 {
     void Load();
@@ -8396,7 +8396,7 @@ void ProcessState::FUN_0090fd80(unsigned flags, unsigned arg2, unsigned arg3)
                 LoadRecord* record = g_TESSaveLoadGame->Record();
                 if (record)
                 {
-                    FormView* form = FUN_004839c0(record->id);
+                    FormView* form = LookupFormByID(record->id);
                     FNV_Warning(
                         "SAVELOAD: (LoadGame Buffer error) Block Header is incorrect in file %s on line %i.  Currently loading form is %08X %s with version %i and flags %08X",
                         "D:\\_Fallout3\\Platforms\\Common\\Code\\Fallout\\ai\\LowProcess.cpp", 0xf2d, record->id,
@@ -8431,7 +8431,7 @@ void ProcessState::FUN_0090fd80(unsigned flags, unsigned arg2, unsigned arg3)
         {
             unsigned objectID;
             g_TESSaveLoadGame->ReadID(&objectID, 4);
-            object34 = dynamic_cast<TESBoundObject*>((TESForm*)FUN_004839c0(objectID));
+            object34 = dynamic_cast<TESBoundObject*>((TESForm*)LookupFormByID(objectID));
         }
         if (g_TESSaveLoadGame->Version() >= 0x56)
             g_TESSaveLoadGame->Read(&field58, 4);
@@ -8457,7 +8457,7 @@ void ProcessState::FUN_0090fd80(unsigned flags, unsigned arg2, unsigned arg3)
             LoadRecord* record2 = g_TESSaveLoadGame->Record();
             if (record2)
             {
-                FormView* form2 = FUN_004839c0(record2->id);
+                FormView* form2 = LookupFormByID(record2->id);
                 if (end > start + blockSize)
                     FNV_Warning(
                         "SAVELOAD: LoadGame Buffer overrun of %i bytes in file %s on line %i.  Currently loading form is %08X %s with version %i and flags %08X",
@@ -9981,7 +9981,7 @@ struct Sound
     virtual void v4B();
     virtual const char* GetName();
 };
-Sound* FUN_004839c0(unsigned int id);
+Sound* LookupFormByID(unsigned int id);
 void FUN_0040fbe0(const char* fmt, ...);
 void FUN_005b5e40(const char* fmt, const char* file, int line);
 
@@ -10101,7 +10101,7 @@ void LowProcessFA70::SaveToStream(unsigned int changedFlags, unsigned int arg2)
         char* pRef = (char*)DAT_011de45c->FUN_004fd3e0();
         if (pRef != 0)
         {
-            Sound* s = FUN_004839c0(*(unsigned int*)pRef);
+            Sound* s = LookupFormByID(*(unsigned int*)pRef);
             FUN_0040fbe0("SaveGame(): %-5i for form %08X %s with flags %08X ending at line %i in file %s",
                          endPos - startPos, *(unsigned int*)pRef, s->GetName(), *(unsigned int*)(pRef + 5), 0xf20,
                          "D:\\_Fallout3\\Platforms\\Common\\Code\\Fallout\\ai\\LowProcess.cpp");

@@ -237,8 +237,8 @@ struct DebugFlag
 };
 struct SaveLock
 {
-    void FUN_0040fbf0(int a);
-    void FUN_0040fba0();
+    void Lock(int a);
+    void Unlock();
 };
 struct PackageMgr
 {
@@ -251,7 +251,7 @@ extern SaveLock DAT_011c3920;
 extern PackageMgr* DAT_011c3f2c;
 void __cdecl FUN_0040fbe0(const char* fmt, ...);
 void __cdecl FUN_005b5e40(const char* fmt, ...);
-SForm* __cdecl FUN_004839c0(unsigned int id);
+SForm* __cdecl LookupFormByID(unsigned int id);
 unsigned char __cdecl FUN_0044a670(char* s);
 void __cdecl FUN_00805b40(void* p, int a);
 
@@ -395,7 +395,7 @@ void SaveShell::FUN_004235e0(unsigned int flags, SForm* form)
         blkA4 = DAT_011de45c->FUN_00825c00();
         DAT_011de45c->FUN_008579b0(&zero, 2);
     }
-    DAT_011c3920.FUN_0040fbf0(0);
+    DAT_011c3920.Lock(0);
     count9 = 0;
     cnt = DAT_011de45c->FUN_00825c00();
     DAT_011de45c->FUN_008579b0(&count9, 2);
@@ -819,7 +819,7 @@ void SaveShell::FUN_004235e0(unsigned int flags, SForm* form)
         FormIDEntry* hdr = DAT_011de45c->FUN_004fd3e0();
         if (hdr)
         {
-            SForm* f = FUN_004839c0(hdr->formID);
+            SForm* f = LookupFormByID(hdr->formID);
             FUN_0040fbe0("SaveGame(): %-5i for form %08X %s with flags %08X ending at line %i in file %s",
                          endPos - kPosB, hdr->formID, f->vf130(), *(int*)hdr->changeFlags, 0x2c1f,
                          "D:\\_Fallout3\\Platforms\\Common\\Code\\Fallout Shared\\ExtraDataList.cpp");
@@ -841,7 +841,7 @@ void SaveShell::FUN_004235e0(unsigned int flags, SForm* form)
         }
         *(short*)blkA4 = (short)(_end - blk);
     }
-    DAT_011c3920.FUN_0040fba0();
+    DAT_011c3920.Unlock();
 }
 
 }
@@ -1160,7 +1160,7 @@ extern char DAT_01183b2c;
 extern char DAT_01184638;
 extern char DAT_0118444c;
 void* FUN_00ec43fb(void*, int, void*, void*, int);
-TESForm* FUN_004839c0(G*);
+TESForm* LookupFormByID(G*);
 int FUN_0040a250(G*);
 int FUN_00825550(G*);
 void FUN_008060e0(int, int);
@@ -1226,7 +1226,7 @@ void ThisQ::FUN_00426020(unsigned int a1, int a2, O* a3, void* a4)
             if (e2)
             {
                 G* f2 = e2->m0c;
-                e2->m0c = (G*)dynamic_cast<TESObjectREFR*>(FUN_004839c0(f2));
+                e2->m0c = (G*)dynamic_cast<TESObjectREFR*>(LookupFormByID(f2));
                 if (!e2->m0c)
                     FUN_0041c900();
             }
@@ -1237,7 +1237,7 @@ void ThisQ::FUN_00426020(unsigned int a1, int a2, O* a3, void* a4)
             if (e3)
             {
                 G* f3 = e3->m0c;
-                G* c3 = (G*)dynamic_cast<AlchemyItem*>(FUN_004839c0(f3));
+                G* c3 = (G*)dynamic_cast<AlchemyItem*>(LookupFormByID(f3));
                 if (c3)
                     FUN_00419d10(c3);
             }
@@ -1252,7 +1252,7 @@ void ThisQ::FUN_00426020(unsigned int a1, int a2, O* a3, void* a4)
                 if (e4->m14)
                 {
                     G* f4 = e4->m14;
-                    e4->m14 = (G*)dynamic_cast<TESObjectREFR*>(FUN_004839c0(f4));
+                    e4->m14 = (G*)dynamic_cast<TESObjectREFR*>(LookupFormByID(f4));
                 }
                 e4->m0c->ComputePackageFlags(e4->m14);
             }
@@ -1272,7 +1272,7 @@ void ThisQ::FUN_00426020(unsigned int a1, int a2, O* a3, void* a4)
                     G* f6 = 0;
                     c6 = *n->FUN_006815c0();
                     if (c6)
-                        f6 = (G*)dynamic_cast<Actor*>(FUN_004839c0(c6));
+                        f6 = (G*)dynamic_cast<Actor*>(LookupFormByID(c6));
                     if (!f6)
                         n->FUN_0063f7b0();
                     else
@@ -1298,14 +1298,14 @@ void ThisQ::FUN_00426020(unsigned int a1, int a2, O* a3, void* a4)
                     if (v60)
                         x->ia.s18(FUN_00825550(v60));
                     if (v58)
-                        x->FUN_0050f9c0((G*)dynamic_cast<TESObjectREFR*>(FUN_004839c0(v58)));
+                        x->FUN_0050f9c0((G*)dynamic_cast<TESObjectREFR*>(LookupFormByID(v58)));
                 }
                 X54* y = (X54*)dynamic_cast<NonActorMagicTarget*>((BSExtraData*)FUN_00410220(0x33));
                 if (y)
                 {
                     G* v64 = y->ia.s1();
                     if (v64)
-                        y->FUN_0050f9a0((G*)dynamic_cast<TESObjectREFR*>(FUN_004839c0(v64)));
+                        y->FUN_0050f9a0((G*)dynamic_cast<TESObjectREFR*>(LookupFormByID(v64)));
                     FUN_008060e0(y->ia.s2(), 0);
                 }
             }
@@ -1324,7 +1324,7 @@ void ThisQ::FUN_00426020(unsigned int a1, int a2, O* a3, void* a4)
                 G* f7 = *n7->FUN_006815c0();
                 G* c7 = f7;
                 if (c7)
-                    f7 = (G*)dynamic_cast<TESObjectREFR*>(FUN_004839c0(c7));
+                    f7 = (G*)dynamic_cast<TESObjectREFR*>(LookupFormByID(c7));
                 if (!f7)
                 {
                     if (!prev)
@@ -1353,7 +1353,7 @@ void ThisQ::FUN_00426020(unsigned int a1, int a2, O* a3, void* a4)
             G* f8 = FUN_0041de00();
             if (f8)
             {
-                G* c8 = (G*)dynamic_cast<TESObjectREFR*>(FUN_004839c0(f8));
+                G* c8 = (G*)dynamic_cast<TESObjectREFR*>(LookupFormByID(f8));
                 FUN_0041de40(c8);
                 if (c8)
                     c8->FUN_005d43c0(a3)->FUN_0041e000();
@@ -1363,7 +1363,7 @@ void ThisQ::FUN_00426020(unsigned int a1, int a2, O* a3, void* a4)
         if (v)
         {
             G* f9 = v;
-            v = (G*)dynamic_cast<TESObjectREFR*>(FUN_004839c0(f9));
+            v = (G*)dynamic_cast<TESObjectREFR*>(LookupFormByID(f9));
             FUN_00419dc0(v);
         }
     }

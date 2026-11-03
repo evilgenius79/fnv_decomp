@@ -313,7 +313,7 @@ struct SeqList
 
 struct SubMatcher
 {
-    bool FUN_00853130(Script* script, unsigned int* outLen);
+    bool GetAt(Script* script, unsigned int* outLen);
 };
 
 struct SpawnedTarget
@@ -351,7 +351,7 @@ char FUN_006e1670_cls::FUN_006e1670(unsigned int limit, SpawnedTarget* target, u
     {
         unsigned int len;
         Script* script = ((SeqList*)((char*)this + 0x1c))->FUN_00877a30(accum)->FUN_00559450()->FUN_0084e3a0();
-        if (!((SubMatcher*)((char*)this + 8))->FUN_00853130(script, &len))
+        if (!((SubMatcher*)((char*)this + 8))->GetAt(script, &len))
         {
             return 0;
         }

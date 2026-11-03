@@ -426,7 +426,7 @@ extern char DAT_01069d20[];
 extern "C" int __cdecl FUN_0044a670(char const*);
 extern "C" void* __cdecl FUN_00653270(void*, void*);
 extern "C" unsigned short __cdecl FUN_0055fdb0(void*);
-extern "C" LoggingObject* __cdecl FUN_004839c0(void*);
+extern "C" LoggingObject* __cdecl LookupFormByID(void*);
 extern "C" void __cdecl FUN_0040fbe0(char const*, ...);
 typedef void*(__thiscall* LogMethod)(LoggingObject*);
 // @fnv 0x00689b20
@@ -456,7 +456,7 @@ unsigned short ParticleEffect::FUN_00689b20()
         void* entry = DAT_011de45c->FUN_004fd3e0();
         if (entry)
         {
-            LoggingObject* writer = FUN_004839c0(*(void**)entry);
+            LoggingObject* writer = LookupFormByID(*(void**)entry);
             FUN_0040fbe0(DAT_01012cb0, previous - total, *(void**)entry, ((LogMethod*)writer->vtable)[76](writer),
                          *(void**)((char*)entry + 5), 0x174, DAT_01069d20);
         }
@@ -957,7 +957,7 @@ struct R01SceneLink
 
 struct R01Scene
 {
-    R01SceneRoot* FUN_00447080(char*, int, int, int, int, int);
+    R01SceneRoot* LoadModel(char*, int, int, int, int, int);
     void FUN_004472a0(char*, R01SceneLink*);
 };
 
@@ -1116,7 +1116,7 @@ extern R01Rand DAT_011f6394;
 extern const double DAT_01017b70;
 extern const float DAT_01012054;
 extern void __cdecl FUN_005b5e40(const char*, ...);
-extern R01Form* __cdecl FUN_004839c0(int);
+extern R01Form* __cdecl LookupFormByID(int);
 extern void __cdecl FUN_0055ffa0(void*, R01Node*, float);
 extern void __cdecl FUN_00a6d2d0(R01Node*);
 extern void* __cdecl memset(void*, int, unsigned int);
@@ -1159,7 +1159,7 @@ bool R01FxPlayer::LoadFromSave()
                 R01Diagnostic* diag = reinterpret_cast<R01SaveReader*>(DAT_011de45c)->FUN_004fd3c0();
                 if (diag)
                 {
-                    R01Form* form = FUN_004839c0(diag->m_formID);
+                    R01Form* form = LookupFormByID(diag->m_formID);
                     FUN_005b5e40(
                         "SAVELOAD: (LoadGame Buffer error) Block Header is incorrect in file %s on line %i.  Currently loading form is %08X %s with version %i and flags %08X",
                         "D:\\_Fallout3\\Platforms\\Common\\Code\\Fallout Shared\\TempEffects\\BSTempEffectParticle.cpp",
@@ -1192,7 +1192,7 @@ bool R01FxPlayer::LoadFromSave()
         reinterpret_cast<R01SaveReader*>(DAT_011de45c)->FUN_008579e0(&a3_2, 2);
         if (aA4)
         {
-            R01SceneRoot* a4_2 = reinterpret_cast<R01Scene*>(DAT_011c3b3c)->FUN_00447080(aActive8, 0, 1, 0, 0, 0);
+            R01SceneRoot* a4_2 = reinterpret_cast<R01Scene*>(DAT_011c3b3c)->LoadModel(aActive8, 0, 1, 0, 0, 0);
             if (a4_2)
             {
                 m_nodeRef.FUN_0066b0d0(a4_2->FUN_00a5d680());
@@ -1243,7 +1243,7 @@ bool R01FxPlayer::LoadFromSave()
             R01Diagnostic* diag = reinterpret_cast<R01SaveReader*>(DAT_011de45c)->FUN_004fd3c0();
             if (diag)
             {
-                R01Form* form = FUN_004839c0(diag->m_formID);
+                R01Form* form = LookupFormByID(diag->m_formID);
                 if (a1cTmp > a1c2 + (unsigned int)aA2)
                 {
                     FUN_005b5e40(
@@ -1567,7 +1567,7 @@ SGControllerManager* __cdecl FUN_00653270(const NiRTTI* apRTTI, SGObject* apObje
 unsigned short __cdecl FUN_0055fdb0(SGControllerManager* apManager);
 void __cdecl FUN_0055fe70(SGControllerManager* apManager, float afTime);
 extern const float DAT_01012054;
-SGForm* __cdecl FUN_004839c0(unsigned int auiFormID);
+SGForm* __cdecl LookupFormByID(unsigned int auiFormID);
 void __cdecl FUN_0040fbe0(const char* apFormat, ...);
 void __cdecl FUN_005b5e40(const char* apFormat, ...);
 unsigned int __cdecl FUN_0044a670(const char* apString);
@@ -1639,7 +1639,7 @@ void SGTempEffectParticle::FUN_00689cb0()
         SGChangeRecord* pChange = DAT_011de45c->FUN_004fd3e0();
         if (pChange)
         {
-            SGForm* pForm = FUN_004839c0(pChange->auiFormId);
+            SGForm* pForm = LookupFormByID(pChange->auiFormId);
             FUN_0040fbe0("SaveGame(): %-5i for form %08X %s with flags %08X ending at line %i in file %s",
                          pDebugEnd - pBeginPos, pChange->auiFormId, pForm->GetName(),
                          *(unsigned int*)pChange->ucChangeFlags, 411, s_szParticleFile);

@@ -2086,7 +2086,7 @@ struct Tile_helper
 };
 
 int __cdecl FUN_00408b20(char const*, char const*);
-int __cdecl FUN_00a01860(char const*);
+int __cdecl TraitNameToID(char const*);
 
 extern char const* const ENGLISH;
 extern const char _DAT_0106ed20[];
@@ -2159,19 +2159,19 @@ void FUN_007dcc80_StandIn::InitializeStatsMenu()
 
         reinterpret_cast<Tile_helper*>(reinterpret_cast<Tile*>(reinterpret_cast<BSSimpleList<Tile*>*>(this)->GetNext()))
             ->GetNamedChild(str_01077388)
-            ->Set(FUN_00a01860(_DAT_0106ed20), g_011d1f5c.GetMenuTitle(), true);
+            ->Set(TraitNameToID(_DAT_0106ed20), g_011d1f5c.GetMenuTitle(), true);
 
         reinterpret_cast<Tile_helper*>(reinterpret_cast<Tile*>(reinterpret_cast<BSSimpleList<Tile*>*>(this)->GetNext()))
             ->GetNamedChild(str_01077378)
-            ->Set(FUN_00a01860(_DAT_0106ed20), g_011d50b0.GetMenuTitle(), true);
+            ->Set(TraitNameToID(_DAT_0106ed20), g_011d50b0.GetMenuTitle(), true);
 
         reinterpret_cast<Tile_helper*>(reinterpret_cast<Tile*>(reinterpret_cast<BSSimpleList<Tile*>*>(this)->GetNext()))
             ->GetNamedChild(str_01077368)
-            ->Set(FUN_00a01860(_DAT_0106ed20), g_011d44a4.GetMenuTitle(), true);
+            ->Set(TraitNameToID(_DAT_0106ed20), g_011d44a4.GetMenuTitle(), true);
 
         reinterpret_cast<Tile_helper*>(reinterpret_cast<Tile*>(reinterpret_cast<BSSimpleList<Tile*>*>(this)->GetNext()))
             ->GetNamedChild(str_01077358)
-            ->Set(FUN_00a01860(_DAT_0106ed20), g_011d3bd4.GetMenuTitle(), true);
+            ->Set(TraitNameToID(_DAT_0106ed20), g_011d3bd4.GetMenuTitle(), true);
 
         reinterpret_cast<Tile_helper*>(reinterpret_cast<Tile*>(reinterpret_cast<BSSimpleList<Tile*>*>(this)->GetNext()))
             ->GetNamedChild(str_01077340)
@@ -2443,7 +2443,7 @@ extern const char UNK_010702d8;
 extern const char UNK_01070250;
 extern double DAT_01012070;
 
-int __cdecl FUN_00a01860(const char* name);
+int __cdecl TraitNameToID(const char* name);
 int __cdecl FUN_0066e9f0(void* value);
 int __cdecl GetActorValueDescription(void* value);
 unsigned int __cdecl GetWeaponSkillIconPath(void* value);
@@ -2476,7 +2476,7 @@ void StatsMenuFunction007dc7e0::UpdateStatsDisplay(void* actor)
         reinterpret_cast<ChildList007dc7e0*>((char*)m_pTiles[26] + 4)->FUN_0073ac90()));
     TileAdapter007dc7e0* second = *(reinterpret_cast<TileAdapter007dc7e0**>(
         reinterpret_cast<ChildList007dc7e0*>((char*)m_pTiles[26] + 4)->FUN_007b5370()));
-    float fMinimumInputValue = second->FUN_00a011b0(FUN_00a01860(&UNK_01074eb8));
+    float fMinimumInputValue = second->FUN_00a011b0(TraitNameToID(&UNK_01074eb8));
     float diff = 0.0f;
     reinterpret_cast<TileAdapter007dc7e0*>(m_pTiles[25])->FUN_00700320(0xfa3, 1);
     reinterpret_cast<TileAdapter007dc7e0*>(m_pTiles[25])->FUN_00a01350(0xfcc, FUN_0066e9f0(actor), true);
@@ -2494,9 +2494,9 @@ void StatsMenuFunction007dc7e0::UpdateStatsDisplay(void* actor)
     pMain->FUN_00a04640(0);
     diff = pMain->FUN_00a011b0(0xfb0) - pMain->FUN_0045cd60()->FUN_00a011b0(0xfb0);
     diff = FUN_00404010(0.0f, diff);
-    second->FUN_00a012d0(FUN_00a01860(&UNK_0106f8f8), FUN_004e4430(diff / fMinimumInputValue) + DAT_01012070, true);
-    second->FUN_00a012d0(FUN_00a01860(&UNK_010702d8), 0.0f, false);
-    second->SetTraitAndReset(FUN_00a01860(&UNK_01070250), 1.0f);
+    second->FUN_00a012d0(TraitNameToID(&UNK_0106f8f8), FUN_004e4430(diff / fMinimumInputValue) + DAT_01012070, true);
+    second->FUN_00a012d0(TraitNameToID(&UNK_010702d8), 0.0f, false);
+    second->SetTraitAndReset(TraitNameToID(&UNK_01070250), 1.0f);
 }
 
 struct TileValue
@@ -3208,7 +3208,7 @@ struct ClickAlchemy
 };
 struct ClickPlayer
 {
-    void FUN_0088c650(TESBoundObject*, void*, AlchemyItem*, bool, bool, bool);
+    void EquipItem(TESBoundObject*, void*, AlchemyItem*, bool, bool, bool);
 };
 struct ClickTile
 {
@@ -3272,7 +3272,7 @@ void ClickMenu::FUN_007db380(int id, Tile* tile)
         if (tile == m_kHealingOptions[i].pTile && m_kHealingOptions[i].m_pStatusEffect)
         {
             ((ClickPlayer*)g_thePlayer)
-                ->FUN_0088c650(m_kHealingOptions[i].m_pStatusEffect->FUN_0044ddc0(),
+                ->EquipItem(m_kHealingOptions[i].m_pStatusEffect->FUN_0044ddc0(),
                                m_kHealingOptions[i].m_pStatusEffect->FUN_00726070(),
                                m_kHealingOptions[i].m_pStatusEffect->FUN_00559450()
                                    ? m_kHealingOptions[i].m_pStatusEffect->FUN_00559450()->FUN_006815c0()
@@ -3646,7 +3646,7 @@ struct TileSI : public Tile
     void FUN_00a012d0(int, float, bool);
     void SetTraitAndReset(int, float);
 };
-int __cdecl FUN_00a01860(const char*);
+int __cdecl TraitNameToID(const char*);
 float __cdecl FUN_00404010(float, float);
 float __cdecl FUN_004e4430(float);
 
@@ -3660,7 +3660,7 @@ void FUN_007dc9b0_shell::UpdateScrollBar(EntrySI** apEntry)
 {
     TileSI* pHeadTile = (TileSI*)((ChildListSI*)((char*)m_pTiles[26] + 4))->FUN_0073ac90();
     TileSI* pTailTile = (TileSI*)((ChildListSI*)((char*)m_pTiles[26] + 4))->FUN_007b5370();
-    float fTailScrollDelta = pTailTile->FUN_00a011b0(FUN_00a01860("_ScrollDelta"));
+    float fTailScrollDelta = pTailTile->FUN_00a011b0(TraitNameToID("_ScrollDelta"));
     {
         float fPos = 0.0f;
         m_pTiles[25]->Set(0xfa3, 1);
@@ -3669,11 +3669,11 @@ void FUN_007dc9b0_shell::UpdateScrollBar(EntrySI** apEntry)
         pHeadTile->FUN_00a04640(0);
         fPos = pHeadTile->FUN_00a011b0(0xfb0) - ((TileSI*)pHeadTile->GetParent())->FUN_00a011b0(0xfb0);
         fPos = FUN_00404010(0.0f, fPos);
-        pTailTile->FUN_00a012d0(FUN_00a01860("_number_of_items"), (float)(FUN_004e4430(fPos / fTailScrollDelta) + 1.0),
+        pTailTile->FUN_00a012d0(TraitNameToID("_number_of_items"), (float)(FUN_004e4430(fPos / fTailScrollDelta) + 1.0),
                                 true);
     }
-    pTailTile->FUN_00a012d0(FUN_00a01860("_current_value"), 0.0f, false);
-    pTailTile->SetTraitAndReset(FUN_00a01860("_SetInCode"), 1.0f);
+    pTailTile->FUN_00a012d0(TraitNameToID("_current_value"), 0.0f, false);
+    pTailTile->SetTraitAndReset(TraitNameToID("_SetInCode"), 1.0f);
 }
 }  // namespace fnv_007dc9b0
 
@@ -4503,7 +4503,7 @@ void HealMenu::UpdateOption(int aiOptionIndex)
 }
 
 namespace fnv_007df620 {
-int __cdecl FUN_00a00940(const char* name, int index);
+int __cdecl TraitNameToIDAdd(const char* name, int index);
 bool __cdecl FUN_004b71d0();
 BodyPartDisplay* __cdecl FUN_007db1c0();
 
@@ -4542,8 +4542,8 @@ struct StatsMenuH_007df620
 // @fnv 0x007df620
 void StatsMenuH_007df620::UpdateXboxButtonState()
 {
-    static int iConsoleButtonTrait = FUN_00a00940("_xbox_button", -1);
-    static int iEnabledTrait = FUN_00a00940("_enabled", -1);
+    static int iConsoleButtonTrait = TraitNameToIDAdd("_xbox_button", -1);
+    static int iEnabledTrait = TraitNameToIDAdd("_enabled", -1);
     if (unkb4 && FUN_004b71d0())
     {
         unkb4->Set(iConsoleButtonTrait, !m_bUpdateOption + 10);
@@ -4867,7 +4867,7 @@ struct TraitAction
     void RemoveFromReactions();
     void FUN_00a09130(int, Tile*, int);
     void AppendFloatAction(int, float);
-    void FUN_00a09410(bool);
+    void Refresh(bool);
 };
 struct ItemTileMethods
 {
@@ -4876,9 +4876,9 @@ struct ItemTileMethods
 };
 struct MenuTemplateMethods
 {
-    Tile* FUN_00a1ddb0(Tile*, const char*, int);
+    Tile* AddTileFromTemplate(Tile*, const char*, int);
 };
-int __cdecl FUN_00a00940(const char*, int);
+int __cdecl TraitNameToIDAdd(const char*, int);
 struct ItemBox : ListBox_enum_ActorValue__Index_
 {
     bool FUN_007242c0(unsigned int);
@@ -4894,7 +4894,7 @@ Tile* ItemBox::FUN_007e1430(ActorValue::Index value, const char* text, ItemCompa
     if (m_pListTile && (pTemplateName || templateName))
     {
         Tile* tile = ((MenuTemplateMethods*)((TileH*)m_pListTile)->GetMenu())
-                         ->FUN_00a1ddb0(m_pListTile, templateName ? templateName : pTemplateName, 0);
+                         ->AddTileFromTemplate(m_pListTile, templateName ? templateName : pTemplateName, 0);
         if (!((ItemTileMethods*)tile)->FUN_00a00f30(4010))
             tile->Set(4010, -1);
         if (text)
@@ -4918,14 +4918,14 @@ Tile* ItemBox::FUN_007e1430(ActorValue::Index value, const char* text, ItemCompa
             tile->Set(4012, m_usSelectedIndex++);
         }
         if (GetRaceCount() == 1 &&
-            ((Dummy007_obj*)m_pListTile)->FUN_00a011b0(FUN_00a00940("_number_of_visible_items", -1)) > 0.0)
+            ((Dummy007_obj*)m_pListTile)->FUN_00a011b0(TraitNameToIDAdd("_number_of_visible_items", -1)) > 0.0)
         {
             TraitAction* action = ((ItemTileMethods*)m_pListTile)->FindTraitValue(4016);
             action->RemoveFromReactions();
             action->FUN_00a09130(2000, tile, 4016);
             action->AppendFloatAction(
-                2003, ((Dummy007_obj*)m_pListTile)->FUN_00a011b0(FUN_00a00940("_number_of_visible_items", -1)));
-            action->FUN_00a09410(false);
+                2003, ((Dummy007_obj*)m_pListTile)->FUN_00a011b0(TraitNameToIDAdd("_number_of_visible_items", -1)));
+            action->Refresh(false);
         }
         return tile;
     }
@@ -4950,14 +4950,14 @@ struct ListOperations
 };
 struct TemplateMenu
 {
-    Tile* FUN_00a1ddb0(Tile*, const char*, int);
+    Tile* AddTileFromTemplate(Tile*, const char*, int);
 };
 struct TileValueOperations
 {
     void RemoveFromReactions();
     void FUN_00a09130(int, Tile*, int);
     void AppendFloatAction(int, float);
-    void FUN_00a09410(int);
+    void Refresh(int);
 };
 struct TileOperations
 {
@@ -4966,7 +4966,7 @@ struct TileOperations
     float FUN_00a011b0(int);
     TileValueOperations* FindTraitValue(int);
 };
-int __cdecl FUN_00a00940(const char*, int);
+int __cdecl TraitNameToIDAdd(const char*, int);
 extern "C" const char kListBoxNumFiltered[];
 struct ListBoxInsert : ListBox_enum_ActorValue__Index_
 {
@@ -4986,7 +4986,7 @@ Tile* ListBoxInsert::FUN_007e16d0(ActorValue::Index value, const char* text,
     {
         Tile* tile = ((TileOperations*)m_pListTile)
                          ->FUN_00a03c90()
-                         ->FUN_00a1ddb0(m_pListTile, templateName ? templateName : pTemplateName, 0);
+                         ->AddTileFromTemplate(m_pListTile, templateName ? templateName : pTemplateName, 0);
         if (!((TileOperations*)tile)->FUN_00a00f30(0xFAA))
             tile->Set(0xFAA, -1);
         if (text)
@@ -5010,14 +5010,14 @@ Tile* ListBoxInsert::FUN_007e16d0(ActorValue::Index value, const char* text,
             tile->Set(0xFAC, m_usSelectedIndex++);
         }
         if (GetRaceCount() == 1 &&
-            ((TileOperations*)m_pListTile)->FUN_00a011b0(FUN_00a00940(kListBoxNumFiltered, -1)) > 0.0)
+            ((TileOperations*)m_pListTile)->FUN_00a011b0(TraitNameToIDAdd(kListBoxNumFiltered, -1)) > 0.0)
         {
             TileValueOperations* height = ((TileOperations*)m_pListTile)->FindTraitValue(0xFB0);
             height->RemoveFromReactions();
             height->FUN_00a09130(0x7D0, tile, 0xFB0);
             height->AppendFloatAction(
-                0x7D3, ((TileOperations*)m_pListTile)->FUN_00a011b0(FUN_00a00940(kListBoxNumFiltered, -1)));
-            height->FUN_00a09410(0);
+                0x7D3, ((TileOperations*)m_pListTile)->FUN_00a011b0(TraitNameToIDAdd(kListBoxNumFiltered, -1)));
+            height->Refresh(0);
         }
         return tile;
     }
@@ -5551,7 +5551,7 @@ extern InputOS* g_osGlobals;
 double __cdecl FUN_00408820(float);
 unsigned int __cdecl gm_GetTickCount();
 extern unsigned int DAT_011dad5c;
-int __cdecl FUN_00a01860(const char*);
+int __cdecl TraitNameToID(const char*);
 
 struct InputStats : public StatsMenu
 {
@@ -5727,11 +5727,11 @@ bool InputStats::FUN_007db680(int code, float amount)
                     GetCurrentPage() == SM_STATUS
                         ? ((InputList*)&m_kStatusEffectList)->FUN_00825c00()
                         : (InputTile*)((InputChildren*)&m_pTiles[26]->m_kChildTileList)->FUN_007b5370();
-                int trait3 = FUN_00a01860("_current_value");
+                int trait3 = TraitNameToID("_current_value");
                 int oldValue4 = (int)scrollTile->FUN_00a011b0(trait3);
                 scrollTile->FUN_00a012d0(trait3, (float)(oldValue4 + scrollStepVal4), false);
                 if (oldValue4 != scrollTile->FUN_00a011b0(trait3))
-                    scrollTile->SetTraitAndReset(FUN_00a01860("_SetInCode"), 1.0f);
+                    scrollTile->SetTraitAndReset(TraitNameToID("_SetInCode"), 1.0f);
                 DAT_011dad5c =
                     gm_GetTickCount() + (DAT_011dad5c ? (int)((InputTile*)m_pTiles[33])->FUN_00a011b0(0x1004)
                                                       : (int)((InputTile*)m_pTiles[33])->FUN_00a011b0(0x1005));

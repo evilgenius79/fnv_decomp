@@ -9732,7 +9732,7 @@ struct List08
     List08();
     ~List08();
 };
-int __cdecl FUN_00a00940(const char*, int);
+int __cdecl TraitNameToIDAdd(const char*, int);
 extern const char DAT_01071ba0[];
 extern const char DAT_01071b94[];
 extern const char DAT_01071b88[];

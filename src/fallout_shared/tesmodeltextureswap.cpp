@@ -768,7 +768,7 @@ class ObjectRef
     int FUN_0084e3a0();
 };
 
-char* __cdecl FUN_00401000(unsigned int);
+char* __cdecl FormHeap_Allocate(unsigned int);
 unsigned int __cdecl FUN_0044a670(unsigned int);
 bool __cdecl FUN_00401500();
 struct FUN_00401080_tag
@@ -812,7 +812,7 @@ bool FUN_0048a590_cls::SerializeList(char** apBuffer, unsigned int* auiSize)
             count++;
             iT = iT->FUN_00726070();
         }
-        *apBuffer = FUN_00401000(*auiSize);
+        *apBuffer = FormHeap_Allocate(*auiSize);
         _w = *apBuffer;
         loA2 = count;
         if (FUN_00401500())

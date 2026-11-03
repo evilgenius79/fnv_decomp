@@ -38,7 +38,7 @@ void FUN_00aa7030();
 struct RecursiveSpinLock
 {
     bool FUN_0078d200();
-    void FUN_0040fba0();
+    void Unlock();
 };
 extern RecursiveSpinLock DAT_011f11a0;
 struct IOManager
@@ -172,7 +172,7 @@ int StateMachine::RunStep(void* context, unsigned int step, bool* finished)
         if (DAT_011f11a0.FUN_0078d200())
         {
             FUN_00868d70(1);
-            DAT_011f11a0.FUN_0040fba0();
+            DAT_011f11a0.Unlock();
         }
     case 3:
         FUN_00c459d0(1);

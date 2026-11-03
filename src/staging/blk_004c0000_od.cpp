@@ -1086,7 +1086,7 @@ FUN_004d4f70::FUN_004d4f70(unsigned int auiCount, int iParam)
     }
 }
 
-extern "C" void __cdecl FUN_00401030(void*);
+extern "C" void __cdecl FormHeap_Free(void*);
 
 struct FUN_004d5080_Class
 {
@@ -1103,13 +1103,13 @@ void __thiscall FUN_004d5080_Class::FUN_004d5080()
 {
     void* fourthValue = *(void**)this->unk08;
     void* secondValue = fourthValue;
-    FUN_00401030(secondValue);
+    FormHeap_Free(secondValue);
 
     void* thirdValue = this->unk08;
-    FUN_00401030(thirdValue);
+    FormHeap_Free(thirdValue);
 
     void* firstValue = this->unk0C;
-    FUN_00401030(firstValue);
+    FormHeap_Free(firstValue);
 }
 
 struct GlobalObject_0044f440
@@ -2843,7 +2843,7 @@ FUN_004de2b0_StandIn* FUN_004de2d0_StandIn::FUN_004de2d0(char c)
     return this;
 }
 
-extern "C" void __cdecl FUN_00401030(void*);
+extern "C" void __cdecl FormHeap_Free(void*);
 
 struct FUN_004de3f0_Class
 {
@@ -2858,7 +2858,7 @@ void* __thiscall FUN_004de3f0_Class::FUN_004de3f0(int flags)
 
     if ((flags & 1) != 0)
     {
-        FUN_00401030(this);
+        FormHeap_Free(this);
     }
 
     return this;

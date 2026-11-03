@@ -459,7 +459,7 @@ struct BGSLoadFormBuffer
     void FUN_00864980(void* destination, unsigned int size);
     unsigned int FUN_008648a0();
 };
-TESForm* __cdecl FUN_004839c0(unsigned int);
+TESForm* __cdecl LookupFormByID(unsigned int);
 struct PackageTargetObj : PackageTargetRecord
 {
     PackageTargetObj();
@@ -492,7 +492,7 @@ void UseWeaponLoader::LoadUseWeaponData(BGSLoadFormBuffer* buffer)
     buffer->FUN_00864980(&m_usValue3, 2);
     buffer->FUN_00864980(&m_fValue1, 4);
     buffer->FUN_00864980(&m_fValue2, 4);
-    pWeapon = dynamic_cast<TESObjectWEAP*>(FUN_004839c0(buffer->FUN_008648a0()));
+    pWeapon = dynamic_cast<TESObjectWEAP*>(LookupFormByID(buffer->FUN_008648a0()));
     bool hasTarget;
     bool hasLocation = false;
     buffer->FUN_00864980(&hasLocation, 1);

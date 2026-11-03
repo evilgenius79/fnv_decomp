@@ -1686,8 +1686,8 @@ struct RemoveInterface
     void FUN_00715860(RemoveTile*, int, bool);
 };
 RemoveInterface* FUN_004b7210();
-int FUN_00a01860(const char*);
-void FUN_00401030(void*);
+int TraitNameToID(const char*);
+void FormHeap_Free(void*);
 struct RemoveBase
 {
     int unk00;
@@ -1714,8 +1714,8 @@ bool RemoveView::RemoveNodeFromList(RemoveNode* node, RemoveNode* previous)
         }
         if (container && (*node->FUN_006815c0())->filtered)
         {
-            container->FUN_00a012d0(FUN_00a01860("_num_filtered"),
-                                    (float)(container->FUN_00a011b0(FUN_00a01860("_num_filtered")) - 1.0), true);
+            container->FUN_00a012d0(TraitNameToID("_num_filtered"),
+                                    (float)(container->FUN_00a011b0(TraitNameToID("_num_filtered")) - 1.0), true);
         }
         RemoveTile* tile_2 = (*node->FUN_006815c0())->tile;
         RemoveTile* tileCopyA = tile_2;
@@ -1728,7 +1728,7 @@ bool RemoveView::RemoveNodeFromList(RemoveNode* node, RemoveNode* previous)
         }
         {
             RemoveData* record7 = *node->FUN_006815c0();
-            FUN_00401030(record7);
+            FormHeap_Free(record7);
         }
         if (node == static_cast<RemoveNode*>(this))
         {

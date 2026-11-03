@@ -471,7 +471,7 @@ double ExpressionEvaluator::Eval(const char* data, TESObjectREFR* reference, TES
                 Value.Type = 0;
                 Value.m_lIntegerValue = atol(token.text);
             }
-            else if (FUN_004b12d0(token.text))
+            else if (IsFloatString(token.text))
             {
                 Value.Type = 1;
                 Value.m_dFloatingPointValue = atof(token.text);

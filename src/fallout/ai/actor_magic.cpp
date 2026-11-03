@@ -3109,7 +3109,7 @@ struct XHost17 : public XHostVtbl17
 
     bool FUN_008bc9d0(void*, int);
 
-    void FUN_0088c650(void*, int, int, int, int, int);
+    void EquipItem(void*, int, int, int, int, int);
 
     void FUN_00891e00(XRefr17*, int, bool);
 };
@@ -3325,7 +3325,7 @@ void XHost17::FUN_00891e00(XRefr17* pRefr, int iCount, bool a2)
                 if (FUN_008bc9d0(bo2, 1))
                 {
 
-                    FUN_0088c650(FUN_0044ddc0(bo), 1, 0, 1, 0, 1);
+                    EquipItem(FUN_0044ddc0(bo), 1, 0, 1, 0, 1);
                 }
 
                 XForm17* t3 = bo;
@@ -4361,7 +4361,7 @@ TESForm* __cdecl FUN_0058db10(int aiIndex);
 struct FUN_00824400_target
 {
     void FUN_00824400(MagicItem* apItem, void* apCaster, void* apEffect);
-    void FUN_008248e0(MagicItem* apItem, bool abFlag);
+    void StopEffect(MagicItem* apItem, bool abFlag);
 };
 
 struct FUN_008c2b60_vtbl
@@ -4626,7 +4626,7 @@ void FUN_008c2b60_shell::ApplyActorSpells()
         TESEnchantableForm* pEnchantable = pItemCur ? dynamic_cast<TESEnchantableForm*>(pItemCur->GetObject()) : 0;
         FUN_008c2b60_node* pEnchantmentItem = pEnchantable ? ((FUN_008c2b60_node*)pEnchantable)->FUN_00726070() : 0;
         if (pEnchantmentItem)
-            ((FUN_00824400_target*)((char*)this + 0x94))->FUN_008248e0((MagicItem*)pItemCur->GetObject(), false);
+            ((FUN_00824400_target*)((char*)this + 0x94))->StopEffect((MagicItem*)pItemCur->GetObject(), false);
         delete (FUN_004459e0*)pItemCur;
     }
 

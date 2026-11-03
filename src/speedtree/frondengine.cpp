@@ -416,7 +416,7 @@ void __cdecl FUN_00b26160(char* pBegin, char* pMiddle, char* pEnd, bool bFlag)
 
 extern int* __cdecl FUN_0044d600(int*, int*, int*);
 extern int* __cdecl UninitCopyChecked(int*, int*, int*, void*);
-extern void __cdecl FUN_00401030(void*);
+extern void __cdecl FormHeap_Free(void*);
 struct C00b1d5d0
 {
     int a, b, alloc;
@@ -502,7 +502,7 @@ C00b1d5d0& C00b1d5d0::FUN_00b1d5d0(const C00b1d5d0& rhs)
                         f.bbd = f.bbe;
                         f.pd8 = (int*)(limit - first);
                         f.pd4 = first;
-                        FUN_00401030(f.pd4);
+                        FormHeap_Free(f.pd4);
                     }
                     f.ndc = rhs.last - rhs.first;
                     if (FUN_0044a240(f.ndc))
@@ -620,7 +620,7 @@ void __cdecl CopyObjects(CopyableStateBlock* apDest, unsigned int auiCount, cons
     }
 }
 
-void* FUN_00401000(unsigned int);
+void* FormHeap_Allocate(unsigned int);
 __declspec(noreturn) void __stdcall FUN_00ec7894(void*, void*);
 struct BadAlloc
 {
@@ -641,7 +641,7 @@ int* FUN_0044d670(unsigned int n)
         e.FUN_0044d6c0(0);
         FUN_00ec7894(&e, &DAT_01140ef8);
     }
-    return (int*)FUN_00401000(n * 4);
+    return (int*)FormHeap_Allocate(n * 4);
 }
 
 // Sets the nine floats at instance to the 3x3 identity matrix and returns instance.
@@ -1386,7 +1386,7 @@ struct AllocationException
 extern unsigned int DAT_010176f8;
 extern unsigned int DAT_01140ef8;
 void __stdcall FUN_00ec7894(void* exception, void* info);
-void* __cdecl FUN_00401000(unsigned int bytes);
+void* __cdecl FormHeap_Allocate(unsigned int bytes);
 
 // Allocates a 12-byte-per-element array of count items, throwing AllocationException on overflow.
 // @fnv 0x00b23bb0
@@ -1402,6 +1402,6 @@ void* __cdecl FUN_00b23bb0(unsigned int count)
         exception.vtable = (unsigned int)&DAT_010176f8;
         FUN_00ec7894(&exception, &DAT_01140ef8);
     }
-    return FUN_00401000(count * 12);
+    return FormHeap_Allocate(count * 12);
 }
 }  // namespace fnv_00b23bb0

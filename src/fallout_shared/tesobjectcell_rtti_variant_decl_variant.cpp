@@ -224,7 +224,7 @@ extern CellSaveLoad* DAT_011de45c;
 class CellModelLoader
 {
   public:
-    void FUN_00444850(RefView* pkRef, int iCell);
+    void QueueReference(RefView* pkRef, int iCell);
 };
 extern CellModelLoader* DAT_011c3b3c;
 class CellProcessLists
@@ -353,7 +353,7 @@ class CellView
 
     bool FUN_005516c0();
     void FUN_00541ac0();  // CellRefLockEnter
-    void FUN_00541ae0();  // CellRefLockLeave
+    void CellRefLockLeave();  // CellRefLockLeave
     RefList* FUN_009604f0();
     CellNavHandler* FUN_0054ddd0();
     void FUN_0054ca90(RefView* pkRef);  // RemoveReference
@@ -405,7 +405,7 @@ bool __fastcall FUN_00440d80(const TESObjectREFR* reference);
 bool __fastcall FUN_00440da0(TESObjectREFR* reference);
 bool __fastcall FUN_00477ba0(TESObjectREFR* reference);
 void* __fastcall FUN_00568e50(TESObjectREFR* reference);
-void __fastcall FUN_00541ae0(TESObjectCELL* cell);
+void __fastcall CellRefLockLeave(TESObjectCELL* cell);
 unsigned int __cdecl GetRandomNumberInRange(int low, int high);
 TESObjectREFR* __cdecl FUN_0054afb0(TESForm* source, TESForm* destination, void* context);
 
@@ -414,7 +414,7 @@ struct FormGroupQuery
     unsigned int tag, unk04, value, kind;
 };
 extern unsigned int DAT_01187020;
-TESForm* FUN_004839c0(unsigned int);
+TESForm* LookupFormByID(unsigned int);
 // @fnv 0x005434d0
 bool TESObjectCELL::FUN_005434d0(FormGroupQuery* group)
 {
@@ -451,7 +451,7 @@ bool TESObjectCELL::FUN_005434d0(FormGroupQuery* group)
         case 8:
         case 9: {
 
-            TESObjectCELL* cell = dynamic_cast<TESObjectCELL*>(FUN_004839c0(group->value));
+            TESObjectCELL* cell = dynamic_cast<TESObjectCELL*>(LookupFormByID(group->value));
 
             if (cell)
 
@@ -497,7 +497,7 @@ bool TESObjectCELL::FUN_005434d0(FormGroupQuery* group)
             if (!IsCellInterior())
             {
 
-                TESWorldSpace* world = dynamic_cast<TESWorldSpace*>(FUN_004839c0(group->value));
+                TESWorldSpace* world = dynamic_cast<TESWorldSpace*>(LookupFormByID(group->value));
 
                 if (world)
 

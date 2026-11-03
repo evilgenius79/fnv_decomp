@@ -774,7 +774,7 @@ struct RecipeEntry;
 struct MenuNode
 {
     MenuNode* FUN_00a03c90(MenuNode* context, int choice, int flags);
-    RecipeEntry* FUN_00a1ddb0();
+    RecipeEntry* AddTileFromTemplate();
     int FUN_00a00f30(int key);
     void FUN_00700320(int key, int value);
     void FUN_00a01350(int key, int value, int flags);
@@ -783,7 +783,7 @@ struct MenuNode
     void RemoveFromReactions();
     void FUN_00a09130(int property, RecipeEntry* source, int key);
     void AppendFloatAction(int property, float value);
-    void FUN_00a09410(int flags);
+    void Refresh(int flags);
 };
 
 struct RecipeEntry
@@ -807,7 +807,7 @@ struct RecipeList
 
 extern "C" double DAT_01012060;
 extern "C" char UNK_0106f860;
-int __cdecl FUN_00a00940(const void* key, int fallback);
+int __cdecl TraitNameToIDAdd(const void* key, int fallback);
 
 struct RecipePanel
 {
@@ -837,7 +837,7 @@ RecipeEntry* RecipePanel::FUN_00729ae0(int selection, int updateChoice, int aiRe
     if (m_parent != 0 && (m_defaultItem != 0 || parentId != 0))
     {
         RecipeEntry* current =
-            m_parent->FUN_00a03c90(m_parent, parentId != 0 ? parentId : m_defaultItem, 0)->FUN_00a1ddb0();
+            m_parent->FUN_00a03c90(m_parent, parentId != 0 ? parentId : m_defaultItem, 0)->AddTileFromTemplate();
         if (!current->FUN_00a00f30(0xfaa))
             current->FUN_00700320(0xfaa, -1);
         if (updateChoice != 0)
@@ -862,13 +862,13 @@ RecipeEntry* RecipePanel::FUN_00729ae0(int selection, int updateChoice, int aiRe
 
         if (GetRaceCount() == 1)
         {
-            if (m_parent->FUN_00a011b0(FUN_00a00940(&UNK_0106f860, -1)) > DAT_01012060)
+            if (m_parent->FUN_00a011b0(TraitNameToIDAdd(&UNK_0106f860, -1)) > DAT_01012060)
             {
                 MenuNode* notifier = m_parent->FindTraitValue(0xfb0);
                 notifier->RemoveFromReactions();
                 notifier->FUN_00a09130(0x7d0, current, 0xfb0);
-                notifier->AppendFloatAction(0x7d3, m_parent->FUN_00a011b0(FUN_00a00940(&UNK_0106f860, -1)));
-                notifier->FUN_00a09410(0);
+                notifier->AppendFloatAction(0x7d3, m_parent->FUN_00a011b0(TraitNameToIDAdd(&UNK_0106f860, -1)));
+                notifier->Refresh(0);
             }
         }
         return current;
@@ -884,7 +884,7 @@ struct Item
     bool __thiscall IsTraitNonZero(int);
 };
 extern int UNK_01070244;
-int __cdecl FUN_00a00940(int*, int);
+int __cdecl TraitNameToIDAdd(int*, int);
 
 struct Object
 {
@@ -903,7 +903,7 @@ struct Object
 // @fnv 0x0072a250
 bool __thiscall Object::SetCurrentItem(Item* pItem)
 {
-    if (FUN_0072bc30() && (!pItem || (ContainsKey(pItem) && pItem->IsTraitNonZero(FUN_00a00940(&UNK_01070244, -1)))))
+    if (FUN_0072bc30() && (!pItem || (ContainsKey(pItem) && pItem->IsTraitNonZero(TraitNameToIDAdd(&UNK_01070244, -1)))))
     {
         current = pItem;
         RefreshHighlight();
@@ -976,7 +976,7 @@ FUN_0072a890_cls::~FUN_0072a890_cls()
 }
 
 extern "C" char DAT_01070244;
-extern "C" void* __cdecl FUN_00a00940(const char* name, int lookupMode);
+extern "C" void* __cdecl TraitNameToIDAdd(const char* name, int lookupMode);
 
 struct SelectedOption
 {
@@ -1000,7 +1000,7 @@ struct SelectionManager
 // @fnv 0x0072b5b0
 bool SelectionManager::FUN_0072b5b0(SelectedOption* option)
 {
-    if (FUN_0072c7d0() && (!option || (ContainsKey(option) && option->IsTraitNonZero(FUN_00a00940(&DAT_01070244, -1)))))
+    if (FUN_0072c7d0() && (!option || (ContainsKey(option) && option->IsTraitNonZero(TraitNameToIDAdd(&DAT_01070244, -1)))))
     {
         selectedOption = option;
         FUN_0072c880();
@@ -1119,7 +1119,7 @@ void FUN_0072c130_cls::ProcessSlots()
 
 namespace fnv_0072c200 {
 extern const char DAT_01070244[];
-extern void* __cdecl FUN_00a00940(const char* name, int fallback);
+extern void* __cdecl TraitNameToIDAdd(const char* name, int fallback);
 
 struct TileValueChecker
 {
@@ -1136,11 +1136,11 @@ struct MenuTileControl
     bool FUN_0072c200();
 };
 
-// Returns true if tile is non-null and its checker accepts the cached value obtained from FUN_00a00940.
+// Returns true if tile is non-null and its checker accepts the cached value obtained from TraitNameToIDAdd.
 // @fnv 0x0072c200
 bool MenuTileControl::FUN_0072c200()
 {
-    static void* cachedValue = FUN_00a00940(DAT_01070244, -1);
+    static void* cachedValue = TraitNameToIDAdd(DAT_01070244, -1);
     return tile != 0 && tile->IsTraitNonZero(cachedValue);
 }
 }  // namespace fnv_0072c200
@@ -1205,7 +1205,7 @@ void ScrollBarHelper::FUN_0072c5d0()
 namespace fnv_0072c7d0 {
 extern "C" const char kListBoxEnabled[];
 
-int __cdecl FUN_00a00940(const char* pcTrait, int iIndex);
+int __cdecl TraitNameToIDAdd(const char* pcTrait, int iIndex);
 
 class B2C7D0Tile
 {
@@ -1227,7 +1227,7 @@ class B2C7D0Menu
 // @fnv 0x0072c7d0
 bool B2C7D0Menu::FUN_0072c7d0()
 {
-    static int s_iEnabled = FUN_00a00940(kListBoxEnabled, -1);
+    static int s_iEnabled = TraitNameToIDAdd(kListBoxEnabled, -1);
     return m_pkTile && m_pkTile->GetBool(s_iEnabled);
 }
 }  // namespace fnv_0072c7d0
@@ -1442,7 +1442,7 @@ struct Tile49
 };
 extern unsigned char DAT_011d8909;
 extern char DAT_0106f8d0;
-int __cdecl FUN_00a01860(const char*);
+int __cdecl TraitNameToID(const char*);
 struct List49
 {
     int context;
@@ -1487,7 +1487,7 @@ void List49::ClearList()
     count = 0;
     value = 0.0f;
     if (tile)
-        tile->FUN_00a012d0(FUN_00a01860(&DAT_0106f8d0), 0.0f, true);
+        tile->FUN_00a012d0(TraitNameToID(&DAT_0106f8d0), 0.0f, true);
     FUN_0072c000();
     selected = 0;
     RefreshHighlight();
@@ -1590,7 +1590,7 @@ struct TileX
     float GetValueFloat(int id);
     bool GetValueBool(int id);
 };
-int FUN_00a01860(char const* name);
+int TraitNameToID(char const* name);
 int __cdecl TraitNameToIDX(char const* name, int def);
 float __cdecl ClampScroll(float value, float minv);
 
@@ -1641,12 +1641,12 @@ TileX* ListBoxX::GetNextEnabledTile(int aiKey)
         break;
     case 15:
         delta8 = m_0c ? (int)ClampScroll(
-                            -m_0c->GetValueFloat(0xfb0) / m_0c->GetValueFloat(FUN_00a01860("_scroll_delta")), 1.0f)
+                            -m_0c->GetValueFloat(0xfb0) / m_0c->GetValueFloat(TraitNameToID("_scroll_delta")), 1.0f)
                       : 0;
         break;
     case 16:
         delta8 = m_0c ? (int)ClampScroll(
-                            m_0c->GetValueFloat(0xfb0) / m_0c->GetValueFloat(FUN_00a01860("_scroll_delta")), 1.0f)
+                            m_0c->GetValueFloat(0xfb0) / m_0c->GetValueFloat(TraitNameToID("_scroll_delta")), 1.0f)
                       : 0;
         break;
     }
@@ -1732,7 +1732,7 @@ struct SelectionInterface
 };
 SelectionInterface* FUN_004b7210();
 bool FUN_004b71d0();
-int FUN_00a01860(const char*);
+int TraitNameToID(const char*);
 float FUN_0040ebd0(float, float);
 struct SelectionList
 {
@@ -1763,8 +1763,8 @@ void SelectionList::UpdateSelection(bool abNotify)
     SelectionTile* selected = 0;
     if (container && scrollBar)
     {
-        scrollBar->FUN_00a012d0(FUN_00a01860("_current_value"), storedScroll, false);
-        scrollBar->SetTraitAndReset(FUN_00a01860("_SetInCode"), 1.0f);
+        scrollBar->FUN_00a012d0(TraitNameToID("_current_value"), storedScroll, false);
+        scrollBar->SetTraitAndReset(TraitNameToID("_SetInCode"), 1.0f);
         selected = GetTile((unsigned int)FUN_0040ebd0(storedIndex, (float)(GetFilteredCount(0) - 1.0)));
         FUN_004b7210()->FUN_00715860(selected, 0xfc3, abNotify);
         SetSelected(selected);
@@ -1816,7 +1816,7 @@ RecipeEntry* Panel515::FUN_0072a900(int selection, int choice, int aiRecipeIndex
 {
     if (parent && (defaultItem || parentId))
     {
-        RecipeEntry* entry = parent->FUN_00a03c90(parent, parentId ? parentId : defaultItem, 0)->FUN_00a1ddb0();
+        RecipeEntry* entry = parent->FUN_00a03c90(parent, parentId ? parentId : defaultItem, 0)->AddTileFromTemplate();
         if (!entry->FUN_00a00f30(0xfaa))
             entry->FUN_00700320(0xfaa, -1);
         if (choice)
@@ -1837,13 +1837,13 @@ RecipeEntry* Panel515::FUN_0072a900(int selection, int choice, int aiRecipeIndex
             }
             entry->FUN_00700320(0xfac, nextIndex++);
         }
-        if (GetRaceCount() == 1 && parent->FUN_00a011b0((int)FUN_00a00940(&UNK_0106f860, -1)) > DAT_01012060)
+        if (GetRaceCount() == 1 && parent->FUN_00a011b0((int)TraitNameToIDAdd(&UNK_0106f860, -1)) > DAT_01012060)
         {
             MenuNode* tile = parent->FindTraitValue(0xfb0);
             tile->RemoveFromReactions();
             tile->FUN_00a09130(0x7d0, entry, 0xfb0);
-            tile->AppendFloatAction(0x7d3, parent->FUN_00a011b0((int)FUN_00a00940(&UNK_0106f860, -1)));
-            tile->FUN_00a09410(0);
+            tile->AppendFloatAction(0x7d3, parent->FUN_00a011b0((int)TraitNameToIDAdd(&UNK_0106f860, -1)));
+            tile->Refresh(0);
         }
         return entry;
     }
@@ -1875,7 +1875,7 @@ struct ListItemNode
     ~ListItemNode();
 };
 extern bool _s_bAllowDetach;
-int __cdecl FUN_00a01860(const char* name);
+int __cdecl TraitNameToID(const char* name);
 struct ListPanel
 {
     void* vtable;
@@ -1920,13 +1920,13 @@ void ListPanel::ClearItems()
     count = 0;
     position = 0.0f;
     if (tile)
-        tile->FUN_00a012d0(FUN_00a01860("_num_filtered"), 0.0f, true);
+        tile->FUN_00a012d0(TraitNameToID("_num_filtered"), 0.0f, true);
     FUN_0072c5d0();
     selection = 0;
     FUN_0072c2b0();
 }
 
-int __cdecl FUN_00a01860(const char* name);
+int __cdecl TraitNameToID(const char* name);
 float __cdecl FUN_004bd510(float value, float unit);
 struct NavigationItem : MenuNode
 {
@@ -1975,13 +1975,13 @@ NavigationItem* NavigationList::GetNextItem(int action)
         break;
     case 15:
         step = scrollTile ? (int)FUN_004bd510(-scrollTile->FUN_00a011b0(0xfb0) /
-                                                  scrollTile->FUN_00a011b0(FUN_00a01860("_scroll_delta")),
+                                                  scrollTile->FUN_00a011b0(TraitNameToID("_scroll_delta")),
                                               1.0f)
                           : 0;
         break;
     case 16:
         step = scrollTile ? (int)FUN_004bd510(scrollTile->FUN_00a011b0(0xfb0) /
-                                                  scrollTile->FUN_00a011b0(FUN_00a01860("_scroll_delta")),
+                                                  scrollTile->FUN_00a011b0(TraitNameToID("_scroll_delta")),
                                               1.0f)
                           : 0;
         break;
@@ -2013,13 +2013,13 @@ NavigationItem* NavigationList::GetNextItem(int action)
                 if ((*node->FUN_006815c0())->item->FUN_00a011b0(0xfac) == last)
                     selected = (*node->FUN_006815c0())->item;
             }
-            if (selected && !selected->IsTraitNonZero(FUN_00a00940(&UNK_01070244, -1)))
+            if (selected && !selected->IsTraitNonZero(TraitNameToIDAdd(&UNK_01070244, -1)))
             {
                 selected = 0;
                 if (step > 0 && ++last > index)
                 {
                     last = index - 1;
-                    while ((!selected || !selected->IsTraitNonZero(FUN_00a00940(&UNK_01070244, -1))) && last >= 0)
+                    while ((!selected || !selected->IsTraitNonZero(TraitNameToIDAdd(&UNK_01070244, -1))) && last >= 0)
                     {
                         selected = FindItem(last--, 0);
                     }
@@ -2028,7 +2028,7 @@ NavigationItem* NavigationList::GetNextItem(int action)
                 else if (step < 0 && --last < 0)
                 {
                     last = 1;
-                    while ((!selected || !selected->IsTraitNonZero(FUN_00a00940(&UNK_01070244, -1))) && last <= index)
+                    while ((!selected || !selected->IsTraitNonZero(TraitNameToIDAdd(&UNK_01070244, -1))) && last <= index)
                     {
                         selected = FindItem(last++, 0);
                     }
@@ -2065,7 +2065,7 @@ struct OwnedEntryNode
     ~OwnedEntryNode();
 };
 extern unsigned char s_bAllowDetach;
-int __cdecl FUN_00a01860(const char* name);
+int __cdecl TraitNameToID(const char* name);
 struct MenuValueTile
 {
     void Set(int trait, float value, bool propagate);
@@ -2114,7 +2114,7 @@ void RecipeListOwner::ClearEntries()
     count = 0;
     value = 0.0f;
     if (tile)
-        tile->Set(FUN_00a01860("_num_filtered"), 0.0f, true);
+        tile->Set(TraitNameToID("_num_filtered"), 0.0f, true);
     FUN_0072cba0();
     selected = 0;
     FUN_0072c880();
@@ -2126,7 +2126,7 @@ struct NavTile
 
     bool IsTraitNonZero(void*);
 };
-int FUN_00a01860(const char*);
+int TraitNameToID(const char*);
 float FUN_004bd510(float, float);
 struct NavEntry
 {
@@ -2179,14 +2179,14 @@ NavTile* Navigation::FUN_0072b620(int action)
         delta8 =
             scroll
                 ? (int)FUN_004bd510(
-                      (float)(-scroll->FUN_00a011b0(0xfb0) / scroll->FUN_00a011b0(FUN_00a01860("_scroll_delta"))), 1.0f)
+                      (float)(-scroll->FUN_00a011b0(0xfb0) / scroll->FUN_00a011b0(TraitNameToID("_scroll_delta"))), 1.0f)
                 : 0;
         break;
     case 16:
         delta8 =
             scroll
                 ? (int)FUN_004bd510(
-                      (float)(scroll->FUN_00a011b0(0xfb0) / scroll->FUN_00a011b0(FUN_00a01860("_scroll_delta"))), 1.0f)
+                      (float)(scroll->FUN_00a011b0(0xfb0) / scroll->FUN_00a011b0(TraitNameToID("_scroll_delta"))), 1.0f)
                 : 0;
         break;
     }
@@ -2215,13 +2215,13 @@ NavTile* Navigation::FUN_0072b620(int action)
                 if ((*node->FUN_006815c0())->tile->FUN_00a011b0(0xfac) == index)
                     foundVal = (*node->FUN_006815c0())->tile;
             }
-            if (foundVal && !foundVal->IsTraitNonZero(FUN_00a00940(&DAT_01070244, -1)))
+            if (foundVal && !foundVal->IsTraitNonZero(TraitNameToIDAdd(&DAT_01070244, -1)))
             {
                 foundVal = 0;
                 if (delta8 > 0 && ++index > maximum)
                 {
                     index = maximum - 1;
-                    while ((!foundVal || !foundVal->IsTraitNonZero(FUN_00a00940(&DAT_01070244, -1))) && index >= 0)
+                    while ((!foundVal || !foundVal->IsTraitNonZero(TraitNameToIDAdd(&DAT_01070244, -1))) && index >= 0)
                     {
                         foundVal = Get(index--, false);
                     }
@@ -2230,7 +2230,7 @@ NavTile* Navigation::FUN_0072b620(int action)
                 else if (delta8 < 0 && --index < 0)
                 {
                     index = 1;
-                    while ((!foundVal || !foundVal->IsTraitNonZero(FUN_00a00940(&DAT_01070244, -1))) &&
+                    while ((!foundVal || !foundVal->IsTraitNonZero(TraitNameToIDAdd(&DAT_01070244, -1))) &&
                            index <= maximum)
                     {
                         foundVal = Get(index++, false);
@@ -2260,7 +2260,7 @@ struct List271
 // @fnv 0x0072ae00
 bool List271::FUN_0072ae00(SelectedOption* option)
 {
-    if (FUN_0072c200() && (!option || (ContainsKey(option) && option->IsTraitNonZero(FUN_00a00940(&DAT_01070244, -1)))))
+    if (FUN_0072c200() && (!option || (ContainsKey(option) && option->IsTraitNonZero(TraitNameToIDAdd(&DAT_01070244, -1)))))
     {
         current = option;
         FUN_0072c2b0();
@@ -2276,7 +2276,7 @@ struct RcMenu;
 
 struct RcTile
 {
-    RcTile* FUN_00a01b00(const char* path);
+    RcTile* ReadXML(const char* path);
     RcMenu* FUN_00a03c90();
     float FUN_00a011b0(int trait);
     void FUN_00a012d0(int trait, float value, bool propagate);
@@ -2738,7 +2738,7 @@ RcTile* CreateRecipeMenu(int vendor, int type)
     {
         delete oldMenu;
     }
-    RcTile* tile2 = im2->FUN_00586150()->FUN_00a01b00("Data\\Menus\\recipe_menu.xml");
+    RcTile* tile2 = im2->FUN_00586150()->ReadXML("Data\\Menus\\recipe_menu.xml");
     DAT_011d8e90 = (int)(tile2 ? tile2->FUN_00a03c90() : 0);
     DAT_011d8eac = 0;
     DAT_011d8eb0 = 0;
@@ -3362,7 +3362,7 @@ extern int DAT_011d8e9c;
 extern int DAT_011d8ea0;
 extern int DAT_011d8e94;
 extern int DAT_011d8ea8;
-int __cdecl FUN_00a01860(char const*);
+int __cdecl TraitNameToID(char const*);
 struct Manager726
 {
     void FUN_008454f0(int);
@@ -3380,9 +3380,9 @@ struct FUN_00726df0 : FUN_00a1c4a0
 // @fnv 0x00726df0
 FUN_00726df0::FUN_00726df0()
 {
-    DAT_011d8e98 = FUN_00a01860(str_0106ed20);
-    DAT_011d8e9c = FUN_00a01860(str_0106ed18);
-    DAT_011d8ea0 = FUN_00a01860(str_01070474);
+    DAT_011d8e98 = TraitNameToID(str_0106ed20);
+    DAT_011d8e9c = TraitNameToID(str_0106ed18);
+    DAT_011d8ea0 = TraitNameToID(str_01070474);
     DAT_011d8e94 = 0;
     m_6c.m_pOwnerObject = &m_6c;
     DAT_011d8ea8 = 0;
@@ -3760,7 +3760,7 @@ void RecipeEnterMenu::FUN_00727b10(int id, RecipeTiles* tile)
     }
 }
 
-int __cdecl FUN_00a01860(const char* apName);
+int __cdecl TraitNameToID(const char* apName);
 float __cdecl FUN_004e4430(float afValue);
 int __cdecl FUN_00647b70(int a, int b);
 
@@ -3796,12 +3796,12 @@ void RecipeScrollMetrics::FUN_0072c000()
             }
             if (iItemCount > 1)
             {
-                pScrollTile->SetFloat(FUN_00a01860("_scroll_delta"), (fTotal - fVisible) / (iItemCount - 1), true);
+                pScrollTile->SetFloat(TraitNameToID("_scroll_delta"), (fTotal - fVisible) / (iItemCount - 1), true);
             }
         }
         if (pCountTile)
         {
-            pCountTile->SetInt(FUN_00a01860("_number_of_items"), iItemCount);
+            pCountTile->SetInt(TraitNameToID("_number_of_items"), iItemCount);
         }
     }
 }
@@ -4251,7 +4251,7 @@ InvChanges* __cdecl FUN_004bf220(void* player);
 float __cdecl GetWeaponDamage(TESObjectWEAP* weapon, float condition, int a, int b);
 float __cdecl FUN_00646360(int rating, float condition);
 float __cdecl FUN_00476b20(float rating);
-int __cdecl FUN_00a01860(const char* a);
+int __cdecl TraitNameToID(const char* a);
 int __cdecl FUN_0048e8a0(void* a);
 float __cdecl ComputeItemValue(float a, float b);
 float __cdecl FUN_0048ebc0(void* a, int b);
@@ -4328,8 +4328,8 @@ void SelfObj::FUN_00728da0(TESForm* apForm, MenuTileList* apTiles)
             void* qhxpxJd;
             void* qjXCGmG;
             qsSDDgz = 0;
-            qHXYKT = FUN_00a01860(str_0106ed20);
-            qvyWyw = FUN_00a01860(str_0106ed18);
+            qHXYKT = TraitNameToID(str_0106ed20);
+            qvyWyw = TraitNameToID(str_0106ed18);
             qSVM = 0x1009;
             qpqRa = 0.0f;
             qdqWL = 0.0f;

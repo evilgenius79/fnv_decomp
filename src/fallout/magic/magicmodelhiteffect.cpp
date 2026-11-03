@@ -1573,7 +1573,7 @@ extern SaveManagerLocal* DAT_011de45c;
 extern const float DAT_01012054;
 void* __cdecl FUN_00653270(const NiRTTI*, NiTimeController*);
 void __cdecl FUN_0055ffa0(void*, NiAVObject*, float);
-void __cdecl FUN_00401030(void*);
+void __cdecl FormHeap_Free(void*);
 struct Candidate : MagicModelHitEffect
 {
     void FUN_008d05e0(EffectLocal*, TESObjectREFR*, int);
@@ -1619,7 +1619,7 @@ void Candidate::SetFilenameAndInit(EffectLocal* effect, TESObjectREFR* target, c
         }
     }
     DAT_011de45c->FUN_00600ab0(saved);
-    FUN_00401030(const_cast<char*>(previous));
+    FormHeap_Free(const_cast<char*>(previous));
     Update(0.0f);
 }
 

@@ -977,7 +977,7 @@ void __thiscall C::FUN_007908f0()
 // InitLockInterface v1 worker20: faithful transcription from capstone ORIG
 struct ModelLoader
 {
-    void* FUN_00447080(const char* path, int a, bool b, bool c, bool d, bool e);
+    void* LoadModel(const char* path, int a, bool b, bool c, bool d, bool e);
 };
 extern ModelLoader* DAT_011c3b3c;
 struct SetHelper
@@ -1238,9 +1238,9 @@ struct ThisCls
 void ThisCls::InitLockInterface()
 {
     void* pin;
-    pin = DAT_011c3b3c->FUN_00447080("Meshes\\Terminals\\LockInterface01.NIF", 0, true, false, false, false);
+    pin = DAT_011c3b3c->LoadModel("Meshes\\Terminals\\LockInterface01.NIF", 0, true, false, false, false);
     void* idx;
-    idx = DAT_011c3b3c->FUN_00447080("Meshes\\Terminals\\BobbyPin01.NIF", 0, true, false, false, false);
+    idx = DAT_011c3b3c->LoadModel("Meshes\\Terminals\\BobbyPin01.NIF", 0, true, false, false, false);
     *(Mat9*)&m_b4 = *(Mat9*)&DAT_011a9448;
     {
         SetHelper n;
@@ -1334,7 +1334,7 @@ struct PickTile
 };
 struct PickTemplate
 {
-    PickTile* FUN_00a1ddb0();
+    PickTile* AddTileFromTemplate();
 };
 struct PickWrapper
 {
@@ -1392,7 +1392,7 @@ void PickMenu::UpdateSweetSpot()
     range = (int)(unk84 - g_iPickAngle_011da208 / 2);
     for (int i = 0; i < 6; i++)
     {
-        PickTile* tile = FUN_00726070(unk64, "LPM_SweetSpotTemplate", 0)->FUN_00639b40()->FUN_00a1ddb0();
+        PickTile* tile = FUN_00726070(unk64, "LPM_SweetSpotTemplate", 0)->FUN_00639b40()->AddTileFromTemplate();
         tile->FUN_00700320(0xfaa, i + 17);
         tile->FUN_00a012d0(0xfb1, (unk84 - range) * 2.0f, true);
         tile->FUN_00700320(0xfa1, range);
@@ -1412,7 +1412,7 @@ struct LKSoundHandle
     unsigned int m_uiState;
     unsigned int m_uiValue1;
     ~LKSoundHandle();
-    bool FUN_00ad8830(bool bLoop);
+    bool Play(bool bLoop);
 };
 
 class LKAudio
@@ -1442,7 +1442,7 @@ class LKTile
 
 struct LKMenuFile
 {
-    LKTile* FUN_00a01b00();
+    LKTile* ReadXML();
 };
 struct LKInterface
 {
@@ -1532,7 +1532,7 @@ int MinInt(int iValue, int iMax);
 int FUN_00406d00(char* pcBuffer, unsigned int uiSize, const char* pcFormat, ...);
 int FUN_00406d50(char* pcBuffer, unsigned int uiSize, const char* pcText);
 void FUN_005b5e40(const char* pcMessage);
-int FUN_00a01860(const char* pcTrait);
+int TraitNameToID(const char* pcTrait);
 float FUN_00a01530();
 int FUN_00408b20(const char* pcA, const char* pcB);
 
@@ -1550,12 +1550,12 @@ LKTile* CreateLockpickMenu(LockRef* pkLockRef, int aiLockLevel, bool bDebug)
     {
         FUN_00406d00(acMessageVal, 0x104, DAT_011d1efc.FUN_00403df0(), g_aiLockLevels_011da28c[iLockLevelNum]);
         DispatchMessageToSink(acMessageVal, 0, "Interface\\Icons\\Message Icons\\glow_message_padlock.dds", 0, 2.0f, 0);
-        LKAudio::FUN_00453a70()->FUN_00ad7550("UIPopUpMessageGeneral", 0x121).FUN_00ad8830(false);
+        LKAudio::FUN_00453a70()->FUN_00ad7550("UIPopUpMessageGeneral", 0x121).Play(false);
         return 0;
     }
     if (pkSelection)
         delete pkSelection;
-    LKTile* pkMenuTileNew = pkInterfaceVal->FUN_00586150("Data\\Menus\\lockpick_menu.xml")->FUN_00a01b00();
+    LKTile* pkMenuTileNew = pkInterfaceVal->FUN_00586150("Data\\Menus\\lockpick_menu.xml")->ReadXML();
     DAT_011da204 = (LKMenu*)pkMenuTileNew->FUN_00a03c90();
     if (DAT_011da204 && DAT_011da204->GetID() == FUN_0078e080())
     {
@@ -1569,7 +1569,7 @@ LKTile* CreateLockpickMenu(LockRef* pkLockRef, int aiLockLevel, bool bDebug)
             pkMenuTileNew->FUN_00a012d0(0xfad, FUN_00a01530(), 1);
         DAT_011da204->m_pkLockRef = pkLockRef;
         DAT_011da204->m_iLockLevel = iLockLevelNum;
-        DAT_011da204->FUN_00726070()->FUN_00700320(FUN_00a01860("_DebugMode"), bDebug);
+        DAT_011da204->FUN_00726070()->FUN_00700320(TraitNameToID("_DebugMode"), bDebug);
         FUN_00406d00(acLabel, 0x40, "%d", DAT_011da204->m_iPickCount);
         DAT_011da204->m_pkSkillTile->FUN_00a01350(DAT_011da1f8, acLabel, 1);
         FUN_00406d00(acLabel, 0x40, "%s [%d", DAT_011d345c.FUN_00403df0(),
@@ -1776,7 +1776,7 @@ struct xSound
     xSound();
     ~xSound();
     xSound& operator=(const xSound&);
-    bool FUN_00ad8830(bool);
+    bool Play(bool);
     void FUN_00ad8da0(int);
     int m_iWordAt00, m_iWordAt04, m_8;
 };
@@ -1831,7 +1831,7 @@ struct xRef : xForm
     xForm* FUN_00567790();
     void FUN_005692a0();
     xForm* FUN_007af430();
-    bool FUN_00573170(xPlayer*, int, int, int);
+    bool Activate(xPlayer*, int, int, int);
 };
 struct xCrimeMgr
 {
@@ -2294,7 +2294,7 @@ void xLockPickMenu::FUN_0078eb50()
                 if (m_30->FUN_00a011b0(xg_iTileId_11da1f8) <= 0.0)
                     xQueueMsg(xg_s_11d34ec.FUN_00403df0(), 0, s_szIcon, 0, 2.0f, 0);
                 else
-                    xAudio::FUN_00453a70()->FUN_00ad7550(s_szEnter, 0x121).FUN_00ad8830(false);
+                    xAudio::FUN_00453a70()->FUN_00ad7550(s_szEnter, 0x121).Play(false);
             }
             if (m_9c->FUN_00508100() <= xg_fElapsed_11da2ac)
             {
@@ -2334,7 +2334,7 @@ void xLockPickMenu::FUN_0078eb50()
             {
                 if ((xIface::FUN_004b71d0() && qrEZrs > 0.0) || (!xIface::FUN_004b71d0() && FUN_00791540(true)))
                 {
-                    xAudio::FUN_00453a70()->FUN_00ad7550(s_szTurn, 0x121).FUN_00ad8830(false);
+                    xAudio::FUN_00453a70()->FUN_00ad7550(s_szTurn, 0x121).Play(false);
                     m_28 = 3;
                 }
                 FUN_007908f0();
@@ -2346,9 +2346,9 @@ void xLockPickMenu::FUN_0078eb50()
                 m_8c = xF404010(m_8c, 0.0f);
                 AdvanceSequence(0.0f);
                 if (m_8c < 30.0 && OLD2 > 30.0)
-                    xAudio::FUN_00453a70()->FUN_00ad7550(s_szSqueakA, 0x101).FUN_00ad8830(false);
+                    xAudio::FUN_00453a70()->FUN_00ad7550(s_szSqueakA, 0x101).Play(false);
                 if (m_8c < 60.0 && OLD2 > 60.0)
-                    xAudio::FUN_00453a70()->FUN_00ad7550(s_szSqueakB, 0x101).FUN_00ad8830(false);
+                    xAudio::FUN_00453a70()->FUN_00ad7550(s_szSqueakB, 0x101).Play(false);
             }
         }
         break;
@@ -2373,9 +2373,9 @@ void xLockPickMenu::FUN_0078eb50()
             if (xIface::FUN_004b71d0())
                 xg_os_11dea0c->FUN_00877720()->FUN_00a255b0(0.1f, 0.0f, 0xfa, 0x7d, 3, 1, 0);
             if (OLD3 < 30.0 && m_8c > 30.0)
-                xAudio::FUN_00453a70()->FUN_00ad7550(s_szSqueakA, 0x101).FUN_00ad8830(false);
+                xAudio::FUN_00453a70()->FUN_00ad7550(s_szSqueakA, 0x101).Play(false);
             if (OLD3 < 60.0 && m_8c > 60.0)
-                xAudio::FUN_00453a70()->FUN_00ad7550(s_szSqueakB, 0x101).FUN_00ad8830(false);
+                xAudio::FUN_00453a70()->FUN_00ad7550(s_szSqueakB, 0x101).Play(false);
             if (m_8c >= m_90)
             {
                 if (m_8c >= 90.0)
@@ -2431,13 +2431,13 @@ void xLockPickMenu::FUN_0078eb50()
                                     xg_player_11dea3c->FUN_0094fd30((int)*xg_f_11cde20.FUN_00403e20());
                             }
                         }
-                        xAudio::FUN_00453a70()->FUN_00ad7550(s_szUnlock, 0x101).FUN_00ad8830(false);
+                        xAudio::FUN_00453a70()->FUN_00ad7550(s_szUnlock, 0x101).Play(false);
                         m_6c->FUN_005692a0();
                         if (m_6c->FUN_00401170() == 0x1c)
                             xg_player_11dea3c->m_20c = true;
                         if (m_6c->FUN_007af430() && m_6c->FUN_007af430()->FUN_00401170() == 0x1b)
                             xF75b6e0(1);
-                        m_6c->FUN_00573170(xg_player_11dea3c, 0, 0, 1);
+                        m_6c->Activate(xg_player_11dea3c, 0, 0, 1);
                         if (m_6c->FUN_00401170() == 0x1c)
                             xg_player_11dea3c->m_20c = false;
                         xF78e0d0();
@@ -2454,9 +2454,9 @@ void xLockPickMenu::FUN_0078eb50()
                 }
                 else
                 {
-                    xAudio::FUN_00453a70()->FUN_00ad7550(s_szStop, 0x101).FUN_00ad8830(false);
+                    xAudio::FUN_00453a70()->FUN_00ad7550(s_szStop, 0x101).Play(false);
                     s_kTension = xAudio::FUN_00453a70()->FUN_00ad7550(s_szTension, 1);
-                    s_kTension.FUN_00ad8830(true);
+                    s_kTension.Play(true);
                     m_28 = 4;
                 }
                 xg_os_11dea0c->FUN_00877720()->ResetTargetState();
@@ -2495,7 +2495,7 @@ void xLockPickMenu::FUN_0078eb50()
             if (m_94 <= 0.0)
             {
                 s_kTension.FUN_00ad8da0(100);
-                xAudio::FUN_00453a70()->FUN_00ad7550(s_szBreak, 0x101).FUN_00ad8830(false);
+                xAudio::FUN_00453a70()->FUN_00ad7550(s_szBreak, 0x101).Play(false);
                 if (m_6c)
                     xg_player_11dea3c->RemoveItem(xg_pLockpick_11ca268, 0, 1, 0, 0, 0, 0, 0, 1, 0);
                 m_30->FUN_00a012d0(xg_iTileId_11da1f8, m_30->FUN_00a011b0(xg_iTileId_11da1f8) - 1.0, true);

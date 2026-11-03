@@ -419,7 +419,7 @@ struct TESSaveLoadGame
     unsigned char FUN_008df040();
 };
 extern TESSaveLoadGame* g_TESSaveLoadGame;
-TESForm* FUN_004839c0(unsigned int);
+TESForm* LookupFormByID(unsigned int);
 struct LoadedList
 {
     void* item;
@@ -454,7 +454,7 @@ void LoadedSpells::LoadSpellList(unsigned int flags, unsigned int unused)
                 SavedRecord* f = g_TESSaveLoadGame->CurrentRecord();
                 if (f)
                 {
-                    TESForm* eb = FUN_004839c0(f->id);
+                    TESForm* eb = LookupFormByID(f->id);
                     Warning(
                         "SAVELOAD: (LoadGame Buffer error) Block Header is incorrect in file %s on line %i.  Currently loading form is %08X %s with version %i and flags %08X",
                         "D:\\_Fallout3\\Platforms\\Common\\Code\\Fallout Shared\\TESSpellList.cpp", 1371, f->id,
@@ -479,8 +479,8 @@ void LoadedSpells::LoadSpellList(unsigned int flags, unsigned int unused)
         {
             unsigned int b;
             g_TESSaveLoadGame->FUN_00857aa0(&b, 4);
-            SpellItem* q = dynamic_cast<SpellItem*>(FUN_004839c0(b));
-            TESLevSpell* cf = dynamic_cast<TESLevSpell*>(FUN_004839c0(b));
+            SpellItem* q = dynamic_cast<SpellItem*>(LookupFormByID(b));
+            TESLevSpell* cf = dynamic_cast<TESLevSpell*>(LookupFormByID(b));
             if (q)
             {
                 spells.AddHead(q);
@@ -504,7 +504,7 @@ void LoadedSpells::LoadSpellList(unsigned int flags, unsigned int unused)
             SavedRecord* k = g_TESSaveLoadGame->CurrentRecord();
             if (k)
             {
-                TESForm* c = FUN_004839c0(k->id);
+                TESForm* c = LookupFormByID(k->id);
                 if (l > a + h)
                 {
                     Warning(
@@ -627,7 +627,7 @@ class FUN_0048d880_shell
     BSSimpleList<void*>* GetOffsetC();
 };
 
-TESForm* FUN_004839c0(unsigned int formID);
+TESForm* LookupFormByID(unsigned int formID);
 extern "C" void FUN_0040fbe0(const char* fmt, ...);
 
 class TESSpellList_Target : public TESSpellList
@@ -711,7 +711,7 @@ void TESSpellList_Target::SaveSpellList(unsigned int flags)
             createdObj2 = reinterpret_cast<TES*>(g_TESSaveLoadGame)->GetHitSound();
             if (createdObj2)
             {
-                form = FUN_004839c0(*(unsigned int*)createdObj2);
+                form = LookupFormByID(*(unsigned int*)createdObj2);
                 FUN_0040fbe0("SaveGame(): %-5i for form %08X %s with flags %08X ending at line %i in file %s",
                              currentPos1 - startPosData, *(unsigned int*)createdObj2, form->GetEditorID(),
                              *(unsigned int*)((char*)createdObj2 + 5), 1359,

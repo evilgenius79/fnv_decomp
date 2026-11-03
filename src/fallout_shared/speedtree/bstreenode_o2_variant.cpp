@@ -2513,7 +2513,7 @@ struct FUN_00cb7790_state
 {
     unsigned int owner;
     unsigned int depth;
-    void __thiscall FUN_0040fbf0(int);
+    void __thiscall Lock(int);
 };
 extern FUN_00cb7790_state DAT_01267b80;
 
@@ -2538,7 +2538,7 @@ void FUN_00cb7790_class::FUN_00cb7790()
         if (target && target->object)
         {
             Buf00cb7750 transform = source->transform;
-            DAT_01267b80.FUN_0040fbf0(0);
+            DAT_01267b80.Lock(0);
             target->FUN_0056df20(&transform);
             if (--DAT_01267b80.depth == 0)
                 DAT_01267b80.owner = 0;

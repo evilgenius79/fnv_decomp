@@ -1380,7 +1380,7 @@ struct Ref62C : Form62C
     void FUN_00572e10(Ref62C*);
     void FUN_00565870();
 };
-Form62C* FUN_004839c0(unsigned int);
+Form62C* LookupFormByID(unsigned int);
 bool FUN_005ac750(Form62C*, Extra62C*, unsigned int);
 struct Entry62C
 {
@@ -1405,7 +1405,7 @@ void Shell62C::ApplyEntriesToRef(Ref62C* ref)
     Extra62C* extra = ref->FUN_005d43c0();
     for (unsigned int j = 0; j < size; j++)
     {
-        Form62C* form = FUN_004839c0(copy[j]);
+        Form62C* form = LookupFormByID(copy[j]);
         if (form && form->isRef())
         {
             Ref62C* target = (Ref62C*)form;
@@ -1768,7 +1768,7 @@ struct Subject62
     bool ProcessCollisionPairs(int);
 };
 void* FUN_004b59f0(void*);
-void __cdecl FUN_00401030(void*);
+void __cdecl FormHeap_Free(void*);
 // @fnv 0x0062cc90
 bool Subject62::ProcessCollisionPairs(int arg)
 {
@@ -1866,7 +1866,7 @@ bool Subject62::ProcessCollisionPairs(int arg)
         else
             ref = 0x40000000;
         unsigned int id = object->key;
-        Ref62C* flags = (Ref62C*)FUN_004839c0(id);
+        Ref62C* flags = (Ref62C*)LookupFormByID(id);
         delete object;
         if (flags)
         {

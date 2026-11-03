@@ -313,7 +313,7 @@ struct NavMeshSearchLOSArray
 };
 float __cdecl FUN_004e4430(float);
 int __cdecl FUN_00647b70(int, int);
-int FUN_00a01860(const char*);
+int TraitNameToID(const char*);
 struct Tile_Set_Helper
 {
     void Set(int, int);
@@ -432,7 +432,7 @@ struct FUN_00a09130_shell
 };
 struct FUN_00a09410_shell
 {
-    void __thiscall FUN_00a09410(int value);
+    void __thiscall Refresh(int value);
 };
 Tile* __cdecl FindNamedTile(Tile* tile, const char* name);
 extern "C" char str_0106f87c[];
@@ -513,7 +513,7 @@ struct FUN_00721150_cls
     void __thiscall FUN_007211e0();
 };
 extern "C" char str_01070244[];
-int __cdecl FUN_00a00940(const char*, int);
+int __cdecl TraitNameToIDAdd(const char*, int);
 struct SelectedObject
 {
     bool __thiscall IsTraitNonZero(int);
@@ -618,7 +618,7 @@ struct LBListBox
     float m_fFirstListValue;
 };
 extern "C" char _DAT_01070244[];
-int __cdecl FUN_00a00940(const char*, int);
+int __cdecl TraitNameToIDAdd(const char*, int);
 struct Tile_7223a0
 {
     bool IsTraitNonZero(int);
@@ -723,7 +723,7 @@ class FUN_00723820_cls
     Member_00723820 m_04;
 };
 extern "C" const char kListBoxEnabled[];
-int __cdecl FUN_00a00940(const char* pcTrait, int iIndex);
+int __cdecl TraitNameToIDAdd(const char* pcTrait, int iIndex);
 class B23AF0Tile
 {
   public:
@@ -787,7 +787,7 @@ struct FUN_00724360_cls
     void FUN_007244e0();
 };
 extern "C" char str_01070244[];
-int __cdecl FUN_00a00940(const char* name, int value);
+int __cdecl TraitNameToIDAdd(const char* name, int value);
 struct Item_00724430
 {
     bool __thiscall IsTraitNonZero(int value);
@@ -835,7 +835,7 @@ struct FUN_00724930_cls
 };
 float __cdecl FUN_004e4430(float);
 int __cdecl FUN_00647b70(int, int);
-int FUN_00a01860(const char*);
+int TraitNameToID(const char*);
 struct TileFloatGet
 {
     float GetFloat(int);
@@ -891,7 +891,7 @@ struct FUN_007255a0_cls
     FUN_00a01230_cls* m_0c;
     unsigned char FUN_007255a0();
 };
-int __cdecl FUN_00a00940(const char* name, int len);
+int __cdecl TraitNameToIDAdd(const char* name, int len);
 extern "C" char str_0106f90c[];
 extern "C" char str_0106f8f8[];
 struct TileA
@@ -915,7 +915,7 @@ struct S725970
     void FUN_00725970();
 };
 extern "C" const char kListBoxEnabled[];
-int __cdecl FUN_00a00940(const char* pcTrait, int iIndex);
+int __cdecl TraitNameToIDAdd(const char* pcTrait, int iIndex);
 class B726160Tile
 {
   public:
@@ -971,9 +971,9 @@ struct FUN_00730e20_cls
     FUN_00730e20_inner* m_0c;
     bool FUN_00730e20();
 };
-int __cdecl FUN_00a00940(const char* s, int n);
+int __cdecl TraitNameToIDAdd(const char* s, int n);
 extern "C" char _DAT_01070244[];
-int __cdecl FUN_00a00940(const char*, int);
+int __cdecl TraitNameToIDAdd(const char*, int);
 struct Tile_764e40
 {
     bool IsTraitNonZero(int);
@@ -1017,7 +1017,7 @@ struct FUN_007a23e0_cls
     void FUN_007a6600();
     bool FUN_007a23e0(FUN_007a23e0_arg* arg);
 };
-int __cdecl FUN_00a00940(const char* name, int len);
+int __cdecl TraitNameToIDAdd(const char* name, int len);
 class B7A27F0Tile;
 class B7A27F0Base
 {
@@ -1096,7 +1096,7 @@ struct FUN_007a6310_cls
     void __thiscall ConstructElements(int arr, unsigned int count);
 };
 extern "C" char str_01070244[];
-int __cdecl FUN_00a00940(const char*, int);
+int __cdecl TraitNameToIDAdd(const char*, int);
 struct FUN_00a01230_shell
 {
     bool __thiscall IsTraitNonZero(int);
@@ -1114,7 +1114,7 @@ struct FUN_00a01230_Target
 {
     bool IsTraitNonZero(int handle);
 };
-int FUN_00a00940(const char* name, int len);
+int TraitNameToIDAdd(const char* name, int len);
 struct FUN_007a7330_cls
 {
     int unk00;
@@ -1136,7 +1136,7 @@ struct FUN_007a81b0_cls
     FUN_007a81b0_target* m_0c;
     bool FUN_007a81b0();
 };
-int __cdecl FUN_00a00940(const char* s, int n);
+int __cdecl TraitNameToIDAdd(const char* s, int n);
 extern int DAT_01077094;
 struct FUN_007240c0_Base
 {
@@ -1186,7 +1186,7 @@ struct FUN_007d8da0_cls
 {
     void FUN_007d8da0(bool bFlag);
 };
-int __cdecl FUN_00a00940(const char*, int);
+int __cdecl TraitNameToIDAdd(const char*, int);
 struct SelectionTile
 {
     bool IsTraitNonZero(int);
@@ -1220,7 +1220,7 @@ struct HeightList
 };
 float __cdecl FUN_004e4430(float);
 int __cdecl FUN_00647b70(int, int);
-int FUN_00a01860(const char*);
+int TraitNameToID(const char*);
 struct TileX
 {
     float GetFloat(int trait);
@@ -1760,13 +1760,13 @@ struct ListBoxHelper
     bool FUN_00726160();
     TileHeight* FUN_00723b60(int code);
 };
-int __cdecl FUN_00a00940(const char*, int);
+int __cdecl TraitNameToIDAdd(const char*, int);
 extern "C" char str_0106f87c[], str_0106f884[], str_0106f88c[], str_0106f894[], str_0106f898[], str_0106f8ac[],
     str_0106f8c0[];
 struct HighlightValue
 {
     void FUN_00a09130(int, void*, int);
-    void FUN_00a09410(int);
+    void Refresh(int);
 };
 struct HighlightTile
 {
@@ -1874,7 +1874,7 @@ struct FUN_00725b70_cls
     FUN_00725b70_inner* m_0c;
     bool FUN_00725b70();
 };
-int __cdecl FUN_00a00940(const char* s, int n);
+int __cdecl TraitNameToIDAdd(const char* s, int n);
 struct VLPoint3
 {
     float x;
@@ -1928,11 +1928,11 @@ struct Value050
     void RemoveFromReactions();
     void FUN_00a09130(int, Tile050*, int);
     void AppendFloatAction(int, float);
-    void FUN_00a09410(int);
+    void Refresh(int);
 };
 struct Menu050
 {
-    Tile050* FUN_00a1ddb0(Tile050*, const char*, int);
+    Tile050* AddTileFromTemplate(Tile050*, const char*, int);
 };
 struct Tile050
 {
@@ -1980,7 +1980,7 @@ struct ItemValue
     void RemoveFromReactions();
     void FUN_00a09130(int, ItemTile*, int);
     void AppendFloatAction(int, float);
-    void FUN_00a09410(int);
+    void Refresh(int);
 };
 struct ItemMenu
 {
@@ -2010,7 +2010,7 @@ struct ItemList
     void AppendItem(BoxItem* const&);
 };
 extern "C" char str_0106f860[];
-int FUN_00a00940(const char*, int);
+int TraitNameToIDAdd(const char*, int);
 struct IntListBox
 {
     int unk00;
@@ -2029,7 +2029,7 @@ struct IntListBox
 };
 extern bool DAT_011d8909;
 extern "C" char str_0106f8d0[];
-int FUN_00a01860(const char*);
+int TraitNameToID(const char*);
 struct ClearTile
 {
     virtual ~ClearTile();
@@ -2290,7 +2290,7 @@ class C7D8950ListBox
 struct TileValue
 {
     void FUN_00a09130(int index, Tile* tile, int value);
-    void FUN_00a09410(int value);
+    void Refresh(int value);
 };
 struct TileExt : Tile
 {
@@ -2351,7 +2351,7 @@ struct Node118
     Node118* FUN_00726070();
 };
 float FUN_004bd510(float, float);
-int FUN_00a01860(const char*);
+int TraitNameToID(const char*);
 struct Box118
 {
     virtual void slot0();

@@ -1342,7 +1342,7 @@ bool __cdecl FUN_008c7aa0();
 struct DoorReference : TESObjectREFR
 {
     void FUN_00575830(const NiPoint3&);
-    bool FUN_00573170(Actor*, bool, TESBoundObject*, int);
+    bool Activate(Actor*, bool, TESBoundObject*, int);
     int FUN_00474cb0();
     const char* FUN_0055d520();
     int GetCellLoadState();
@@ -1384,7 +1384,7 @@ int DoorPathHandler::UpdateDoorPath(NiPoint3& position)
     DoorReference* pPathNodeDoor =
         ((DoorPathNode*)((PathingSolution*)pCurrentPathingSolution)->FUN_006e78b0(m_uiPathPointIndex))->FUN_0055b980();
     ++m_uiPathPointIndex;
-    if (pPathNodeDoor && !pPathNodeDoor->FUN_00573170(pActor, false, 0, 1))
+    if (pPathNodeDoor && !pPathNodeDoor->Activate(pActor, false, 0, 1))
         return -1;
     if ((PathingSolution*)pCurrentPathingSolution &&
         m_uiPathPointIndex < ((PathingSolution*)pCurrentPathingSolution)->FUN_005a4320())

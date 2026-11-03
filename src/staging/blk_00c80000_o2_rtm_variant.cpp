@@ -12888,7 +12888,7 @@ struct TargetLocal
 struct LockLocal
 {
     unsigned int owner, count;
-    void FUN_0040fbf0(char*);
+    void Lock(char*);
     void Unlock()
     {
         if (--count == 0)
@@ -13023,7 +13023,7 @@ void BlendLocal::FUN_00c81e30()
             rigid->FUN_00561690(DAT_01267e30);
             rigid->FUN_005617c0(DAT_01267e30);
         }
-        DAT_01267b80.FUN_0040fbf0(0);
+        DAT_01267b80.Lock(0);
         FUN_00c65f40(desiredMotion, rigid, false);
         DAT_01267b80.Unlock();
         motion = desiredMotion;

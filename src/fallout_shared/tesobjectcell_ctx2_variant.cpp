@@ -210,7 +210,7 @@ struct CellFile
     void* FUN_00467bb0();
     int FUN_004726b0();
     unsigned int GetField25C();
-    void FUN_00472890(void*, unsigned int);
+    void GetChunkData(void*, unsigned int);
     void ReadChunkInt(void*);
     bool FUN_00401680();
     bool FUN_004726f0();
@@ -492,7 +492,7 @@ bool CellLoader::FUN_005422d0(CellFile* file)
         case 0x44494445:  // EDID
         {
             char* editorId = (char*)_alloca(file->GetField25C());
-            file->FUN_00472890(editorId, 512);
+            file->GetChunkData(editorId, 512);
             SetEditorId(editorId);
             break;
         }
@@ -616,7 +616,7 @@ bool CellLoader::FUN_005422d0(CellFile* file)
             if (textSize)
             {
                 char* text = (char*)_alloca(textSize);
-                file->FUN_00472890(text, textSize);
+                file->GetChunkData(text, textSize);
                 name.FUN_00489100(text);
             }
             break;
@@ -635,7 +635,7 @@ bool CellLoader::FUN_005422d0(CellFile* file)
                 flags = (unsigned char)oldFlags;
             }
             else
-                file->FUN_00472890(&flags, 1);
+                file->GetChunkData(&flags, 1);
             if (!(flags & 1))
                 flags |= 2;
             if ((flags & 1) && (flags & 0x80))
@@ -654,7 +654,7 @@ bool CellLoader::FUN_005422d0(CellFile* file)
             {
                 if (file->FUN_00401680() && file->GetField25C() != 12)
                     exterior->FUN_00462230();
-                file->FUN_00472890(exterior, 12);
+                file->GetChunkData(exterior, 12);
                 if (file->FUN_00401680())
                     exterior->FUN_00462230();
             }
@@ -667,7 +667,7 @@ bool CellLoader::FUN_005422d0(CellFile* file)
             {
                 if (file->FUN_00401680() && file->GetField25C() != 44)
                     interior->SwapBytes();
-                file->FUN_00472890(interior, 44);
+                file->GetChunkData(interior, 44);
                 if (file->FUN_00401680())
                     interior->SwapBytes();
             }

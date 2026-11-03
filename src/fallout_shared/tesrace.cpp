@@ -1239,8 +1239,8 @@ void __cdecl FUN_00485710(unsigned int, const void*, unsigned int);
 void __cdecl FUN_00485910(unsigned int, unsigned int);
 void __cdecl FUN_00485910(unsigned int, float);
 void __cdecl FUN_00485950(unsigned int, unsigned short);
-void* __cdecl FUN_00401000(unsigned int);
-void __cdecl FUN_00401030(void*);
+void* __cdecl FormHeap_Allocate(unsigned int);
+void __cdecl FormHeap_Free(void*);
 void* __cdecl FUN_00403d30(void*, int, unsigned int);
 struct SaveComponent611e50
 {
@@ -1435,7 +1435,7 @@ void SaveRace611e50::SaveRace()
         if (count)
         {
             unsigned int geometrybytes31 = count * 4;
-            float* geometrydata18 = (float*)FUN_00401000(geometrybytes31);
+            float* geometrydata18 = (float*)FormHeap_Allocate(geometrybytes31);
             FUN_00403d30(geometrydata18, 0, geometrybytes31);
             for (unsigned int geometryindex = 0; geometryindex < count; geometryindex++)
             {
@@ -1449,7 +1449,7 @@ void SaveRace611e50::SaveRace()
                                                          .FUN_00629ab0();
             }
             FUN_00485710(0x53474746, geometrydata18, count);
-            FUN_00401030(geometrydata18);
+            FormHeap_Free(geometrydata18);
             geometrydata18 = 0;
         }
         if (sex3 == 0)
@@ -1459,7 +1459,7 @@ void SaveRace611e50::SaveRace()
         if (count)
         {
             unsigned int asymmetrybytes4 = count * 4;
-            float* asymmetrydata24 = (float*)FUN_00401000(asymmetrybytes4);
+            float* asymmetrydata24 = (float*)FormHeap_Allocate(asymmetrybytes4);
             FUN_00403d30(asymmetrydata24, 0, asymmetrybytes4);
             for (unsigned int asymmetryindex = 0; asymmetryindex < count; asymmetryindex++)
             {
@@ -1473,7 +1473,7 @@ void SaveRace611e50::SaveRace()
                                                            .FUN_00629ab0();
             }
             FUN_00485710(0x41474746, asymmetrydata24, count);
-            FUN_00401030(asymmetrydata24);
+            FormHeap_Free(asymmetrydata24);
             asymmetrydata24 = 0;
         }
         if (sex3 == 0)
@@ -1483,7 +1483,7 @@ void SaveRace611e50::SaveRace()
         if (count)
         {
             unsigned int texturebytes2 = count * 4;
-            float* texturedata16 = (float*)FUN_00401000(texturebytes2);
+            float* texturedata16 = (float*)FormHeap_Allocate(texturebytes2);
             FUN_00403d30(texturedata16, 0, texturebytes2);
             for (unsigned int textureindex = 0; textureindex < count; textureindex++)
             {
@@ -1497,7 +1497,7 @@ void SaveRace611e50::SaveRace()
                                                        .FUN_00629ab0();
             }
             FUN_00485710(0x53544746, texturedata16, count);
-            FUN_00401030(texturedata16);
+            FormHeap_Free(texturedata16);
             texturedata16 = 0;
         }
         FUN_00485950(0x4d414e53, m_usRaceAttribute);
@@ -2436,7 +2436,7 @@ struct RaceLoadFile
     int FUN_004726b0();
     unsigned int GetField25C();
     bool ReadChunkInt(void*);
-    bool FUN_00472890(void*, unsigned int);
+    bool GetChunkData(void*, unsigned int);
     bool FUN_004726f0();
 };
 struct RaceLoadComponents
@@ -2663,7 +2663,7 @@ bool RaceLoadTarget::FUN_00610cd0(TESFile* apFile)
         {
         case 0x44494445: {
             char* pMessage = (char*)_alloca(((RaceLoadFile*)apFile)->GetField25C());
-            ((RaceLoadFile*)apFile)->FUN_00472890(pMessage, 0x200);
+            ((RaceLoadFile*)apFile)->GetChunkData(pMessage, 0x200);
             ((RaceLoadVirtuals*)this)->v77(pMessage);
             break;
         }
@@ -2684,7 +2684,7 @@ bool RaceLoadTarget::FUN_00610cd0(TESFile* apFile)
         }
         case 0x4d414e58: {
             RaceLoadReaction* pdata = new RaceLoadReaction;
-            ((RaceLoadFile*)apFile)->FUN_00472890(pdata, 0xc);
+            ((RaceLoadFile*)apFile)->GetChunkData(pdata, 0xc);
             if (((RaceLoadEndianState*)apFile)->FUN_00401680())
                 ((RaceLoadReactionEndian*)pdata)->FUN_005a6b10();
             ((RaceLoadReactionList&)((RaceLoadReactionAccess*)(&((RaceLoadComponents*)this)->reactions))
@@ -2716,7 +2716,7 @@ bool RaceLoadTarget::FUN_00610cd0(TESFile* apFile)
             else if (((RaceLoadFile*)apFile)->GetField25C() == 8)
             {
                 unsigned int ptempint[2];
-                ((RaceLoadFile*)apFile)->FUN_00472890(ptempint, 8);
+                ((RaceLoadFile*)apFile)->GetChunkData(ptempint, 8);
                 if (((RaceLoadEndianState*)apFile)->FUN_00401680())
                 {
                     for (int i = 0; i < 2; i++)
@@ -2729,13 +2729,13 @@ bool RaceLoadTarget::FUN_00610cd0(TESFile* apFile)
         case 0x4d414e43:
             if (((RaceLoadFile*)apFile)->GetField25C() == 1)
             {
-                ((RaceLoadFile*)apFile)->FUN_00472890(&m_acDefaultHairColors[0], 2);
-                ((RaceLoadFile*)apFile)->FUN_00472890(&m_acDefaultHairColors[1], 2);
+                ((RaceLoadFile*)apFile)->GetChunkData(&m_acDefaultHairColors[0], 2);
+                ((RaceLoadFile*)apFile)->GetChunkData(&m_acDefaultHairColors[1], 2);
             }
             else if (((RaceLoadFile*)apFile)->GetField25C() == 2)
             {
                 unsigned char ptempcolor[2];
-                ((RaceLoadFile*)apFile)->FUN_00472890(ptempcolor, 2);
+                ((RaceLoadFile*)apFile)->GetChunkData(ptempcolor, 2);
                 for (int isex = 0; isex < 2; isex++)
                     SetDefaultHairColor((SEX)isex, ptempcolor[isex]);
             }
@@ -2748,7 +2748,7 @@ bool RaceLoadTarget::FUN_00610cd0(TESFile* apFile)
             break;
         case 0x4d414e44: {
             unsigned int ptempint[2];
-            ((RaceLoadFile*)apFile)->FUN_00472890(ptempint, 8);
+            ((RaceLoadFile*)apFile)->GetChunkData(ptempint, 8);
             if (((RaceLoadEndianState*)apFile)->FUN_00401680())
             {
                 for (int i = 0; i < 2; i++)
@@ -2761,7 +2761,7 @@ bool RaceLoadTarget::FUN_00610cd0(TESFile* apFile)
         case 0x52545441: {
             unsigned int iattribSize = FUN_009d2510(&m_kMaleAttributes);
             char* pdata = (char*)_alloca(iattribSize * 2);
-            ((RaceLoadFile*)apFile)->FUN_00472890(pdata, iattribSize * 2);
+            ((RaceLoadFile*)apFile)->GetChunkData(pdata, iattribSize * 2);
             ((RaceLoadAttributes*)&m_kMaleAttributes)->FUN_00480130((unsigned char*)pdata);
             pdata = pdata + iattribSize;
             ((RaceLoadAttributes*)&m_kFemaleAttributes)->FUN_00480130((unsigned char*)pdata);
@@ -2793,7 +2793,7 @@ bool RaceLoadTarget::FUN_00610cd0(TESFile* apFile)
             ((RaceLoadCoordArray*)&m_kFirstFloatPairBySex[etype][esymm])->SetDimensions(isize, true);
             pfloats = (float*)_alloca(imemsize);
             FUN_00403d30(pfloats, 0, imemsize);
-            ((RaceLoadFile*)apFile)->FUN_00472890(pfloats, imemsize);
+            ((RaceLoadFile*)apFile)->GetChunkData(pfloats, imemsize);
             for (unsigned int i = 0; i < isize; i++)
             {
                 if (((RaceLoadEndianState*)apFile)->FUN_00401680())
@@ -2863,7 +2863,7 @@ bool RaceLoadTarget::FUN_00610cd0(TESFile* apFile)
             if (inumHair != 0)
             {
                 phairIDs = new unsigned int[inumHair];
-                ((RaceLoadFile*)apFile)->FUN_00472890(phairIDs, ichunksize);
+                ((RaceLoadFile*)apFile)->GetChunkData(phairIDs, ichunksize);
                 for (unsigned int i = 0; i < inumHair; i++)
                 {
                     if (((RaceLoadEndianState*)apFile)->FUN_00401680())
@@ -2889,7 +2889,7 @@ bool RaceLoadTarget::FUN_00610cd0(TESFile* apFile)
             if (inumEyes != 0)
             {
                 peyesIDs = new unsigned int[inumEyes];
-                ((RaceLoadFile*)apFile)->FUN_00472890(peyesIDs, ichunksize);
+                ((RaceLoadFile*)apFile)->GetChunkData(peyesIDs, ichunksize);
                 for (unsigned int i = 0; i < inumEyes; i++)
                 {
                     if (((RaceLoadEndianState*)apFile)->FUN_00401680())

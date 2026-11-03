@@ -771,11 +771,11 @@ struct ConsoleManager
 typedef char _sizecheck_MenuConsole[sizeof(ConsoleManager) == 2324 ? 1 : -1];
 struct FUN_004a4020_shell : public ConsoleManager
 {
-    bool FUN_004a4020();
+    bool IsConsoleOpen();
 };
 
 // @fnv 0x004a4020
-bool FUN_004a4020_shell::FUN_004a4020()
+bool FUN_004a4020_shell::IsConsoleOpen()
 {
     return cVisible > 0;
 }

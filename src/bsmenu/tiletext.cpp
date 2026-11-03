@@ -80,9 +80,9 @@ unsigned __cdecl FUN_0044a670(const char*);
 
 unsigned __cdecl FUN_00403940(unsigned, unsigned);
 
-void* __cdecl FUN_00401000(unsigned);
+void* __cdecl FormHeap_Allocate(unsigned);
 
-void __cdecl FUN_00401030(void*);
+void __cdecl FormHeap_Free(void*);
 
 void __cdecl FUN_00401460(void*, const void*, unsigned);
 

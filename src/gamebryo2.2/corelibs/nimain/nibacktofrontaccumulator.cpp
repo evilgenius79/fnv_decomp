@@ -155,7 +155,7 @@ struct S_00aa0d00_Pool
 struct S_00aa0d00_Aux
 {
     int unk00;
-    void FUN_0040fbf0(int a);
+    void Lock(int a);
 };
 extern S_00aa0d00_Aux DAT_011c5f80;
 extern S_00aa0d00_Node* DAT_011c5f58;
@@ -253,7 +253,7 @@ void S_00aa0d00_Base::ReleaseAllItems()
             else
                 tail = 0;
             pNode->data = 0;
-            DAT_011c5f80.FUN_0040fbf0(0);
+            DAT_011c5f80.Lock(0);
             pNode->prev = 0;
             pNode->next = DAT_011c5f58;
             --DAT_011c5f84;
@@ -404,7 +404,7 @@ void C_00aa0dc0::FUN_00aa0dc0()
         }
 
         item->data = 0;
-        DAT_011c5f80.FUN_0040fbf0(0);
+        DAT_011c5f80.Lock(0);
         item->prev = 0;
         item->next = DAT_011c5f58;
 

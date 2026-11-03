@@ -2380,7 +2380,7 @@ class FUN_00437510 : public ExtraBase437510
     ~FUN_00437510();
 };
 
-TESForm* __cdecl FUN_004839c0(unsigned int auiFormId);
+TESForm* __cdecl LookupFormByID(unsigned int auiFormId);
 
 class FUN_0043a9f0_C
 {
@@ -2395,5 +2395,5 @@ void FUN_0043a9f0_C::FUN_0043a9f0()
 {
     unsigned int auiFormId = (unsigned int)m_pkRef;
     if (auiFormId)
-        m_pkRef = dynamic_cast<TESObjectREFR*>(FUN_004839c0(auiFormId));
+        m_pkRef = dynamic_cast<TESObjectREFR*>(LookupFormByID(auiFormId));
 }

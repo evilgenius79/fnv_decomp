@@ -518,7 +518,7 @@ class ManagedSubObject
     ~ManagedSubObject();
 };
 
-extern "C" void __cdecl FUN_00401030(void* p);
+extern "C" void __cdecl FormHeap_Free(void* p);
 
 class FUN_007a8960_cls : public ManagedSubObject
 {
@@ -542,7 +542,7 @@ class FUN_007a8960_cls : public ManagedSubObject
 FUN_007a8960_cls::~FUN_007a8960_cls()
 {
     void* p = m_08;
-    FUN_00401030(p);
+    FormHeap_Free(p);
     m_08 = 0;
 }
 

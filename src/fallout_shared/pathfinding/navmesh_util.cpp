@@ -2443,7 +2443,7 @@ bool Target::FindTriangleZ(const NiPoint3& point, float above, float below, floa
 
 struct FUN_006986d0_cls;
 
-void* __cdecl FUN_00401000(unsigned int size);
+void* __cdecl FormHeap_Allocate(unsigned int size);
 
 struct b9_big
 {
@@ -2451,7 +2451,7 @@ struct b9_big
     int m_30, m_34, m_38, m_3c, m_40, m_44, m_48, m_4c, m_50, m_54, m_58;
     static void* operator new(unsigned int size)
     {
-        return FUN_00401000(size);
+        return FormHeap_Allocate(size);
     }
     static void operator delete(void*, unsigned int);
     b9_big();
@@ -2815,7 +2815,7 @@ class TESForm
   public:
     virtual void v0();
 };
-TESForm* __cdecl FUN_004839c0(unsigned int);
+TESForm* __cdecl LookupFormByID(unsigned int);
 struct P507Array
 {
     void* table;
@@ -2959,7 +2959,7 @@ void __cdecl RemoveNavMeshId(unsigned int id)
                 NavMeshPtr mesh;
                 if (!firstCount->FUN_00690860(mesh))
                 {
-                    TESForm* nav = FUN_004839c0(firstCount->FUN_00559450());
+                    TESForm* nav = LookupFormByID(firstCount->FUN_00559450());
                     NavMesh* form = dynamic_cast<NavMesh*>(nav);
                     mesh = MakeNavMeshPointer(form);
                 }

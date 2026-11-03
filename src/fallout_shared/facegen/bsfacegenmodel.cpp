@@ -1153,7 +1153,7 @@ FUN_0065c6a0::~FUN_0065c6a0()
 }
 }  // namespace fnv_0065c6a0
 
-void __cdecl FUN_00401030(void*);
+void __cdecl FormHeap_Free(void*);
 
 struct Cls_659ab0
 {
@@ -1161,13 +1161,13 @@ struct Cls_659ab0
     void* FUN_00659ab0(unsigned int flags);
 };
 
-// Calls FUN_00659710, then if bit 0 of flags is set calls FUN_00401030 on this, and returns this.
+// Calls FUN_00659710, then if bit 0 of flags is set calls FormHeap_Free on this, and returns this.
 // @fnv 0x00659ab0
 void* Cls_659ab0::FUN_00659ab0(unsigned int flags)
 {
     FUN_00659710();
     if (flags & 1)
-        FUN_00401030(this);
+        FormHeap_Free(this);
     return this;
 }
 

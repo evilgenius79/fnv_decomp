@@ -8421,7 +8421,7 @@ struct PoolNode
 struct LockObj
 {
     unsigned int value;
-    void FUN_0040fbf0(char*);
+    void Lock(char*);
 };
 extern LockObj DAT_011c5f80;
 extern unsigned int DAT_011c5f84;

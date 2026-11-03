@@ -92,12 +92,12 @@ struct NiTMapBase
     virtual ~NiTMapBase();
     virtual unsigned int __thiscall GetHash(unsigned int key);
     virtual bool __thiscall Matches(unsigned int key, unsigned int uiHash);
-    bool __thiscall FUN_00853130(unsigned int key, CombatThreatRecord*& value);
+    bool __thiscall GetAt(unsigned int key, CombatThreatRecord*& value);
 };
 
 // Looks up key in the hash table, returning true and setting value to the matching item's data, or false if not found.
 // @fnv 0x00853130
-bool __thiscall NiTMapBase::FUN_00853130(unsigned int key, CombatThreatRecord*& value)
+bool __thiscall NiTMapBase::GetAt(unsigned int key, CombatThreatRecord*& value)
 {
     NiTMapItem* item;
     unsigned int index = GetHash(key);
@@ -141,7 +141,7 @@ void __thiscall FUN_009a5270_class::DeleteAllEntries()
     RemoveAll();
 }
 
-void* __cdecl FUN_00401000(unsigned int size);
+void* __cdecl FormHeap_Allocate(unsigned int size);
 extern void* DAT_011c8048;
 
 struct SpawnedObj404a80
@@ -150,7 +150,7 @@ struct SpawnedObj404a80
     SpawnedObj404a80();
     static void* operator new(unsigned int size)
     {
-        return FUN_00401000(size);
+        return FormHeap_Allocate(size);
     }
 };
 

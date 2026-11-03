@@ -142,8 +142,8 @@ struct AudioPlaybackHandle
     {
         FUN_00483710();
     }
-    void FUN_00ad8b60(float, float, float);
-    void FUN_00ad8830(int);
+    void SetPos(float, float, float);
+    void Play(int);
 };
 struct AudioSystem
 {
@@ -354,8 +354,8 @@ int __cdecl FUN_009c0d80(Scene* scene, Controller* player, int eventOwner, float
                             AudioPlaybackHandle sound =
                                 FUN_00453a70()->FUN_00ad7480(player->FUN_004181e0()->FUN_004fd3e0()->FUN_00511840(),
                                                              flags, player->FUN_004181e0()->FUN_004fd3e0());
-                            sound.FUN_00ad8b60(impact.components[0], impact.components[1], impact.components[2]);
-                            sound.FUN_00ad8830(0);
+                            sound.SetPos(impact.components[0], impact.components[1], impact.components[2]);
+                            sound.Play(0);
                             if (DAT_011f20a4 != 0 && ((GetVisualFn)player->vtable[0x1d0 / 4])(player) != 0)
                             {
                                 Color color;
@@ -394,8 +394,8 @@ int __cdecl FUN_009c0d80(Scene* scene, Controller* player, int eventOwner, float
                     AudioPlaybackHandle sound =
                         FUN_00453a70()->FUN_00ad7480(player->FUN_004181e0()->FUN_004fd3e0()->FUN_00511840(), flags,
                                                      player->FUN_004181e0()->FUN_004fd3e0());
-                    sound.FUN_00ad8b60(projected.components[0], projected.components[1], projected.components[2]);
-                    sound.FUN_00ad8830(0);
+                    sound.SetPos(projected.components[0], projected.components[1], projected.components[2]);
+                    sound.Play(0);
                     if (DAT_011f20a4 != 0)
                     {
                         Color color;

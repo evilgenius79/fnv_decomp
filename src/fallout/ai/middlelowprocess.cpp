@@ -1132,7 +1132,7 @@ struct Sub92
 {
     void LoadModifiers();
 };
-Virtual92* __cdecl FUN_004839c0(unsigned);
+Virtual92* __cdecl LookupFormByID(unsigned);
 void __cdecl FUN_005b5e40(const char*, ...);
 struct Target92
 {
@@ -1157,7 +1157,7 @@ void Target92::FUN_0092e730(unsigned flags, unsigned arg2, unsigned arg3)
             Record92* pRecord = (*(Save92**)&DAT_011de45c)->FUN_004fd3c0();
             if (pRecord)
             {
-                Virtual92* pVirtual = FUN_004839c0(pRecord->id);
+                Virtual92* pVirtual = LookupFormByID(pRecord->id);
                 FUN_005b5e40(&DAT_01015718, &DAT_0108a3f0, 0x287, pRecord->id, pVirtual->v76(), pRecord->kind,
                              *(unsigned*)pRecord->value);
             }
@@ -1178,7 +1178,7 @@ void Target92::FUN_0092e730(unsigned flags, unsigned arg2, unsigned arg3)
         Record92* pRecord2 = (*(Save92**)&DAT_011de45c)->FUN_004fd3c0();
         if (pRecord2)
         {
-            Virtual92* pVirtual2 = FUN_004839c0(pRecord2->id);
+            Virtual92* pVirtual2 = LookupFormByID(pRecord2->id);
             if (uiNewPos > b + a)
             {
                 FUN_005b5e40(&DAT_01015588, uiNewPos - (b + a), &DAT_0108a3f0, 0x290, pRecord2->id, pVirtual2->v76(),
@@ -2011,7 +2011,7 @@ extern FloatSetting DAT_011cdbac;
 extern FloatSetting DAT_011cd82c;
 extern int DAT_0119bcb0[];
 
-Spell* FUN_004839c0(int id);
+Spell* LookupFormByID(int id);
 void FUN_0090d480();
 void FUN_0090d570();
 Ref* FUN_00703180();
@@ -2609,7 +2609,7 @@ void ProcStandIn::FUN_0092d050(Ref* apRef)
                     }
                     if (!GetAssignedPackage()->CheckA(pActor, 0, DAT_01012054, 0) && pActor->IsBusy())
                     {
-                        Spell* m_pEffectInstance = FUN_004839c0(0x3a);
+                        Spell* m_pEffectInstance = LookupFormByID(0x3a);
                         float fNowVal = DAT_011de7b8.GetGameTime();
                         if (fNowVal < GetTime())
                         {

@@ -976,7 +976,7 @@ extern const char str_01071b7c[], str_01071b70[], str_01071b64[];
 extern int DAT_011d9210, DAT_011d9214, DAT_011d9224;
 extern int DAT_011d9218, DAT_011d921c, DAT_011d9220;
 extern float DAT_01012054;
-int __cdecl FUN_00a00940(const char*, int);
+int __cdecl TraitNameToIDAdd(const char*, int);
 struct FUN_00753230 : Base753230
 {
     int field_48, field_4c;
@@ -990,12 +990,12 @@ struct FUN_00753230 : Base753230
 // @fnv 0x00753230
 FUN_00753230::FUN_00753230()
 {
-    DAT_011d9210 = FUN_00a00940(str_01071ba0, -1);
-    DAT_011d9214 = FUN_00a00940(str_01071b94, -1);
-    DAT_011d9224 = FUN_00a00940(str_01071b88, -1);
-    DAT_011d9218 = FUN_00a00940(str_01071b7c, -1);
-    DAT_011d921c = FUN_00a00940(str_01071b70, -1);
-    DAT_011d9220 = FUN_00a00940(str_01071b64, -1);
+    DAT_011d9210 = TraitNameToIDAdd(str_01071ba0, -1);
+    DAT_011d9214 = TraitNameToIDAdd(str_01071b94, -1);
+    DAT_011d9224 = TraitNameToIDAdd(str_01071b88, -1);
+    DAT_011d9218 = TraitNameToIDAdd(str_01071b7c, -1);
+    DAT_011d921c = TraitNameToIDAdd(str_01071b70, -1);
+    DAT_011d9220 = TraitNameToIDAdd(str_01071b64, -1);
     field_48 = 0;
     field_50 = DAT_01012054;
     field_55 = false;
@@ -1130,7 +1130,7 @@ extern unsigned int DAT_011db004;
 bool FUN_00709d40();
 float FUN_00408820(float);
 unsigned int gm_GetTickCount();
-int FUN_00a01860(const char*);
+int TraitNameToID(const char*);
 struct ChoiceTile
 {
     void FUN_00a0b110(int);
@@ -1203,12 +1203,12 @@ bool ProgressMenu::HandleKey(int key, int unused)
         if (step != 0 && gm_GetTickCount() > DAT_011db004)
         {
             ScrollTile* trait = scroll;
-            int iValueId = FUN_00a01860("_current_value");
+            int iValueId = TraitNameToID("_current_value");
             int tile = (int)trait->FUN_00a011b0(iValueId);
             trait->FUN_00a012d0(iValueId, (float)(tile + step), false);
             if (tile != trait->FUN_00a011b0(iValueId))
             {
-                trait->SetTraitAndReset(FUN_00a01860("_SetInCode"), 1.0f);
+                trait->SetTraitAndReset(TraitNameToID("_SetInCode"), 1.0f);
             }
             DAT_011db004 = gm_GetTickCount() + (DAT_011db004 ? 50 : 500);
         }
@@ -1393,7 +1393,7 @@ ResourceProvider* __cdecl FUN_004b7210();
 TraitView* __cdecl FUN_00a09030(int);
 void __cdecl FNV_Warning(const char*);
 float __stdcall FUN_00a01530(int);
-int __cdecl FUN_00a01860(const char*);
+int __cdecl TraitNameToID(const char*);
 struct SettingView
 {
     int* Int();
@@ -1506,7 +1506,7 @@ TileView* __cdecl FUN_007e6990()
             _sprintf_s(text, 64, DAT_011d2310.String(), count);
         ((TraitView*)DAT_011daf74)->tile28->Set(4036, text, true);
         ((TraitView*)DAT_011daf74)->tile3c->Set(4036, DAT_011d33d8.String(), true);
-        ((TraitView*)DAT_011daf74)->tile40->Set(FUN_00a01860("_Title"), DAT_011d35c4.String(), true);
+        ((TraitView*)DAT_011daf74)->tile40->Set(TraitNameToID("_Title"), DAT_011d35c4.String(), true);
         for (PerkNode* node = DAT_011c3f2c->FUN_00460fb0(); node && *node->FUN_006815c0(); node = node->FUN_00726070())
         {
             PerkView* perk = *node->FUN_006815c0();
@@ -1604,9 +1604,9 @@ void TraitMenu_7e6ea0::UpdatePerkTile(int id, Tile* tile)
         this->tile44->Set(0xFA3, 0);
         FUN_00706f30(4);
         ScrollTile* scroll2 = this->tile48;
-        int traitVal = FUN_00a01860("_current_value");
+        int traitVal = TraitNameToID("_current_value");
         scroll2->FUN_00a012d0(traitVal, 0.0f, false);
-        scroll2->SetTraitAndReset(FUN_00a01860("_SetInCode"), 1.0f);
+        scroll2->SetTraitAndReset(TraitNameToID("_SetInCode"), 1.0f);
         break;
     }
 }

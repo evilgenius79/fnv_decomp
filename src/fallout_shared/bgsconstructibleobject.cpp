@@ -505,7 +505,7 @@ class TESBoundObject : public TESForm
     virtual ~TESBoundObject();
 };
 
-TESForm* __cdecl FUN_004839c0(unsigned int id);
+TESForm* __cdecl LookupFormByID(unsigned int id);
 void __cdecl ResolveFormID(unsigned int* id, void* file);
 int __cdecl FUN_005b5e40(const char* fmt, ...);
 
@@ -650,7 +650,7 @@ void S_004f95a0::LoadFormReferences()
     if (id)
     {
         ResolveFormID(&id, FUN_00484e60(-1));
-        unkac = dynamic_cast<BGSListForm*>(FUN_004839c0(id));
+        unkac = dynamic_cast<BGSListForm*>(LookupFormByID(id));
         if (!unkac)
             FUN_005b5e40("MASTERFILE: Could not find item list (%08X) on constructible object '%s' (%08X).", id, v130(),
                          FUN_0084e3a0());
@@ -659,7 +659,7 @@ void S_004f95a0::LoadFormReferences()
     if (id)
     {
         ResolveFormID(&id, FUN_00484e60(-1));
-        unkb0 = dynamic_cast<TESBoundObject*>(FUN_004839c0(id));
+        unkb0 = dynamic_cast<TESBoundObject*>(LookupFormByID(id));
         if (!unkb0)
             FUN_005b5e40("MASTERFILE: Could not find created item (%08X) on constructible object '%s' (%08X).", id,
                          v130(), FUN_0084e3a0());

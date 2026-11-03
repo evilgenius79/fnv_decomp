@@ -91,7 +91,7 @@ void MenuValueWatcher::UpdateThresholdCheck()
 
 struct Tile_7aba00
 {
-    Tile_7aba00* FUN_00a01b00(const char* path);
+    Tile_7aba00* ReadXML(const char* path);
     struct Menu_7aba00* FUN_00a03c90();
     Tile_7aba00* FUN_00a03da0(const char* name);
     float FUN_00a011b0(unsigned int id);
@@ -145,7 +145,7 @@ struct Sound_7aba00
     int unk04;
     int unk08;
     ~Sound_7aba00();
-    bool FUN_00ad8830(bool a1);
+    bool Play(bool a1);
 };
 struct Audio_7aba00
 {
@@ -191,7 +191,7 @@ Tile_7aba00* __cdecl CreateQuantityMenu(int max, void* callback, int initial)
         delete old;
     if (FUN_007023c0())
         flag_ = true;
-    Tile_7aba00* tile6 = im4->FUN_00586150()->FUN_00a01b00(kMenuFile_7aba00);
+    Tile_7aba00* tile6 = im4->FUN_00586150()->ReadXML(kMenuFile_7aba00);
     DAT_011da618 = tile6->FUN_00a03c90();
     if (DAT_011da618 && DAT_011da618->GetID() == FUN_007abda0())
     {
@@ -201,7 +201,7 @@ Tile_7aba00* __cdecl CreateQuantityMenu(int max, void* callback, int initial)
             FUN_005b5e40(kWarning_7aba00);
             return 0;
         }
-        FUN_00453a70()->FUN_00ad7550(kSound_7aba00, 0x121).FUN_00ad8830(false);
+        FUN_00453a70()->FUN_00ad7550(kSound_7aba00, 0x121).Play(false);
         if (tile6->FUN_00a011b0(0xfa7) == 6006.0 || tile6->FUN_00a011b0(0xfa7) == 102.0)
         {
             tile6->FUN_00a012d0(0xfad, FUN_00a01530(), true);

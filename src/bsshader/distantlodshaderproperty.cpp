@@ -611,7 +611,7 @@ struct S_00b6f0b0_Node
 struct S_00b6f0b0_Lock
 {
     int owner;
-    void FUN_0040fbf0(const char* s) throw();
+    void Lock(const char* s) throw();
 };
 extern S_00b6f0b0_Lock DAT_011c5f80;
 extern S_00b6f0b0_Node* DAT_011c5f58;
@@ -695,7 +695,7 @@ FUN_00b6f0b0::~FUN_00b6f0b0()
         else
             m84.tail = 0;
         node->item = 0;
-        DAT_011c5f80.FUN_0040fbf0(0);
+        DAT_011c5f80.Lock(0);
         node->prev = 0;
         node->next = DAT_011c5f58;
         if (--DAT_011c5f84 == 0)
@@ -722,7 +722,7 @@ FUN_00b6f0b0::~FUN_00b6f0b0()
         else
             m78.tail = 0;
         node->item = 0;
-        DAT_011c5f80.FUN_0040fbf0(0);
+        DAT_011c5f80.Lock(0);
         node->prev = 0;
         node->next = DAT_011c5f58;
         if (--DAT_011c5f84 == 0)

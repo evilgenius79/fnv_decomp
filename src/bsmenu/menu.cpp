@@ -1044,7 +1044,7 @@ struct NiFixedString
 typedef char _sizecheck_NiFixedString[sizeof(NiFixedString) == 4 ? 1 : -1];
 struct FUN_00a1ddb0_shell : public Menu
 {
-    Tile* FUN_00a1ddb0(Tile*, char*, Tile*);
+    Tile* AddTileFromTemplate(Tile*, char*, Tile*);
 };
 
 extern "C" __declspec(dllimport) long __stdcall InterlockedDecrement(volatile long*);
@@ -1167,7 +1167,7 @@ struct FUN_00a033b0_shell
 
 // Looks up a tile template by name in a linked list, builds a tile from it under apParent, and returns the new tile or null.
 // @fnv 0x00a1ddb0
-Tile* FUN_00a1ddb0_shell::FUN_00a1ddb0(Tile* apParent, char* axName, Tile* apLast)
+Tile* FUN_00a1ddb0_shell::AddTileFromTemplate(Tile* apParent, char* axName, Tile* apLast)
 {
     Tile* preturn_val = 0;
     if (apLast)

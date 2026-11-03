@@ -10009,7 +10009,7 @@ struct SpinLk
 {
     int owner;
     unsigned int count;
-    void FUN_0040fbf0(const char* name = 0) throw();
+    void Lock(const char* name = 0) throw();
     void Unlock() throw()
     {
         if (--count == 0)
@@ -10034,7 +10034,7 @@ struct PoolAlloc
 {
     static ListItem* Allocate() throw()
     {
-        DAT_011c5f80.FUN_0040fbf0();
+        DAT_011c5f80.Lock();
         if (!NiTAbstractPoolAllocator_unsigned_int_instance.head)
             FUN_0043a080();
         ListItem* p = NiTAbstractPoolAllocator_unsigned_int_instance.head;

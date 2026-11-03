@@ -769,7 +769,7 @@ class RecursiveSpinLock
 };
 
 // @fnv 0x00541ae0
-void __fastcall FUN_00541ae0(char* this_ptr)
+void __fastcall CellRefLockLeave(char* this_ptr)
 {
     ((RecursiveSpinLock*)(this_ptr + 0x80))->Unlock();
 }
@@ -11900,7 +11900,7 @@ struct TES_s
 extern TES_s* g_TES;
 struct Loader_S
 {
-    void FUN_00444850(TESObjectREFR*, void*, int);
+    void QueueReference(TESObjectREFR*, void*, int);
 };
 extern Loader_S* g_modelLoader;
 
@@ -11934,7 +11934,7 @@ void FUN_005627c0_shell::FUN_005627c0(BGSLoadFormBuffer* apLoadGameBuffer)
             ((VRefr005627c0*)this)->Slot73(0, 0);
         else if (!((VRefr005627c0*)this)->Slot74() && ((BSOcclusionPlane*)this)->GetCullResult() &&
                  ((TESObjectCELL*)((BSOcclusionPlane*)this)->GetCullResult())->IsOutdoorCell())
-            g_modelLoader->FUN_00444850(this, g_TES->FUN_00458be0(((BSOcclusionPlane*)this)->GetCullResult(), 0), 1);
+            g_modelLoader->QueueReference(this, g_TES->FUN_00458be0(((BSOcclusionPlane*)this)->GetCullResult(), 0), 1);
     }
 }
 }  // namespace fnv_005627c0
@@ -24663,7 +24663,7 @@ struct SaveDebugForm
     virtual void slot75();
     virtual const char* Describe();
 };
-SaveDebugForm* __cdecl FUN_004839c0(unsigned int);
+SaveDebugForm* __cdecl LookupFormByID(unsigned int);
 void __cdecl FUN_0040fbe0(const char*, ...);
 struct TESSaveLoadGame
 {
@@ -24799,7 +24799,7 @@ unsigned short SaveReference::FUN_0055e730(unsigned int flags)
         SaveChangeRecord* record = g_TESSaveLoadGame->FUN_004fd3e0();
         if (record)
         {
-            SaveDebugForm* form = FUN_004839c0(record->formID);
+            SaveDebugForm* form = LookupFormByID(record->formID);
             FUN_0040fbe0("GetSaveSize(): %-5i for form %08X %s with flags %08X ending at line %i in file %s",
                          uiTotalSize - size, record->formID, form->Describe(),
                          *reinterpret_cast<unsigned int*>(record->changeFlags), 0xAD0,
@@ -24925,7 +24925,7 @@ struct DiagnosticForm
     virtual void virtual_12c();
     virtual const char* GetDiagnosticName();
 };
-DiagnosticForm* FUN_004839c0(unsigned int);
+DiagnosticForm* LookupFormByID(unsigned int);
 void FUN_0040fbe0(const char*, ...);
 void FNV_Warning(const char*, ...);
 struct SaveReference
@@ -25073,7 +25073,7 @@ void SaveReference::FUN_0055e940(unsigned int flags)
                     record = g_TESSaveLoadGame->FUN_004fd3e0();
                     if (record)
                     {
-                        DiagnosticForm* form = FUN_004839c0(record->formId);
+                        DiagnosticForm* form = LookupFormByID(record->formId);
                         FUN_0040fbe0("SaveGame(): %-5i for form %08X %s with flags %08X ending at line %i in file %s",
                                      position - start, record->formId, form->GetDiagnosticName(),
                                      *reinterpret_cast<unsigned int*>(record->changeFlags), 2817,
@@ -25188,7 +25188,7 @@ struct LoadForm
     virtual void v75();
     virtual const char* describe();
 };
-LoadForm* __cdecl FUN_004839c0(unsigned int);
+LoadForm* __cdecl LookupFormByID(unsigned int);
 struct LoadExtra
 {
     void FUN_0041aeb0();
@@ -25422,7 +25422,7 @@ void LoadObject::FUN_0055ec40(unsigned int flags, unsigned int more)
             LoadRecord* record = g_TESSaveLoadGame->FUN_004fd3c0();
             if (record)
             {
-                LoadForm* form = FUN_004839c0(record->id);
+                LoadForm* form = LookupFormByID(record->id);
                 FNV_Warning(
                     "SAVELOAD: (LoadGame Buffer error) Block Header is incorrect in file %s on line %i.  Currently loading form is %08X %s with version %i and flags %08X",
                     "D:\\_Fallout3\\Platforms\\Common\\Code\\Fallout Shared\\TESObjectREFR.cpp", 0xb10, record->id,
@@ -25527,7 +25527,7 @@ void LoadObject::FUN_0055ec40(unsigned int flags, unsigned int more)
         LoadRecord* record2 = g_TESSaveLoadGame->FUN_004fd3c0();
         if (record2)
         {
-            LoadForm* form2 = FUN_004839c0(record2->id);
+            LoadForm* form2 = LookupFormByID(record2->id);
             if (end > start + length)
                 FNV_Warning(
                     "SAVELOAD: LoadGame Buffer overrun of %i bytes in file %s on line %i.  Currently loading form is %08X %s with version %i and flags %08X",
@@ -25573,7 +25573,7 @@ struct MyExtraDataList : public ExtraDataList
 struct MyModelLoader : public ModelLoader
 {
     bool FUN_00445750(void* ref);
-    void FUN_00444850(void* ref, void* cellData);
+    void QueueReference(void* ref, void* cellData);
 };
 extern MyModelLoader* g_modelLoader;
 
@@ -25785,7 +25785,7 @@ void FUN_0055f240_Class::FUN_0055f240(unsigned int changedFlags)
             {
                 if (!g_modelLoader->FUN_00445750(this))
                 {
-                    g_modelLoader->FUN_00444850(this, g_TES->FUN_00458be0(GetParentCell(), 0, 0));
+                    g_modelLoader->QueueReference(this, g_TES->FUN_00458be0(GetParentCell(), 0, 0));
                 }
             }
         }
@@ -30069,7 +30069,7 @@ void Holder_a1e0::FUN_0056a1e0(unsigned char flag)
 
 struct TimedAction
 {
-    void FUN_00573170(TESObjectREFR*, int, int, int);
+    void Activate(TESObjectREFR*, int, int, int);
 };
 struct TimedRecord
 {
@@ -30137,7 +30137,7 @@ unsigned char FUN_0056a380_shell::FUN_0056a380()
                         if (record->deadline > current)
                         {
                             if (record->deadline <= fNewTime)
-                                record->action->FUN_00573170((TESObjectREFR*)this, 0, 0, 1);
+                                record->action->Activate((TESObjectREFR*)this, 0, 0, 1);
                             else
                                 found = 1;
                         }
@@ -30549,7 +30549,7 @@ struct LightData
     LightData();
     ~LightData();
     bool FUN_00ad8ce0();
-    void FUN_00ad8f20(Scene*);
+    void SetNiNode(Scene*);
 };
 struct ReferenceListNode
 {
@@ -31351,7 +31351,7 @@ Scene* Reference::FUN_0056b2d0(unsigned char immediate)
         LightData lightSlot0;
         FUN_005d43c0()->FUN_00418890(&lightSlot0);
         if (lightSlot0.FUN_00ad8ce0())
-            lightSlot0.FUN_00ad8f20(scene.FUN_00559450());
+            lightSlot0.SetNiNode(scene.FUN_00559450());
         ReferenceListNode* lightsSlot12 = FUN_005d43c0()->FUN_0041f810();
         ScenePointer* ownSceneSlot1 = FUN_005725f0();
         if (ownSceneSlot1 && ownSceneSlot1->FUN_00559450() && !FUN_004077c0())
@@ -32980,7 +32980,7 @@ struct ActRef
     void RunOnActivateBlock();
     ActTeleport* GetTeleportData();
     void HandleActivation(ActRef* apActivator);
-    bool FUN_00573170(ActRef* apActivator, bool abFlag, ActForm* apObject, int aiCount);
+    bool Activate(ActRef* apActivator, bool abFlag, ActForm* apObject, int aiCount);
 };
 
 struct ActActor : ActRef
@@ -33015,7 +33015,7 @@ extern "C" int __cdecl sprintf(char* apBuffer, const char* apFormat, ...);
 void __cdecl ActDebugLog(const char* apFormat, ...);
 
 // @fnv 0x00573170
-bool ActRef::FUN_00573170(ActRef* apActivator, bool abFlag, ActForm* apObject, int aiCount)
+bool ActRef::Activate(ActRef* apActivator, bool abFlag, ActForm* apObject, int aiCount)
 {
     bool bUnconscious = false;
     ActRef* pLinked_2;
@@ -33025,7 +33025,7 @@ bool ActRef::FUN_00573170(ActRef* apActivator, bool abFlag, ActForm* apObject, i
     {
         pLinked_2 = GetExtraList()->GetLinkedRef();
         if (pLinked_2)
-            return pLinked_2->FUN_00573170(apActivator, abFlag, apObject, aiCount);
+            return pLinked_2->Activate(apActivator, abFlag, apObject, aiCount);
     }
 
     g_bActActivated = false;
@@ -33772,8 +33772,8 @@ struct FUN_0055a2f0
 };
 struct ScriptOps
 {
-    void* FUN_005abf60();
-    bool FUN_005ac1e0(FUN_0055a2f0*, void*, int, bool);
+    void* CreateEventList();
+    bool Execute(FUN_0055a2f0*, void*, int, bool);
 };
 struct ExtraOps
 {
@@ -34001,10 +34001,10 @@ void RefOps::FUN_00574b30(RefOps* source, int count, bool abArg1, bool abArg2)
                         if (extras && !extras->FUN_00418800())
                         {
                             extras->FUN_00419ed0(script);
-                            extras->FUN_00419f80(script->FUN_005abf60());
+                            extras->FUN_00419f80(script->CreateEventList());
                             FUN_0055a2f0* reference = new FUN_0055a2f0;
                             reference->FUN_00484490();
-                            script->FUN_005ac1e0(reference, extras->FUN_00418830(), 0, false);
+                            script->Execute(reference, extras->FUN_00418830(), 0, false);
                             delete reference;
                         }
                         FUN_005ac750(this, extras, 1);
@@ -37436,7 +37436,7 @@ struct RemapNode
 };
 struct RemapMap
 {
-    bool FUN_00853130(void*, TESForm**);
+    bool GetAt(void*, TESForm**);
 };
 struct RemapRef
 {
@@ -37589,7 +37589,7 @@ void RemapRef::FUN_0055b9c0(RemapMap* map)
     if (map)
     {
         TESForm* mapped = 0;
-        if (map->FUN_00853130(this, &mapped) && mapped)
+        if (map->GetAt(this, &mapped) && mapped)
         {
             RemapRef* copy = reinterpret_cast<RemapRef*>(dynamic_cast<TESObjectREFR*>(mapped));
             if (copy)
@@ -37599,7 +37599,7 @@ void RemapRef::FUN_0055b9c0(RemapMap* map)
                 if (parentNum)
                 {
                     mappedOtherNew = 0;
-                    if (map->FUN_00853130(parentNum, &mappedOtherNew) && mappedOtherNew)
+                    if (map->GetAt(parentNum, &mappedOtherNew) && mappedOtherNew)
                     {
                         RemapRef* other = reinterpret_cast<RemapRef*>(dynamic_cast<TESObjectREFR*>(mappedOtherNew));
                         if (other)
@@ -37614,7 +37614,7 @@ void RemapRef::FUN_0055b9c0(RemapMap* map)
                 if (ownerPos)
                 {
                     mappedOtherNew = 0;
-                    if (map->FUN_00853130(ownerPos, &mappedOtherNew) && mappedOtherNew)
+                    if (map->GetAt(ownerPos, &mappedOtherNew) && mappedOtherNew)
                     {
                         RemapRef* other = reinterpret_cast<RemapRef*>(dynamic_cast<TESObjectREFR*>(mappedOtherNew));
                         if (other)
@@ -37625,7 +37625,7 @@ void RemapRef::FUN_0055b9c0(RemapMap* map)
                 if (linked)
                 {
                     mappedOtherNew = 0;
-                    if (map->FUN_00853130(linked, &mappedOtherNew) && mappedOtherNew)
+                    if (map->GetAt(linked, &mappedOtherNew) && mappedOtherNew)
                     {
                         RemapRef* other = reinterpret_cast<RemapRef*>(dynamic_cast<TESObjectREFR*>(mappedOtherNew));
                         if (other)
@@ -37642,7 +37642,7 @@ void RemapRef::FUN_0055b9c0(RemapMap* map)
                     if (reference)
                     {
                         mappedOtherNew = 0;
-                        if (map->FUN_00853130(reference, &mappedOtherNew) && mappedOtherNew)
+                        if (map->GetAt(reference, &mappedOtherNew) && mappedOtherNew)
                         {
                             RemapRef* other = reinterpret_cast<RemapRef*>(dynamic_cast<TESObjectREFR*>(mappedOtherNew));
                             if (other)
@@ -37658,7 +37658,7 @@ void RemapRef::FUN_0055b9c0(RemapMap* map)
                     if (reference)
                     {
                         mappedOtherNew = 0;
-                        if (map->FUN_00853130(reference, &mappedOtherNew) && mappedOtherNew)
+                        if (map->GetAt(reference, &mappedOtherNew) && mappedOtherNew)
                         {
                             RemapRef* other = reinterpret_cast<RemapRef*>(dynamic_cast<TESObjectREFR*>(mappedOtherNew));
                             if (other)
@@ -37673,7 +37673,7 @@ void RemapRef::FUN_0055b9c0(RemapMap* map)
                     RemapData* entry = static_cast<RemapData*>(*linksOut->FUN_006815c0());
                     linksOut = linksOut->FUN_00726070();
                     mappedOtherNew = 0;
-                    if (map->FUN_00853130(entry->reference, &mappedOtherNew) && mappedOtherNew)
+                    if (map->GetAt(entry->reference, &mappedOtherNew) && mappedOtherNew)
                     {
                         RemapRef* other = reinterpret_cast<RemapRef*>(dynamic_cast<TESObjectREFR*>(mappedOtherNew));
                         if (other)
@@ -37692,7 +37692,7 @@ void RemapRef::FUN_0055b9c0(RemapMap* map)
                 {
                     RemapTransform* entry = static_cast<RemapTransform*>(*transformsOld->FUN_006815c0());
                     mappedOtherNew = 0;
-                    if (map->FUN_00853130(entry->reference, &mappedOtherNew) && mappedOtherNew)
+                    if (map->GetAt(entry->reference, &mappedOtherNew) && mappedOtherNew)
                     {
                         RemapRef* other = reinterpret_cast<RemapRef*>(dynamic_cast<TESObjectREFR*>(mappedOtherNew));
                         if (other)
@@ -37704,7 +37704,7 @@ void RemapRef::FUN_0055b9c0(RemapMap* map)
                 if (target)
                 {
                     mappedOtherNew = 0;
-                    if (map->FUN_00853130(target, &mappedOtherNew) && mappedOtherNew)
+                    if (map->GetAt(target, &mappedOtherNew) && mappedOtherNew)
                     {
                         RemapRef* other = reinterpret_cast<RemapRef*>(dynamic_cast<TESObjectREFR*>(mappedOtherNew));
                         if (other)
@@ -37715,7 +37715,7 @@ void RemapRef::FUN_0055b9c0(RemapMap* map)
                 if (nodeVal && nodeVal->FUN_00559450())
                 {
                     mappedOtherNew = 0;
-                    if (map->FUN_00853130(nodeVal->FUN_00559450(), &mappedOtherNew) && mappedOtherNew)
+                    if (map->GetAt(nodeVal->FUN_00559450(), &mappedOtherNew) && mappedOtherNew)
                     {
                         RemapRef* other = reinterpret_cast<RemapRef*>(dynamic_cast<TESObjectREFR*>(mappedOtherNew));
                         if (other)
@@ -38883,7 +38883,7 @@ bool S_0055e3f0_cls::FUN_0055e3f0(S_0055e3f0_ref* apRef)
         {
         case 8:
         case 9: {
-            TESObjectCELL* cell = dynamic_cast<TESObjectCELL*>((TESForm*)FUN_004839c0(apRef->unk08));
+            TESObjectCELL* cell = dynamic_cast<TESObjectCELL*>((TESForm*)LookupFormByID(apRef->unk08));
             if ((void*)cell != 0 && (void*)sub.v00() == (void*)cell)
             {
                 if (FUN_005653d0())
@@ -43076,7 +43076,7 @@ class Obj011c3b3c
 {
   public:
     bool FUN_00445750(Ref*);
-    void FUN_00444850(Ref*, void*);
+    void QueueReference(Ref*, void*);
 };
 
 class Obj011dea10
@@ -43293,7 +43293,7 @@ void Ref::FUN_0056f700()
                     }
                 }
                 ((Obj011c3b3c*)*(void**)&DAT_011c3b3c)
-                    ->FUN_00444850(this, ((Obj011dea10*)*(void**)&DAT_011dea10)->FUN_00458be0(GetTarget(0, 1)));
+                    ->QueueReference(this, ((Obj011dea10*)*(void**)&DAT_011dea10)->FUN_00458be0(GetTarget(0, 1)));
             }
             else
             {
@@ -44418,7 +44418,7 @@ struct G
 struct H
 {
     bool FUN_00445750(R*);
-    void FUN_00444850(R*, void*, int);
+    void QueueReference(R*, void*, int);
 };
 struct M
 {
@@ -44646,7 +44646,7 @@ void R::FUN_00573f40()
                 FUN_00579ac0(true);
             if (!FUN_00440d80() && FUN_007af430() &&
                 (FUN_007af430()->FUN_00401170() == 30 || FUN_007af430()->FUN_00401170() == 21 || !FUN_00444ed0()))
-                (*(H**)&DAT_011c3b3c)->FUN_00444850(this, (*(G**)&DAT_011dea10)->FUN_00458be0(FUN_008d6f30(), 0), 0);
+                (*(H**)&DAT_011c3b3c)->QueueReference(this, (*(G**)&DAT_011dea10)->FUN_00458be0(FUN_008d6f30(), 0), 0);
             if (FUN_008d6f30()->FUN_00450ff0() && v116() && FUN_007af430() && FUN_007af430()->FUN_00401170() == 30)
             {
                 N* node = FUN_005725f0();
@@ -44782,7 +44782,7 @@ struct S
     bool FUN_00493bb0();
     bool FUN_00566950();
     void FUN_0088c830(Item*, int, void*, bool, bool, bool);
-    void FUN_0088c650(Item*, int, void*, bool, bool, bool);
+    void EquipItem(Item*, int, void*, bool, bool, bool);
     int FUN_005750a0(Item*, void*, int, bool, bool, int, int, int, bool, bool);
 };
 // @fnv 0x005750a0
@@ -44821,7 +44821,7 @@ int S::FUN_005750a0(Item* arg, void* extra, int count, bool b1, bool b2, int p1,
                         if (FUN_00702360() && actor->FUN_00566950())
                             actor->FUN_0088c830(item->FUN_0044ddc0(), 1, 0, true, false, true);
                         else
-                            actor->FUN_0088c650(item->FUN_0044ddc0(), 1, 0, true, false, true);
+                            actor->EquipItem(item->FUN_0044ddc0(), 1, 0, true, false, true);
                     }
                 }
             }
@@ -47232,7 +47232,7 @@ struct DlgConversation
 {
     void FUN_0061e760(DlgQuery* apQuery);
     bool FUN_00579200();
-    void FUN_0061f170(int aiValue, struct DlgActor* apActor);
+    void RunResultScript(int aiValue, struct DlgActor* apActor);
 };
 
 struct DlgExtraList
@@ -47506,7 +47506,7 @@ void DlgActor::FUN_00935f60()
             FUN_005d43c0()->FUN_0042edb0();
         }
         if (m_pkConversation && !m_pkConversation->FUN_00579200())
-            m_pkConversation->FUN_0061f170(1, this);
+            m_pkConversation->RunResultScript(1, this);
         if (bFinishNew)
             FUN_005ac750(pOwner, FUN_005d43c0(), 0x40000);
         if (!bSaid)
@@ -47661,7 +47661,7 @@ struct TESObjectREFRHelper
 {
     void SetTargetingState(bool);
 };
-TESForm* __cdecl FUN_004839c0(void*);
+TESForm* __cdecl LookupFormByID(void*);
 struct Fn9a4f40
 {
     void* ref;
@@ -47671,7 +47671,7 @@ struct Fn9a4f40
 // @fnv 0x009a4f40
 void Fn9a4f40::FUN_009a4f40(int unused)
 {
-    ref = ref ? (TESObjectREFRHelper*)dynamic_cast<TESObjectREFR*>(FUN_004839c0(ref)) : 0;
+    ref = ref ? (TESObjectREFRHelper*)dynamic_cast<TESObjectREFR*>(LookupFormByID(ref)) : 0;
     if (ref)
         ((TESObjectREFRHelper*)ref)->SetTargetingState(true);
 }
@@ -48088,7 +48088,7 @@ struct FUN_00633c90
 };
 struct AttachModelLoader
 {
-    ModelNode* FUN_00447080(const char*, int, int, int, int, int);
+    ModelNode* LoadModel(const char*, int, int, int, int, int);
 };
 struct ModelEnvironment
 {
@@ -48145,7 +48145,7 @@ bool ModelRef::FUN_005710c0()
                 FUN_00406d30(filename5, 260, FUN_005715d0());
                 char* separator270 = FUN_0040ab30(filename5, '\\');
                 FUN_00406d30(separator270 + 1, 260 - (separator270 - filename5) - 1, *link14->FUN_006815c0());
-                ModelNode* loaded338 = DAT_011c3b3c->FUN_00447080(filename5, 3, 1, 0, 0, 0);
+                ModelNode* loaded338 = DAT_011c3b3c->LoadModel(filename5, 3, 1, 0, 0, 0);
                 if (loaded338)
                 {
                     FUN_004ad050 process392(FUN_00567400());
@@ -50049,14 +50049,14 @@ struct FUN_0042ede0_shell
     ExtraSayToTopicInfo* __thiscall FUN_0042ede0();
 };
 
-TESFormSlots* __cdecl FUN_004839c0(unsigned int index);
+TESFormSlots* __cdecl LookupFormByID(unsigned int index);
 ExtraDataList* __fastcall FUN_005d43c0(TESObjectREFR* refr);
 
 // @fnv 0x005790f0
 void __cdecl FUN_005790f0(unsigned int aiIndex)
 {
     unsigned int index = aiIndex;
-    TESFormSlots* form3 = FUN_004839c0(index);
+    TESFormSlots* form3 = LookupFormByID(index);
     if (form3 != 0 && form3->Slot3C())
     {
         TESObjectREFR* refr = reinterpret_cast<TESObjectREFR*>(form3);

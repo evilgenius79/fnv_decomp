@@ -646,7 +646,7 @@ int C44C8E0Map::LookupBucket(int iKey, int iSize)
     return GetBucket(m_pkHasher->Hash(iKey, iKey, iSize));
 }
 
-void __cdecl FUN_00401030(void* apMemory);
+void __cdecl FormHeap_Free(void* apMemory);
 
 struct CleanupBaseDtor
 {
@@ -670,9 +670,9 @@ FUN_0044cae0_cls::~FUN_0044cae0_cls()
 {
     Shutdown(1);
     void* pC_ = (void*)m_0c;
-    FUN_00401030(pC_);
+    FormHeap_Free(pC_);
     void* p4 = (void*)m_04;
-    FUN_00401030(p4);
+    FormHeap_Free(p4);
 }
 
 struct Dispatch
@@ -690,14 +690,14 @@ struct Dispatch
     virtual void Slot0A(unsigned int value);
     void FUN_0044dde0(unsigned int* argument);
 };
-void __cdecl FUN_00401030(void* object);
-// Calls Slot0A with the value pointed to by argument, then passes argument to FUN_00401030.
+void __cdecl FormHeap_Free(void* object);
+// Calls Slot0A with the value pointed to by argument, then passes argument to FormHeap_Free.
 // @fnv 0x0044dde0
 void Dispatch::FUN_0044dde0(unsigned int* puiValue)
 {
     Slot0A(*puiValue);
     void* target = puiValue;
-    FUN_00401030(target);
+    FormHeap_Free(target);
 }
 
 struct FUN_0044de20_cls

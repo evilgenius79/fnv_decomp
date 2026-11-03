@@ -730,7 +730,7 @@ struct FUN_007b1e70_shell
 };
 struct FUN_007b25a0_shell
 {
-    void FUN_007b25a0();
+    void UpdatePlayerHead();
 };
 struct FUN_007b51f0_shell : FUN_007adc30_shell
 {
@@ -749,7 +749,7 @@ void __cdecl FUN_007b51f0()
             ((FUN_007b18f0_shell*)DAT_011da634)->HandleMenuKey(0x22);
             ((FUN_007b18f0_shell*)DAT_011da634)->HandleMenuKey(0x23);
             ((FUN_007b1e70_shell*)DAT_011da634)->UpdateFaceGen(1, 1, 0);
-            ((FUN_007b25a0_shell*)DAT_011da634)->FUN_007b25a0();
+            ((FUN_007b25a0_shell*)DAT_011da634)->UpdatePlayerHead();
             ((FUN_007adc60_shell*)DAT_011da634)->FUN_007adc60(8, false);
             ((FUN_007adc60_shell*)DAT_011da634)->FUN_007adc60(9, false);
         }
@@ -825,7 +825,7 @@ int __cdecl FUN_004b7220();
 struct Actor
 {
     unsigned char FUN_008a6970();
-    void FUN_008a6840(int);
+    void SetWantsWeaponOut(int);
     void UnEquipObject(void*, int, void*, bool, bool, bool);
 };
 extern Actor* pPlayer;
@@ -980,7 +980,7 @@ Tile* __cdecl GetOrCreateMenuTile(int param)
             }
         }
         DAT_011da688 = pPlayer->FUN_008a6970();
-        pPlayer->FUN_008a6840(0);
+        pPlayer->SetWantsWeaponOut(0);
         InventoryChanges* inventory = InventoryChanges::GetOrAddInventoryChanges(pPlayer);
         for (unsigned int i = 0; i < 20; i++)
         {
@@ -2747,9 +2747,9 @@ struct InterfaceRoot
     int unk70;
     int unk74;
     void* unk78;
-    PropertyObject* FUN_00a1ddb0(void* parent, const char* name, int mode);
+    PropertyObject* AddTileFromTemplate(void* parent, const char* name, int mode);
 };
-int __cdecl FUN_00a00940(const char* name, int index);
+int __cdecl TraitNameToIDAdd(const char* name, int index);
 struct FUN_007b39e0 : FUN_0048f200
 {
     int unk0c;
@@ -2767,11 +2767,11 @@ FUN_007b39e0::FUN_007b39e0(int low, int high)
     unk0c = 20;
     unk18 = 0.0f;
     unk1c = 0;
-    unk14 = ((InterfaceRoot*)DAT_011da634)->FUN_00a1ddb0(((InterfaceRoot*)DAT_011da634)->unk78, str_01075b10, 0);
+    unk14 = ((InterfaceRoot*)DAT_011da634)->AddTileFromTemplate(((InterfaceRoot*)DAT_011da634)->unk78, str_01075b10, 0);
     unk14->Set(0x1004, low);
     unk14->FUN_00a01350(0xfc4, high, true);
     unk14->Set(0xfaf, 0);
-    unk14->Set(FUN_00a00940(str_01075b5c, -1), 1);
+    unk14->Set(TraitNameToIDAdd(str_01075b5c, -1), 1);
     unk14->FUN_00a04640(false);
     unk20 = 0;
 }
@@ -2900,7 +2900,7 @@ struct Date
     ~Date();
     int FUN_00726070();
 };
-int __cdecl FUN_00a00940(const char*, int);
+int __cdecl TraitNameToIDAdd(const char*, int);
 void __cdecl FUN_00706ff0(LocalTile*);
 struct OptionList
 {
@@ -2949,7 +2949,7 @@ void OptionList::RemoveOptionById(int id)
         Date* before = FUN_0057cbe0(pos);
         before->tile->Set(0xfa2,
                           current ? current->tile->FUN_00a011b0(0xfa2) + current->tile->FUN_00a011b0(0xfb0)
-                                  : before->tile->GetParent()->FUN_00a011b0(FUN_00a00940("_top_bound", -1)),
+                                  : before->tile->GetParent()->FUN_00a011b0(TraitNameToIDAdd("_top_bound", -1)),
                           true);
         before->tile->FUN_00a04640(false);
     }
@@ -3131,7 +3131,7 @@ extern InitString DAT_011da6f4;
 struct InitSub
 {
     int unk00, unk04, unk08;
-    void FUN_00ad8830(int);
+    void Play(int);
 };
 struct InitManager
 {
@@ -3731,8 +3731,8 @@ void InitRaceMenu::SetupRaceMenu(int mode)
                         ((InitOptions*)options[0])->ApplyToAllTiles();
                         ((InitOptions*)options[1])->ApplyToAllTiles();
                         ((InitOptions*)options[7])->ApplyToAllTiles();
-                        sub0.FUN_00ad8830(0);
-                        sub1.FUN_00ad8830(0);
+                        sub0.Play(0);
+                        sub1.Play(0);
                         FUN_007af180(page);
                         FUN_00a1dc20(0);
                     }
@@ -3857,7 +3857,7 @@ struct Sound
 {
     unsigned int unk0, unk4, unk8;
     int FUN_0044ddc0();
-    void FUN_00ad8830(int);
+    void Play(int);
     bool FUN_00ad8930();
     void FUN_00ad88f0();
     void FUN_00ad88b0();
@@ -4028,7 +4028,7 @@ void Menu::UpdateZoomAndScroll()
     {
         for (unsigned int i = 0; i < 4; i++)
             if (sounds[i].FUN_0044ddc0() == 3)
-                sounds[i].FUN_00ad8830(0);
+                sounds[i].Play(0);
         static unsigned int previous = FUN_00457fe0();
         unsigned int time = FUN_00457fe0();
         if (FUN_004b71d0())
@@ -4060,11 +4060,11 @@ void Menu::UpdateZoomAndScroll()
                 velocity = 0.0f;
             }
             if (FUN_007adc30(5) && !sounds[3].FUN_00ad8930())
-                sounds[3].FUN_00ad8830(0);
+                sounds[3].Play(0);
             else if (!FUN_007adc30(5) && sounds[3].FUN_00ad8930())
                 sounds[3].FUN_00ad88f0();
             if (FUN_007adc30(6) && !sounds[2].FUN_00ad8930())
-                sounds[2].FUN_00ad8830(0);
+                sounds[2].Play(0);
             else if (!FUN_007adc30(6) && sounds[2].FUN_00ad8930())
                 sounds[2].FUN_00ad88f0();
             if (dragY && FUN_007adc30(4))
@@ -4112,11 +4112,11 @@ void Menu::UpdateZoomAndScroll()
             else
                 velocity = 0.0f;
             if (FUN_007adc30(6) && !sounds[2].FUN_00ad8930())
-                sounds[2].FUN_00ad8830(0);
+                sounds[2].Play(0);
             else if (!FUN_007adc30(6) && sounds[2].FUN_00ad8930())
                 sounds[2].FUN_00ad88f0();
             if (FUN_007adc30(5) && !sounds[3].FUN_00ad8930())
-                sounds[3].FUN_00ad8830(0);
+                sounds[3].Play(0);
             else if (!FUN_007adc30(5) && sounds[3].FUN_00ad8930())
                 sounds[3].FUN_00ad88f0();
             FUN_007adc60(5, 0);
@@ -4151,7 +4151,7 @@ struct Sound67
 {
     int unk00, unk04, unk08;
     ~Sound67();
-    void FUN_00ad8830();
+    void Play();
 };
 struct Audio67
 {
@@ -4238,7 +4238,7 @@ int FUN_0072fa60(int);
 bool FUN_004b71d0();
 void FUN_00706ff0(Tile67*);
 void UpdateRaceSexMenu();
-void FUN_00703e80(const char*, int, int, void (*)(), int, int, float, float, const char*, const char*, int);
+void ShowMessageBox(const char*, int, int, void (*)(), int, int, float, float, const char*, const char*, int);
 struct Menu67
 {
     virtual void v0();
@@ -4290,7 +4290,7 @@ bool Menu67::HandleAction(int action, int argument)
         {
         case 10:
             if (FUN_007af180(options[FUN_007dcc00()]->FUN_0084e3a0()))
-                FUN_00453a70()->FUN_00ad7550(DAT_0106f380, 0x121, 0).FUN_00ad8830();
+                FUN_00453a70()->FUN_00ad7550(DAT_0106f380, 0x121, 0).Play();
             return true;
         case 13:
         case 14: {
@@ -4300,9 +4300,9 @@ bool Menu67::HandleAction(int action, int argument)
             bool bChanged = action == 13 ? FUN_007af180(options[iOptionIndex]->FUN_0084e3a0())
                                          : FUN_007af180(options[iOptionIndex]->FUN_0044edb0());
             if (bChanged)
-                FUN_00453a70()->FUN_00ad7550(DAT_01075b00, 0x121, 0).FUN_00ad8830();
+                FUN_00453a70()->FUN_00ad7550(DAT_01075b00, 0x121, 0).Play();
             else if (action == 14)
-                FUN_00703e80(message.FUN_00559450(), 0, 0, UpdateRaceSexMenu, 1, 0x12, 0.0f, 0.0f,
+                ShowMessageBox(message.FUN_00559450(), 0, 0, UpdateRaceSexMenu, 1, 0x12, 0.0f, 0.0f,
                              DAT_011d3684.FUN_00403df0(), DAT_011d34f8.FUN_00403df0(), 0);
             return true;
         }
@@ -4810,7 +4810,7 @@ struct FaceMorphMenu
     bool FUN_007adc30(int);
     void UpdateFaceGen(int, int, int);
     void FUN_007adc60(int, bool);
-    void FUN_007b25a0();
+    void UpdatePlayerHead();
     void BuildMorphOptions();
 };
 // @fnv 0x007afaf0
@@ -5040,7 +5040,7 @@ void FaceMorphMenu::BuildMorphOptions()
     }
     if (FUN_007adc30(9))
     {
-        FUN_007b25a0();
+        UpdatePlayerHead();
         FUN_007adc60(9, false);
     }
 }
@@ -6780,10 +6780,10 @@ struct Menu511
     int unkd4;
     TESNPC* npc;
     void UpdateShadowSceneNode();
-    void FUN_007b25a0();
+    void UpdatePlayerHead();
 };
 // @fnv 0x007b25a0
-void Menu511::FUN_007b25a0()
+void Menu511::UpdatePlayerHead()
 {
     FUN_006570e0(_g_thePlayer->FUN_007af430());
     DAT_011c5cb4 = true;
@@ -7296,7 +7296,7 @@ struct Menu7
     bool FUN_007adc30(int);
     void UpdateFaceGen(int, int, int);
     void FUN_007adc60(int, bool);
-    void FUN_007b25a0();
+    void UpdatePlayerHead();
     void RebuildFaceGen(int);
     void UpdateEyeTextures();
     void FUN_007afa40(unsigned int);
@@ -7338,7 +7338,7 @@ void Menu7::HandleOptionSelection()
         HandleMenuKey(34);
         HandleMenuKey(35);
         UpdateFaceGen(1, 1, 0);
-        FUN_007b25a0();
+        UpdatePlayerHead();
         RebuildFaceGen(1);
         UpdateEyeTextures();
         FUN_007adc60(8, false);
@@ -7576,7 +7576,7 @@ class HCMenuView
 
     int FUN_007dcc00();
     void CreateMenuOption();
-    void FUN_007b25a0();
+    void UpdatePlayerHead();
     void UpdateHairAndEyes();
     bool FUN_007adc30(int m_iValueId);
     void RebuildFaceGen(int iValue);
@@ -7623,7 +7623,7 @@ void HCMenuView::FUN_007adce0(int aiIndex, HCTile* pkTile)
                     bUpdatePlayer = true;
                 }
                 CreateMenuOption();
-                FUN_007b25a0();
+                UpdatePlayerHead();
                 UpdateHairAndEyes();
                 bChangedTmp = true;
                 if (bUpdatePlayer)
@@ -7634,7 +7634,7 @@ void HCMenuView::FUN_007adce0(int aiIndex, HCTile* pkTile)
             if (FUN_007adc30(7))
                 FUN_007b51f0();
             else
-                FUN_00703e80(DAT_011d3288.FUN_00403df0(), 0, 0, FUN_007b51f0, 0, 0x12, 0.0f, 0.0f,
+                ShowMessageBox(DAT_011d3288.FUN_00403df0(), 0, 0, FUN_007b51f0, 0, 0x12, 0.0f, 0.0f,
                              DAT_011d3684.FUN_00403df0(), DAT_011d34f8.FUN_00403df0(), 0);
             break;
         case 0x1b:
@@ -7680,7 +7680,7 @@ void HCMenuView::FUN_007adce0(int aiIndex, HCTile* pkTile)
     else if (aiIndex == 5)
     {
         if (iList == m_iNameList)
-            FUN_00703e80(m_kName.FUN_00559450(), 0, 0, UpdateRaceSexMenu, 1, 0x12, 0.0f, 0.0f,
+            ShowMessageBox(m_kName.FUN_00559450(), 0, 0, UpdateRaceSexMenu, 1, 0x12, 0.0f, 0.0f,
                          DAT_011d3684.FUN_00403df0(), DAT_011d34f8.FUN_00403df0(), 0);
         else
             FUN_007af180(m_apLists[iList]->FUN_0044edb0());

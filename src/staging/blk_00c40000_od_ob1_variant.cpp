@@ -1554,7 +1554,7 @@ class GameLockA
 {
   public:
     bool FUN_0078d200();
-    void FUN_0040fbf0(int a);
+    void Lock(int a);
 };
 class GameLockB
 {
@@ -5198,14 +5198,14 @@ extern Array354 _DAT_01202e20;
 struct LockState354
 {
     unsigned int owner, recursion;
-    void FUN_0040fbf0(int);
+    void Lock(int);
 };
 extern LockState354 _DAT_01202e40;
 unsigned int gm_GetCurrentThreadId();
 long FUN_0043b460(volatile long*, long comparand, long exchange);
 void FUN_0040fca0(unsigned long);
 void FUN_0040fbe0();
-inline void LockState354::FUN_0040fbf0(int)
+inline void LockState354::Lock(int)
 {
     unsigned int thread = gm_GetCurrentThreadId();
     if (owner == thread)
@@ -5235,7 +5235,7 @@ inline unsigned int CleanupDeadline354()
 // @fnv 0x00c458f0
 void FUN_00c458f0()
 {
-    _DAT_01202e40.FUN_0040fbf0(0);
+    _DAT_01202e40.Lock(0);
     unsigned int deadline = CleanupDeadline354();
     unsigned int now5 = 0;
     unsigned int remaining7 = DAT_01202e2c;
@@ -6694,7 +6694,7 @@ struct Lock40
 {
     int owner;
     int count;
-    void FUN_0040fbf0(int a);
+    void Lock(int a);
     void Unlock()
     {
         count--;
@@ -6757,7 +6757,7 @@ class Map40
 // @fnv 0x00c40e70
 bool Map40::FUN_00c40e70(Iter40* it, __int64* out, int arg, bool b)
 {
-    lock.FUN_0040fbf0(0);
+    lock.Lock(0);
     bool r = false;
     if (it->GetFlag2())
     {
@@ -9821,7 +9821,7 @@ struct OwnerWord
 
 // /Ob1 tries to inline these and then refuses on size. The refused locals stay
 // in the caller's frame (two for the lock, one for the insert) and the calls remain.
-inline void GameLockA::FUN_0040fbf0(int a)
+inline void GameLockA::Lock(int a)
 {
     int passes;
     int spins;
@@ -9920,7 +9920,7 @@ inline unsigned int FUN_00c45e00_class::AppendElement(unsigned int uiElement)
 // @fnv 0x00c45830
 void __cdecl FUN_00c45830(MyRef* object)
 {
-    DAT_01202e40.FUN_0040fbf0(0);
+    DAT_01202e40.Lock(0);
     {
         NiPointer<MyRef> local(object);
         reinterpret_cast<FUN_00c45e00_class&>(DAT_01202e20).AppendElement((unsigned int)&local);
@@ -12835,7 +12835,7 @@ class NiAVObjectStandIn : public NiRefObjectStandIn
     void FUN_00546780(bool bVal);
     void FUN_00a5ed10(FUN_00a5ecb0* pkChild, bool abFirstAvailableSlot);
     float FUN_00c52450();
-    void FUN_00c52020(float fValue, int iArg1, int iArg2, int iArg3);
+    void SetCameraFOV(float fValue, int iArg1, int iArg2, int iArg3);
     void FUN_00c51f20();
     void SetLocalRotation(const ThreeByThreeMatrix& kRot)
     {
@@ -13074,7 +13074,7 @@ FUN_00c517b0::FUN_00c517b0(const char* pcName, bool bFlag, FUN_00a712f0* pkCamer
         m_spCamera->SetLocalRotation(kRot2);
         m_spCamera->SetMinNearPlaneDist(1.0f);
         m_spCamera->SetMaxFarNearRatio(FUN_00c52450() / g_01203144.GetFloat());
-        FUN_00c52020(g_01203150.GetFloat(), 1, 0, 0);
+        SetCameraFOV(g_01203150.GetFloat(), 1, 0, 0);
         fnvDead4();
     }
     FUN_00c51f20();
@@ -20081,7 +20081,7 @@ struct C52520Camera
     {
         return m_ac;
     }
-    void FUN_00c52020(float m_fFirstFloat, unsigned char ucFlag, C52020Obj* pObj, unsigned char ucArg4);
+    void SetCameraFOV(float m_fFirstFloat, unsigned char ucFlag, C52020Obj* pObj, unsigned char ucArg4);
     void FUN_00c52520();
 };
 // @fnv 0x00c52520
@@ -20089,7 +20089,7 @@ void C52520Camera::FUN_00c52520()
 {
     CameraViewportC52 port(0.0f, 1.0f, 1.0f, 0.0f);
     GetObj()->viewport = port;
-    FUN_00c52020(m_bc, 1, 0, 0);
+    SetCameraFOV(m_bc, 1, 0, 0);
 }
 
 struct BoxColor

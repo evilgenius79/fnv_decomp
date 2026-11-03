@@ -729,7 +729,7 @@ FUN_00786bb0::FUN_00786bb0()
 }
 
 extern int DAT_01071b64;
-void* __cdecl FUN_00a00940(const void* data, int flags);
+void* __cdecl TraitNameToIDAdd(const void* data, int flags);
 struct LevelOption
 {
     bool __thiscall IsTraitNonZero(void* data);
@@ -741,7 +741,7 @@ struct FUN_007877a0_Object
 // @fnv 0x007877a0
 bool FUN_007877a0_Object::FUN_007877a0(LevelOption* option)
 {
-    static void* cached = FUN_00a00940(&DAT_01071b64, -1);
+    static void* cached = TraitNameToIDAdd(&DAT_01071b64, -1);
     return cached != 0 && option != 0 && option->IsTraitNonZero(cached);
 }
 
@@ -758,7 +758,7 @@ struct FUN_007879f0_helper
 extern const double DAT_01012060;
 extern char str_0106f90c[];
 extern char str_0106f8f8[];
-extern "C" int __cdecl FUN_00a01860(const char*);
+extern "C" int __cdecl TraitNameToID(const char*);
 extern "C" float __cdecl FUN_004e4430(float);
 extern "C" int __cdecl FUN_00647b70(int, int);
 struct LevelMenuView
@@ -794,12 +794,12 @@ void LevelMenuView::FUN_007880a0()
             }
             if (count > 1)
             {
-                meter0c->FUN_00a012d0(FUN_00a01860(str_0106f90c), (maximum20 - current) / (count - 1), 1);
+                meter0c->FUN_00a012d0(TraitNameToID(str_0106f90c), (maximum20 - current) / (count - 1), 1);
             }
         }
         if (count14)
         {
-            count14->FUN_00700320(FUN_00a01860(str_0106f8f8), count);
+            count14->FUN_00700320(TraitNameToID(str_0106f8f8), count);
         }
     }
 }
@@ -1423,7 +1423,7 @@ void SkillsMenu::UpdateSkillsAndPerks()
 }
 }  // namespace fnv_00785540
 
-int FUN_00a01860(const char*);
+int TraitNameToID(const char*);
 void UpdateLevelUpMenu();
 void FUN_007864e0(const char*);
 void ComparePerkListItems(const char*);
@@ -1495,7 +1495,7 @@ struct Target
 // @fnv 0x00785830
 void Target::SetPage(int page)
 {
-    if (page > FUN_00726070()->FUN_00a011b0(FUN_00a01860("_EndPage")))
+    if (page > FUN_00726070()->FUN_00a011b0(TraitNameToID("_EndPage")))
     {
         UpdateLevelUpMenu();
     }
@@ -2190,14 +2190,14 @@ void LBListBox::ClearItems()
     usUnk1C = 0;
     fScroll = 0.0f;
     if (m_pHighlightedTile)
-        m_pHighlightedTile->Set(FUN_00a01860("_num_filtered"), 0.0f, true);
+        m_pHighlightedTile->Set(TraitNameToID("_num_filtered"), 0.0f, true);
     FUN_007880a0();
     iUnk10 = 0;
     UpdateHighlight();
 }
 }  // namespace fnv_00786f90
 
-int __cdecl FUN_00a00940(const char* pcName, int iDefault);
+int __cdecl TraitNameToIDAdd(const char* pcName, int iDefault);
 
 class Tile787
 {
@@ -2224,7 +2224,7 @@ class ListBox787
 // @fnv 0x007871f0
 bool ListBox787::SelectTile(Tile787* pkTile)
 {
-    if (IsActive() && (!pkTile || (Contains(pkTile) && pkTile->GetBool(FUN_00a00940("_enabled", -1)))))
+    if (IsActive() && (!pkTile || (Contains(pkTile) && pkTile->GetBool(TraitNameToIDAdd("_enabled", -1)))))
     {
         m_pkSelected = pkTile;
         UpdateSelection();
@@ -2239,7 +2239,7 @@ bool ListBox787::SelectTile(Tile787* pkTile)
 class Tile;
 class Menu;
 struct InterfaceManager;
-int FUN_00a01860(const char* apName);
+int TraitNameToID(const char* apName);
 float FUN_0040ebd0(float afA, float afB);
 InterfaceManager* FUN_004b7210();
 bool FUN_004b71d0();
@@ -2300,8 +2300,8 @@ void FUN_00787600_shell::UpdateScrollTile(bool abFlag)
     FUN_00787600_Tile* pTile = 0;
     if (m_pFourthMenuObject && pScrollTile)
     {
-        pScrollTile->FUN_00a012d0(FUN_00a01860("_current_value"), fValue, false);
-        ((FUN_00a01290_shell*)pScrollTile)->SetTraitAndReset(FUN_00a01860("_SetInCode"), 1.0f);
+        pScrollTile->FUN_00a012d0(TraitNameToID("_current_value"), fValue, false);
+        ((FUN_00a01290_shell*)pScrollTile)->SetTraitAndReset(TraitNameToID("_SetInCode"), 1.0f);
         pTile = Unk_05((unsigned int)FUN_0040ebd0(fScrollPos, (float)FUN_007879f0(0) - 1.0));
         ((IMStandIn*)FUN_004b7210())->FUN_00715860((int)pTile, 0xfc3, abFlag);
         Unk_00(pTile);
@@ -2570,12 +2570,12 @@ struct FUN_00787b70_cls
     bool FUN_00787b70();
 };
 
-int __cdecl FUN_00a00940(const char* s, int n);
+int __cdecl TraitNameToIDAdd(const char* s, int n);
 
 // @fnv 0x00787b70
 bool FUN_00787b70_cls::FUN_00787b70()
 {
-    static void* sKey = (void*)FUN_00a00940("_enabled", -1);
+    static void* sKey = (void*)TraitNameToIDAdd("_enabled", -1);
     return (m_0c != 0 && m_0c->IsTraitNonZero(sKey)) ? 1 : 0;
 }
 
@@ -3107,8 +3107,8 @@ void ScrollBar::FUN_00786a50(bool abSound)
     ScrollTile* pTile = 0;
     if (parent0c && tile14)
     {
-        tile14->SetFloat(FUN_00a01860("_current_value"), currentValue28, false);
-        tile14->SetFloatNoProp(FUN_00a01860("_SetInCode"), 1.0f);
+        tile14->SetFloat(TraitNameToID("_current_value"), currentValue28, false);
+        tile14->SetFloatNoProp(TraitNameToID("_SetInCode"), 1.0f);
         pTile = GetItemTile((unsigned int)ScrollMin(maxValue24, (float)(GetCount(0) - 1.0)));
         GetScrollIM()->PlayScroll(pTile, 0xfc3, abSound);
         Update(pTile);
@@ -3129,8 +3129,8 @@ struct LBTile
     double FUN_00a011b0(int traitID);
     bool IsTraitNonZero(int traitID);
 };
-int __cdecl FUN_00a01860(const char* name);
-int __cdecl FUN_00a00940(const char* name, int fallback);
+int __cdecl TraitNameToID(const char* name);
+int __cdecl TraitNameToIDAdd(const char* name, int fallback);
 float __cdecl FUN_004bd510(float value, float step);
 
 struct LBItem
@@ -3187,13 +3187,13 @@ LBTile* LBItemListBox::FUN_00787260(int key)
         break;
     case 15:
         delta3 = parentTile ? (int)FUN_004bd510((float)(-parentTile->FUN_00a011b0(0xfb0) /
-                                                        parentTile->FUN_00a011b0(FUN_00a01860("_scroll_delta"))),
+                                                        parentTile->FUN_00a011b0(TraitNameToID("_scroll_delta"))),
                                                 1.0f)
                             : 0;
         break;
     case 16:
         delta3 = parentTile ? (int)FUN_004bd510((float)(parentTile->FUN_00a011b0(0xfb0) /
-                                                        parentTile->FUN_00a011b0(FUN_00a01860("_scroll_delta"))),
+                                                        parentTile->FUN_00a011b0(TraitNameToID("_scroll_delta"))),
                                                 1.0f)
                             : 0;
         break;
@@ -3224,13 +3224,13 @@ LBTile* LBItemListBox::FUN_00787260(int key)
                 if ((*node->FUN_006815c0())->tile->FUN_00a011b0(0xfac) == index)
                     found7 = (*node->FUN_006815c0())->tile;
             }
-            if (found7 && !found7->IsTraitNonZero(FUN_00a00940("_enabled", -1)))
+            if (found7 && !found7->IsTraitNonZero(TraitNameToIDAdd("_enabled", -1)))
             {
                 found7 = 0;
                 if (delta3 > 0 && ++index > last2)
                 {
                     index = last2 - 1;
-                    while ((!found7 || !found7->IsTraitNonZero(FUN_00a00940("_enabled", -1))) && index >= 0)
+                    while ((!found7 || !found7->IsTraitNonZero(TraitNameToIDAdd("_enabled", -1))) && index >= 0)
                     {
                         found7 = GetItemTile(index--, false);
                     }
@@ -3239,7 +3239,7 @@ LBTile* LBItemListBox::FUN_00787260(int key)
                 else if (delta3 < 0 && --index < 0)
                 {
                     index = 1;
-                    while ((!found7 || !found7->IsTraitNonZero(FUN_00a00940("_enabled", -1))) && index <= last2)
+                    while ((!found7 || !found7->IsTraitNonZero(TraitNameToIDAdd("_enabled", -1))) && index <= last2)
                     {
                         found7 = GetItemTile(index++, false);
                     }
@@ -3294,7 +3294,7 @@ int Counter_007878d0::FUN_007878d0()
 struct HighlightValue
 {
     void FUN_00a09130(int property, void* source, int sourceProperty);
-    void FUN_00a09410(int value);
+    void Refresh(int value);
 };
 struct HighlightTile : LevelValue
 {
@@ -3318,8 +3318,8 @@ struct SkillHighlight
 // @fnv 0x00787d80
 void SkillHighlight::UpdateHighlight()
 {
-    static int highlightY = (int)FUN_00a00940("_highlight_y", -1);
-    static int selectedHeight = (int)FUN_00a00940("_selected_height", -1);
+    static int highlightY = (int)TraitNameToIDAdd("_highlight_y", -1);
+    static int selectedHeight = (int)TraitNameToIDAdd("_selected_height", -1);
     if (tile)
     {
         if (selected)
@@ -3327,9 +3327,9 @@ void SkillHighlight::UpdateHighlight()
             HighlightValue* highlightYValue = tile->FUN_00a00f30(highlightY);
             HighlightValue* heightValue = tile->FUN_00a00f30(selectedHeight);
             highlightYValue->FUN_00a09130(2000, selected, 4002);
-            highlightYValue->FUN_00a09410(0);
+            highlightYValue->Refresh(0);
             heightValue->FUN_00a09130(2000, selected, 4016);
-            heightValue->FUN_00a09410(0);
+            heightValue->Refresh(0);
             if (selected->FUN_0071aa80())
             {
                 HighlightTile* box = FUN_00a08b20(tile, "lb_highlight_box");
@@ -3717,7 +3717,7 @@ struct ResourceProvider
 };
 struct TileB
 {
-    void* FUN_00a01b00();
+    void* ReadXML();
 };
 struct FUN_00a03c90_shell
 {
@@ -3838,7 +3838,7 @@ struct ByteO
 {
     unsigned char* FUN_00408d60();
 };
-int FUN_00a01860(const char*);
+int TraitNameToID(const char*);
 struct HeadO
 {
     void FUN_00700320(int, int);
@@ -3859,7 +3859,7 @@ int FUN_00784c80()
     void* objA = FUN_004b7210();
     if (objB)
         delete (DelObj*)objB;
-    menu = ((TileB*)((ResourceProvider*)objA)->FUN_00586150(s_xml))->FUN_00a01b00();
+    menu = ((TileB*)((ResourceProvider*)objA)->FUN_00586150(s_xml))->ReadXML();
     DAT_011d9fdc = (int)(void*)((FUN_00a03c90_shell*)menu)->FUN_00a03c90();
     if (DAT_011d9fdc && ((MenuV*)(void*)(unsigned int)DAT_011d9fdc)->GetID() == FUN_00785180())
     {
@@ -3883,10 +3883,10 @@ int FUN_00784c80()
         ((DatObj*)(void*)(unsigned int)DAT_011d9fdc)
             ->f44->FUN_00a01350(0xfc4, ((InventoryMenuSetting*)&DAT_011d33d8)->FUN_00403df0(), 1);
         ((DatObj*)(void*)(unsigned int)DAT_011d9fdc)
-            ->f48->FUN_00a01350(FUN_00a01860(s_title0), (int)((InventoryMenuSetting*)&DAT_011d3564)->FUN_00403df0(), 1);
+            ->f48->FUN_00a01350(TraitNameToID(s_title0), (int)((InventoryMenuSetting*)&DAT_011d3564)->FUN_00403df0(), 1);
         ((DatObj*)(void*)(unsigned int)DAT_011d9fdc)
-            ->f48->FUN_00a01350(FUN_00a01860(s_title1), (int)((InventoryMenuSetting*)&DAT_011d35c4)->FUN_00403df0(), 1);
-        ((FUN_00a01290_shell*)menu)->SetTraitAndReset(FUN_00a01860(s_curpage), 1.0f);
+            ->f48->FUN_00a01350(TraitNameToID(s_title1), (int)((InventoryMenuSetting*)&DAT_011d35c4)->FUN_00403df0(), 1);
+        ((FUN_00a01290_shell*)menu)->SetTraitAndReset(TraitNameToID(s_curpage), 1.0f);
         ((DatObj*)(void*)(unsigned int)DAT_011d9fdc)
             ->f4c->FUN_00a01350(0xfc4, ((InventoryMenuSetting*)&DAT_011d1fec)->FUN_00403df0(), 1);
         {
@@ -3928,7 +3928,7 @@ int FUN_00784c80()
         if (!((ListObj*)((char*)(void*)(unsigned int)DAT_011d9fdc + 0xc4))->FUN_005ae380())
         {
             ((HeadO*)FUN_00726070((ContNode*)(void*)(unsigned int)DAT_011d9fdc))
-                ->FUN_00700320(FUN_00a01860(s_endpage), 0);
+                ->FUN_00700320(TraitNameToID(s_endpage), 0);
         }
         ((DatObj*)(void*)(unsigned int)DAT_011d9fdc)->UpdateSkillsAndPerks();
         ((DatObj*)(void*)(unsigned int)DAT_011d9fdc)->SetPage(0);
@@ -3963,7 +3963,7 @@ bool ListBox_int_::SetTileSelection(Tile* pkTile, int eMode)
 {
     if (FUN_00787b70() && pkTile && ContainsKey(pkTile))
     {
-        static int s_iSelectedTrait = (int)FUN_00a00940("_selected", -1);
+        static int s_iSelectedTrait = (int)TraitNameToIDAdd("_selected", -1);
         bool bSelected = ((TileValue*)pkTile)->IsTraitNonZero(s_iSelectedTrait);
         switch (eMode)
         {
@@ -4021,25 +4021,25 @@ void __cdecl FUN_00786240(LevelValue* apTile, int aiMatchValue)
         {
             int total = (int)(apTile->FUN_00a011b0(DAT_011d9fe4) + apTile->FUN_00a011b0(DAT_011d9fec) +
                               apTile->FUN_00a011b0(DAT_011d9ff0));
-            int overflowTrait2 = FUN_00a01860("_OverflowValue");
+            int overflowTrait2 = TraitNameToID("_OverflowValue");
             if (apTile->FUN_00a011b0(overflowTrait2) != DAT_01012060)
             {
                 g_011da050.GetItem(i)->unk00 += (int)apTile->FUN_00a011b0(overflowTrait2);
                 apTile->FUN_00a012d0(overflowTrait2, 0.0f, 1);
             }
 
-            if (total + g_011da050.GetItem(i)->unk00 > apTile->FUN_00a011b0(FUN_00a01860("_MaxValue")))
+            if (total + g_011da050.GetItem(i)->unk00 > apTile->FUN_00a011b0(TraitNameToID("_MaxValue")))
             {
                 int diff =
-                    (int)((total + g_011da050.GetItem(i)->unk00) - apTile->FUN_00a011b0(FUN_00a01860("_MaxValue")));
-                apTile->FUN_00700320(FUN_00a01860("_OverflowValue"), diff);
+                    (int)((total + g_011da050.GetItem(i)->unk00) - apTile->FUN_00a011b0(TraitNameToID("_MaxValue")));
+                apTile->FUN_00700320(TraitNameToID("_OverflowValue"), diff);
                 g_011da050.GetItem(i)->unk00 -= diff;
             }
-            else if (total + g_011da050.GetItem(i)->unk00 < apTile->FUN_00a011b0(FUN_00a01860("_MinValue")))
+            else if (total + g_011da050.GetItem(i)->unk00 < apTile->FUN_00a011b0(TraitNameToID("_MinValue")))
             {
                 int diff =
-                    (int)((total + g_011da050.GetItem(i)->unk00) - apTile->FUN_00a011b0(FUN_00a01860("_MinValue")));
-                apTile->FUN_00700320(FUN_00a01860("_OverflowValue"), diff);
+                    (int)((total + g_011da050.GetItem(i)->unk00) - apTile->FUN_00a011b0(TraitNameToID("_MinValue")));
+                apTile->FUN_00700320(TraitNameToID("_OverflowValue"), diff);
                 g_011da050.GetItem(i)->unk00 -= diff;
             }
 

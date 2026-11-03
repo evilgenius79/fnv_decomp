@@ -64,7 +64,7 @@ class TESBoundObject : public TESForm
 {
 };
 
-TESForm* __cdecl FUN_004839c0(unsigned int);
+TESForm* __cdecl LookupFormByID(unsigned int);
 
 struct CombatLoadBuffer
 {
@@ -369,7 +369,7 @@ void CombatLoadState::FUN_009a2040(CombatLoadBuffer* buffer)
         state = 0;
 
     for (unsigned int i = 0; i < 6; i++)
-        weapons[i] = dynamic_cast<TESObjectWEAP*>(FUN_004839c0(buffer->FUN_008648a0()));
+        weapons[i] = dynamic_cast<TESObjectWEAP*>(LookupFormByID(buffer->FUN_008648a0()));
 
     {
 
@@ -382,10 +382,10 @@ void CombatLoadState::FUN_009a2040(CombatLoadBuffer* buffer)
 
             TESObjectWEAP** item = otherWeapons.FUN_006a7ad0(i);
 
-            *item = dynamic_cast<TESObjectWEAP*>(FUN_004839c0(buffer->FUN_008648a0()));
+            *item = dynamic_cast<TESObjectWEAP*>(LookupFormByID(buffer->FUN_008648a0()));
         }
 
-        currentWeapon = dynamic_cast<TESObjectWEAP*>(FUN_004839c0(buffer->FUN_008648a0()));
+        currentWeapon = dynamic_cast<TESObjectWEAP*>(LookupFormByID(buffer->FUN_008648a0()));
 
         buffer->FUN_00864980(&value38, 4);
 
@@ -418,7 +418,7 @@ void CombatLoadState::FUN_009a2040(CombatLoadBuffer* buffer)
 
         buffer->FUN_00864980(&flag77, 1);
 
-        explosion = dynamic_cast<BGSExplosion*>(FUN_004839c0(buffer->FUN_008648a0()));
+        explosion = dynamic_cast<BGSExplosion*>(LookupFormByID(buffer->FUN_008648a0()));
 
         buffer->FUN_00864980(&unk07c, 4);
 
@@ -562,14 +562,14 @@ void CombatLoadState::FUN_009a2040(CombatLoadBuffer* buffer)
 
                         buffer->FUN_008648e0(pairs[i]);
 
-                        pairs[i]->object = dynamic_cast<TESBoundObject*>(FUN_004839c0(buffer->FUN_008648a0()));
+                        pairs[i]->object = dynamic_cast<TESBoundObject*>(LookupFormByID(buffer->FUN_008648a0()));
                     }
                 }
 
                 for (unsigned int i = 0; i < 2; i++)
                 {
 
-                    objects[i] = dynamic_cast<TESBoundObject*>(FUN_004839c0(buffer->FUN_008648a0()));
+                    objects[i] = dynamic_cast<TESBoundObject*>(LookupFormByID(buffer->FUN_008648a0()));
 
                     objectStamps[i].FUN_009a5f20(buffer);
                 }

@@ -548,7 +548,7 @@ struct FUN_009abf30 : TESObjectREFR
     unsigned int unkfc;
     unsigned int unk100;
 };
-TESForm* __cdecl FUN_004839c0(unsigned int);
+TESForm* __cdecl LookupFormByID(unsigned int);
 TESObjectREFR* __cdecl FUN_00564480(unsigned char, bool);
 void __cdecl FUN_00845cc0(const char*, ...);
 extern const char DAT_0107fa20[];
@@ -562,10 +562,10 @@ TESForm* __cdecl ResolveReferenceForm(unsigned int formID, ReferencePlacementDat
         unsigned char flags;
         {
             if (!form)
-                form = FUN_004839c0(formID);
+                form = LookupFormByID(formID);
             if (((DataHandlerAccess*)g_dataHandler)->FUN_00469860(data->m_uiBaseFormID))
                 data->m_uiBaseFormID = 0;
-            TESBoundObject* bound = dynamic_cast<TESBoundObject*>(FUN_004839c0(data->m_uiBaseFormID));
+            TESBoundObject* bound = dynamic_cast<TESBoundObject*>(LookupFormByID(data->m_uiBaseFormID));
             if (!bound)
             {
                 FUN_00845cc0(DAT_0107fa20, data->m_uiBaseFormID, formID);

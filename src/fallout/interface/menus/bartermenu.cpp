@@ -888,7 +888,7 @@ struct ObjB
 
 struct ObjX
 {
-    ObjB* FUN_00a01b00();
+    ObjB* ReadXML();
 };
 
 struct SelfObj
@@ -928,7 +928,7 @@ void* __cdecl FUN_004b7210();
 int __cdecl FUN_005b5e40(int a, const char* b);
 int __cdecl FUN_0072d6c0();
 ObjA* __cdecl FUN_00a09030(int a);
-int __cdecl FUN_00a01860(const char* a);
+int __cdecl TraitNameToID(const char* a);
 float __stdcall FUN_00a01530(int a);
 void __cdecl FUN_00763ff0();
 int __cdecl FUN_00647b70(int a, int b);
@@ -968,7 +968,7 @@ int __cdecl InitInventoryMenu(int arg0, int aiValue)
         else
             t28a = 0;
     }
-    bb = ((SelfObj*)selfa)->FUN_00586150(str_010707b4)->FUN_00a01b00();
+    bb = ((SelfObj*)selfa)->FUN_00586150(str_010707b4)->ReadXML();
     if (bb != 0)
         t2c15 = bb->FUN_00a03c90();
     else
@@ -994,7 +994,7 @@ int __cdecl InitInventoryMenu(int arg0, int aiValue)
         bb->FUN_00a03da0(str_0107074c)->FUN_00a01350(0xfc4, DAT_011d25b0.FUN_00403df0(), true);
         ((BigObj*)DAT_011d8fa4)->m_5c->FUN_00a01350(0xfc4, DAT_011d26f4.FUN_00403df0(), true);
         ((BigObj*)DAT_011d8fa4)->m_74->FUN_00a01350(0xfc4, DAT_011d33fc.FUN_00403df0(), true);
-        xTmp14 = FUN_00a01860(str_0106ed20);
+        xTmp14 = TraitNameToID(str_0106ed20);
         tmp10o = bb->FUN_00a03da0(str_01070740);
         if (tmp10o != 0)
             tmp10o->FUN_00a01350(xTmp14, DAT_011d2aa8.FUN_00403df0(), true);
@@ -1165,14 +1165,14 @@ struct BmFilteredList
     int FUN_0071ae60();
 };
 
-int __cdecl FUN_00a01860(const char* pName);
+int __cdecl TraitNameToID(const char* pName);
 int __cdecl TruncateFloatToInt(float f);
 bool __cdecl FUN_00703d50();
 void __cdecl FUN_00703c00(const char* pFormat, ...);
 void __cdecl UpdateBarterQuantity(int iCount);
 void __cdecl CreateQuantityMenu(int iCount, void(__cdecl* pfnCallback)(int), int iMax);
 void __cdecl FUN_0072db40();
-void __cdecl FUN_00703e80(int a1, int a2, const char* pMessage, void(__cdecl* pfnCallback)(), int a5, int a6, float f7,
+void __cdecl ShowMessageBox(int a1, int a2, const char* pMessage, void(__cdecl* pfnCallback)(), int a5, int a6, float f7,
                           float f8, const char* pButton1, const char* pButton2, int a11);
 void __cdecl UpdateTopicMenu();
 void __cdecl FUN_00706f30(void* pkTile);
@@ -1218,7 +1218,7 @@ void BarterMenuClick::HandleTileClick(int iTileIndex, BmTile* pkTile)
         {
             g_bBarterFlag_0119fdb0 = 0;
             int iCount = g_pkSelectedItem_011d8fa8->FUN_00726070() -
-                         TruncateFloatToInt(pkTile->FUN_00a011b0(FUN_00a01860(s_szNumBartered)));
+                         TruncateFloatToInt(pkTile->FUN_00a011b0(TraitNameToID(s_szNumBartered)));
             if (FUN_00703d50())
             {
                 BmRef* pkOrig = g_pkSelectedItem_011d8fa8->FUN_00559450() &&
@@ -1249,7 +1249,7 @@ void BarterMenuClick::HandleTileClick(int iTileIndex, BmTile* pkTile)
         break;
     case 19:
         if (m_kMerchantItems.FUN_005ae380() || m_kPlayerItems.FUN_005ae380())
-            FUN_00703e80(0, 0, g_s_011d1fa4.FUN_00403df0(), FUN_0072db40, 0, 0x17, 0.0f, 0.0f,
+            ShowMessageBox(0, 0, g_s_011d1fa4.FUN_00403df0(), FUN_0072db40, 0, 0x17, 0.0f, 0.0f,
                          g_s_011d34f8.FUN_00403df0(), g_s_011d3684.FUN_00403df0(), 0);
         else
             UpdateTopicMenu();
@@ -1851,8 +1851,8 @@ extern int g_iTileIDEquipped_011d8fb4;
 extern int g_iTileIDValue_011d8fb0;
 
 float __cdecl FUN_0072ed00(BarterTile* pkTile, BarterItem* pkItem);
-int __cdecl FUN_00a01860(const char* pName);
-int __cdecl FUN_00a00940(const char* pName, int iDefault);
+int __cdecl TraitNameToID(const char* pName);
+int __cdecl TraitNameToIDAdd(const char* pName, int iDefault);
 int __cdecl FUN_00406d00(char* pBuffer, unsigned int uiSize, const char* pFormat, ...);
 int __cdecl FUN_00406d30(char* pBuffer, unsigned int uiSize, const char* pSrc);
 
@@ -1877,7 +1877,7 @@ void __cdecl UpdateBarterItemTile(BarterTile* pkTile, BarterItem* pkItem)
         if (!pkOther)
             pkOther = g_pkBarterMenu_011d8fa4->FindMatchingEntry(g_pkBarterMenu_011d8fa4->m_kPlayerItems, pkItem);
         iCount = pkItem->FUN_00726070() - (pkOther ? pkOther->FUN_00726070() : 0);
-        pkTile->FUN_00700320(FUN_00a01860(s_szNumBartered), pkOther ? pkOther->FUN_00726070() : 0);
+        pkTile->FUN_00700320(TraitNameToID(s_szNumBartered), pkOther ? pkOther->FUN_00726070() : 0);
     }
     else
     {
@@ -1889,7 +1889,7 @@ void __cdecl UpdateBarterItemTile(BarterTile* pkTile, BarterItem* pkItem)
         pkTile->FUN_00a01350(0xfc4, acBuffer, true);
     }
     if (pkItem->FUN_004bddd0(0) && !pkTile->IsTraitNonZero(g_iTileIDEquipped_011d8fb4))
-        pkTile->FUN_00700320(FUN_00a00940(s_szIsEquipped, -1), 1);
+        pkTile->FUN_00700320(TraitNameToIDAdd(s_szIsEquipped, -1), 1);
     if (fValue <= 0.0)
         FUN_00406d30(acBuffer, 0x80, s_szNoValue);
     else if (fValue > 0.0 && fValue < 1.0)
@@ -2301,7 +2301,7 @@ struct LbTile
     void FUN_00700320(int m_uiSoundID, int iValue);
     void FUN_00715c60(int m_uiSoundID, int iValue);
 };
-int __cdecl FUN_00a00940(const char* pcName, int iDefault);
+int __cdecl TraitNameToIDAdd(const char* pcName, int iDefault);
 
 struct LbItem
 {
@@ -2357,7 +2357,7 @@ void ListBoxImpl::ApplyFilter(bool(__cdecl* pfnFilter)(void* pkObject))
 {
     int iFilteredCount = 0;
     int iSelectedIndex = -1;
-    static int s_iNumFilteredID = FUN_00a00940(s_szNumFiltered, -1);
+    static int s_iNumFilteredID = TraitNameToIDAdd(s_szNumFiltered, -1);
     m_usElementCount = 0;
     m_fScroll = 0.0f;
     for (LbNode* pkNode = this; pkNode && *pkNode->FUN_006815c0(); pkNode = pkNode->FUN_00726070())
@@ -3127,7 +3127,7 @@ float __cdecl FUN_00406ce0(float afValue);
 int __cdecl TruncateFloatToInt(float afValue);
 extern "C" const char* __cdecl FUN_00ec7d40(int aiValue);
 void __cdecl FUN_004d5e10(int aiID, const char* apText);
-extern "C" TESBoundObject* __cdecl FUN_004839c0(unsigned int auiFormID);
+extern "C" TESBoundObject* __cdecl LookupFormByID(unsigned int auiFormID);
 int __cdecl MinInt(int aiValue, int aiValue2);
 
 struct SoundPlaybackHandle
@@ -3207,7 +3207,7 @@ void BarterMenuImpl::CompleteBarterTransaction()
 
     if (m_barterTotal > 0.0)
     {
-        InventoryStackRecord kCaps9(FUN_004839c0(0xf), 0);
+        InventoryStackRecord kCaps9(LookupFormByID(0xf), 0);
         pChanges = InventoryChangesStandIn::GetOrAddInventoryChanges(pTarget3);
         if (pChanges)
             g_transferMgr_011c3f2c->ProcessInventoryRecords(&kCaps9, MinInt(iAmount5, unk90), m_merchant);
@@ -3367,8 +3367,8 @@ void List7313::UpdateCurrentValueTile(bool abFlag)
     Tile7313* pTile = 0;
     if (m_0c && m_14)
     {
-        m_14->FUN_00a012d0(FUN_00a01860("_current_value"), m_28, false);
-        m_14->SetTraitAndReset(FUN_00a01860("_SetInCode"), 1.0f);
+        m_14->FUN_00a012d0(TraitNameToID("_current_value"), m_28, false);
+        m_14->SetTraitAndReset(TraitNameToID("_SetInCode"), 1.0f);
         pTile = GetTile7313((unsigned int)FUN_0040ebd0(m_24, (float)(FUN_0071ae60(0) - 1.0)));
         ((IM7313*)FUN_004b7210())->FUN_00715860(pTile, 0xfc3, abFlag);
         SetSelected7313(pTile);
@@ -3629,7 +3629,7 @@ bool __cdecl FUN_007304b0(Fr7304Entry* pkItem)
     if (pkTile)
     {
         bResult =
-            bResult || (double)pkItem->FUN_00726070() - pkTile->FUN_00a011b0(FUN_00a01860(s_szNumBartered)) <= 0.0;
+            bResult || (double)pkItem->FUN_00726070() - pkTile->FUN_00a011b0(TraitNameToID(s_szNumBartered)) <= 0.0;
     }
     return bResult;
 }

@@ -1869,7 +1869,7 @@ struct TESObjectREFR : TESForm
 {
     virtual ~TESObjectREFR();
 };
-extern "C" TESForm* __cdecl FUN_004839c0(unsigned int);
+extern "C" TESForm* __cdecl LookupFormByID(unsigned int);
 struct FUN_0085f070_shell
 {
     void SaveReferenceState(TESObjectREFR*, unsigned int, void*);
@@ -1888,7 +1888,7 @@ void FUN_0085f070_shell::FUN_0085f070()
         void* value2;
         reinterpret_cast<NiTMap*>(*(void**)((char*)this + 0x58))->GetNext(pos2, key, value2);
         if (key)
-            ref = dynamic_cast<TESObjectREFR*>(FUN_004839c0(key));
+            ref = dynamic_cast<TESObjectREFR*>(LookupFormByID(key));
         else
             ref = g_thePlayer;
         if (ref)
@@ -2533,7 +2533,7 @@ void* SaveLoadCleanup::FUN_008451a0(unsigned int flags)
     return this;
 }
 
-void* __cdecl FUN_00401000(unsigned int size);
+void* __cdecl FormHeap_Allocate(unsigned int size);
 
 struct Obj_b9971
 {
@@ -2544,7 +2544,7 @@ struct Obj_b9971
     Obj_b9971();
     static void* operator new(unsigned int size) throw()
     {
-        return FUN_00401000(size);
+        return FormHeap_Allocate(size);
     }
 };
 
@@ -3643,7 +3643,7 @@ void ReferenceSaveContext::SaveReferenceState(TESObjectREFR* reference, int firs
     }
 }
 
-extern "C" void __cdecl FUN_00401030(void* data);
+extern "C" void __cdecl FormHeap_Free(void* data);
 struct FnvMap
 {
     void* FUN_004b9ba0();
@@ -3676,7 +3676,7 @@ void FUN_0085f5d0_class::ProcessMapEntries()
         unsigned int key;
         void* data;
         reinterpret_cast<FnvState*>(this)->unk64->FUN_006b7f20(cursor, key, data);
-        TESObjectREFR* refObject = dynamic_cast<TESObjectREFR*>(FUN_004839c0(key));
+        TESObjectREFR* refObject = dynamic_cast<TESObjectREFR*>(LookupFormByID(key));
         if (refObject)
         {
             if (!reinterpret_cast<FnvRefMethod*>(refObject)->FUN_0043fcd0())
@@ -3690,7 +3690,7 @@ void FUN_0085f5d0_class::ProcessMapEntries()
             }
             reinterpret_cast<FUN_0085f6c0_Class*>(this)->FUN_0085f6c0((int)refObject, (int)data);
         }
-        FUN_00401030(data);
+        FormHeap_Free(data);
         reinterpret_cast<FnvState*>(this)->unk64->RemoveKey(key);
     }
 }
@@ -5080,7 +5080,7 @@ struct List859
 };
 struct Map859
 {
-    bool FUN_00853130(unsigned, List859*&);
+    bool GetAt(unsigned, List859*&);
     bool RemoveKey(unsigned);
 };
 struct Cell859
@@ -5111,7 +5111,7 @@ bool Manager859::FUN_00859690(Cell859* cell)
     if (cell->FUN_00425fd0())
     {
         List859* list8;
-        bool found8 = interiors->FUN_00853130(cell->FUN_0084e3a0(), list8);
+        bool found8 = interiors->GetAt(cell->FUN_0084e3a0(), list8);
         if (!found8)
             return result5;
         List859* node2 = list8;
@@ -5132,7 +5132,7 @@ bool Manager859::FUN_00859690(Cell859* cell)
     else
     {
         List859* listExterior;
-        bool foundExterior = worlds->FUN_00853130(cell->FUN_0054ddd0()->FUN_0084e3a0(), listExterior);
+        bool foundExterior = worlds->GetAt(cell->FUN_0054ddd0()->FUN_0084e3a0(), listExterior);
         if (!foundExterior)
             return result5;
         List859* nodeExterior8 = listExterior;
@@ -5358,7 +5358,7 @@ RestoredObject* ObjectRestorer::FUN_00859f20(unsigned int id, RestoreLocation* l
     unsigned int parent = location->id;
     if (!parent)
         parent = location->alternate;
-    void* form2 = FUN_004839c0(parent);
+    void* form2 = LookupFormByID(parent);
     RestoreForm* cellTmp = (RestoreForm*)FUN_00ec43fb(form2, 0, &DAT_01183028, &DAT_01183fb4, 0);
     RestoreForm* world = (RestoreForm*)FUN_00ec43fb(form2, 0, &DAT_01183028, &DAT_01183fd0, 0);
     int x6 = 0, y4 = 0;
@@ -5623,7 +5623,7 @@ void StQ::FUN_0085f2e0()
         unsigned int uiID;
         void* pData_zbax;
         pMap->FUN_006b7f20(pIterator, uiID, pData_zbax);
-        TESObjectREFR* pRef_zaxvzc = dynamic_cast<TESObjectREFR*>(FUN_004839c0(uiID));
+        TESObjectREFR* pRef_zaxvzc = dynamic_cast<TESObjectREFR*>(LookupFormByID(uiID));
         if (pRef_zaxvzc)
         {
             if (!((FnvRefMethod*)pRef_zaxvzc)->FUN_0043fcd0())
@@ -5637,7 +5637,7 @@ void StQ::FUN_0085f2e0()
             }
             FUN_0085f3d0(pRef_zaxvzc, pData_zbax);
         }
-        FUN_00401030(pData_zbax);
+        FormHeap_Free(pData_zbax);
         pMap->RemoveKey(uiID);
     }
 }
@@ -5956,12 +5956,12 @@ void RefLoader::LoadChange(TESForm* pkForm, unsigned int uiChangeFlags)
         DAT_011de45c->FUN_008579e0(&kMoveData, 0x24);
         kMoveData.m_uiBaseID = FUN_00861c00(kMoveData.m_uiBaseID);
         kMoveData.m_uiCellID = FUN_00861c00(kMoveData.m_uiCellID);
-        TESForm* pkLocation = FUN_004839c0(kMoveData.m_uiCellID);
+        TESForm* pkLocation = LookupFormByID(kMoveData.m_uiCellID);
         TESObjectCELL* pkCell = dynamic_cast<TESObjectCELL*>(pkLocation);
         TESWorldSpace* pkWorld = dynamic_cast<TESWorldSpace*>(pkLocation);
         if (kMoveData.m_iType != 2)
         {
-            TESBoundObject* pkBase = dynamic_cast<TESBoundObject*>(FUN_004839c0(kMoveData.m_uiBaseID));
+            TESBoundObject* pkBase = dynamic_cast<TESBoundObject*>(LookupFormByID(kMoveData.m_uiBaseID));
             DAT_011c3f2c->PlaceObjectReference(pkBase, &kMoveData.m_kPos, &kMoveData.m_kAngle, pkCell, pkWorld, pkRef,
                                                0, 0);
             FUN_008624e0(pkRef);
@@ -6002,7 +6002,7 @@ void RefLoader::LoadChange(TESForm* pkForm, unsigned int uiChangeFlags)
         {
             ((RefView*)pkRef)->FUN_00575830(kPosition.m_kPos);
             FUN_008624e0(pkRef);
-            TESForm* pkLocation = FUN_004839c0(kPosition.m_uiCellID);
+            TESForm* pkLocation = LookupFormByID(kPosition.m_uiCellID);
             TESObjectCELL* pkCell2 = dynamic_cast<TESObjectCELL*>(pkLocation);
             TESWorldSpace* pkWorld2 = dynamic_cast<TESWorldSpace*>(pkLocation);
             if (pkCell2)
@@ -6582,7 +6582,7 @@ void FUN_0085f450_class::FUN_0085f450()
         unsigned int data;
         void* object;
         ((FnvMap*)((FUN_0085f5a0_Class*)this)->m_60)->FUN_006b7f20(pos, data, object);
-        MobileObject* id = dynamic_cast<MobileObject*>(FUN_004839c0(data));
+        MobileObject* id = dynamic_cast<MobileObject*>(LookupFormByID(data));
         if (id)
         {
             HighProcess* process = dynamic_cast<HighProcess*>(id->FUN_008d8520());
@@ -6800,7 +6800,7 @@ struct Mgr10
 };
 struct Mgr3c
 {
-    void FUN_00444850(Actor*, int, int);
+    void QueueReference(Actor*, int, int);
 };
 struct Owner
 {
@@ -6891,7 +6891,7 @@ void Cls::FUN_00858af0(EntryListNode* list, Entry* ctx, bool reset)
             if (!a->FUN_008d6f30() && !a->FUN_00575d70())
             {
                 unsigned int id = 0;
-                TESObjectCELL* cell = dynamic_cast<TESObjectCELL*>(FUN_004839c0(id));
+                TESObjectCELL* cell = dynamic_cast<TESObjectCELL*>(LookupFormByID(id));
                 if (cell)
                 {
                     NiPoint3 pos = DAT_011f426c;
@@ -6920,7 +6920,7 @@ void Cls::FUN_00858af0(EntryListNode* list, Entry* ctx, bool reset)
             FUN_00451010()->FUN_00c66300();
         DAT_011dea10->FUN_00459920();
         if (!((VObj*)DAT_011dea3c)->FUN_00950bb0(0))
-            DAT_011c3b3c->FUN_00444850((Actor*)DAT_011dea3c, 0, 0);
+            DAT_011c3b3c->QueueReference((Actor*)DAT_011dea3c, 0, 0);
         DAT_01202d98->FUN_00456520();
         DAT_01202d98->FUN_008495b0();
         if (node1)

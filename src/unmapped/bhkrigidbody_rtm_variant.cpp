@@ -3597,7 +3597,7 @@ struct SmartObj160
 {
     int unk00;
     int ref04;
-    void FUN_0040fbf0(int x);
+    void Lock(int x);
 };
 struct Vec50Obj
 {
@@ -3787,7 +3787,7 @@ void This160::FUN_00c8e160(float* p1, RotationArg160 input, unsigned int p3)
     if (DAT_0106b798 < len)
     {
         if (a3)
-            a3->FUN_0040fbf0(0);
+            a3->Lock(0);
         FUN_005610f0(p1);
         if (a3)
         {

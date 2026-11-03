@@ -170,7 +170,7 @@ struct ImpactData
 };
 struct Gate
 {
-    bool FUN_004a4020();
+    bool IsConsoleOpen();
 };
 Gate* __cdecl FUN_0071b160(int);
 bool __cdecl IsStartMenuFlag1Set();
@@ -228,7 +228,7 @@ struct ImpactTask
 // @fnv 0x004a2d50
 void ImpactTask::FUN_004a2d50()
 {
-    if (FUN_0071b160(1)->FUN_004a4020() || IsStartMenuFlag1Set())
+    if (FUN_0071b160(1)->IsConsoleOpen() || IsStartMenuFlag1Set())
         return;
     if (!reference.FUN_00559450()->FUN_0084e3a0() || !reference.FUN_00559450()->FUN_00490e40())
     {
