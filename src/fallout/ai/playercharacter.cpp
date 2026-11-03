@@ -52065,7 +52065,7 @@ struct Extra
 struct ObjC
 {
     unsigned char FUN_00418b10();
-    Extra* FUN_00410220(int);
+    Extra* GetExtraData(int);
 };
 struct ListObj
 {
@@ -52206,7 +52206,7 @@ bool Cls::FUN_00967b70(ArgObj* arg)
     extra = 0;
     fres = 0.0f;
     if (slotC7)
-        extra = slotC7->FUN_00410220(0x25);
+        extra = slotC7->GetExtraData(0x25);
     if (extra)
         fres = extra->f0c;
     else

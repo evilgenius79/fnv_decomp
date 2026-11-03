@@ -2771,12 +2771,12 @@ struct FUN_00568bb0_shell : public TESObjectREFR
     void FUN_00568bb0(ExtraDataList*);
 };
 
-void __fastcall FUN_00411ec0(const ExtraDataList*, int, ExtraDataList*);
+void __fastcall CopyList(const ExtraDataList*, int, ExtraDataList*);
 const ExtraDataList* __fastcall GetExtra_005d43c0(TESObjectREFR*, int);
 
 struct ExtraDataList_helper
 {
-    void FUN_00411ec0(ExtraDataList*) const;
+    void CopyList(ExtraDataList*) const;
 };
 
 struct TESObjectREFR_helper
@@ -2787,7 +2787,7 @@ struct TESObjectREFR_helper
 // @fnv 0x00568bb0
 void FUN_00568bb0_shell::FUN_00568bb0(ExtraDataList* pextra)
 {
-    ((TESObjectREFR_helper*)this)->GetExtra()->FUN_00411ec0(pextra);
+    ((TESObjectREFR_helper*)this)->GetExtra()->CopyList(pextra);
 }
 }  // namespace fnv_00568bb0
 
@@ -12514,7 +12514,7 @@ struct BaseExtraList
 {
     BSExtraData* GetExtraData(unsigned char);
     BSExtraData* AddExtra(BSExtraData*);
-    void FUN_00410020(BSExtraData*, bool);
+    void RemoveExtra(BSExtraData*, bool);
 };
 struct XActor
 {
@@ -12530,7 +12530,7 @@ void FUN_00568150_shell::FUN_00568150(unsigned int aiMarkerIndex, bool abVal)
     {
         pextra->SetUsedMarker(aiMarkerIndex, abVal);
         if (!pextra->m_uiReservedMarkers)
-            ((XActor*)this)->GetExtra()->FUN_00410020((BSExtraData*)pextra, true);
+            ((XActor*)this)->GetExtra()->RemoveExtra((BSExtraData*)pextra, true);
     }
     else if (abVal)
     {
@@ -13556,7 +13556,7 @@ struct S_00631370
 };
 struct ExtraListRemover
 {
-    void FUN_00410020(BSExtraData*, bool);
+    void RemoveExtra(BSExtraData*, bool);
 };
 struct MobileObjectCellAccess
 {
@@ -13695,7 +13695,7 @@ void FUN_0057b520_shell::FUN_0057b520(bool abTraverseAllZones)
         }
     }
     if (pextra)
-        ((ExtraListRemover*)((XActor*)this)->GetExtra())->FUN_00410020((BSExtraData*)pextra, true);
+        ((ExtraListRemover*)((XActor*)this)->GetExtra())->RemoveExtra((BSExtraData*)pextra, true);
     if (*(int*)((char*)this + 0x40) && ((MobileObjectCellAccess*)*(void**)((char*)this + 0x40))->FUN_004518e0())
         pwater->UpdateWaterZone(0, this, ((MobileObject*)this)->GetRelevantWaterHeight());
     if (((EffectSetting*)g_TES)->GetEffectID())
@@ -19086,8 +19086,8 @@ struct FlagExtra
 };
 struct FlagList
 {
-    FlagExtra* FUN_0040ff60(FlagExtra*);
-    void FUN_00410140(int);
+    FlagExtra* AddExtra(FlagExtra*);
+    void RemoveExtra(int);
 };
 struct RefFlags
 {
@@ -19120,7 +19120,7 @@ void RefFlags::FUN_005650d0(unsigned char enabled)
     FlagExtra* extra = FUN_00527080(0x92);
     if (enabled == 1 && !extra)
     {
-        extra = FUN_005d43c0()->FUN_0040ff60(new FlagExtra);
+        extra = FUN_005d43c0()->AddExtra(new FlagExtra);
     }
     if (extra)
     {
@@ -19131,7 +19131,7 @@ void RefFlags::FUN_005650d0(unsigned char enabled)
             flags &= ~8;
         extra->FUN_0041fd00(flags);
         if (!flags)
-            FUN_005d43c0()->FUN_00410140(0x92);
+            FUN_005d43c0()->RemoveExtra(0x92);
         Changed(0x80000000);
     }
 }
@@ -23861,8 +23861,8 @@ struct InitExtraList
     short FUN_00418770();
     void FUN_00419ad0(int);
     void FUN_00421f30(InitScaleExtra*);
-    void* FUN_00410220(int);
-    void FUN_00410140(int);
+    void* GetExtraData(int);
+    void RemoveExtra(int);
     void FUN_0041aeb0();
 };
 struct InitCell
@@ -24534,8 +24534,8 @@ void InitReference::FUN_0055d760()
     FUN_004846a0(FUN_004753d0(base));
     rotation.z = FUN_004b1480(rotation.z);
     FUN_00484ab0(true);
-    if (FUN_007af430() && FUN_007af430()->FUN_00401170() != 40 && FUN_005d43c0()->FUN_00410220(110))
-        FUN_005d43c0()->FUN_00410140(110);
+    if (FUN_007af430() && FUN_007af430()->FUN_00401170() != 40 && FUN_005d43c0()->GetExtraData(110))
+        FUN_005d43c0()->RemoveExtra(110);
     FUN_0043b2b0(false);
     int errors = FUN_0046e8a0();
     FUN_004fffe0(previousDebug);
@@ -29319,8 +29319,8 @@ struct ExtraHealth39
 };
 struct ExtraAccess39
 {
-    ExtraHealth39* FUN_00410220(unsigned char type);
-    void FUN_00410020(ExtraHealth39* extra, bool remove);
+    ExtraHealth39* GetExtraData(unsigned char type);
+    void RemoveExtra(ExtraHealth39* extra, bool remove);
     void FUN_00419970(float value);
 };
 struct Ref39
@@ -29336,11 +29336,11 @@ void Ref39::FUN_00568bd0(float afHealth)
     TESHealthForm* health = dynamic_cast<TESHealthForm*>(FUN_007af430());
     if (health)
     {
-        ExtraHealth39* extra = FUN_005d43c0()->FUN_00410220(0x25);
+        ExtraHealth39* extra = FUN_005d43c0()->GetExtraData(0x25);
         if (extra)
         {
             if (afHealth == health->GetHealth())
-                FUN_005d43c0()->FUN_00410020(extra, true);
+                FUN_005d43c0()->RemoveExtra(extra, true);
             else
                 extra->health = afHealth;
         }
@@ -35975,7 +35975,7 @@ struct LoopExtras
 {
     LoopPrimitive* FUN_0041fbe0();
     void FUN_00418890(GlobalObject_0041a250*);
-    void FUN_00410140(int);
+    void RemoveExtra(int);
     void FUN_0041a800(GlobalObject_0041a250*);
 };
 struct LoopAudio
@@ -36235,7 +36235,7 @@ void RefObj::FUN_00579ac0(bool enable)
             {
                 i.FUN_00ad88f0();
                 i.FUN_00ad8d10();
-                FUN_005d43c0()->FUN_00410140(79);
+                FUN_005d43c0()->RemoveExtra(79);
             }
             if (h)
             {
@@ -36278,7 +36278,7 @@ void RefObj::FUN_00579ac0(bool enable)
             if (i.FUN_00ad8ce0())
             {
                 i.FUN_00ad8da0(1000);
-                FUN_005d43c0()->FUN_00410140(79);
+                FUN_005d43c0()->RemoveExtra(79);
             }
             break;
         }
@@ -37764,9 +37764,9 @@ class ExtraMultiBoundRef : public BSExtraData
 class ListQ
 {
   public:
-    BSExtraData* FUN_00410220();
-    void FUN_00410020(int);
-    void FUN_0040ff60();
+    BSExtraData* GetExtraData();
+    void RemoveExtra(int);
+    void AddExtra();
 };
 
 class ResQ
@@ -38040,49 +38040,49 @@ class OwnQ
 // @fnv 0x0055c050
 ResQ* OwnQ::FUN_0055c050(int a1, int a2)
 {
-    ExtraTeleport* pTeleport_mcxj = dynamic_cast<ExtraTeleport*>(FUN_005d43c0(0x2b)->FUN_00410220());
+    ExtraTeleport* pTeleport_mcxj = dynamic_cast<ExtraTeleport*>(FUN_005d43c0(0x2b)->GetExtraData());
     if (pTeleport_mcxj)
-        FUN_005d43c0((int)pTeleport_mcxj)->FUN_00410020(0);
-    ExtraEnableStateParent* pEnable_ix = dynamic_cast<ExtraEnableStateParent*>(FUN_005d43c0(0x37)->FUN_00410220());
+        FUN_005d43c0((int)pTeleport_mcxj)->RemoveExtra(0);
+    ExtraEnableStateParent* pEnable_ix = dynamic_cast<ExtraEnableStateParent*>(FUN_005d43c0(0x37)->GetExtraData());
     if (pEnable_ix)
-        FUN_005d43c0((int)pEnable_ix)->FUN_00410020(0);
-    ExtraRandomTeleportMarker* pRandom_v = dynamic_cast<ExtraRandomTeleportMarker*>(FUN_005d43c0(0x3b)->FUN_00410220());
+        FUN_005d43c0((int)pEnable_ix)->RemoveExtra(0);
+    ExtraRandomTeleportMarker* pRandom_v = dynamic_cast<ExtraRandomTeleportMarker*>(FUN_005d43c0(0x3b)->GetExtraData());
     if (pRandom_v)
-        FUN_005d43c0((int)pRandom_v)->FUN_00410020(0);
-    ExtraLinkedRef* pLock_fqcf = dynamic_cast<ExtraLinkedRef*>(FUN_005d43c0(0x51)->FUN_00410220());
+        FUN_005d43c0((int)pRandom_v)->RemoveExtra(0);
+    ExtraLinkedRef* pLock_fqcf = dynamic_cast<ExtraLinkedRef*>(FUN_005d43c0(0x51)->GetExtraData());
     if (pLock_fqcf)
-        FUN_005d43c0((int)pLock_fqcf)->FUN_00410020(0);
-    ExtraActivateRef* pLock_ekv = dynamic_cast<ExtraActivateRef*>(FUN_005d43c0(0x51)->FUN_00410220());
+        FUN_005d43c0((int)pLock_fqcf)->RemoveExtra(0);
+    ExtraActivateRef* pLock_ekv = dynamic_cast<ExtraActivateRef*>(FUN_005d43c0(0x51)->GetExtraData());
     if (pLock_ekv)
-        FUN_005d43c0((int)pLock_ekv)->FUN_00410020(0);
-    ExtraDecalRefs* pOwner_v = dynamic_cast<ExtraDecalRefs*>(FUN_005d43c0(0x57)->FUN_00410220());
+        FUN_005d43c0((int)pLock_ekv)->RemoveExtra(0);
+    ExtraDecalRefs* pOwner_v = dynamic_cast<ExtraDecalRefs*>(FUN_005d43c0(0x57)->GetExtraData());
     if (pOwner_v)
-        FUN_005d43c0((int)pOwner_v)->FUN_00410020(0);
-    ExtraMerchantContainer* pMerch_mb = dynamic_cast<ExtraMerchantContainer*>(FUN_005d43c0(0x3c)->FUN_00410220());
+        FUN_005d43c0((int)pOwner_v)->RemoveExtra(0);
+    ExtraMerchantContainer* pMerch_mb = dynamic_cast<ExtraMerchantContainer*>(FUN_005d43c0(0x3c)->GetExtraData());
     if (pMerch_mb)
-        FUN_005d43c0((int)pMerch_mb)->FUN_00410020(0);
-    ExtraMultiBoundRef* pLeveled_xczy = dynamic_cast<ExtraMultiBoundRef*>(FUN_005d43c0(0x63)->FUN_00410220());
+        FUN_005d43c0((int)pMerch_mb)->RemoveExtra(0);
+    ExtraMultiBoundRef* pLeveled_xczy = dynamic_cast<ExtraMultiBoundRef*>(FUN_005d43c0(0x63)->GetExtraData());
     if (pLeveled_xczy)
-        FUN_005d43c0((int)pLeveled_xczy)->FUN_00410020(0);
+        FUN_005d43c0((int)pLeveled_xczy)->RemoveExtra(0);
     int iSaved_yywkx = FUN_008d6f30();
     Lock(0);
     ResQ* pResult_f = (ResQ*)dynamic_cast<TESObjectREFR*>(FUN_004867a0(0, a2));
     if (pTeleport_mcxj)
-        FUN_005d43c0((int)pTeleport_mcxj)->FUN_0040ff60();
+        FUN_005d43c0((int)pTeleport_mcxj)->AddExtra();
     if (pEnable_ix)
-        FUN_005d43c0((int)pEnable_ix)->FUN_0040ff60();
+        FUN_005d43c0((int)pEnable_ix)->AddExtra();
     if (pRandom_v)
-        FUN_005d43c0((int)pRandom_v)->FUN_0040ff60();
+        FUN_005d43c0((int)pRandom_v)->AddExtra();
     if (pLock_fqcf)
-        FUN_005d43c0((int)pLock_fqcf)->FUN_0040ff60();
+        FUN_005d43c0((int)pLock_fqcf)->AddExtra();
     if (pLock_ekv)
-        FUN_005d43c0((int)pLock_ekv)->FUN_0040ff60();
+        FUN_005d43c0((int)pLock_ekv)->AddExtra();
     if (pOwner_v)
-        FUN_005d43c0((int)pOwner_v)->FUN_0040ff60();
+        FUN_005d43c0((int)pOwner_v)->AddExtra();
     if (pMerch_mb)
-        FUN_005d43c0((int)pMerch_mb)->FUN_0040ff60();
+        FUN_005d43c0((int)pMerch_mb)->AddExtra();
     if (pLeveled_xczy)
-        FUN_005d43c0((int)pLeveled_xczy)->FUN_0040ff60();
+        FUN_005d43c0((int)pLeveled_xczy)->AddExtra();
     Lock(iSaved_yywkx);
     pResult_f->SetQ(0, 1);
     pResult_f->FUN_00565480(0);
@@ -38133,7 +38133,7 @@ struct Extra
     Link* FUN_0041f810();
     CopyHolder* FUN_00418250();
     void FUN_0041f840(Ref*, bool);
-    void FUN_00411ec0(Extra*);
+    void CopyList(Extra*);
     void FUN_0041e530(Ref*);
     void FUN_0041edd0(Ref*);
     void FUN_0041ae70();
@@ -38598,7 +38598,7 @@ void Ref::FUN_0055c3e0(TESForm* apSource)
             lights = lights->FUN_00726070();
         }
     }
-    FUN_005d43c0()->FUN_00411ec0(pSource->FUN_005d43c0());
+    FUN_005d43c0()->CopyList(pSource->FUN_005d43c0());
     if (pSource->FUN_004077c0())
     {
         links3 = pSource->FUN_005d43c0()->FUN_0041f170();
@@ -39415,7 +39415,7 @@ struct Vec3
 };
 struct Inner
 {
-    void* __thiscall FUN_00410220(unsigned char);
+    void* __thiscall GetExtraData(unsigned char);
     void* __thiscall FUN_0041b320();
 };
 struct TypeObj
@@ -39436,7 +39436,7 @@ struct S00561df0
 // @fnv 0x00561df0
 unsigned char S00561df0::FUN_00561df0(Vec3* pOutA, Vec3* pOutB, void** ppOut, TypeObj* pOpt)
 {
-    void* pBase = FUN_005d43c0()->FUN_00410220(15);
+    void* pBase = FUN_005d43c0()->GetExtraData(15);
     if (pBase == 0)
     {
         return 0;
@@ -44970,8 +44970,8 @@ class FUN_00575e30_thing
 class FUN_00575e30_mid
 {
   public:
-    BSExtraData* FUN_00410220();
-    void FUN_0040ff60();
+    BSExtraData* GetExtraData();
+    void AddExtra();
 };
 class FUN_00575e30_cls
 {
@@ -45003,11 +45003,11 @@ class FUN_00575e30_cls
 void* FUN_00575e30_cls::FUN_00575e30()
 {
     void* z = 0;
-    z = dynamic_cast<NonActorMagicCaster*>(FUN_005d43c0(0x32u)->FUN_00410220());
+    z = dynamic_cast<NonActorMagicCaster*>(FUN_005d43c0(0x32u)->GetExtraData());
     if (z == 0)
     {
         z = new FUN_00575e30_thing(this);
-        FUN_005d43c0(z)->FUN_0040ff60();
+        FUN_005d43c0(z)->AddExtra();
         v48(0x80000000);
     }
     return z != 0 ? (char*)z + 0xc : 0;
@@ -50383,7 +50383,7 @@ struct CompareFormReceiver
 };
 struct CompareExtraList
 {
-    bool FUN_004127e0(CompareExtraList*);
+    bool CompareList(CompareExtraList*);
 };
 struct CompareData
 {
@@ -50417,7 +50417,7 @@ bool CompareRefView::FUN_0055d230(TESForm* other)
         return true;
     if (FUN_008d6f30() != pOther->FUN_008d6f30())
         return true;
-    if (extra.FUN_004127e0(pOther->FUN_005d43c0()))
+    if (extra.CompareList(pOther->FUN_005d43c0()))
         return true;
     if (((TESObjectREFR*)this)->GetScale() != ((TESObjectREFR*)pOther)->GetScale())
         return true;
@@ -50872,7 +50872,7 @@ struct HealthExtraValue
 };
 struct HealthExtraList
 {
-    void* FUN_00410220(unsigned char);
+    void* GetExtraData(unsigned char);
 };
 struct HealthReferenceEntry;
 void* __fastcall FUN_007af430(HealthReferenceEntry*);
@@ -50978,7 +50978,7 @@ float HealthReferenceEntry::FUN_00568ad0()
         pExtra = dynamic_cast<TESHealthForm*>((TESBoundObject*)FUN_007af430(this));
         if (pExtra)
         {
-            fVal = (HealthExtraValue*)FUN_005d43c0()->FUN_00410220(0x25);
+            fVal = (HealthExtraValue*)FUN_005d43c0()->GetExtraData(0x25);
             if (fVal)
             {
                 pHealth = fVal->pHealth;

@@ -993,10 +993,10 @@ struct ExtraDataList
     int flags1c;
     ExtraDataList();
     short FUN_00418770();
-    void FUN_00412380(ExtraDataList*);
+    void DuplicateExtraListForContainer(ExtraDataList*);
     void FUN_00419ad0(int);
     void SetExtraHealth(float);
-    bool FUN_004126c0(ExtraDataList*, bool, bool);
+    bool CompareListForContainer(ExtraDataList*, bool, bool);
     void FUN_00419f80(void*);
 };
 struct RepairExtraNode
@@ -1047,7 +1047,7 @@ void RepairAction::ApplyRepair(HealthOwner* source)
     int count = -1;
     bool found9 = false;
     count = extra7->FUN_00418770();
-    repairA->FUN_00412380(extra7);
+    repairA->DuplicateExtraListForContainer(extra7);
     repairA->FUN_00419ad0(1);
     repairA->SetExtraHealth(repairVal);
     FUN_004d5c60(34);
@@ -1056,8 +1056,8 @@ void RepairAction::ApplyRepair(HealthOwner* source)
         extra7->FUN_00419ad0(count - 1);
     for (RepairExtraNode* node = entryTmp->FUN_00559450(); node && node->FUN_006815c0(); node = node->FUN_00726070())
     {
-        if (!node->FUN_006815c0()->FUN_004126c0(repairA, true, false) &&
-            !repairA->FUN_004126c0(node->FUN_006815c0(), true, false))
+        if (!node->FUN_006815c0()->CompareListForContainer(repairA, true, false) &&
+            !repairA->CompareListForContainer(node->FUN_006815c0(), true, false))
         {
             node->FUN_006815c0()->FUN_00419ad0(node->FUN_006815c0()->FUN_00418770() + 1);
             ((RepairInventoryItem*)DAT_011da760)->FUN_00559450()->FUN_005ae3d0(node->FUN_006815c0());

@@ -1017,7 +1017,7 @@ class ExtraDataList
     void CopyFrom(ExtraDataList* apSource);
     void SetCount(int aiCount);
     void SetExtraHealth(float afHealth);
-    bool FUN_004126c0(ExtraDataList* apOther, int aiUnk1, int aiUnk2);
+    bool CompareListForContainer(ExtraDataList* apOther, int aiUnk1, int aiUnk2);
     void FUN_00419f80(int aiUnk);
 };
 
@@ -1092,8 +1092,8 @@ void RepairMenuData::ApplyRepair(RepairEntry* apEntry)
     {
         if (apEntry->FUN_0044ddc0()->FNV_FUN_0044ddc0Type() == 0x18 && apEntry->FUN_004bde40())
             break;
-        if (!(*pNodeOut->GetItem())->FUN_004126c0(pNewList4, 1, 0) &&
-            !pNewList4->FUN_004126c0(*pNodeOut->GetItem(), 1, 0))
+        if (!(*pNodeOut->GetItem())->CompareListForContainer(pNewList4, 1, 0) &&
+            !pNewList4->CompareListForContainer(*pNodeOut->GetItem(), 1, 0))
         {
             (*pNodeOut->GetItem())->SetCount((*pNodeOut->GetItem())->GetCount() + 1);
             bMergedTmp = true;

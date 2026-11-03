@@ -8620,7 +8620,7 @@ struct ReloadContext
 };
 struct ReloadPathing
 {
-    void FUN_006c39c0();
+    void ForceUpdate();
 };
 ReloadPathing* ReloadPathingGet();
 extern ReloadPlayer* reloadPlayer;
@@ -9014,7 +9014,7 @@ void ReloadManager::AttachScene(ReloadScene* destination, ReloadPoint* position)
         else
             reloadMenu->FUN_0070ec90()->SetColorData(0);
         if (!reloadMode->FUN_0042ce10())
-            ReloadPathingGet()->FUN_006c39c0();
+            ReloadPathingGet()->ForceUpdate();
     }
 }
 
@@ -9157,7 +9157,7 @@ struct ReloadContext
 };
 struct ReloadPathing
 {
-    void FUN_006c39c0();
+    void ForceUpdate();
 };
 ReloadPathing* ReloadPathingGet();
 extern ReloadPlayer* reloadPlayer;
@@ -9364,7 +9364,7 @@ void ReloadManager::FUN_00454450(ReloadPoint* point)
     else
         reloadHasWorld = false;
     if (!reloadMode->FUN_0042ce10())
-        ReloadPathingGet()->FUN_006c39c0();
+        ReloadPathingGet()->ForceUpdate();
 }
 }  // namespace fnv_00454450
 

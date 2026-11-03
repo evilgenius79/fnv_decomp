@@ -9,7 +9,7 @@ class BSSpinLock_r006eae40
 };
 
 namespace fnv_006eae40 {
-// Stand-in declarations for FUN_006eae40
+// Stand-in declarations for Update
 
 struct ObjA
 {
@@ -1502,11 +1502,11 @@ struct FUN_006eae40_shell
     int unk_147c;
     Coll1480 m_sub1480;
     void FUN_006c5ec0(ObjC* pC, int a);
-    void FUN_006eae40();
+    void Update();
 };
 
 // @fnv 0x006eae40
-void FUN_006eae40_shell::FUN_006eae40()
+void FUN_006eae40_shell::Update()
 {
     m_lockC38.Lock("PathManagerImpl::Update");
     switch (m_stateC24)

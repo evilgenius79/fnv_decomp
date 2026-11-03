@@ -10721,7 +10721,7 @@ struct PtrPair
 };
 struct ExtraListPair
 {
-    void FUN_00411ec0(ExtraListPair* other);
+    void CopyList(ExtraListPair* other);
 };
 struct CellSubMember
 {
@@ -10812,7 +10812,7 @@ void CellState::CopyFromCell(TESForm* form)
     if (!cell)
         return;
     FUN_004851b0((TESForm*)cell);
-    GetExtraDataList()->FUN_00411ec0(cell->GetExtraDataList());
+    GetExtraDataList()->CopyList(cell->GetExtraDataList());
     if (FUN_00425fd0())
     {
         delete cellData;
@@ -12979,7 +12979,7 @@ struct Extra54 : ExtraDataList
 {
     Ref54* FUN_00421400();
     void FUN_00419ad0(short count);
-    void FUN_00412380(Extra54* source);
+    void DuplicateExtraListForContainer(Extra54* source);
     void SetOriginalReference(Ref54* reference);
     void FUN_0041aed0();
     short FUN_00418770();
@@ -13083,7 +13083,7 @@ void Cell54::FUN_0054b260(Ref54* actor, Destination54* destination)
                                 if (!entry->extraLists)
                                     entry->extraLists = new FUN_0096a2d0;
                                 extra = new FUN_00410360;
-                                extra->FUN_00412380(reference->FUN_005d43c0());
+                                extra->DuplicateExtraListForContainer(reference->FUN_005d43c0());
                                 extra->SetOriginalReference(reference);
                                 extra->FUN_0041aed0();
                                 entry->extraLists->AddHead(&extra);
@@ -13383,7 +13383,7 @@ struct RotationForm
 struct RotationList;
 struct RotationExtra
 {
-    void* FUN_00410220();
+    void* GetExtraData();
 };
 struct RotationReference
 {
@@ -13580,7 +13580,7 @@ void RotationCell::ComputeCellRotationCenter(RotationPoint& aRotationCenter)
                     different)
                 {
                     bool reset = true;
-                    if (ref->FUN_005d43c0(15)->FUN_00410220())
+                    if (ref->FUN_005d43c0(15)->GetExtraData())
                     {
                         FUN_005b5e40(DAT_0102ef68, ref->Name(), ref->FUN_0084e3a0());
                         ref->FUN_00575830(ref->Position());
@@ -23750,7 +23750,7 @@ struct FUN_005e79a0_t
 
 struct FUN_004127e0_shell
 {
-    bool FUN_004127e0(BSSimpleList<TESImageSpaceModifier*>* otherList);
+    bool CompareList(BSSimpleList<TESImageSpaceModifier*>* otherList);
 };
 
 struct CellCompareComponent
@@ -23863,7 +23863,7 @@ bool CellCompareView::FUN_00543c50(TESForm* apCompare)
     }
 
     if (((FUN_004127e0_shell*)((TESDataHandler*)this)->GetTESImageSpaceModifierList())
-            ->FUN_004127e0(((TESDataHandler*)pCompareCell)->GetTESImageSpaceModifierList()))
+            ->CompareList(((TESDataHandler*)pCompareCell)->GetTESImageSpaceModifierList()))
     {
         return true;
     }

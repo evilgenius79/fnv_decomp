@@ -433,14 +433,14 @@ unsigned int FUN_00aa5800_s::FUN_00aa5800()
 
 struct FUN_00aa58b0_holder
 {
-    void FUN_00aa5c80();
+    void FreeAllBuffers();
     void FUN_00aa58b0();
 };
 
 // @fnv 0x00aa58b0
 void FUN_00aa58b0_holder::FUN_00aa58b0()
 {
-    FUN_00aa5c80();
+    FreeAllBuffers();
 }
 
 struct FUN_00aa5f30_holder
@@ -504,12 +504,12 @@ struct MySpinLock : RecursiveSpinLock
 
 struct FUN_00aa5c80_shell : ScrapHeapManager
 {
-    void FUN_00aa5c80();
+    void FreeAllBuffers();
 };
 
 // Frees every buffer in the entries array, then resets count and totalSize to zero and unlocks bufferLock.
 // @fnv 0x00aa5c80
-void FUN_00aa5c80_shell::FUN_00aa5c80()
+void FUN_00aa5c80_shell::FreeAllBuffers()
 {
     if (!count)
         return;
@@ -548,12 +548,12 @@ struct TwoPointerRecord
 
 struct FUN_00aa5d40_shell : ScrapHeapManager
 {
-    unsigned int FUN_00aa5d40(unsigned int aiSize);
+    unsigned int FreeBuffers(unsigned int aiSize);
 };
 
 // Frees buffers from the end of the entry list until at least aiSize bytes are freed, updating count and totalSize, and returns the freed size.
 // @fnv 0x00aa5d40
-unsigned int FUN_00aa5d40_shell::FUN_00aa5d40(unsigned int aiSize)
+unsigned int FUN_00aa5d40_shell::FreeBuffers(unsigned int aiSize)
 {
     if (!count)
         return 0;

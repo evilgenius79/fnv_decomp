@@ -439,7 +439,7 @@ void FUN_006ebcd0_shell::FUN_006ebcd0()
 
 struct T006ebd10
 {
-    void FUN_006eb6b0(int);
+    void CancelCurrentPathsAndPause(int);
 };
 struct S006ebd10
 {
@@ -449,7 +449,7 @@ struct S006ebd10
 // @fnv 0x006ebd10
 void S006ebd10::FUN_006ebd10(int a)
 {
-    p->FUN_006eb6b0(a);
+    p->CancelCurrentPathsAndPause(a);
 }
 
 struct G006ebf30

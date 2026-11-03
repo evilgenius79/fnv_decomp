@@ -3604,7 +3604,7 @@ extern Setting DAT_011d1230;
 struct Quest
 {
     void FUN_004213c0(void*, void*);
-    void FUN_00410140(int);
+    void RemoveExtra(int);
 };
 struct ActorRef
 {
@@ -4235,7 +4235,7 @@ void Owner::FUN_0095f6c0(float delta)
                         pressed = false;
                         DAT_011e0d5c = true;
                         actor->FUN_005d43c0()->FUN_004213c0(actor, this);
-                        actor->FUN_005d43c0()->FUN_00410140(124);
+                        actor->FUN_005d43c0()->RemoveExtra(124);
                     }
                 }
             }

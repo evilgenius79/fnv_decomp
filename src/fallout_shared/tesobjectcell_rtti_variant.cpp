@@ -25,8 +25,8 @@ struct FUN_0040f410 : BSExtraData
 };
 struct ExtraListAccess548 : ExtraDataList
 {
-    BSExtraData* FUN_0040ff60(BSExtraData*);
-    bool FUN_00410020(BSExtraData*, bool);
+    BSExtraData* AddExtra(BSExtraData*);
+    bool RemoveExtra(BSExtraData*, bool);
 };
 class BaseProcess;
 class MobileObject : public TESObjectREFR
@@ -974,7 +974,7 @@ void Cell548::FUN_00551480(bool RetainReference)
     if (!extra && RetainReference)
     {
         extra = new FUN_0040f410;
-        static_cast<ExtraListAccess548*>(&extraDataList)->FUN_0040ff60(extra);
+        static_cast<ExtraListAccess548*>(&extraDataList)->AddExtra(extra);
         CellRefLockEnter();
         RefList548* position = FUN_009604f0();
         while (position && position->FUN_006815c0())
@@ -993,7 +993,7 @@ void Cell548::FUN_00551480(bool RetainReference)
         else
             extra->references--;
         if (!extra->references)
-            static_cast<ExtraListAccess548*>(&extraDataList)->FUN_00410020(extra, true);
+            static_cast<ExtraListAccess548*>(&extraDataList)->RemoveExtra(extra, true);
     }
 }
 

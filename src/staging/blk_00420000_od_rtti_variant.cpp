@@ -768,7 +768,7 @@ struct FUN_0043b5f0_cls : TESObjectTREE
 };
 struct ExtraListShell
 {
-    void FUN_00410140(unsigned char type);
+    void RemoveExtra(unsigned char type);
     void FUN_004216b0();
 };
 extern "C" void* DAT_0101598c;
@@ -831,9 +831,9 @@ struct FUN_00436b20
 };
 struct FUN_0042e060_class
 {
-    void* __thiscall FUN_00410220(unsigned char type);
-    void __thiscall FUN_00410020(void* extra, bool remove);
-    void __thiscall FUN_0040ff60(void* extra);
+    void* __thiscall GetExtraData(unsigned char type);
+    void __thiscall RemoveExtra(void* extra, bool remove);
+    void __thiscall AddExtra(void* extra);
     void __thiscall FUN_0042e060(unsigned int a, unsigned int b);
 };
 void* __cdecl operator new(unsigned int uiSize, void* pvMem);

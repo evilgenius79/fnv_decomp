@@ -6758,7 +6758,7 @@ struct B006815c0
 };
 struct Extra624
 {
-    void* FUN_00410220(unsigned char);
+    void* GetExtraData(unsigned char);
     void* FUN_0041b320();
 };
 struct Ref624
@@ -6974,7 +6974,7 @@ void Repair624::FUN_008624e0(Ref624* reference)
                     FUN_00573800(reference, cell, world);
                 }
             }
-            else if (reference->FUN_005d43c0()->FUN_00410220(15))
+            else if (reference->FUN_005d43c0()->GetExtraData(15))
             {
                 B006815c0 startRotation = reference->GetStartingPosition();
                 B006815c0 uiTimestamp = reference->GetStartingAngle();

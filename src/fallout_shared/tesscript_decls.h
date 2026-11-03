@@ -175,7 +175,7 @@ class Script : public TESForm
     void GetLocalData();
     void FUN_005aa2e0();
     void FUN_005ae2e0();
-    void FUN_006eae40();
+    void Update();
 
     Script();
     virtual ~Script();

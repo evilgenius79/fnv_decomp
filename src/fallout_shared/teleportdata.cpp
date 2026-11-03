@@ -113,7 +113,7 @@ struct FUN_00431ae0 : public BSExtraData
 
 struct ExtraListRemover
 {
-    void FUN_00410020(BSExtraData* extra, bool clear);
+    void RemoveExtra(BSExtraData* extra, bool clear);
 };
 
 struct FUN_004197d0_shell : public BaseExtraList
@@ -130,7 +130,7 @@ void FUN_004197d0_shell::SetExtraDataValue(int value)
     {
         if (!value)
         {
-            ((ExtraListRemover*)this)->FUN_00410020(extra, true);
+            ((ExtraListRemover*)this)->RemoveExtra(extra, true);
         }
         else
         {

@@ -20,7 +20,7 @@ extern unsigned int DAT_011de70c;
 struct ScrapHeapManager
 {
     static ScrapHeapManager& Instance();
-    void FUN_00aa5c80();
+    void FreeAllBuffers();
 };
 struct Worker
 {
@@ -144,7 +144,7 @@ int StateMachine::RunStep(void* context, unsigned int step, bool* finished)
             g_TES->FUN_00452490(0);
         break;
     case 1:
-        ScrapHeapManager::Instance().FUN_00aa5c80();
+        ScrapHeapManager::Instance().FreeAllBuffers();
         break;
     case 2:
         if (FUN_00652110() && FUN_00652110()->FUN_00529ea0() && FUN_00652160())

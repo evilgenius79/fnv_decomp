@@ -19,7 +19,7 @@ struct FUN_004bc780_shell : public InventoryStackRecord
 struct _DummyExtraDataList
 {
     virtual ~_DummyExtraDataList();
-    void FUN_0040fae0(bool);
+    void RemoveAll(bool);
 };
 struct _DummySimpleList
 {
@@ -76,7 +76,7 @@ struct ExtraHelper_004bca80
     virtual ~ExtraHelper_004bca80();
     short FUN_00418770();
     bool HasOnlyAllowedExtraData(int);
-    int FUN_0040fe20();
+    int ItemsInList();
     void RemoveExtra24();
 };
 struct ListHelper_004bca80
@@ -1815,7 +1815,7 @@ struct Weapon : Form
 };
 struct Extra
 {
-    void* FUN_00410220(int);
+    void* GetExtraData(int);
     float FUN_004186f0();
     bool FUN_00418b10();
 };
@@ -2217,9 +2217,9 @@ struct EquipExtra
     int unk1c;
     EquipExtra();
     bool FUN_00418750();
-    bool FUN_004127e0(EquipExtra*);
+    bool CompareList(EquipExtra*);
     short FUN_00418770();
-    void FUN_00411ec0(EquipExtra*);
+    void CopyList(EquipExtra*);
     void FUN_00419ad0(unsigned short);
     signed char GetExtraByteValue();
     void FUN_0042dec0();
@@ -2929,11 +2929,11 @@ struct ExtraShell : ExtraDataList
 
     short FUN_00418770();
 
-    bool FUN_004127e0(ExtraShell*);
+    bool CompareList(ExtraShell*);
 
     void FUN_00419ad0(int);
 
-    void FUN_00411ec0(ExtraShell*);
+    void CopyList(ExtraShell*);
 
     signed char GetExtraByteValue();
 
@@ -3014,8 +3014,8 @@ struct W20Extra
     short FUN_00418770();
     void FUN_00419ad0(short);
     void FUN_00419fb0(float);
-    void FUN_004121e0(W20Extra*, bool);
-    bool FUN_004126c0(W20Extra*, bool, bool);
+    void CopyListForContainer(W20Extra*, bool);
+    bool CompareListForContainer(W20Extra*, bool, bool);
     W20Form* GetOwner();
     void FUN_0041aed0();
     void RemoveExtra24();
@@ -3189,7 +3189,7 @@ struct AddExtra
     bool FUN_00418750();
     short FUN_00418770();
     void FUN_00419ad0(short);
-    bool FUN_004126c0(AddExtra*, bool, bool);
+    bool CompareListForContainer(AddExtra*, bool, bool);
 };
 struct AddNode
 {
@@ -3790,10 +3790,10 @@ struct FUN_00410360
     FUN_00410360();
     static void* operator new(unsigned int);
     static void operator delete(void*);
-    void* FUN_00410220(int);
-    void FUN_00410020(void*, int);
-    void FUN_004121e0(FUN_00410360*, int);
-    void FUN_0040ff60(void*);
+    void* GetExtraData(int);
+    void RemoveExtra(void*, int);
+    void CopyListForContainer(FUN_00410360*, int);
+    void AddExtra(void*);
 };
 typedef FUN_00410360 Extra;
 struct ExtraNode
@@ -3911,13 +3911,13 @@ void Inventory::FUN_004cd9c0(void* source, void* destination)
                             while (nodeA && *nodeA->FUN_006815c0())
                             {
                                 Extra* extraASlot11 = new Extra;
-                                void* removedASlot21 = (*nodeA->FUN_006815c0())->FUN_00410220(0xd);
+                                void* removedASlot21 = (*nodeA->FUN_006815c0())->GetExtraData(0xd);
                                 if (removedASlot21)
-                                    (*nodeA->FUN_006815c0())->FUN_00410020(removedASlot21, 0);
-                                extraASlot11->FUN_004121e0(*nodeA->FUN_006815c0(), 1);
+                                    (*nodeA->FUN_006815c0())->RemoveExtra(removedASlot21, 0);
+                                extraASlot11->CopyListForContainer(*nodeA->FUN_006815c0(), 1);
                                 copySlot14->FUN_00559450()->FUN_00905820(&extraASlot11);
                                 if (removedASlot21)
-                                    (*nodeA->FUN_006815c0())->FUN_0040ff60(removedASlot21);
+                                    (*nodeA->FUN_006815c0())->AddExtra(removedASlot21);
                                 nodeA = nodeA->FUN_00726070();
                             }
                         }
@@ -3934,7 +3934,7 @@ void Inventory::FUN_004cd9c0(void* source, void* destination)
                             while (nodeB && *nodeB->FUN_006815c0())
                             {
                                 Extra* extraB = new Extra;
-                                extraB->FUN_004121e0(*nodeB->FUN_006815c0(), 1);
+                                extraB->CopyListForContainer(*nodeB->FUN_006815c0(), 1);
                                 copySlot14->FUN_00559450()->FUN_00905820(&extraB);
                                 nodeB = nodeB->FUN_00726070();
                             }
@@ -3972,13 +3972,13 @@ void Inventory::FUN_004cd9c0(void* source, void* destination)
                         while (nodeC && *nodeC->FUN_006815c0())
                         {
                             Extra* extraCSlot22 = new Extra;
-                            void* removedCSlot8 = (*nodeC->FUN_006815c0())->FUN_00410220(0xd);
+                            void* removedCSlot8 = (*nodeC->FUN_006815c0())->GetExtraData(0xd);
                             if (removedCSlot8)
-                                (*nodeC->FUN_006815c0())->FUN_00410020(removedCSlot8, 0);
-                            extraCSlot22->FUN_004121e0(*nodeC->FUN_006815c0(), 1);
+                                (*nodeC->FUN_006815c0())->RemoveExtra(removedCSlot8, 0);
+                            extraCSlot22->CopyListForContainer(*nodeC->FUN_006815c0(), 1);
                             copySlot14->FUN_00559450()->FUN_00905820(&extraCSlot22);
                             if (removedCSlot8)
-                                (*nodeC->FUN_006815c0())->FUN_0040ff60(removedCSlot8);
+                                (*nodeC->FUN_006815c0())->AddExtra(removedCSlot8);
                             nodeC = nodeC->FUN_00726070();
                         }
                     }
@@ -3995,7 +3995,7 @@ void Inventory::FUN_004cd9c0(void* source, void* destination)
                         while (nodeD && *nodeD->FUN_006815c0())
                         {
                             Extra* extraD = new Extra;
-                            extraD->FUN_004121e0(*nodeD->FUN_006815c0(), 1);
+                            extraD->CopyListForContainer(*nodeD->FUN_006815c0(), 1);
                             copySlot14->FUN_00559450()->FUN_00905820(&extraD);
                             nodeD = nodeD->FUN_00726070();
                         }
@@ -4063,7 +4063,7 @@ struct MoveExtra
     MoveExtra();
     static void* operator new(unsigned int);
     static void operator delete(void*);
-    unsigned int FUN_0040fe20();
+    unsigned int ItemsInList();
     void* FUN_00418660();
     short FUN_00418770();
     void FUN_00419700(void*);
@@ -4523,7 +4523,7 @@ struct Extra
     Extra();
     static void* operator new(unsigned int);
     static void operator delete(void*);
-    void* FUN_00410220(int);
+    void* GetExtraData(int);
     void SetOriginalReference(void*);
     void FUN_00418600();
     short FUN_00418770();
@@ -4731,7 +4731,7 @@ void Inventory::FUN_004d26d0(Inventory* target, void* owner, bool exclude)
                 bool hasSpecialSlot4 = false;
                 while (walkSlot1 && *walkSlot1->FUN_006815c0())
                 {
-                    if ((*walkSlot1->FUN_006815c0())->FUN_00410220(0x2f))
+                    if ((*walkSlot1->FUN_006815c0())->GetExtraData(0x2f))
                         hasSpecialSlot4 = true;
                     walkSlot1 = walkSlot1->FUN_00726070();
                 }
@@ -4858,7 +4858,7 @@ struct CleanupExtra
     virtual ~CleanupExtra();
     CleanupReference* FUN_00418630();
     void FUN_00418600();
-    unsigned int FUN_0040fe20();
+    unsigned int ItemsInList();
     short FUN_00418770();
     void RemoveExtra24();
     void* FUN_00418800();
@@ -5186,10 +5186,10 @@ struct InvExtra
     int unk1c;
     InvExtra();
     bool HasOnlyAllowedExtraData(int);
-    bool FUN_004126c0(InvExtra*, int, int);
+    bool CompareListForContainer(InvExtra*, int, int);
     short FUN_00418770();
     void FUN_00419ad0(unsigned short);
-    void FUN_00412380(InvExtra*);
+    void DuplicateExtraListForContainer(InvExtra*);
 };
 struct InvNode
 {
@@ -6588,8 +6588,8 @@ struct Transfer4c37C37Obj
 struct Transfer4c37Form4
 {
     virtual ~Transfer4c37Form4();
-    int FUN_0040fe20();
-    int FUN_00410220(int a);
+    int ItemsInList();
+    int GetExtraData(int a);
     short FUN_00418770();
     void FUN_0042dec0();
 };
@@ -6625,10 +6625,10 @@ struct Transfer4c37Obj20
     int unk04, unk08, unk0c, unk10, unk14, unk18, unk1c;
     void SetLeveledItemIndex(int a);
     int FUN_0041d000();
-    void FUN_00412490(void* a, int b);
+    void CopyListForReference(void* a, int b);
     void FUN_00419700(void* a);
     void FUN_00419ad0(int a);
-    int FUN_0040fe20();
+    int ItemsInList();
     short FUN_00418770();
     void FUN_0041aed0();
     void* FUN_00418660();
@@ -6661,7 +6661,7 @@ struct Transfer4c37CurHead
 };
 struct Transfer4c37MidObj
 {
-    void FUN_00412490(void* a, int b);
+    void CopyListForReference(void* a, int b);
     void RemoveExtraData30();
     void FUN_0041c900();
     int FUN_0041b320();
@@ -6752,7 +6752,7 @@ struct Transfer4c37T70Obj
 void __cdecl FUN_005ac750(void* a, void* b, int c);
 struct Transfer4c37ItemObj
 {
-    int FUN_0040fe20();
+    int ItemsInList();
     short FUN_00418770();
     bool FUN_00418ab0(int a);
     void* FUN_00418660();
@@ -7475,7 +7475,7 @@ struct Sh00419f80
 };
 struct Sh00411fd0
 {
-    void FUN_00411fd0(void* p);
+    void RemoveAllCopyableExtra(void* p);
 };
 struct Sh00418830
 {
@@ -7605,11 +7605,11 @@ struct XExtra17
     bool FUN_00418b10();
     bool FUN_00418ab0(bool);
     void SetWornState(bool, bool);
-    int FUN_0040fe20();
+    int ItemsInList();
     char GetExtraByteValue();
     void FUN_00419ad0(short);
     bool FUN_004bca60();
-    bool FUN_004126c0(XExtra17*, int, bool);
+    bool CompareListForContainer(XExtra17*, int, bool);
     short FUN_00418770();
     void SetHotKey(unsigned char);
     XDism17* FUN_0042e8c0();

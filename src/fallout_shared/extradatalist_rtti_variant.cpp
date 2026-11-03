@@ -96,7 +96,7 @@ void __cdecl FUN_00806130(int a, int b);
 struct OwnQ
 {
     ResQ* FUN_00418460();
-    BSExtraData* FUN_00410220(int iType);
+    BSExtraData* GetExtraData(int iType);
     void FUN_00426720(unsigned int uiFlags, int a2, P3Q* p3);
 };
 // @fnv 0x00426720
@@ -114,7 +114,7 @@ void OwnQ::FUN_00426720(unsigned int uiFlags, int a2, P3Q* p3)
         }
         if (uiFlags & 0)
         {
-            NonActorMagicTarget* pTarget = dynamic_cast<NonActorMagicTarget*>(FUN_00410220(0x33));
+            NonActorMagicTarget* pTarget = dynamic_cast<NonActorMagicTarget*>(GetExtraData(0x33));
             if (pTarget)
                 FUN_00806130(pTarget->kMT.GetCaster(), 0);
         }

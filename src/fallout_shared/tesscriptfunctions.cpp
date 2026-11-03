@@ -40209,7 +40209,7 @@ struct CommandExtraData {
     void FUN_00438280(const char* value);
     void FUN_00437f90(void* node);
 };
-struct CommandAttachResult { void FUN_0040ff60(); };
+struct CommandAttachResult { void AddExtra(); };
 struct CommandReference {
     virtual void slot0();
     virtual void slot1();
@@ -40345,7 +40345,7 @@ bool FUN_005cf680(const ScriptParameter* parameters, const char* scriptData, TES
             CommandExtraData* extra6 = target->FUN_00527080(0x8f);
             if (!extra6) {
                 extra6 = new CommandExtraData;
-                target->FUN_005d43c0(extra6)->FUN_0040ff60();
+                target->FUN_005d43c0(extra6)->AddExtra();
             }
             if (extra6) {
                 extra6->FUN_00438260(firstPath2);

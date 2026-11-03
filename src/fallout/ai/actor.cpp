@@ -57188,7 +57188,7 @@ struct P2C
 {
     bool FUN_00418b10();
     bool FUN_00418ab0(int a);
-    void* FUN_00410220(int a);
+    void* GetExtraData(int a);
 };
 struct InvC
 {
@@ -57774,7 +57774,7 @@ void ThisC::FUN_0088c830(FormC* p0, int aiCount, void* apExtraData, bool p3, boo
     }
     if (apExtraData != 0)
     {
-        action40 = (int)((P2C*)apExtraData)->FUN_00410220(0x25);
+        action40 = (int)((P2C*)apExtraData)->GetExtraData(0x25);
     }
     if (action40 != 0)
     {

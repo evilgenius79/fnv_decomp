@@ -2629,7 +2629,7 @@ struct ExtraListP
 };
 struct ExtraP
 {
-    unsigned int FUN_0040fe20();
+    unsigned int ItemsInList();
     short FUN_00418770();
     void FUN_0041ab70(int);
     void FUN_0041b010(int);
@@ -3114,7 +3114,7 @@ struct FUN_00410360 : ExtraP
         return FUN_00401000(n);
     }
     static void operator delete(void*);
-    void FUN_00412380(ExtraP*);
+    void DuplicateExtraListForContainer(ExtraP*);
 };
 struct FUN_004bc550 : EntryP
 {
@@ -3183,7 +3183,7 @@ void EffectP::FUN_00808a30()
         {
             ExtraP* old = 0;
             old = *weapon->FUN_008d8520()->Equipped()->list->FUN_006815c0();
-            if (old->FUN_0040fe20() < 2 || old->FUN_0040fe20() == 2 && old->FUN_00418770() > 1)
+            if (old->ItemsInList() < 2 || old->ItemsInList() == 2 && old->FUN_00418770() > 1)
                 old = 0;
             TESBoundObject* extra = weapon->FUN_008d8520()->Equipped()->FUN_0044ddc0();
             if (extra && !unka6)
@@ -3201,7 +3201,7 @@ void EffectP::FUN_00808a30()
             if (old)
             {
                 FUN_00410360* copied = new FUN_00410360;
-                copied->FUN_00412380(old);
+                copied->DuplicateExtraListForContainer(old);
                 ((EntryP*)unk4c)->list->FUN_005ae3d0((ExtraP**)&copied);
             }
         }

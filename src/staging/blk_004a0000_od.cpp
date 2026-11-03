@@ -4226,7 +4226,7 @@ void BipedAB::FUN_004ab130(AVObjAB* pkObject)
 struct AGItem
 {
     void* GetExtraLeveledItem();
-    void FUN_00410020(void* p, int n);
+    void RemoveExtra(void* p, int n);
     bool FUN_004bca60();
 };
 struct AGNode
@@ -4255,7 +4255,7 @@ void* AGOwner::FUN_004bcd10()
         if (pItem && pItem->GetExtraLeveledItem())
         {
             pResult = pItem->GetExtraLeveledItem();
-            pItem->FUN_00410020(pResult, 0);
+            pItem->RemoveExtra(pResult, 0);
             if (pItem->FUN_004bca60())
                 m_pEntries->FUN_00905330(&pItem);
             pNode = m_pEntries;
