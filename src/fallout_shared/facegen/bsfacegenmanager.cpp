@@ -272,9 +272,9 @@ struct FUN_006516c0_class
     void SetNoConvert(bool abTF);
 };
 
-// Actually, instructions say: "Define it as a free function named exactly FUN_006516c0. If it is a __thiscall method (this pointer in ecx, callee pops stack arguments with ret N) write a free function with __fastcall whose first parameter is the this pointer and whose second parameter is an unused int (for edx), then the real arguments."
-// Wait: in MSVC /Od, a __fastcall function with (void* this_ptr, int edx, bool abTF) will spill BOTH ecx and edx to the stack! `push ecx; push ecx; mov [ebp-8], edx; mov [ebp-4], ecx;`
-// Let's check how only `ecx` is spilled: if edx is NOT named or not a parameter? No, __fastcall always has 2 register params if there are >=2 integer params, EXCEPT if the first parameter is 64-bit, or if there is only 1 register parameter (i.e. the second param is passed on stack, e.g., a struct by value of size 1, 2, or 4!).
+// The original spills only ecx: a __thiscall taking one bool on the stack. Written as __fastcall with the usual
+// unused int for edx, /Od would spill edx as well, and a bare bool as the second parameter would itself go in
+// edx; wrapping it in a struct keeps it on the stack and leaves ecx as the only register parameter.
 struct _stack_bool
 {
     bool v;

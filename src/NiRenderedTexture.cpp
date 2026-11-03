@@ -55,27 +55,20 @@ NiRenderedTexture* NiRenderedTexture::Create(const NiFixedString& name, unsigned
     return texture;
 }
 
-// Declarations needed
-// InterlockedDecrement might be needed if not in headers, but let's assume it is or use a helper if needed.
-// The error log didn't complain about InterlockedDecrement, only LONG.
-
 void __fastcall DestroyFogProperty(void*);
 void __fastcall FUN_00a5f800(void*);
 void __cdecl __Dummy_00b6fef0(void*, unsigned int);
 extern int DAT_0109b944;
 
-// Need to declare InterlockedDecrement if it's not found.
-// extern "C" long __cdecl InterlockedDecrement(long*);
-
+// Scalar deleting destructor of NiRenderedTexture: releases the render target buffer (this+0x30) and the renderer
+// data (this+0x24), runs the base-class destructors, and frees the object when bit 0 of flags is set.
 // @fnv 0x00a7fd30
 void* __fastcall DestroyRenderedTexture(NiRenderedTexture* self, int, unsigned char flags)
 {
     void* p30 = *(void**)((char*)self + 0x30);
     if (p30)
     {
-        // InterlockedDecrement((long*)((char*)p30 + 4))
-        // The assembly uses a call to an address.
-        // If I use InterlockedDecrement, it matches the semantics.
+        // NiPointer<Ni2DBuffer> release: drop the reference, DeleteThis when it was the last one
         if (InterlockedDecrement((long*)((char*)p30 + 4)) == 0)
         {
             void** vtbl = *(void***)p30;
